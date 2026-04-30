@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevStage | Student Project Platform</title>
+  <meta name="description"
+    content="DevStage is a modern platform for students to showcase their projects, find teams, and level up their skills.">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="../project2/style.css">
+</head>
+
+<body>
+  <canvas id="wave-canvas" aria-hidden="true"></canvas>
+
+  <nav class="navbar" id="main-navbar">
+    <div class="nav-container">
+
+      <!-- Left: Logo -->
+      <a href="#" class="nav-logo" id="devstage-logo">
+        Dev<span>Stage</span>
+      </a>
+
+      <!-- Center: Search Bar -->
+      <div class="search-wrapper">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" class="search-bar" placeholder="Search projects, skills, users..." id="nav-search">
+      </div>
+
+      <!-- Right: Navigation & Profile -->
+      <div class="nav-menu">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#" class="nav-link">Explore</a></li>
+          <li><a href="#" class="nav-link">Upload</a></li>
+          <li><a href="#" class="nav-link">Teams</a></li>
+        </ul>
+
+        <div class="profile-avatar" id="user-profile">
+          <img src="https://ui-avatars.com/api/?name=Dev+Stage&background=3b82f6&color=fff" alt="User Profile">
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <span class="hero-tag">Student Project Platform</span>
+      <h1 class="hero-title">
+        <span>Build.</span>
+        <span class="text-hollow">Share.</span>
+        <span>Improve.</span>
+      </h1>
+      <p>A platform where students showcase projects, get real feedback, and find teammates.</p>
+      <div class="hero-buttons">
+        <a href="#" class="button-primary">Upload Project</a>
+        <a href="#" class="button-secondary">Explore Projects</a>
+      </div>
+    </div>
+
+    <div class="card-preview">
+      <div class="card">
+        <div class="card-icon"><i data-lucide="brain" style="width:18px;height:18px;"></i></div>
+        <h3 class="card-title">AI Resume Builder</h3>
+        <p class="card-desc">An intelligent tool to craft ATS-friendly resumes using Gemini.</p>
+        <div class="card-tags">
+          <span class="tag">Next.js</span>
+          <span class="tag">Gemini API</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i data-lucide="layers" style="width:18px;height:18px;"></i></div>
+        <h3 class="card-title">DevStage Platform</h3>
+        <p class="card-desc">The project showcase platform for student developers.</p>
+        <div class="card-tags">
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i data-lucide="trending-up" style="width:18px;height:18px;"></i></div>
+        <h3 class="card-title">Crypto Tracker</h3>
+        <p class="card-desc">Real-time cryptocurrency tracking dashboard with charts.</p>
+        <div class="card-tags">
+          <span class="tag">Vue</span>
+          <span class="tag">Chart.js</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="hollow-3d-cursor">
+    <div class="halo-glow"></div>
+    <div class="border-ring"></div>
+    <div class="highlight-layer"></div>
+    <div class="click-cross">
+      <div class="cross-h"></div>
+      <div class="cross-v"></div>
+    </div>
+  </div>
+
+  <script src="../project2/script.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>
