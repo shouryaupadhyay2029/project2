@@ -1,7 +1,5 @@
-/**
- * auth.js - Production-ready Authentication System
- * Handles: Session Management, Redirects, Signup, Login & Resend
- */
+// Global State
+window.currentUser = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
@@ -20,26 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── 1. FIREBASE AUTH INITIALIZATION ────────────────────────
     const auth = firebase.auth();
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-    let currentUser = null;
 
-    // ─── 2. AUTH STATE CHANGE LISTENER ─────────────────────────
+    // ─── 2. AUTH STATE CHANGE LISTENER (Instant UI Sync) ─────────
     auth.onAuthStateChanged((user) => {
         if (user) {
-            console.log("[DevStage] User authenticated:", user);
-            currentUser = {
+            console.log("[DevStage] Auth State: Logged In", user.email);
+            window.currentUser = {
                 name: user.displayName,
                 email: user.email,
-                photo: user.photoURL
+                photo: user.photoURL,
+                uid: user.uid
             };
-            updateUI(currentUser);
-            
-            // Auto-redirect if on login page and not in a modal
-            // if (window.location.pathname.includes('index.html')) {
-            //     window.location.href = 'dashboard.html';
-            // }
+            updateUI(window.currentUser);
         } else {
-            console.log("[DevStage] No active session.");
-            currentUser = null;
+            console.log("[DevStage] Auth State: Logged Out");
+            window.currentUser = null;
             updateUI(null);
         }
     });
@@ -52,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = result.user;
             console.log("[DevStage] Google Login Success:", user.displayName);
             
+            // Sync User Data to Firestore
+            await saveUserToFirestore(user);
+
             // Success Animation
             if (authCard) {
                 authCard.classList.add('fade-out');
@@ -76,7 +72,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ─── 4. LOGOUT FLOW ─────────────────────────────────────────
+    // ─── 4. FIRESTORE SYNC LOGIC ────────────────────────────────
+    const db = firebase.firestore();
+
+    async function saveUserToFirestore(user) {
+        const userRef = db.collection('users').doc(user.uid);
+        
+        try {
+            const doc = await userRef.get();
+            if (!doc.exists) {
+                console.log("[DevStage] First time login. Creating user profile in Firestore...");
+                await userRef.set({
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log("[DevStage] User profile created successfully.");
+            } else {
+                console.log("[DevStage] User already exists in Firestore. Skipping creation.");
+            }
+        } catch (error) {
+            console.error("[DevStage] Firestore Sync Error:", error);
+        }
+    }
+
+    // ─── 5. LOGOUT FLOW ─────────────────────────────────────────
     window.logoutUser = async () => {
         try {
             await auth.signOut();
@@ -113,7 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!authSubmitBtn) return;
         authSubmitBtn.disabled = isLoading;
         const defaultText = isLoginMode ? 'Sign In' : 'Sign Up';
-        authSubmitBtn.innerHTML = isLoading ? `<span class="loader"></span> ${message || 'Processing...'}` : defaultText;
+        const loaderHtml = `
+            <div class="loader loader-btn">
+                <svg viewBox="0 0 80 80">
+                    <circle r="32" cy="40" cx="40"></circle>
+                </svg>
+            </div>
+        `;
+        authSubmitBtn.innerHTML = isLoading ? `${loaderHtml} ${message || 'Processing...'}` : defaultText;
         
         const googleBtn = document.getElementById('google-login-btn');
         if (googleBtn) googleBtn.disabled = isLoading;
@@ -204,6 +232,31 @@ document.addEventListener('DOMContentLoaded', () => {
         window.loginWithGoogle();
     });
 
+    // ─── 7. PROTECTED FEATURES ACCESS CONTROL ────────────────
+    window.requireAuth = (actionCallback) => {
+        if (window.currentUser) {
+            actionCallback();
+        } else {
+            console.log("[DevStage] Auth Guard: Access Denied. Opening modal...");
+            openModal('login');
+            showMessage("Please login to perform this action.", "info");
+        }
+    };
+
+    const protectedBtns = [
+        { id: 'nav-upload-btn', action: () => console.log("Navigating to Upload...") },
+        { id: 'nav-teams-btn', action: () => console.log("Navigating to Teams...") },
+        { id: 'hero-upload-btn', action: () => console.log("Hero: Uploading...") }
+    ];
+
+    protectedBtns.forEach(({ id, action }) => {
+        const btn = document.getElementById(id);
+        btn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.requireAuth(action);
+        });
+    });
+
     // ─── PREMIUM INTERACTIONS (3D TILT & GLOW) ──────────────
     const authCard = document.getElementById('auth-card');
   
@@ -264,4 +317,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-auth-modal')?.addEventListener('click', () => {
         closeModal();
     });
+
+    // ─── 8. DEEP LINKING (MODAL TRIGGERS) ────────────────────
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'login') {
+        setTimeout(() => {
+            openModal('login');
+            showMessage("Please login to continue.", "info");
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 500);
+    }
 });
