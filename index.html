@@ -46,8 +46,32 @@
           <li><a href="#" class="nav-link">Teams</a></li>
         </ul>
 
-        <div class="profile-avatar" id="user-profile">
-          <img src="https://ui-avatars.com/api/?name=Dev+Stage&background=3b82f6&color=fff" alt="User Profile">
+        <div class="auth-controls" id="auth-controls">
+          <button id="nav-login-btn" class="nav-link-btn">Login</button>
+          <button id="nav-signup-btn" class="button-primary-sm">Sign Up</button>
+        </div>
+
+        <div class="profile-container" id="profile-container" style="display:none;">
+          <div class="profile-avatar" id="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
+          </div>
+          
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profile-dropdown">
+            <div class="dropdown-header">
+              <p class="user-name" id="dropdown-user-name">Guest User</p>
+              <p class="user-email" id="dropdown-user-email">guest@example.com</p>
+            </div>
+            <div class="dropdown-divider"></div>
+            <ul class="dropdown-links">
+              <li><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+              <li><a href="#"><i data-lucide="settings"></i> Settings</a></li>
+            </ul>
+            <div class="dropdown-divider"></div>
+            <button class="logout-btn" id="dropdown-logout-btn">
+              <i data-lucide="log-out"></i> Logout
+            </button>
+          </div>
         </div>
 
         <!-- Mobile Hamburger -->
@@ -79,34 +103,42 @@
 
     <div class="card-preview">
       <div class="card">
-        <div class="card-icon"><i data-lucide="brain" style="width:18px;height:18px;"></i></div>
-        <h3 class="card-title">AI Resume Builder</h3>
-        <p class="card-desc">An intelligent tool to craft ATS-friendly resumes using Gemini.</p>
+        <div class="card-icon"><i data-lucide="layers" style="width:18px;height:18px;"></i></div>
+        <h3 class="card-title">Build</h3>
+        <p class="card-desc">Showcase your projects, experiments, and ideas in one place. Create a portfolio that
+          reflects your real skills.</p>
         <div class="card-tags">
-          <span class="tag">Next.js</span>
-          <span class="tag">Gemini API</span>
+          <span class="tag">Portfolio</span>
+          <span class="tag">Showcase</span>
         </div>
       </div>
       <div class="card">
-        <div class="card-icon"><i data-lucide="layers" style="width:18px;height:18px;"></i></div>
-        <h3 class="card-title">DevStage Platform</h3>
-        <p class="card-desc">The project showcase platform for student developers.</p>
+        <div class="card-icon"><i data-lucide="users" style="width:18px;height:18px;"></i></div>
+        <h3 class="card-title">Share</h3>
+        <p class="card-desc">Get feedback from other students, discover new ideas, and learn from real projects built by
+          peers.</p>
         <div class="card-tags">
-          <span class="tag">React</span>
-          <span class="tag">Node.js</span>
+          <span class="tag">Community</span>
+          <span class="tag">Feedback</span>
         </div>
       </div>
       <div class="card">
         <div class="card-icon"><i data-lucide="trending-up" style="width:18px;height:18px;"></i></div>
-        <h3 class="card-title">Crypto Tracker</h3>
-        <p class="card-desc">Real-time cryptocurrency tracking dashboard with charts.</p>
+        <h3 class="card-title">Improve</h3>
+        <p class="card-desc">Refine your work through feedback, collaboration, and iteration. Grow faster by building
+          and improving continuously.</p>
         <div class="card-tags">
-          <span class="tag">Vue</span>
-          <span class="tag">Chart.js</span>
+          <span class="tag">Growth</span>
+          <span class="tag">Iteration</span>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Custom Scrollbar -->
+  <div id="custom-scrollbar" class="scrollbar-container">
+    <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
+  </div>
 
   <div id="hollow-3d-cursor">
     <div class="halo-glow"></div>
@@ -118,11 +150,84 @@
     </div>
   </div>
 
-  <script src="../project2/script.js"></script>
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="modal-overlay">
+    <div class="modal-card" id="auth-card">
+      <div class="card-glow"></div>
+      <button id="close-auth-modal" class="modal-close" aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="auth-header">
+        <h2 id="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Elevate your development stage</p>
+      </div>
+
+      <div id="auth-message" class="auth-message"></div>
+
+      <form id="auth-form" class="auth-form">
+        <div class="floating-group">
+          <input type="email" id="auth-email" placeholder=" " required autocomplete="email">
+          <label for="auth-email">Email Address</label>
+          <div class="input-accent"></div>
+        </div>
+
+        <div class="floating-group">
+          <input type="password" id="auth-password" placeholder=" " required autocomplete="current-password">
+          <label for="auth-password">Password</label>
+          <div class="input-accent"></div>
+        </div>
+
+        <button type="submit" id="auth-submit-btn" class="premium-btn">
+          <span>Sign In</span>
+          <div class="btn-shine"></div>
+        </button>
+      </form>
+
+      <div class="auth-divider">
+        <span>OR</span>
+      </div>
+
+      <button id="google-login-btn" class="google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="auth-footer">
+        <p id="auth-toggle-text">
+          Don't have an account? <a href="#" id="toggle-auth">Sign Up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs (Compat Version) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+  <!-- App Logic -->
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
+      authDomain: "devstage-872b1.firebaseapp.com",
+      projectId: "devstage-872b1",
+      storageBucket: "devstage-872b1.firebasestorage.app",
+      messagingSenderId: "993834630425",
+      appId: "1:993834630425:web:b063407a7d47a0830d5988"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
   <script>
     // Initialize Lucide icons
     lucide.createIcons();
   </script>
+
+
 </body>
 
 </html>

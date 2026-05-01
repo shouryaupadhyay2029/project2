@@ -9,7 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.classList.toggle('active');
 
     // Prevent scrolling when menu is open
-    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
+    if (navLinks.classList.contains('active')) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.style.overflow = 'auto';
+      document.body.classList.remove('modal-open');
+    }
   });
 
   // Close mobile menu when clicking a link
@@ -19,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('active');
       document.body.style.overflow = 'auto';
+      document.body.classList.remove('modal-open');
     });
   });
 
@@ -92,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Target Detection
   document.addEventListener('mouseover', (e) => {
-    const target = e.target.closest('.hero-title span, a, button, .card, .hero-tag, .nav-logo');
+    const target = e.target.closest('.hero-title span, a, button, .card, .hero-tag, .nav-logo, input, label, .modal-close');
     
     if (target) {
       isHovering = true;
@@ -252,6 +259,92 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('focus', () => {
       console.log('Search focused');
     });
+  }
+
+  // ─── Authentication Readiness ───
+  console.log('[DevStage] System ready. Awaiting Google OAuth configuration.');
+
+  // ─── Custom Scrollbar Logic (Sync + Drag + Auto-Hide) ───
+  const thumb = document.getElementById('scrollbar-thumb');
+  const container = document.getElementById('custom-scrollbar');
+  let isDragging = false;
+  let scrollTimeout;
+
+  if (thumb && container) {
+    const showScrollbar = () => {
+      container.classList.add('is-visible');
+      clearTimeout(scrollTimeout);
+      if (!isDragging) {
+        scrollTimeout = setTimeout(() => {
+          container.classList.remove('is-visible');
+        }, 2000); // Hide after 2 seconds of idle
+      }
+    };
+
+    const updateScrollbar = () => {
+      if (isDragging) return;
+
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const scrollable = docHeight - winHeight;
+
+      if (scrollable <= 0) {
+        container.style.display = 'none';
+        return;
+      }
+      
+      container.style.display = 'flex';
+      showScrollbar();
+
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollPercent = Math.min(Math.max(scrollTop / scrollable, 0), 1);
+      
+      const maxTravel = container.offsetHeight - thumb.offsetHeight;
+      const moveY = scrollPercent * maxTravel;
+      
+      requestAnimationFrame(() => {
+        thumb.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
+      });
+    };
+
+    const onDrag = (e) => {
+      if (!isDragging) return;
+      showScrollbar(); // Keep visible during drag
+      
+      const rect = container.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+      const scrollPercent = Math.min(Math.max(y / rect.height, 0), 1);
+      
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const targetScroll = scrollPercent * (docHeight - winHeight);
+      
+      window.scrollTo(0, targetScroll);
+      
+      const maxTravel = rect.height - thumb.offsetHeight;
+      const moveY = scrollPercent * maxTravel;
+      thumb.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
+    };
+
+    const stopDrag = () => {
+      isDragging = false;
+      container.classList.remove('is-dragging');
+      showScrollbar(); // Trigger fade-out timer
+      window.removeEventListener('mousemove', onDrag);
+      window.removeEventListener('mouseup', stopDrag);
+    };
+
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      container.classList.add('is-dragging');
+      onDrag(e);
+      window.addEventListener('mousemove', onDrag);
+      window.addEventListener('mouseup', stopDrag);
+    });
+
+    window.addEventListener('scroll', updateScrollbar, { passive: true });
+    window.addEventListener('resize', updateScrollbar);
+    updateScrollbar();
   }
 });
 
