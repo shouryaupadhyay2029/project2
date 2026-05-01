@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery | DevStage</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cursor.css">
+  <link rel="stylesheet" href="wave.css">
+
+  <style>
+    /* ─── Explore Platform Layout ─── */
+    .explore-layout {
+      max-width: 1300px;
+      margin: 100px auto 80px;
+      display: grid;
+      grid-template-columns: 260px 1fr 300px;
+      gap: 32px;
+      padding: 0 40px;
+    }
+
+    /* Sidebar Styles */
+    .sidebar-sticky {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-list { list-style: none; }
+    .filter-item {
+      padding: 10px 0;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      transition: color 0.3s ease;
+    }
+    .filter-item:hover { color: var(--brand-orange); }
+
+    /* Feed & Search */
+    .search-section {
+      margin-bottom: 32px;
+    }
+
+    .search-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .search-box i { margin: 0 16px; color: var(--text-tertiary); }
+    .search-box input {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 12px 0;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    /* Trending List */
+    .trending-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .trending-item:last-child { border-bottom: none; }
+    .trending-info h4 { color: #fff; font-size: 0.85rem; margin-bottom: 2px; }
+    .trending-info span { color: var(--text-tertiary); font-size: 0.75rem; }
+
+    /* Project Cards (Hybrid Style) */
+    .project-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+    .project-card:hover { border-color: rgba(255, 138, 0, 0.3); }
+
+    .card-head { padding: 20px 24px; display: flex; align-items: center; gap: 12px; }
+    .card-head img { width: 40px; height: 40px; border-radius: 50%; }
+    .card-head .meta { flex: 1; }
+    .card-head h4 { color: #fff; font-size: 0.95rem; }
+    .card-head span { color: var(--text-tertiary); font-size: 0.75rem; }
+
+    .card-body { padding: 0 24px 20px; }
+    .card-body h3 { color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
+    .card-body p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+
+    .card-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stats { display: flex; gap: 20px; color: var(--text-tertiary); font-size: 0.8rem; }
+    .stats span { display: flex; align-items: center; gap: 6px; }
+    .stats i { width: 16px; height: 16px; }
+
+    .view-btn {
+      color: var(--brand-orange);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .explore-layout { grid-template-columns: 260px 1fr; }
+      .sidebar-right { display: none; }
+    }
+    @media (max-width: 850px) {
+      .explore-layout { grid-template-columns: 1fr; }
+      .sidebar-left { display: none; }
+    }
+  </style>
+</head>
+<body class="explore-page">
+  <div class="wave-container">
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+      <defs><path id="oceanic-wave" d="M-160 44c60 0 100-20 150-20s 100 20 150 20 100-20 150-20 100 20 150 20 v44h-600z" /></defs>
+      <g class="parallax">
+        <use href="#oceanic-wave" x="48" y="0" /><use href="#oceanic-wave" x="48" y="3" /><use href="#oceanic-wave" x="48" y="5" />
+      </g>
+    </svg>
+  </div>
+
+  <nav class="navbar" id="main-navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">Dev<span>Stage</span></a>
+      <div class="nav-menu">
+        <ul class="nav-links">
+          <li><a href="explore.html" class="nav-link active">Explore</a></li>
+          <li><a href="upload.html" class="nav-link">Feed</a></li>
+          <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="explore-layout">
+    <!-- Left Sidebar: Filters -->
+    <aside class="sidebar-left sidebar-sticky">
+      <div class="sidebar-card">
+        <h3 class="sidebar-title"><i data-lucide="filter"></i> Filter By</h3>
+        <ul class="filter-list">
+          <li class="filter-item">Latest <span>✓</span></li>
+          <li class="filter-item">Most Liked</li>
+          <li class="filter-item">Trending</li>
+        </ul>
+      </div>
+      <div class="sidebar-card">
+        <h3 class="sidebar-title"><i data-lucide="code"></i> Tech Stack</h3>
+        <ul class="filter-list">
+          <li class="filter-item">React <span>24</span></li>
+          <li class="filter-item">Python <span>18</span></li>
+          <li class="filter-item">TypeScript <span>12</span></li>
+          <li class="filter-item">UI/UX <span>30</span></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content: Search & Feed -->
+    <section class="main-content">
+      <div class="search-section">
+        <div class="search-box">
+          <i data-lucide="search"></i>
+          <input type="text" id="feed-search" placeholder="Search projects, users, or skills...">
+        </div>
+      </div>
+
+      <div id="explore-feed" class="project-feed">
+        <!-- Skeleton Loading -->
+        <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;"></div>
+        <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;"></div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Suggested -->
+    <aside class="sidebar-right sidebar-sticky">
+      <div class="sidebar-card">
+        <h3 class="sidebar-title"><i data-lucide="trending-up"></i> Trending Now</h3>
+        <div class="trending-list">
+          <div class="trending-item">
+            <div class="trending-info">
+              <h4>AI Portfolio Engine</h4>
+              <span>1.2k likes • 48 comments</span>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-info">
+              <h4>Modern SaaS Boilerplate</h4>
+              <span>850 likes • 12 comments</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
+        <!-- Users will be populated here -->
+        <p style="color:gray; font-size: 0.8rem;">Discover top creators</p>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
+      authDomain: "devstage-872b1.firebaseapp.com",
+      projectId: "devstage-872b1",
+      storageBucket: "devstage-872b1.firebasestorage.app",
+      messagingSenderId: "993834630425",
+      appId: "1:993834630425:web:b063407a7d47a0830d5988"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const feed = document.getElementById('explore-feed');
+
+    const fetchProjects = async (filter = 'latest') => {
+      try {
+        let query = db.collection('projects');
+        
+        if (filter === 'latest') {
+          query = query.orderBy('createdAt', 'desc');
+        }
+
+        const snapshot = await query.get();
+        feed.innerHTML = '';
+
+        if (snapshot.empty) {
+          feed.innerHTML = '<div style="text-align:center; padding: 40px; color: gray;">No projects found matching your criteria.</div>';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          renderProject(doc.data(), doc.id);
+        });
+
+      } catch (error) {
+        console.error("Explore fetch error:", error);
+      }
+    };
+
+    const renderProject = (p, id) => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <div class="card-head">
+          <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name='+p.userName}" alt="User">
+          <div class="meta">
+            <h4>${p.userName || 'Anonymous'}</h4>
+            <span>${p.createdAt ? new Date(p.createdAt.toDate()).toDateString() : 'Recent'}</span>
+          </div>
+          <button class="action-btn" style="background:none; border:none; color:gray;"><i data-lucide="more-horizontal"></i></button>
+        </div>
+        <div class="card-body">
+          <h3>${p.title}</h3>
+          <p>${p.description}</p>
+        </div>
+        <div class="card-footer">
+          <div class="stats">
+            <span><i data-lucide="thumbs-up"></i> ${p.likes?.length || 0}</span>
+            <span><i data-lucide="message-square"></i> ${p.commentCount || 0}</span>
+            <span><i data-lucide="bookmark"></i></span>
+          </div>
+          <a href="${p.fileURL}" target="_blank" class="view-btn">View Project <i data-lucide="arrow-right"></i></a>
+        </div>
+      `;
+      feed.appendChild(card);
+      lucide.createIcons();
+    };
+
+    // Search logic
+    document.getElementById('feed-search').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const cards = feed.querySelectorAll('.project-card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(term) ? 'block' : 'none';
+      });
+    });
+
+    // Initialize
+    fetchProjects();
+    lucide.createIcons();
+  </script>
+  
+  <script src="cursor.js" defer></script>
+</body>
+</html>

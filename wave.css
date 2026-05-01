@@ -1,0 +1,85 @@
+/* ─── Premium Motion Wave System ─── */
+
+.wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    overflow: hidden;
+    line-height: 0;
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    
+    mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+}
+
+.waves {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Layered Wave Motion */
+.parallax > use {
+    animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+    will-change: transform;
+}
+
+/* ─── PAGE MAPPING SYSTEM ─── */
+
+/* Home: Structured & Balanced (Filled) */
+.home-page .wave-container { height: 18vh; opacity: 0.8; }
+.home-page .parallax > use:nth-child(1) { animation-duration: 12s; fill: rgba(255, 138, 0, 0.06); filter: blur(2px); }
+.home-page .parallax > use:nth-child(2) { animation-duration: 15s; fill: rgba(255, 255, 255, 0.02); filter: blur(1px); }
+.home-page .parallax > use:nth-child(3) { animation-duration: 19s; fill: rgba(255, 138, 0, 0.03); }
+.home-page .parallax > use:nth-child(4) { animation-duration: 25s; fill: rgba(255, 255, 255, 0.01); }
+
+/* Explore: Oceanic Flow (Thin Lines) */
+.explore-page .wave-container { 
+    height: 25vh; 
+    opacity: 0.5; 
+    animation: breathe 10s ease-in-out infinite;
+}
+
+.explore-page .parallax > use {
+    fill: none !important;
+    stroke-width: 0.5px;
+}
+
+.explore-page .parallax > use:nth-child(1) { 
+    animation-duration: 30s; 
+    stroke: rgba(255, 255, 255, 0.15); 
+}
+.explore-page .parallax > use:nth-child(2) { 
+    animation-duration: 40s; 
+    stroke: rgba(255, 138, 0, 0.1); 
+    animation-delay: -5s;
+}
+.explore-page .parallax > use:nth-child(3) { 
+    animation-duration: 55s; 
+    stroke: rgba(255, 255, 255, 0.05); 
+    animation-delay: -10s;
+}
+
+/* Upload/Dashboard: Structured & Active */
+.upload-page .wave-container { height: 22vh; opacity: 0.9; }
+.upload-page .parallax > use:nth-child(1) { animation-duration: 8s; fill: rgba(255, 138, 0, 0.06); }
+.upload-page .parallax > use:nth-child(2) { animation-duration: 11s; fill: rgba(255, 255, 255, 0.03); }
+.upload-page .parallax > use:nth-child(3) { animation-duration: 14s; fill: rgba(255, 138, 0, 0.03); }
+.upload-page .parallax > use:nth-child(4) { animation-duration: 18s; fill: rgba(255, 255, 255, 0.02); }
+
+@keyframes move-forever {
+    0% { transform: translate3d(-90px, 0, 0); }
+    100% { transform: translate3d(85px, 0, 0); }
+}
+
+@keyframes breathe {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@media (max-width: 768px) {
+    .wave-container { height: 60px !important; }
+}

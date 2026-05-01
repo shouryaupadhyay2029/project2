@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Challenges | DevStage</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cursor.css">
+    <link rel="stylesheet" href="wave.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .challenge-container {
+            max-width: 1100px;
+            margin: 100px auto;
+            padding: 0 40px;
+        }
+        
+        /* Active Challenge Banner */
+        .active-challenge {
+            background: linear-gradient(135deg, rgba(255, 138, 0, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+            border: 1px solid rgba(255, 138, 0, 0.3);
+            border-radius: 32px;
+            padding: 60px;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .challenge-tag {
+            background: var(--brand-orange);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+        .active-challenge h1 { font-size: 3.5rem; color: #fff; margin-bottom: 16px; letter-spacing: -0.04em; }
+        .active-challenge p { color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        .timer-box {
+            text-align: center;
+        }
+        .timer-val { font-size: 2rem; font-weight: 800; color: #fff; display: block; }
+        .timer-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; }
+
+        .submission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .sub-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 20px;
+            padding: 20px;
+        }
+        .sub-card img { width: 100%; height: 160px; border-radius: 12px; object-fit: cover; margin-bottom: 16px; }
+        .sub-meta { display: flex; align-items: center; gap: 8px; color: var(--text-tertiary); font-size: 0.8rem; }
+    </style>
+</head>
+<body class="home-page">
+    <div class="wave-container">
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+            <g class="parallax">
+                <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
+            </g>
+        </svg>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Dev<span>Stage</span></a>
+            <a href="index.html" class="button-secondary" style="padding: 8px 16px;">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="challenge-container">
+        <section class="active-challenge">
+            <span class="challenge-tag">Active Challenge</span>
+            <h1>The Modern Portfolio</h1>
+            <p>Design and build a responsive portfolio site using any tech stack. Focus on clean typography and smooth transitions.</p>
+            
+            <div class="timer-container">
+                <div class="timer-box"><span class="timer-val">04</span><span class="timer-label">Days</span></div>
+                <div class="timer-box"><span class="timer-val">12</span><span class="timer-label">Hours</span></div>
+                <div class="timer-box"><span class="timer-val">45</span><span class="timer-label">Mins</span></div>
+            </div>
+
+            <button class="button-primary" onclick="window.location.href='index.html?action=upload'">Submit Your Project</button>
+        </section>
+
+        <h2 style="color:#fff; margin-bottom: 32px;">Recent Submissions</h2>
+        <div class="submission-grid">
+            <div class="sub-card">
+                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=400" alt="Sub">
+                <h3 style="color:#fff; font-size: 1rem; margin-bottom: 8px;">Minimal Dark Portfolio</h3>
+                <div class="sub-meta"><i data-lucide="user" style="width:14px;"></i> Alex Chen</div>
+            </div>
+            <div class="sub-card">
+                <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=400" alt="Sub">
+                <h3 style="color:#fff; font-size: 1rem; margin-bottom: 8px;">Glassmorphism Portfolio</h3>
+                <div class="sub-meta"><i data-lucide="user" style="width:14px;"></i> Sarah J.</div>
+            </div>
+        </div>
+    </main>
+
+    <script>lucide.createIcons();</script>
+    <script src="cursor.js" defer></script>
+</body>
+</html>

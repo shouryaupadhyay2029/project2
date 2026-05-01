@@ -318,14 +318,144 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModal();
     });
 
+    // ─── 9. PROJECT UPLOAD SYSTEM ────────────────────────────
+    const uploadModal = document.getElementById('upload-modal');
+    const uploadForm = document.getElementById('project-upload-form');
+    const uploadStatus = document.getElementById('upload-status');
+    const fileInput = document.getElementById('project-file');
+    const fileNameDisplay = document.getElementById('file-name-display');
+
+    const openUploadModal = () => {
+        uploadModal?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeUploadModal = () => {
+        uploadModal?.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        uploadForm?.reset();
+        if (uploadStatus) {
+            uploadStatus.textContent = '';
+            uploadStatus.className = "auth-message";
+        }
+        if (fileNameDisplay) fileNameDisplay.textContent = '';
+    };
+
+    document.getElementById('nav-upload-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.requireAuth(openUploadModal);
+    });
+
+    document.getElementById('hero-upload-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.requireAuth(openUploadModal);
+    });
+
+    document.getElementById('close-upload-modal')?.addEventListener('click', closeUploadModal);
+    
+    // Close on overlay click
+    uploadModal?.addEventListener('click', (e) => {
+        if (e.target === uploadModal) closeUploadModal();
+    });
+
+    // Display file name when selected
+    fileInput?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            fileNameDisplay.textContent = `Selected: ${file.name}`;
+        }
+    });
+
+    uploadForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!window.currentUser) {
+            uploadStatus.textContent = "Please login to upload.";
+            uploadStatus.className = "auth-message error";
+            return;
+        }
+
+        const title = document.getElementById('project-title').value;
+        const desc = document.getElementById('project-desc').value;
+        const file = fileInput.files[0];
+
+        if (!file) {
+            uploadStatus.textContent = "Please select a file.";
+            uploadStatus.className = "auth-message error";
+            return;
+        }
+
+        try {
+            const submitBtn = document.getElementById('upload-submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Set Loading State
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>Uploading...</span>`;
+            uploadStatus.textContent = "Uploading to secure storage...";
+            uploadStatus.className = "auth-message info";
+
+            const storage = firebase.storage();
+            const db = firebase.firestore();
+            const user = firebase.auth().currentUser;
+
+            // 1. Upload to Storage
+            const storageRef = storage.ref(`projects/${user.uid}/${Date.now()}_${file.name}`);
+            const uploadTask = await storageRef.put(file);
+            const fileURL = await uploadTask.ref.getDownloadURL();
+
+            // 2. Save to Firestore
+            await db.collection('projects').add({
+                title: title,
+                description: desc,
+                userId: user.uid,
+                userName: user.displayName || 'Anonymous',
+                fileURL: fileURL,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            uploadStatus.textContent = "Project shared successfully!";
+            uploadStatus.className = "auth-message success";
+            
+            setTimeout(() => {
+                closeUploadModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                // Optional: Refresh Explore page if already there
+                if (window.location.pathname.includes('explore.html')) {
+                    window.location.reload();
+                }
+            }, 1500);
+
+        } catch (error) {
+            console.error("[DevStage] Upload Failed:", error);
+            uploadStatus.textContent = "Upload failed: " + error.message;
+            uploadStatus.className = "auth-message error";
+            const submitBtn = document.getElementById('upload-submit-btn');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Try Again</span>`;
+        }
+    });
+
     // ─── 8. DEEP LINKING (MODAL TRIGGERS) ────────────────────
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('action') === 'login') {
         setTimeout(() => {
             openModal('login');
             showMessage("Please login to continue.", "info");
-            // Clean up URL
             window.history.replaceState({}, document.title, window.location.pathname);
         }, 500);
+    }
+
+    // ─── 9. HERO CARD TRIGGERS ──────────────────────────────
+    const cardBuild = document.getElementById('card-build');
+    if (cardBuild) {
+        cardBuild.addEventListener('click', () => {
+            if (typeof requireAuth === 'function') {
+                requireAuth(() => openUploadModal());
+            } else {
+                openUploadModal();
+            }
+        });
     }
 });

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginner Zone | DevStage</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cursor.css">
+    <link rel="stylesheet" href="wave.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .zone-container {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 0 40px;
+        }
+        .header { margin-bottom: 60px; text-align: center; }
+        .header h1 { font-size: 2.8rem; color: #fff; margin-bottom: 12px; }
+        .header p { color: var(--text-tertiary); font-size: 1.1rem; }
+
+        .section { margin-bottom: 60px; }
+        .section-title {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title i { color: var(--brand-orange); }
+
+        .idea-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .idea-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        .idea-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 138, 0, 0.4);
+        }
+        .idea-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--brand-orange);
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .idea-card h3 { color: #fff; margin-bottom: 12px; }
+        .idea-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+    </style>
+</head>
+<body class="home-page">
+    <div class="wave-container">
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+            <g class="parallax">
+                <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
+            </g>
+        </svg>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Dev<span>Stage</span></a>
+            <a href="index.html" class="button-secondary" style="padding: 8px 16px;">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="zone-container">
+        <header class="header">
+            <h1>Beginner Zone</h1>
+            <p>Every expert was once a beginner. Start your journey here.</p>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="lightbulb"></i> Easy Project Ideas</h2>
+            <div class="idea-grid">
+                <div class="idea-card">
+                    <span class="idea-tag">Web Dev</span>
+                    <h3>Personal Portfolio</h3>
+                    <p>Build a simple one-page site to introduce yourself and show your contact info. Perfect for learning HTML/CSS.</p>
+                </div>
+                <div class="idea-card">
+                    <span class="idea-tag">JS Basics</span>
+                    <h3>To-Do List App</h3>
+                    <p>Create an app where you can add, complete, and delete tasks. Master DOM manipulation and state.</p>
+                </div>
+                <div class="idea-card">
+                    <span class="idea-tag">Design</span>
+                    <h3>Landing Page Clone</h3>
+                    <p>Try to replicate the design of your favorite simple website using pure CSS. Great for layout skills.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="book-open"></i> Guided Inspiration</h2>
+            <div class="idea-grid">
+                <div class="idea-card">
+                    <span class="idea-tag">Path</span>
+                    <h3>The Frontend Roadmap</h3>
+                    <p>A step-by-step guide on what to learn first to become a web developer in 2024.</p>
+                </div>
+                <div class="idea-card">
+                    <span class="idea-tag">Resource</span>
+                    <h3>Free Asset Packs</h3>
+                    <p>A curated list of free icons, fonts, and illustrations to make your first projects look professional.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+    <script src="cursor.js" defer></script>
+</body>
+</html>

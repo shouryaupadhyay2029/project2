@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Discovery Feed | DevStage</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cursor.css">
+    <link rel="stylesheet" href="wave.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .feed-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 0 20px;
+        }
+        .feed-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .feed-header h1 {
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .feed-header p {
+            color: var(--text-tertiary);
+        }
+        .project-card-mini {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: border-color 0.3s ease;
+        }
+        .project-card-mini:hover {
+            border-color: rgba(255, 138, 0, 0.4);
+        }
+        .creator-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .creator-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+        .creator-name {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .project-preview {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="home-page">
+    <div class="wave-container">
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+            <g class="parallax">
+                <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
+            </g>
+        </svg>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Dev<span>Stage</span></a>
+            <a href="index.html" class="button-secondary" style="padding: 8px 16px;">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="feed-container">
+        <header class="feed-header">
+            <h1>Discovery Feed</h1>
+            <p>A simple, live stream of what the community is building.</p>
+        </header>
+        <div id="feed-list">
+            <!-- Dynamic projects will load here -->
+            <div class="project-card-mini" style="opacity: 0.2; height: 150px; background: #fff;"></div>
+            <div class="project-card-mini" style="opacity: 0.2; height: 150px; background: #fff;"></div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
+          authDomain: "devstage-872b1.firebaseapp.com",
+          projectId: "devstage-872b1",
+          storageBucket: "devstage-872b1.firebasestorage.app",
+          messagingSenderId: "993834630425",
+          appId: "1:993834630425:web:b063407a7d47a0830d5988"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const loadFeed = async () => {
+            const snap = await db.collection('projects').orderBy('createdAt', 'desc').limit(10).get();
+            const list = document.getElementById('feed-list');
+            list.innerHTML = '';
+            snap.forEach(doc => {
+                const p = doc.data();
+                list.innerHTML += `
+                    <div class="project-card-mini">
+                        <div class="creator-info">
+                            <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name='+p.userName}" alt="User">
+                            <span class="creator-name">${p.userName || 'Anonymous'}</span>
+                        </div>
+                        <h2 class="project-title">${p.title}</h2>
+                        <p class="project-preview">${p.description.substring(0, 100)}...</p>
+                    </div>
+                `;
+            });
+        };
+        loadFeed();
+        lucide.createIcons();
+    </script>
+    <script src="cursor.js" defer></script>
+</body>
+</html>

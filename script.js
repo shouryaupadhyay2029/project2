@@ -42,20 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const cursor = document.getElementById('hollow-3d-cursor');
   const borderRing = cursor.querySelector('.border-ring');
   const haloGlow = cursor.querySelector('.halo-glow');
-  
+
   // State & Physics
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
   let currentX = mouseX, currentY = mouseY;
   let currentW = 16, currentH = 16;
-  let currentR = 50; 
+  let currentR = 50;
   let currentScale = 1;
-  
+
   let targetX = mouseX, targetY = mouseY;
   let targetW = 16, targetH = 16;
   let targetR = 50;
   let targetScale = 1;
-  
+
   let isHovering = false;
   let isClicking = false;
   let hoverTarget = null;
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    
+
     // Pulse effect during motion
     targetScale = 1.1;
     clearTimeout(window.cursorPulseTimeout);
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = hoverTarget.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       // Element pulls toward mouse (Magnetic effect)
       const pullX = (e.clientX - centerX) * 0.2; // 20% attraction
       const pullY = (e.clientY - centerY) * 0.2;
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Target Detection
   document.addEventListener('mouseover', (e) => {
     const target = e.target.closest('.hero-title span, a, button, .card, .hero-tag, .nav-logo, input, label, .modal-close');
-    
+
     if (target) {
       isHovering = true;
       hoverTarget = target;
@@ -163,11 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── GPU-Accelerated Wave Engine ───
   const canvas = document.getElementById('wave-canvas');
   const ctx = canvas.getContext('2d', { alpha: true });
-  
+
   let width, height;
   let waves = [];
   const waveCount = 5;
-  
+
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
@@ -179,12 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
       this.index = index;
       // Layer depth: front waves (large index) are brighter/thicker
       const depthFactor = (index + 1) / waveCount;
-      
+
       this.amplitude = 30 + depthFactor * 40;
       this.frequency = 0.001 + (1 - depthFactor) * 0.0015;
       this.speed = 0.004 + depthFactor * 0.006;
       this.yBase = height * (0.3 + depthFactor * 0.4);
-      
+
       this.color = `rgba(255, 255, 255, ${0.05 + depthFactor * 0.15})`;
       this.lineWidth = 0.5 + depthFactor * 1.5;
       this.offset = Math.random() * Math.PI * 2;
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     draw(t) {
       this.offset += this.speed;
-      
+
       ctx.beginPath();
       ctx.strokeStyle = this.color;
       ctx.lineWidth = this.lineWidth;
@@ -201,18 +201,18 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let x = 0; x <= width; x += 2) {
         // Base sine wave
         let y = Math.sin(x * this.frequency + this.offset) * this.amplitude;
-        
+
         // Cursor Distortion Field
         const dx = x - mouseX;
         const dy = (this.yBase + y) - mouseY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const radius = 200;
-        
+
         if (dist < radius) {
           // Smooth bell-curve falloff
           const force = Math.pow(1 - dist / radius, 2);
           const distortion = force * 60; // Max 60px bend
-          
+
           // Pull toward/away from cursor
           y -= distortion * (dy / dist);
         }
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (x === 0) ctx.moveTo(x, this.yBase + y);
         else ctx.lineTo(x, this.yBase + y);
       }
-      
+
       ctx.stroke();
     }
   }
@@ -234,9 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderWaves(t) {
     ctx.clearRect(0, 0, width, height);
-    
+
     waves.forEach(wave => wave.draw(t));
-    
+
     requestAnimationFrame(renderWaves);
   }
 
@@ -292,16 +292,16 @@ document.addEventListener('DOMContentLoaded', () => {
         container.style.display = 'none';
         return;
       }
-      
+
       container.style.display = 'flex';
       showScrollbar();
 
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const scrollPercent = Math.min(Math.max(scrollTop / scrollable, 0), 1);
-      
+
       const maxTravel = container.offsetHeight - thumb.offsetHeight;
       const moveY = scrollPercent * maxTravel;
-      
+
       requestAnimationFrame(() => {
         thumb.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
       });
@@ -310,17 +310,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const onDrag = (e) => {
       if (!isDragging) return;
       showScrollbar(); // Keep visible during drag
-      
+
       const rect = container.getBoundingClientRect();
       const y = e.clientY - rect.top;
       const scrollPercent = Math.min(Math.max(y / rect.height, 0), 1);
-      
+
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
       const targetScroll = scrollPercent * (docHeight - winHeight);
-      
+
       window.scrollTo(0, targetScroll);
-      
+
       const maxTravel = rect.height - thumb.offsetHeight;
       const moveY = scrollPercent * maxTravel;
       thumb.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
