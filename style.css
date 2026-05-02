@@ -184,7 +184,10 @@ select,
 textarea,
 label,
 .modal-card,
-.modal-overlay {
+.modal-overlay,
+.discovery-card,
+.lower-section,
+.filter-select {
   cursor: none !important;
 }
 
@@ -385,19 +388,131 @@ body::before {
   gap: 24px;
 }
 
-.nav-logo {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #ffffff;
+/* ─── Logo: Weight Bloom Animation ─── */
+.logo-bloom-wrapper {
   text-decoration: none;
-  letter-spacing: -0.03em;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: none !important;
+  margin-top: -4px;
 }
 
-.nav-logo span {
-  opacity: 0.35;
+.logo-bloom-wrapper:hover {
+  transform: translateY(-2px);
+}
+
+.logo-chars {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.char {
+  color: #efefef;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(9px);
+  -webkit-filter: blur(7px);
+  filter: blur(7px);
+  transition: opacity 1.05s, transform 1.05s, filter 0.85s, -webkit-filter 0.85s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i) * 0.072s + 0.1s);
+}
+
+.char.outline {
+  color: transparent;
+  -webkit-text-stroke: 1.6px rgba(239, 239, 239, 0.68);
+}
+
+.bloom .char {
+  opacity: 1;
+  transform: translateY(0);
+  -webkit-filter: blur(0);
+  filter: blur(0);
+}
+
+/* Breathing Animation */
+.logo-bloom-wrapper.is-breathing .char {
+  animation: charBreath 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.06s);
+}
+
+@keyframes charBreath {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.86; }
+}
+
+.logo-separator {
+  width: 1px;
+  height: 0.55em;
+  background: rgba(239, 239, 239, 0.12);
+  margin: 0 6px;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: opacity 1.05s, transform 1.05s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.6s;
+}
+
+.bloom .logo-separator {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.logo-dot {
+  position: absolute;
+  top: -2px;
+  right: -12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid #D97941;
+  background: transparent;
+  opacity: 0;
+  transform: scale(0.3);
+  transition: opacity 1.05s, transform 1.05s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.68s;
+}
+
+.bloom .logo-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.logo-bloom-wrapper.is-breathing .logo-dot {
+  animation: dotBreath 5s ease-in-out infinite;
+}
+
+@keyframes dotBreath {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(1.25); }
+}
+
+.logo-underline {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(217, 121, 65, 0.28), transparent);
+  margin-top: -2px;
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: opacity 1.05s, transform 1.05s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.72s;
+}
+
+.bloom .logo-underline {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 /* Search — Uiverse Animated Component (DevStage Dark Theme) */
@@ -2043,24 +2158,28 @@ body::before {
   overflow: hidden;
 }
 
-.explore-section {
+.lower-section {
   position: relative;
   margin-top: 95vh;
   z-index: 2;
 
-  /* Translucent glass effect */
-  background: rgba(14, 14, 22, 0.72);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  /* PREMIUM TRANSLUCENT GLASS (MATTE GREY) */
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-  /* Glass border — subtle inner glint */
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(20, 20, 20, 0.85) 100%
+  );
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: none;
 
   min-height: 200vh;
   padding: 80px 40px 120px;
 
-  /* Clearly visible curved corners */
   border-top-left-radius: 48px;
   border-top-right-radius: 48px;
 
@@ -2068,10 +2187,11 @@ body::before {
   justify-content: center;
   align-items: flex-start;
 
-  /* Deep shadow to lift the glass panel off the hero */
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08), /* glass top-edge highlight */
-    0 -20px 60px rgba(0, 0, 0, 0.6);
+    0 -10px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+
+  color: #eaeaea;
 
   /* Entrance Animation */
   opacity: 0;
@@ -2080,9 +2200,76 @@ body::before {
     opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.explore-section.is-visible {
+.lower-section.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ─── Vertical Waves Background ─── */
+.vertical-waves {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1; /* Ensure it stays behind content */
+}
+
+/* Base lines (same feel as homepage) */
+.vertical-waves::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: repeating-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.06) 0px,
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 1px,
+    transparent 16px
+  );
+
+  /* THIS CREATES THE WAVE FEEL */
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    white 20%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    white 20%,
+    transparent 70%
+  );
+
+  animation: waveFlow 18s linear infinite;
+}
+
+/* Secondary layer for depth */
+.vertical-waves::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: repeating-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 20px
+  );
+
+  animation: waveFlowReverse 24s linear infinite;
+}
+
+/* Motion (LEFT → RIGHT) */
+@keyframes waveFlow {
+  0% { transform: translateX(-80px); }
+  100% { transform: translateX(80px); }
+}
+
+/* Opposite slow layer */
+@keyframes waveFlowReverse {
+  0% { transform: translateX(60px); }
+  100% { transform: translateX(-60px); }
 }
 
 .hero-layer {
@@ -2251,12 +2438,15 @@ body::before {
 }
 
 /* ─── Discovery Engine Styles ─── */
-.explore-section {
+/* Redundant definition removed to maintain glass styles */
+/* 
+.lower-section {
   padding: 80px 0;
   background: #0a0a0f;
   position: relative;
   overflow: hidden;
 }
+*/
 
 .explore-discovery-container {
   max-width: 1400px;
@@ -3317,7 +3507,7 @@ body::before {
     padding: 80px 20px;
   }
 
-  .explore-section {
+  .lower-section {
     padding: 60px 20px 100px;
     border-top-left-radius: 28px;
     border-top-right-radius: 28px;

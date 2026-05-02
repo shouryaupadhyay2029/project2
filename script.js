@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ─── Weight Bloom Logo Animation ───
+  const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+  if (logoWrapper) {
+    // 500ms silence before bloom
+    setTimeout(() => {
+      logoWrapper.classList.add('bloom');
+      
+      // 2.2s after page load for breathing (Total 2.2s)
+      setTimeout(() => {
+        logoWrapper.classList.add('is-breathing');
+      }, 1700); 
+    }, 500);
+  }
+
   const hamburger = document.getElementById('hamburger-menu');
   const navLinks = document.getElementById('nav-links');
   const navbar = document.getElementById('main-navbar');
@@ -99,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Target Detection
   document.addEventListener('mouseover', (e) => {
-    const target = e.target.closest('.hero-title span, a, button, .card, .hero-tag, .nav-logo, input, label, .modal-close');
+    const target = e.target.closest('.hero-title span, a, button, .card, .discovery-card, .hero-tag, .logo-bloom-wrapper, input, select, label, .modal-close');
 
     if (target) {
       isHovering = true;
@@ -348,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   // ─── High-End Scroll Interaction Engine ───
   const heroLayer = document.querySelector('.hero-layer');
-  const exploreLayer = document.querySelector('.explore-section');
+  const exploreLayer = document.querySelector('.lower-section');
   
   const updateParallax = () => {
     const scrollY = window.scrollY;
@@ -648,4 +662,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial Boot
   initDiscoveryFeed();
   initActivityPulse();
+  
+  // ─── Vertical Waves Cursor Interaction ───
+  document.addEventListener("mousemove", (e) => {
+    const wave = document.querySelector(".vertical-waves");
+    if (wave) {
+      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+      wave.style.transform = `translateX(${x}px)`;
+    }
+  });
 });
