@@ -36,32 +36,7 @@
 .home-page .parallax > use:nth-child(3) { animation-duration: 19s; fill: rgba(255, 138, 0, 0.03); }
 .home-page .parallax > use:nth-child(4) { animation-duration: 25s; fill: rgba(255, 255, 255, 0.01); }
 
-/* Explore: Oceanic Flow (Thin Lines) */
-.explore-page .wave-container { 
-    height: 25vh; 
-    opacity: 0.5; 
-    animation: breathe 10s ease-in-out infinite;
-}
 
-.explore-page .parallax > use {
-    fill: none !important;
-    stroke-width: 0.5px;
-}
-
-.explore-page .parallax > use:nth-child(1) { 
-    animation-duration: 30s; 
-    stroke: rgba(255, 255, 255, 0.15); 
-}
-.explore-page .parallax > use:nth-child(2) { 
-    animation-duration: 40s; 
-    stroke: rgba(255, 138, 0, 0.1); 
-    animation-delay: -5s;
-}
-.explore-page .parallax > use:nth-child(3) { 
-    animation-duration: 55s; 
-    stroke: rgba(255, 255, 255, 0.05); 
-    animation-delay: -10s;
-}
 
 /* Upload/Dashboard: Structured & Active */
 .upload-page .wave-container { height: 22vh; opacity: 0.9; }

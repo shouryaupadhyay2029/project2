@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discovery | DevStage</title>
-  
+
   <!-- Premium Typography: Clash Display & Inter -->
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +16,7 @@
   <!-- Global Styles -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="cursor.css">
-  <link rel="stylesheet" href="wave.css">
+  <link rel="stylesheet" href="grid-background.css">
 
   <style>
     /* ─── Explore Platform Layout ─── */
@@ -53,7 +54,10 @@
       gap: 8px;
     }
 
-    .filter-list { list-style: none; }
+    .filter-list {
+      list-style: none;
+    }
+
     .filter-item {
       padding: 10px 0;
       color: var(--text-tertiary);
@@ -63,7 +67,10 @@
       justify-content: space-between;
       transition: color 0.3s ease;
     }
-    .filter-item:hover { color: var(--brand-orange); }
+
+    .filter-item:hover {
+      color: var(--brand-orange);
+    }
 
     /* Feed & Search */
     .search-section {
@@ -77,10 +84,14 @@
       padding: 4px;
       display: flex;
       align-items: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .search-box i { margin: 0 16px; color: var(--text-tertiary); }
+    .search-box i {
+      margin: 0 16px;
+      color: var(--text-tertiary);
+    }
+
     .search-box input {
       flex: 1;
       background: none;
@@ -98,9 +109,21 @@
       padding-bottom: 16px;
       border-bottom: 1px solid var(--border-soft);
     }
-    .trending-item:last-child { border-bottom: none; }
-    .trending-info h4 { color: #fff; font-size: 0.85rem; margin-bottom: 2px; }
-    .trending-info span { color: var(--text-tertiary); font-size: 0.75rem; }
+
+    .trending-item:last-child {
+      border-bottom: none;
+    }
+
+    .trending-info h4 {
+      color: #fff;
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
+
+    .trending-info span {
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+    }
 
     /* Project Cards (Hybrid Style) */
     .project-feed {
@@ -116,17 +139,54 @@
       overflow: hidden;
       transition: border-color 0.3s ease;
     }
-    .project-card:hover { border-color: rgba(255, 138, 0, 0.3); }
 
-    .card-head { padding: 20px 24px; display: flex; align-items: center; gap: 12px; }
-    .card-head img { width: 40px; height: 40px; border-radius: 50%; }
-    .card-head .meta { flex: 1; }
-    .card-head h4 { color: #fff; font-size: 0.95rem; }
-    .card-head span { color: var(--text-tertiary); font-size: 0.75rem; }
+    .project-card:hover {
+      border-color: rgba(255, 138, 0, 0.3);
+    }
 
-    .card-body { padding: 0 24px 20px; }
-    .card-body h3 { color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
-    .card-body p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+    .card-head {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-head img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .card-head .meta {
+      flex: 1;
+    }
+
+    .card-head h4 {
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .card-head span {
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+    }
+
+    .card-body {
+      padding: 0 24px 20px;
+    }
+
+    .card-body h3 {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .card-body p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
 
     .card-footer {
       padding: 12px 24px;
@@ -136,9 +196,23 @@
       align-items: center;
     }
 
-    .stats { display: flex; gap: 20px; color: var(--text-tertiary); font-size: 0.8rem; }
-    .stats span { display: flex; align-items: center; gap: 6px; }
-    .stats i { width: 16px; height: 16px; }
+    .stats {
+      display: flex;
+      gap: 20px;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+    }
+
+    .stats span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stats i {
+      width: 16px;
+      height: 16px;
+    }
 
     .view-btn {
       color: var(--brand-orange);
@@ -152,24 +226,36 @@
 
     /* Responsive */
     @media (max-width: 1100px) {
-      .explore-layout { grid-template-columns: 260px 1fr; }
-      .sidebar-right { display: none; }
+      .explore-layout {
+        grid-template-columns: 260px 1fr;
+      }
+
+      .sidebar-right {
+        display: none;
+      }
     }
+
     @media (max-width: 850px) {
-      .explore-layout { grid-template-columns: 1fr; }
-      .sidebar-left { display: none; }
+      .explore-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-left {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body class="explore-page">
   <script src="loader.js"></script>
-  <div class="wave-container">
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-      <defs><path id="oceanic-wave" d="M-160 44c60 0 100-20 150-20s 100 20 150 20 100-20 150-20 100 20 150 20 v44h-600z" /></defs>
-      <g class="parallax">
-        <use href="#oceanic-wave" x="48" y="0" /><use href="#oceanic-wave" x="48" y="3" /><use href="#oceanic-wave" x="48" y="5" />
-      </g>
-    </svg>
+  <div class="grid-background">
+    <div class="grid-layer layer-1"></div>
+    <div class="grid-layer layer-2"></div>
+    <div class="grid-layer layer-3"></div>
+    <div class="grid-layer layer-4"></div>
+    <canvas id="grid-distortion-canvas" class="grid-distortion"></canvas>
+    <div class="grid-vignette"></div>
   </div>
 
   <nav class="navbar" id="main-navbar">
@@ -272,7 +358,7 @@
     const fetchProjects = async (filter = 'latest') => {
       try {
         let query = db.collection('projects');
-        
+
         if (filter === 'latest') {
           query = query.orderBy('createdAt', 'desc');
         }
@@ -299,7 +385,7 @@
       card.className = 'project-card';
       card.innerHTML = `
         <div class="card-head">
-          <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name='+p.userName}" alt="User">
+          <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name=' + p.userName}" alt="User">
           <div class="meta">
             <h4>${p.userName || 'Anonymous'}</h4>
             <span>${p.createdAt ? new Date(p.createdAt.toDate()).toDateString() : 'Recent'}</span>
@@ -337,7 +423,9 @@
     fetchProjects();
     lucide.createIcons();
   </script>
-  
+
+  <script src="grid-distortion.js" defer></script>
   <script src="cursor.js" defer></script>
 </body>
+
 </html>
