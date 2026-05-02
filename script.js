@@ -176,11 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── GPU-Accelerated Wave Engine ───
   const canvas = document.getElementById('wave-canvas');
-  const ctx = canvas.getContext('2d', { alpha: true });
+  if (canvas) {
+    const ctx = canvas.getContext('2d', { alpha: true });
 
-  let width, height;
-  let waves = [];
-  const waveCount = 5;
+    let width, height;
+    let waves = [];
+    const waveCount = 5;
 
   function resize() {
     width = canvas.width = window.innerWidth;
@@ -254,9 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(renderWaves);
   }
 
-  window.addEventListener('resize', resize);
-  resize();
-  renderWaves(0);
+    window.addEventListener('resize', resize);
+    resize();
+    renderWaves(0);
+  }
 
   // Navbar scroll effect
   window.addEventListener('scroll', () => {
