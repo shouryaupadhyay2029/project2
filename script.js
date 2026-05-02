@@ -346,5 +346,306 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateScrollbar);
     updateScrollbar();
   }
-});
+  // ─── High-End Scroll Interaction Engine ───
+  const heroLayer = document.querySelector('.hero-layer');
+  const exploreLayer = document.querySelector('.explore-section');
+  
+  const updateParallax = () => {
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+    const progress = Math.min(scrollY / vh, 1);
+    
+    // Apply dim/blur to Hero as we scroll
+    if (heroLayer) {
+      heroLayer.style.setProperty('--scroll-progress', progress);
+      heroLayer.style.filter = `blur(${progress * 8}px)`;
+      heroLayer.style.opacity = 1 - (progress * 0.4);
+      heroLayer.style.transform = `translateY(${scrollY * 0.2}px)`; // Subtle parallax
+    }
 
+    requestAnimationFrame(updateParallax);
+  };
+  requestAnimationFrame(updateParallax);
+
+  // Entrance Observer for Explore Layer
+  const entranceObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        
+        // Stagger project cards if they exist
+        const cards = entry.target.querySelectorAll('.discovery-card');
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.classList.add('fade-up');
+          }, index * 100);
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  if (exploreLayer) entranceObserver.observe(exploreLayer);
+
+  // ─── Discovery Engine (Awwwards Style) ───
+  // ─── 4. DISCOVERY FEED ENGINE (Real-time) ────────────────
+  const discoveryGrid = document.getElementById('explore-grid');
+  const filters = {
+    domain: document.getElementById('filter-domain'),
+    tech: document.getElementById('filter-tech'),
+    difficulty: document.getElementById('filter-difficulty'),
+    sort: document.getElementById('filter-sort')
+  };
+  let discoveryUnsubscribe = null;
+
+  const initDiscoveryFeed = () => {
+    if (!discoveryGrid) return;
+
+    // Skeletons while connecting
+    discoveryGrid.innerHTML = `
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    `;
+
+    // Unsubscribe from existing listener if filters change
+    if (discoveryUnsubscribe) discoveryUnsubscribe();
+
+    const sortBy = filters.sort?.value || 'newest';
+    let query = db.collection('projects');
+
+    if (sortBy === 'newest') query = query.orderBy('createdAt', 'desc');
+    else if (sortBy === 'likes') query = query.orderBy('likesCount', 'desc');
+    else if (sortBy === 'views') query = query.orderBy('viewCount', 'desc');
+
+    // Real-time Listener
+    discoveryUnsubscribe = query.limit(12).onSnapshot((snapshot) => {
+      discoveryGrid.innerHTML = '';
+
+      if (snapshot.empty) {
+        discoveryGrid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 0; opacity: 0.5;">
+            <i data-lucide="compass" style="width: 40px; height: 40px; margin-bottom: 15px;"></i>
+            <p>No projects found. Be the first to share!</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      snapshot.forEach((doc, index) => {
+        renderDiscoveryCard(doc.data(), doc.id, index);
+      });
+
+      lucide.createIcons();
+    }, (error) => {
+      console.error("[DevStage] Discovery Engine Error:", error);
+      discoveryGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff4b4b;">Sync failed. Please check your connection.</p>`;
+    });
+  };
+
+  const renderDiscoveryCard = (p, id, index) => {
+    const card = document.createElement('div');
+    card.className = 'discovery-card';
+    card.setAttribute('data-id', id);
+    
+    const banner = p.fileURL || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80';
+    const avatar = p.userAvatar || `https://ui-avatars.com/api/?name=${p.userName || 'User'}&background=random`;
+    
+    // Smooth entrance
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = `all 0.6s cubic-bezier(0.23, 1, 0.32, 1) ${index * 0.05}s`;
+
+    card.innerHTML = `
+      <div class="card-banner">
+        <img src="${banner}" alt="${p.title}" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-user">
+          <img src="${avatar}" alt="${p.userName}">
+          <span>${p.userName || 'DevStage Developer'}</span>
+        </div>
+        <h3 class="card-title">${p.title}</h3>
+        <p class="card-description">${p.description}</p>
+        <div class="card-stats">
+          <button class="stat-btn like-btn" id="like-${id}">
+            <i data-lucide="heart"></i>
+            <span class="count">${p.likesCount || 0}</span>
+          </button>
+          <button class="stat-btn comment-btn" id="comment-${id}">
+            <i data-lucide="message-square"></i>
+            <span class="count">${p.commentCount || 0}</span>
+          </button>
+          <div class="stat-item">
+            <i data-lucide="eye"></i>
+            <span>${p.viewCount || Math.floor(Math.random() * 50)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Click Card to View
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.stat-btn')) {
+        window.location.href = `explore.html?id=${id}`;
+      }
+    });
+
+    // Like Interaction
+    const likeBtn = card.querySelector('.like-btn');
+    likeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleLikeToggle(id, likeBtn);
+    });
+
+    // Comment Interaction
+    const commentBtn = card.querySelector('.comment-btn');
+    commentBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.location.href = `explore.html?id=${id}#comments`;
+    });
+
+    discoveryGrid.appendChild(card);
+    
+    // Check if liked by current user
+    checkIfLiked(id, likeBtn);
+
+    requestAnimationFrame(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+    });
+  };
+
+  // ─── Engagement Logic ───
+  const handleLikeToggle = async (projectId, btn) => {
+    if (!window.auth.currentUser) {
+        if (window.showGlobalAuthMessage) {
+            window.showGlobalAuthMessage("Please login to like projects", "info");
+        }
+        return;
+    }
+
+    const userId = window.auth.currentUser.uid;
+    const likeId = `${userId}_${projectId}`;
+    const likeRef = db.collection('likes').doc(likeId);
+    const projectRef = db.collection('projects').doc(projectId);
+
+    try {
+        const likeDoc = await likeRef.get();
+        const icon = btn.querySelector('i');
+        const countSpan = btn.querySelector('.count');
+        let currentCount = parseInt(countSpan.textContent);
+
+        if (likeDoc.exists) {
+            // Unlike
+            await likeRef.delete();
+            await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(-1) });
+            btn.classList.remove('active');
+            countSpan.textContent = Math.max(0, currentCount - 1);
+        } else {
+            // Like
+            await likeRef.set({ userId, projectId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            const pDoc = await projectRef.get();
+            const pTitle = pDoc.data()?.title || "a project";
+            
+            await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(1) });
+            
+            // Log Activity
+            await db.collection('activity').add({
+                type: 'like',
+                userId,
+                userName: window.auth.currentUser.displayName || 'Anonymous',
+                userAvatar: window.auth.currentUser.photoURL || `https://ui-avatars.com/api/?name=User`,
+                projectId,
+                projectTitle: pTitle,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            btn.classList.add('active');
+            countSpan.textContent = currentCount + 1;
+        }
+        lucide.createIcons();
+    } catch (error) {
+        console.error("[DevStage] Like Error:", error);
+    }
+  };
+
+  const checkIfLiked = async (projectId, btn) => {
+    if (!window.auth.currentUser) return;
+    const userId = window.auth.currentUser.uid;
+    const likeId = `${userId}_${projectId}`;
+    const likeDoc = await db.collection('likes').doc(likeId).get();
+    if (likeDoc.exists) {
+        btn.classList.add('active');
+        lucide.createIcons();
+    }
+  };
+
+  // Bind Filters
+  if (filters.domain) filters.domain.addEventListener('change', initDiscoveryFeed);
+  if (filters.tech) filters.tech.addEventListener('change', initDiscoveryFeed);
+  if (filters.difficulty) filters.difficulty.addEventListener('change', initDiscoveryFeed);
+  if (filters.sort) filters.sort.addEventListener('change', initDiscoveryFeed);
+
+  // ─── 5. ACTIVITY PULSE ENGINE (Real-time) ────────────────
+  const activityList = document.getElementById('activity-list');
+
+  const initActivityPulse = () => {
+    if (!activityList) return;
+
+    db.collection('activity')
+      .orderBy('timestamp', 'desc')
+      .limit(8)
+      .onSnapshot((snapshot) => {
+        activityList.innerHTML = '';
+
+        if (snapshot.empty) {
+          activityList.innerHTML = '<p class="loading-text">Quiet for now...</p>';
+          return;
+        }
+
+        snapshot.forEach((doc) => {
+          const act = doc.data();
+          const item = document.createElement('div');
+          item.className = 'activity-item';
+          
+          const time = act.timestamp ? formatTimeAgo(act.timestamp.toDate()) : 'Just now';
+          const icon = act.type === 'upload' ? 'rocket' : 'heart';
+          const actionText = act.type === 'upload' ? 'uploaded' : 'liked';
+          
+          item.innerHTML = `
+            <img src="${act.userAvatar}" class="activity-avatar" alt="${act.userName}">
+            <div class="activity-content">
+              <b>${act.userName}</b> ${actionText} 
+              <a href="explore.html?id=${act.projectId}" class="activity-project-link">
+                ${act.projectTitle}
+              </a>
+              <span class="activity-time">${time}</span>
+            </div>
+          `;
+          activityList.appendChild(item);
+        });
+        
+        lucide.createIcons();
+      });
+  };
+
+  function formatTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + "y ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + "mo ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + "d ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + "h ago";
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + "m ago";
+    return "just now";
+  }
+
+  // Initial Boot
+  initDiscoveryFeed();
+  initActivityPulse();
+});

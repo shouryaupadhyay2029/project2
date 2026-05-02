@@ -1,401 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Community Feed | DevStage</title>
-  
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Project | DevStage</title>
+    
+    <!-- Premium Typography -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Global Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="cursor.css">
-  <link rel="stylesheet" href="wave.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-  <style>
-    /* ─── Feed Specific Styles ─── */
-    .feed-wrapper {
-      max-width: 680px;
-      margin: 100px auto 80px;
-      padding: 0 20px;
-    }
-
-    /* Share Project Box */
-    .share-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 32px;
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .share-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .share-trigger {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-soft);
-      border-radius: 30px;
-      padding: 14px 20px;
-      color: var(--text-tertiary);
-      font-size: 0.95rem;
-      text-align: left;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .share-trigger:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    /* Project Card */
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: 20px;
-      padding: 0;
-      margin-bottom: 24px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-
-    .card-header {
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .user-info {
-      flex: 1;
-    }
-
-    .user-name {
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: block;
-    }
-
-    .timestamp {
-      color: var(--text-tertiary);
-      font-size: 0.75rem;
-    }
-
-    .card-content {
-      padding: 0 24px 20px;
-    }
-
-    .project-title {
-      font-family: var(--font-heading);
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-
-    .project-desc {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .project-media {
-      width: 100%;
-      height: 340px;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .project-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* Social Actions */
-    .card-actions {
-      padding: 12px 24px;
-      border-top: 1px solid var(--border-soft);
-      display: flex;
-      gap: 24px;
-    }
-
-    .action-btn {
-      background: none;
-      border: none;
-      color: var(--text-tertiary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .action-btn:hover, .action-btn.active {
-      color: var(--brand-orange);
-    }
-
-    .action-btn i { width: 18px; height: 18px; }
-
-    /* Comments Section */
-    .comments-section {
-      background: rgba(0, 0, 0, 0.1);
-      padding: 20px 24px;
-      border-top: 1px solid var(--border-soft);
-      display: none;
-    }
-
-    .comments-section.visible { display: block; }
-
-    .comment {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .comment-avatar { width: 32px; height: 32px; border-radius: 50%; }
-
-    .comment-body {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 10px 14px;
-      border-radius: 12px;
-      flex: 1;
-    }
-
-    .comment-user { color: #fff; font-weight: 600; font-size: 0.85rem; margin-bottom: 2px; }
-    .comment-text { color: var(--text-secondary); font-size: 0.85rem; }
-
-    .comment-input-area {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .comment-input {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-soft);
-      border-radius: 20px;
-      padding: 8px 16px;
-      color: #fff;
-      font-size: 0.85rem;
-    }
-
-    /* Shimmer Loading */
-    .shimmer {
-      background: linear-gradient(110deg, var(--bg-card) 30%, #333338 50%, var(--bg-card) 70%);
-      background-size: 300% 100%;
-      animation: shimmer 1.5s infinite linear;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-  </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cursor.css">
 </head>
 <body class="upload-page">
-  <div class="wave-container">
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-      <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
-      <g class="parallax">
-        <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
-      </g>
-    </svg>
-  </div>
-
-  <nav class="navbar" id="main-navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">Dev<span>Stage</span></a>
-      <div class="nav-menu">
-        <ul class="nav-links">
-          <li><a href="explore.html" class="nav-link">Explore</a></li>
-          <li><a href="upload.html" class="nav-link active">Feed</a></li>
-          <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <main class="feed-wrapper">
-    <!-- Share Box -->
-    <div class="share-box">
-      <img id="user-avatar-current" src="https://ui-avatars.com/api/?name=User" class="share-avatar" alt="User">
-      <button class="share-trigger" onclick="window.location.href='index.html?action=upload'">What project are you working on?</button>
-    </div>
-
-    <!-- Feed Container -->
-    <div id="project-feed">
-      <!-- Loading Skeleton -->
-      <div class="project-card shimmer" style="height: 400px; margin-bottom: 24px; opacity: 0.2;"></div>
-      <div class="project-card shimmer" style="height: 400px; opacity: 0.2;"></div>
-    </div>
-  </main>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-  <script>
-    // ─── Firebase Init ───
-    const firebaseConfig = {
-      apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
-      authDomain: "devstage-872b1.firebaseapp.com",
-      projectId: "devstage-872b1",
-      storageBucket: "devstage-872b1.firebasestorage.app",
-      messagingSenderId: "993834630425",
-      appId: "1:993834630425:web:b063407a7d47a0830d5988"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
-    const feedContainer = document.getElementById('project-feed');
-
-    // ─── Core: Fetch Feed ───
-    const loadFeed = async () => {
-      try {
-        const snapshot = await db.collection('projects')
-          .orderBy('createdAt', 'desc')
-          .get();
-
-        feedContainer.innerHTML = '';
-        
-        if (snapshot.empty) {
-          feedContainer.innerHTML = '<p style="text-align:center; color:gray;">No projects in feed yet.</p>';
-          return;
-        }
-
-        snapshot.forEach(doc => {
-          renderProjectCard(doc);
-        });
-
-      } catch (error) {
-        console.error("Feed error:", error);
-      }
-    };
-
-    const renderProjectCard = async (doc) => {
-      const p = doc.data();
-      const id = doc.id;
-      const card = document.createElement('div');
-      card.className = 'project-card';
-      
-      const timeAgo = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString() : 'Just now';
-
-      card.innerHTML = `
-        <div class="card-header">
-          <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name='+p.userName}" class="comment-avatar">
-          <div class="user-info">
-            <span class="user-name">${p.userName || 'Developer'}</span>
-            <span class="timestamp">${timeAgo}</span>
-          </div>
-        </div>
-        <div class="card-content">
-          <h3 class="project-title">${p.title}</h3>
-          <p class="project-desc">${p.description}</p>
-        </div>
-        ${p.fileURL ? `<div class="project-media"><img src="${p.fileURL}" alt="Preview"></div>` : ''}
-        
-        <div class="card-actions">
-          <button class="action-btn like-btn" data-id="${id}">
-            <i data-lucide="thumbs-up"></i> Like
-          </button>
-          <button class="action-btn comment-btn" onclick="toggleComments('${id}')">
-            <i data-lucide="message-square"></i> Comment
-          </button>
-          <button class="action-btn">
-            <i data-lucide="bookmark"></i> Save
-          </button>
-        </div>
-
-        <div class="comments-section" id="comments-${id}">
-          <div id="comments-list-${id}"></div>
-          <div class="comment-input-area">
-            <img src="${auth.currentUser?.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="comment-avatar">
-            <input type="text" class="comment-input" placeholder="Write a comment..." 
-                   onkeydown="if(event.key==='Enter') submitComment('${id}', this.value, this)">
-          </div>
-        </div>
-      `;
-      feedContainer.appendChild(card);
-      lucide.createIcons();
-      loadComments(id);
-    };
-
-    // ─── Social: Comments ───
-    const loadComments = async (projectId) => {
-      const list = document.getElementById(`comments-list-${projectId}`);
-      const snap = await db.collection('projects').doc(projectId).collection('comments')
-        .orderBy('createdAt', 'asc').limit(3).get();
-      
-      list.innerHTML = '';
-      snap.forEach(cDoc => {
-        const c = cDoc.data();
-        list.innerHTML += `
-          <div class="comment">
-            <img src="${c.userAvatar}" class="comment-avatar">
-            <div class="comment-body">
-              <p class="comment-user">${c.userName}</p>
-              <p class="comment-text">${c.text}</p>
+    <nav class="navbar" id="main-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Dev<span>Stage</span></a>
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="explore.html" class="nav-link">Explore</a></li>
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                </ul>
             </div>
-          </div>
-        `;
-      });
-    };
+        </div>
+    </nav>
 
-    const submitComment = async (projectId, text, input) => {
-      if (!text.trim() || !auth.currentUser) return;
-      
-      const user = auth.currentUser;
-      await db.collection('projects').doc(projectId).collection('comments').add({
-        text,
-        userId: user.uid,
-        userName: user.displayName || 'Anonymous',
-        userAvatar: user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      
-      input.value = '';
-      loadComments(projectId);
-    };
+    <main class="upload-wrapper" style="padding-top: 120px; padding-bottom: 60px;">
+        <div class="upload-grid-container">
+            
+            <!-- LEFT: Upload Form -->
+            <section class="upload-form-section">
+                <div class="upload-card glass-card">
+                    <div class="card-glow"></div>
+                    <div class="section-header">
+                        <i data-lucide="upload-cloud" class="brand-icon"></i>
+                        <h2>Share a New Project</h2>
+                        <p>Let the community discover your latest creation.</p>
+                    </div>
 
-    window.toggleComments = (id) => {
-      document.getElementById(`comments-${id}`).classList.toggle('visible');
-    };
+                    <form id="project-upload-form" class="upload-form-layout">
+                        <div class="floating-group">
+                            <input type="text" id="project-title" required placeholder=" ">
+                            <label for="project-title">Project Title</label>
+                            <div class="input-accent"></div>
+                        </div>
 
-    // ─── Init ───
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById('user-avatar-current').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`;
-        loadFeed();
-      } else {
-        window.location.href = 'index.html?action=login';
-      }
-    });
-  </script>
-  
-  <script src="cursor.js" defer></script>
+                        <div class="floating-group">
+                            <textarea id="project-desc" required placeholder=" " rows="4"></textarea>
+                            <label for="project-desc">Description</label>
+                            <div class="input-accent"></div>
+                        </div>
+
+                        <div class="floating-group">
+                            <input type="text" id="project-tech" placeholder=" ">
+                            <label for="project-tech">Tech Stack (e.g. React, Node, GSAP)</label>
+                            <div class="input-accent"></div>
+                        </div>
+
+                        <div class="file-upload-area" id="drop-zone">
+                            <input type="file" id="project-file" accept="image/*,video/*" style="display: none;">
+                            <div class="file-dummy">
+                                <i data-lucide="image"></i>
+                                <p id="file-label">Click or drag to upload thumbnail/demo</p>
+                                <span class="file-hint">Supports PNG, JPG, WEBP (Max 5MB)</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar (Glassmorphic) -->
+                        <div id="upload-progress-container" style="display: none; margin: 20px 0;">
+                            <div class="glass-progress-track">
+                                <div id="upload-progress-bar" class="glass-progress-fill"></div>
+                            </div>
+                            <p id="upload-progress-text" class="progress-info">0% Complete</p>
+                        </div>
+
+                        <div id="upload-status" class="auth-message" style="display: none;"></div>
+
+                        <button type="submit" id="upload-submit-btn" class="premium-btn" style="width: 100%; margin-top: 10px;">
+                            <span>Share Project</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- RIGHT: Previous Uploads -->
+            <aside class="previous-uploads-section">
+                <div class="section-header-compact">
+                    <i data-lucide="history"></i>
+                    <h3>Your Previous Uploads</h3>
+                </div>
+
+                <div id="previous-projects-list" class="mini-upload-list">
+                    <!-- Skeletons while loading -->
+                    <div class="mini-skeleton"></div>
+                    <div class="mini-skeleton"></div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="upload.js"></script>
+    <script src="cursor.js" defer></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

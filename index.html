@@ -8,12 +8,11 @@
   <meta name="description"
     content="DevStage is a modern platform for students to showcase their projects, find teams, and level up their skills.">
 
-  <!-- Google Fonts: Inter -->
+  <!-- Premium Typography: Clash Display & Inter -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -28,199 +27,265 @@
 
   <div class="wave-container">
     <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-      <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
       <g class="parallax">
-        <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
+        <use href="#gentle-wave" x="48" y="0" />
+        <use href="#gentle-wave" x="48" y="3" />
+        <use href="#gentle-wave" x="48" y="5" />
+        <use href="#gentle-wave" x="48" y="7" />
       </g>
     </svg>
   </div>
 
-  <nav class="navbar" id="main-navbar">
-    <div class="nav-container">
+  <div class="main-wrapper">
+    <div class="hero-section">
+      <nav class="navbar" id="main-navbar">
+        <div class="nav-container">
 
-      <!-- Left: Logo -->
-      <a href="#" class="nav-logo" id="devstage-logo">
-        Dev<span>Stage</span>
-      </a>
+          <!-- Left: Logo -->
+          <a href="#" class="nav-logo" id="devstage-logo">
+            Dev<span>Stage</span>
+          </a>
 
-      <!-- Center: Search Bar -->
-      <div class="search-wrapper">
-        <i data-lucide="search" class="search-icon"></i>
-        <input type="text" class="search-bar" placeholder="Search projects, skills, users..." id="nav-search">
-      </div>
-
-      <!-- Right: Navigation & Profile -->
-      <div class="nav-menu">
-        <ul class="nav-links" id="nav-links">
-          <li><a href="explore.html" class="nav-link">Explore</a></li>
-          <li><a href="#" class="nav-link" id="nav-upload-btn">Upload</a></li>
-          <li><a href="#" class="nav-link" id="nav-teams-btn">Teams</a></li>
-        </ul>
-
-        <div class="auth-controls" id="auth-controls">
-          <button id="nav-login-btn" class="nav-link-btn">Login</button>
-          <button id="nav-signup-btn" class="button-primary-sm">Sign Up</button>
-        </div>
-
-        <div class="profile-container" id="profile-container" style="display:none;">
-          <div class="profile-avatar" id="user-profile">
-            <img src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
+          <!-- Center: Search Bar (Uiverse Animated) -->
+          <div class="input-container">
+            <input type="text" name="text" class="input" placeholder="Search..." id="nav-search" autocomplete="off">
+            <span class="icon">
+              <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path opacity="0.6" d="M14 5H20" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+                <path opacity="0.6" d="M14 8H17" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M21 11.5C21 16.75 16.75 21 11.5 21C6.25 21 2 16.75 2 11.5C2 6.25 6.25 2 11.5 2"
+                  stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                </path>
+                <path d="M22 22L20 20" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+            </span>
           </div>
 
-          <!-- Profile Dropdown -->
-          <div class="profile-dropdown" id="profile-dropdown">
-            <div class="dropdown-header">
-              <p class="user-name" id="dropdown-user-name">Guest User</p>
-              <p class="user-email" id="dropdown-user-email">guest@example.com</p>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-content">
-              <!-- Dashboard with Submenu -->
-              <div class="dropdown-item-wrapper">
-                <a href="dashboard.html" class="dropdown-item">
-                  <div class="item-left">
-                    <i data-lucide="layout-dashboard"></i>
-                    <span>Dashboard</span>
-                  </div>
-                  <i data-lucide="chevron-left" class="submenu-chevron"></i>
+          <!-- Right: Navigation & Profile -->
+          <div class="nav-menu">
+            <ul class="nav-links" id="nav-links">
+              <li>
+                <a href="explore.html" class="fancy">
+                  <span class="top-key"></span>
+                  <span class="text">Explore</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
                 </a>
-                <div class="dropdown-submenu">
-                  <a href="dashboard.html?view=projects" class="submenu-item">
-                    <i data-lucide="folder"></i> My Projects
-                  </a>
-                  <a href="#" class="submenu-item">
-                    <i data-lucide="bar-chart-3"></i> Analytics
-                  </a>
-                  <a href="#" class="submenu-item">
-                    <i data-lucide="bookmark"></i> Saved
-                  </a>
-                </div>
-              </div>
+              </li>
+              <li>
+                <a href="upload.html" class="fancy" id="nav-upload-btn">
+                  <span class="top-key"></span>
+                  <span class="text">Upload</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="fancy" id="nav-teams-btn">
+                  <span class="top-key"></span>
+                  <span class="text">Teams</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
+                </a>
+              </li>
+            </ul>
 
-              <!-- Settings with Submenu -->
-              <div class="dropdown-item-wrapper">
-                <a href="#" class="dropdown-item">
-                  <div class="item-left">
-                    <i data-lucide="settings"></i>
-                    <span>Settings</span>
-                  </div>
-                  <i data-lucide="chevron-left" class="submenu-chevron"></i>
-                </a>
-                <div class="dropdown-submenu">
-                  <a href="#" class="submenu-item">
-                    <i data-lucide="user-cog"></i> Profile
+            <!-- GUEST SECTION -->
+            <div class="auth-controls" id="guestSection">
+              <button id="loginBtn" class="nav-link-btn">Login</button>
+              <button id="signupBtn" class="button-primary-sm">Sign Up</button>
+            </div>
+
+            <!-- USER SECTION -->
+            <div class="profile-container" id="userSection" style="display:none;">
+              <div class="profile-avatar" id="user-profile">
+                <img id="navAvatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
+              </div>
+              <span id="navName" style="display: none;"></span>
+
+              <!-- Profile Dropdown -->
+              <div class="profile-dropdown" id="profile-dropdown">
+                <div class="dropdown-header">
+                  <p class="user-name" id="dropdown-user-name">Guest User</p>
+                  <p class="user-email" id="dropdown-user-email">guest@example.com</p>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-content">
+                  <a href="dashboard.html" class="dropdown-item">
+                    <div class="item-left">
+                      <i data-lucide="layout-dashboard"></i>
+                      <span>Dashboard</span>
+                    </div>
                   </a>
-                  <a href="#" class="submenu-item">
-                    <i data-lucide="shield"></i> Account
+                  <a href="profile.html" class="dropdown-item">
+                    <div class="item-left">
+                      <i data-lucide="user"></i>
+                      <span>Profile</span>
+                    </div>
                   </a>
-                  <button class="submenu-item logout-btn" id="dropdown-logout-btn">
-                    <i data-lucide="log-out"></i> Logout
+                  <a href="#" class="dropdown-item">
+                    <div class="item-left">
+                      <i data-lucide="settings"></i>
+                      <span>Settings</span>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
+                    <div class="item-left">
+                      <i data-lucide="log-out"></i>
+                      <span>Logout</span>
+                    </div>
                   </button>
                 </div>
               </div>
             </div>
+
+            <!-- Mobile Hamburger -->
+            <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+
+        </div>
+      </nav>
+
+      <main class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+          <span class="hero-tag">Student Project Platform</span>
+          <h1 class="hero-title">
+            <span>Build.</span>
+            <span class="text-hollow">Share.</span>
+            <span>Improve.</span>
+          </h1>
+          <p>A platform where students showcase projects, get real feedback, and find teammates.</p>
+        </div>
+
+        <div class="card-preview">
+          <!-- Card 1: Discovery Feed -->
+          <a href="feed.html" class="card clickable-module">
+            <div class="card-icon"><i data-lucide="layout-list"></i></div>
+            <h3 class="card-title">Live Discovery Feed</h3>
+            <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.
+            </p>
+            <span class="card-action-text">Open Feed <i data-lucide="arrow-right"></i></span>
+          </a>
+
+          <!-- Card 2: Beginner Zone -->
+          <a href="beginner.html" class="card clickable-module">
+            <div class="card-icon"><i data-lucide="seedling"></i></div>
+            <h3 class="card-title">Beginner Zone</h3>
+            <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided inspiration.
+            </p>
+            <span class="card-action-text">Start Exploring <i data-lucide="arrow-right"></i></span>
+          </a>
+
+          <!-- Card 3: Weekly Challenges -->
+          <a href="challenges.html" class="card clickable-module">
+            <div class="card-icon"><i data-lucide="trophy"></i></div>
+            <h3 class="card-title">Weekly Challenges</h3>
+            <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
+            <span class="card-action-text">View Challenges <i data-lucide="arrow-right"></i></span>
+          </a>
+        </div>
+      </main>
+
+    </div> <!-- End Hero Section -->
+
+    <!-- Awwwards-Inspired Explore Section -->
+    <section class="explore-section">
+      <div class="explore-discovery-container">
+        <div class="discovery-header">
+          <span class="badge-premium">Discovery Engine</span>
+          <h2 class="discovery-title">Explore Global Projects</h2>
+          <p class="discovery-subtitle">Curated by the community, built by students.</p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <select id="filter-domain" class="filter-select">
+              <option value="all">All Domains</option>
+              <option value="web">Web Development</option>
+              <option value="app">Mobile Apps</option>
+              <option value="ai">AI / ML</option>
+              <option value="design">UI/UX Design</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select id="filter-tech" class="filter-select">
+              <option value="all">All Tech</option>
+              <option value="react">React</option>
+              <option value="python">Python</option>
+              <option value="node">Node.js</option>
+              <option value="figma">Figma</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select id="filter-difficulty" class="filter-select">
+              <option value="all">Difficulty</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select id="filter-sort" class="filter-select">
+              <option value="newest">Newest First</option>
+              <option value="likes">Most Liked</option>
+              <option value="views">Most Viewed</option>
+            </select>
           </div>
         </div>
 
-        <!-- Mobile Hamburger -->
-        <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <!-- Discovery Layout: Grid + Sidebar -->
+        <div class="discovery-layout">
+          <!-- Project Grid -->
+          <div id="explore-grid" class="discovery-grid">
+            <!-- Cards injected by Firestore -->
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+
+          <!-- Activity Sidebar -->
+          <aside class="activity-pulse-sidebar">
+            <div class="sidebar-header">
+              <i data-lucide="zap" class="pulse-icon"></i>
+              <h3>Activity Pulse</h3>
+            </div>
+            <div id="activity-list" class="activity-list">
+              <!-- Activity items injected by JS -->
+              <p class="loading-text">Monitoring community...</p>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Feed Footer -->
+        <div class="feed-footer">
+          <div class="feed-footer-line"></div>
+          <span class="feed-footer-label">More projects loading&hellip;</span>
+          <div class="feed-footer-line"></div>
+        </div>
+
       </div>
-
-    </div>
-  </nav>
-
-  <main class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-content">
-      <span class="hero-tag">Student Project Platform</span>
-      <h1 class="hero-title">
-        <span>Build.</span>
-        <span class="text-hollow">Share.</span>
-        <span>Improve.</span>
-      </h1>
-      <p>A platform where students showcase projects, get real feedback, and find teammates.</p>
-    </div>
-
-    <div class="card-preview">
-      <!-- Card 1: Discovery Feed -->
-      <a href="feed.html" class="card clickable-module">
-        <div class="card-icon"><i data-lucide="layout-list"></i></div>
-        <h3 class="card-title">Live Discovery Feed</h3>
-        <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.</p>
-        <span class="card-action-text">Open Feed <i data-lucide="arrow-right"></i></span>
-      </a>
-      
-      <!-- Card 2: Beginner Zone -->
-      <a href="beginner.html" class="card clickable-module">
-        <div class="card-icon"><i data-lucide="seedling"></i></div>
-        <h3 class="card-title">Beginner Zone</h3>
-        <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided inspiration.</p>
-        <span class="card-action-text">Start Exploring <i data-lucide="arrow-right"></i></span>
-      </a>
-
-      <!-- Card 3: Weekly Challenges -->
-      <a href="challenges.html" class="card clickable-module">
-        <div class="card-icon"><i data-lucide="trophy"></i></div>
-        <h3 class="card-title">Weekly Challenges</h3>
-        <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
-        <span class="card-action-text">View Challenges <i data-lucide="arrow-right"></i></span>
-      </a>
-    </div>
-  </main>
+    </section>
+  </div> <!-- End Main Wrapper -->
 
   <!-- Custom Scrollbar -->
   <div id="custom-scrollbar" class="scrollbar-container">
     <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
   </div>
 
-  <!-- Project Upload Modal -->
-  <div id="upload-modal" class="modal-overlay">
-    <div class="modal-card" id="upload-card">
-      <div class="card-glow"></div>
-      <button id="close-upload-modal" class="modal-close" aria-label="Close">
-        <i data-lucide="x"></i>
-      </button>
 
-      <div class="auth-header">
-        <h2>Share Your Work</h2>
-        <p class="auth-subtitle">Upload your project to the community</p>
-      </div>
-
-      <div id="upload-status" class="auth-message"></div>
-
-      <form id="project-upload-form" class="auth-form">
-        <div class="floating-group">
-          <input type="text" id="project-title" placeholder=" " required>
-          <label for="project-title">Project Title</label>
-          <div class="input-accent"></div>
-        </div>
-
-        <div class="floating-group">
-          <textarea id="project-desc" placeholder=" " required style="min-height: 100px; padding-top: 20px;"></textarea>
-          <label for="project-desc">Description</label>
-          <div class="input-accent"></div>
-        </div>
-
-        <div class="file-upload-group">
-          <label for="project-file" class="file-label">
-            <i data-lucide="upload-cloud"></i>
-            <span>Choose Project File (Image or Doc)</span>
-          </label>
-          <input type="file" id="project-file" required style="display: none;">
-          <p id="file-name-display" style="font-size: 0.8rem; color: var(--brand-orange); margin-top: 8px;"></p>
-        </div>
-
-        <button type="submit" id="upload-submit-btn" class="premium-btn">
-          <span>Upload Project</span>
-          <div class="btn-shine"></div>
-        </button>
-      </form>
-    </div>
-  </div>
 
   <!-- Auth Modal -->
   <div id="auth-modal" class="modal-overlay">
@@ -260,10 +325,16 @@
         <span>OR</span>
       </div>
 
-      <button id="google-login-btn" class="google-btn">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-        <span>Continue with Google</span>
-      </button>
+      <div class="social-auth-group">
+        <button id="google-login-btn" class="social-btn google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          <span>Google</span>
+        </button>
+        <button id="github-login-btn" class="social-btn github-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </button>
+      </div>
 
       <div class="auth-footer">
         <p id="auth-toggle-text">
@@ -273,36 +344,58 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs (Compat Version) -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <!-- Firebase SDKs (Modular & Compat for gradual migration) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
 
   <!-- App Logic -->
-  <script>
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
-      authDomain: "devstage-872b1.firebaseapp.com",
-      projectId: "devstage-872b1",
-      storageBucket: "devstage-872b1.firebasestorage.app",
-      messagingSenderId: "993834630425",
-      appId: "1:993834630425:web:b063407a7d47a0830d5988"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-  </script>
-  <script src="auth.js"></script>
-  <script src="script.js"></script>
+  <script src="auth.js" type="module" defer></script>
+  <script src="script.js" defer></script>
   <script src="cursor.js" defer></script>
   <script>
-    // Initialize Lucide icons
-    lucide.createIcons();
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
   </script>
-
-
 </body>
 
-</html>
+1. Add a top filter bar:
+
+- Domain dropdown
+- Tech stack dropdown
+- Difficulty dropdown
+- Project type dropdown
+- Sort by dropdown
+
+2. Add a responsive project grid below filters
+
+Project Card:
+
+Each card should include:
+
+- Project image
+- Title
+- Short description
+- Tech tags
+- Author avatar + name
+- Like count
+- View count
+
+Styling:
+
+- Dark theme (same as homepage)
+- Glassmorphism cards
+- Smooth hover lift effect
+- Orange accent highlights
+
+Behavior:
+
+- Clicking card → opens project detail page
+- Cards load dynamically from Firebase
+- Smooth fade-in animation when scrolling
+
+Goal:
+
+The lower section should feel like a real platform (not empty), similar to Awwwards but for student projects
