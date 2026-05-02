@@ -224,38 +224,69 @@
 
         <!-- Filter Bar -->
         <div class="filter-bar">
-          <div class="filter-group">
-            <select id="filter-domain" class="filter-select">
-              <option value="all">All Domains</option>
-              <option value="web">Web Development</option>
-              <option value="app">Mobile Apps</option>
-              <option value="ai">AI / ML</option>
-              <option value="design">UI/UX Design</option>
-            </select>
+          <div class="filter-dropdown" id="domain-dropdown">
+            <div class="filter-trigger">All Domains <span class="tilt-line"></span></div>
+            <div class="filter-menu">
+              <div class="menu-col">
+                <p class="menu-title">Primary Domains</p>
+                <a data-value="all" class="active">All Domains</a>
+                <a data-value="web">Web Development</a>
+                <a data-value="app">Mobile Apps</a>
+                <a data-value="ai">AI / ML</a>
+                <a data-value="design">UI/UX Design</a>
+              </div>
+              <div class="menu-col">
+                <p class="menu-title">Specialized</p>
+                <a data-value="blockchain">Blockchain</a>
+                <a data-value="cyber">Cybersecurity</a>
+                <a data-value="data">Data Science</a>
+              </div>
+            </div>
           </div>
-          <div class="filter-group">
-            <select id="filter-tech" class="filter-select">
-              <option value="all">All Tech</option>
-              <option value="react">React</option>
-              <option value="python">Python</option>
-              <option value="node">Node.js</option>
-              <option value="figma">Figma</option>
-            </select>
+
+          <div class="filter-dropdown" id="tech-dropdown">
+            <div class="filter-trigger">All Tech <span class="tilt-line"></span></div>
+            <div class="filter-menu">
+              <div class="menu-col">
+                <p class="menu-title">Languages</p>
+                <a data-value="all" class="active">All Tech</a>
+                <a data-value="python">Python</a>
+                <a data-value="javascript">JavaScript</a>
+                <a data-value="java">Java</a>
+                <a data-value="cpp">C++</a>
+              </div>
+              <div class="menu-col">
+                <p class="menu-title">Frameworks</p>
+                <a data-value="react">React</a>
+                <a data-value="node">Node.js</a>
+                <a data-value="figma">Figma</a>
+              </div>
+            </div>
           </div>
-          <div class="filter-group">
-            <select id="filter-difficulty" class="filter-select">
-              <option value="all">Difficulty</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
+
+          <div class="filter-dropdown" id="difficulty-dropdown">
+            <div class="filter-trigger">Difficulty <span class="tilt-line"></span></div>
+            <div class="filter-menu">
+              <div class="menu-col">
+                <p class="menu-title">Level</p>
+                <a data-value="all" class="active">All Levels</a>
+                <a data-value="beginner">Beginner</a>
+                <a data-value="intermediate">Intermediate</a>
+                <a data-value="advanced">Advanced</a>
+              </div>
+            </div>
           </div>
-          <div class="filter-group">
-            <select id="filter-sort" class="filter-select">
-              <option value="newest">Newest First</option>
-              <option value="likes">Most Liked</option>
-              <option value="views">Most Viewed</option>
-            </select>
+
+          <div class="filter-dropdown" id="sort-dropdown">
+            <div class="filter-trigger">Newest First <span class="tilt-line"></span></div>
+            <div class="filter-menu">
+              <div class="menu-col">
+                <p class="menu-title">Sort By</p>
+                <a data-value="newest" class="active">Newest First</a>
+                <a data-value="likes">Most Liked</a>
+                <a data-value="views">Most Viewed</a>
+              </div>
+            </div>
           </div>
         </div>
 

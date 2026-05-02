@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 500ms silence before bloom
     setTimeout(() => {
       logoWrapper.classList.add('bloom');
-      
+
       // 2.2s after page load for breathing (Total 2.2s)
       setTimeout(() => {
         logoWrapper.classList.add('is-breathing');
-      }, 1700); 
+      }, 1700);
     }, 500);
   }
 
@@ -363,12 +363,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── High-End Scroll Interaction Engine ───
   const heroLayer = document.querySelector('.hero-layer');
   const exploreLayer = document.querySelector('.lower-section');
-  
+
   const updateParallax = () => {
     const scrollY = window.scrollY;
     const vh = window.innerHeight;
     const progress = Math.min(scrollY / vh, 1);
-    
+
     // Apply dim/blur to Hero as we scroll
     if (heroLayer) {
       heroLayer.style.setProperty('--scroll-progress', progress);
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        
+
         // Stagger project cards if they exist
         const cards = entry.target.querySelectorAll('.discovery-card');
         cards.forEach((card, index) => {
@@ -403,12 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── Discovery Engine (Awwwards Style) ───
   // ─── 4. DISCOVERY FEED ENGINE (Real-time) ────────────────
   const discoveryGrid = document.getElementById('explore-grid');
-  const filters = {
-    domain: document.getElementById('filter-domain'),
-    tech: document.getElementById('filter-tech'),
-    difficulty: document.getElementById('filter-difficulty'),
-    sort: document.getElementById('filter-sort')
+  
+  const getFilterValue = (dropdownId) => {
+    const activeOpt = document.querySelector(`#${dropdownId} .menu-col a.active`);
+    return activeOpt ? activeOpt.getAttribute('data-value') : 'all';
   };
+
   let discoveryUnsubscribe = null;
 
   const initDiscoveryFeed = () => {
@@ -424,9 +424,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Unsubscribe from existing listener if filters change
     if (discoveryUnsubscribe) discoveryUnsubscribe();
 
-    const sortBy = filters.sort?.value || 'newest';
+    const domain = getFilterValue('domain-dropdown');
+    const tech = getFilterValue('tech-dropdown');
+    const diff = getFilterValue('difficulty-dropdown');
+    const sortBy = getFilterValue('sort-dropdown');
+    
     let query = db.collection('projects');
 
+    // Apply Client-side filtering if needed or order by
     if (sortBy === 'newest') query = query.orderBy('createdAt', 'desc');
     else if (sortBy === 'likes') query = query.orderBy('likesCount', 'desc');
     else if (sortBy === 'views') query = query.orderBy('viewCount', 'desc');
@@ -461,10 +466,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = document.createElement('div');
     card.className = 'discovery-card';
     card.setAttribute('data-id', id);
-    
+
     const banner = p.fileURL || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80';
     const avatar = p.userAvatar || `https://ui-avatars.com/api/?name=${p.userName || 'User'}&background=random`;
-    
+
     // Smooth entrance
     card.style.opacity = '0';
     card.style.transform = 'translateY(20px)';
@@ -520,23 +525,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     discoveryGrid.appendChild(card);
-    
+
     // Check if liked by current user
     checkIfLiked(id, likeBtn);
 
     requestAnimationFrame(() => {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
     });
   };
 
   // ─── Engagement Logic ───
   const handleLikeToggle = async (projectId, btn) => {
     if (!window.auth.currentUser) {
-        if (window.showGlobalAuthMessage) {
-            window.showGlobalAuthMessage("Please login to like projects", "info");
-        }
-        return;
+      if (window.showGlobalAuthMessage) {
+        window.showGlobalAuthMessage("Please login to like projects", "info");
+      }
+      return;
     }
 
     const userId = window.auth.currentUser.uid;
@@ -545,42 +550,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectRef = db.collection('projects').doc(projectId);
 
     try {
-        const likeDoc = await likeRef.get();
-        const icon = btn.querySelector('i');
-        const countSpan = btn.querySelector('.count');
-        let currentCount = parseInt(countSpan.textContent);
+      const likeDoc = await likeRef.get();
+      const icon = btn.querySelector('i');
+      const countSpan = btn.querySelector('.count');
+      let currentCount = parseInt(countSpan.textContent);
 
-        if (likeDoc.exists) {
-            // Unlike
-            await likeRef.delete();
-            await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(-1) });
-            btn.classList.remove('active');
-            countSpan.textContent = Math.max(0, currentCount - 1);
-        } else {
-            // Like
-            await likeRef.set({ userId, projectId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            const pDoc = await projectRef.get();
-            const pTitle = pDoc.data()?.title || "a project";
-            
-            await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(1) });
-            
-            // Log Activity
-            await db.collection('activity').add({
-                type: 'like',
-                userId,
-                userName: window.auth.currentUser.displayName || 'Anonymous',
-                userAvatar: window.auth.currentUser.photoURL || `https://ui-avatars.com/api/?name=User`,
-                projectId,
-                projectTitle: pTitle,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
+      if (likeDoc.exists) {
+        // Unlike
+        await likeRef.delete();
+        await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(-1) });
+        btn.classList.remove('active');
+        countSpan.textContent = Math.max(0, currentCount - 1);
+      } else {
+        // Like
+        await likeRef.set({ userId, projectId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+        const pDoc = await projectRef.get();
+        const pTitle = pDoc.data()?.title || "a project";
 
-            btn.classList.add('active');
-            countSpan.textContent = currentCount + 1;
-        }
-        lucide.createIcons();
+        await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(1) });
+
+        // Log Activity
+        await db.collection('activity').add({
+          type: 'like',
+          userId,
+          userName: window.auth.currentUser.displayName || 'Anonymous',
+          userAvatar: window.auth.currentUser.photoURL || `https://ui-avatars.com/api/?name=User`,
+          projectId,
+          projectTitle: pTitle,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        btn.classList.add('active');
+        countSpan.textContent = currentCount + 1;
+      }
+      lucide.createIcons();
     } catch (error) {
-        console.error("[DevStage] Like Error:", error);
+      console.error("[DevStage] Like Error:", error);
     }
   };
 
@@ -590,8 +595,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const likeId = `${userId}_${projectId}`;
     const likeDoc = await db.collection('likes').doc(likeId).get();
     if (likeDoc.exists) {
-        btn.classList.add('active');
-        lucide.createIcons();
+      btn.classList.add('active');
+      lucide.createIcons();
     }
   };
 
@@ -622,11 +627,11 @@ document.addEventListener('DOMContentLoaded', () => {
           const act = doc.data();
           const item = document.createElement('div');
           item.className = 'activity-item';
-          
+
           const time = act.timestamp ? formatTimeAgo(act.timestamp.toDate()) : 'Just now';
           const icon = act.type === 'upload' ? 'rocket' : 'heart';
           const actionText = act.type === 'upload' ? 'uploaded' : 'liked';
-          
+
           item.innerHTML = `
             <img src="${act.userAvatar}" class="activity-avatar" alt="${act.userName}">
             <div class="activity-content">
@@ -639,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
           activityList.appendChild(item);
         });
-        
+
         lucide.createIcons();
       });
   };
@@ -659,10 +664,49 @@ document.addEventListener('DOMContentLoaded', () => {
     return "just now";
   }
 
+  // ─── 5. FILTER DROPDOWNS ENGINE ────────────────
+  const setupFilterDropdowns = () => {
+    const dropdowns = document.querySelectorAll('.filter-dropdown');
+    
+    dropdowns.forEach(dropdown => {
+      const trigger = dropdown.querySelector('.filter-trigger');
+      const options = dropdown.querySelectorAll('.filter-menu a');
+      
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdowns.forEach(d => { if (d !== dropdown) d.classList.remove('active'); });
+        dropdown.classList.toggle('active');
+      });
+      
+      options.forEach(opt => {
+        opt.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const text = opt.innerText;
+          
+          trigger.innerHTML = `${text} <span class="tilt-line"></span>`;
+          lucide.createIcons();
+          
+          options.forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          dropdown.classList.remove('active');
+          
+          initDiscoveryFeed();
+        });
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.filter-dropdown')) {
+        dropdowns.forEach(d => d.classList.remove('active'));
+      }
+    });
+  };
+
   // Initial Boot
+  setupFilterDropdowns();
   initDiscoveryFeed();
   initActivityPulse();
-  
+
   // ─── Vertical Waves Cursor Interaction ───
   document.addEventListener("mousemove", (e) => {
     const wave = document.querySelector(".vertical-waves");
