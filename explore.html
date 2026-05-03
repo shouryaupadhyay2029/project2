@@ -10,7 +10,8 @@
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
+    rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Global Styles -->
@@ -19,6 +20,110 @@
   <link rel="stylesheet" href="grid-background.css">
 
   <style>
+    /* ─── Contextual Breadcrumb ─── */
+    .breadcrumb-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .breadcrumb-trail {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: -2px;
+      animation: breadcrumbFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 0.3s;
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    @keyframes breadcrumbFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .breadcrumb-slash {
+      color: rgba(255, 255, 255, 0.15);
+      font-family: 'Syne', sans-serif;
+      font-weight: 500;
+      font-size: 1.5rem;
+      user-select: none;
+    }
+
+    .breadcrumb-current {
+      color: #ff8c42;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1.5rem;
+      letter-spacing: -0.01em;
+      position: relative;
+      text-shadow: 0 0 16px rgba(255, 140, 66, 0.25);
+      cursor: default;
+    }
+
+    .breadcrumb-current::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ff8c42;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 8px rgba(255, 140, 66, 0.6);
+    }
+
+    .breadcrumb-trail:hover .breadcrumb-current::after {
+      width: 100%;
+    }
+
+    /* ─── Uiverse Hamburger Menu ─── */
+    .uiverse-hamburger {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+    }
+
+    .uiverse-hamburger input {
+      display: none;
+    }
+
+    .uiverse-hamburger svg {
+      height: 48px;
+      width: 48px;
+      transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .line {
+      fill: none;
+      stroke: #ff8c42;
+      /* Requested Orange Color */
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 3;
+      transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+        stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .line-top-bottom {
+      stroke-dasharray: 12 63;
+    }
+
+    .uiverse-hamburger input:checked+svg {
+      transform: rotate(-45deg);
+    }
+
+    .uiverse-hamburger input:checked+svg .line-top-bottom {
+      stroke-dasharray: 20 300;
+      stroke-dashoffset: -32.42;
+    }
+
 
     /* ─── Explore Platform Layout ─── */
     .explore-layout {
@@ -38,11 +143,33 @@
     }
 
     .sidebar-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
+      /* Premium Glassmorphism Base */
+      background: linear-gradient(135deg, rgba(255, 140, 66, 0.05) 0%, transparent 100%), rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 20px;
       padding: 24px;
       margin-bottom: 24px;
+
+      /* Subtle inner highlight & soft matte shadow */
+      box-shadow: 
+        inset 1px 1px 1px rgba(255, 255, 255, 0.05),
+        0 8px 32px rgba(0, 0, 0, 0.25);
+        
+      /* Smooth Interaction */
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, box-shadow, border-color;
+    }
+
+    .sidebar-card:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(135deg, rgba(255, 140, 66, 0.08) 0%, transparent 100%), rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 140, 66, 0.25);
+      box-shadow: 
+        inset 1px 1px 1px rgba(255, 255, 255, 0.08),
+        0 16px 40px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 140, 66, 0.1);
     }
 
     .sidebar-title {
@@ -55,22 +182,124 @@
       gap: 8px;
     }
 
-    .filter-list {
-      list-style: none;
+    .segmented-control {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .filter-item {
-      padding: 10px 0;
+    .segment-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 16px;
       color: var(--text-tertiary);
       font-size: 0.9rem;
+      font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
       display: flex;
-      justify-content: space-between;
-      transition: color 0.3s ease;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 100%;
+      text-align: left;
     }
 
-    .filter-item:hover {
-      color: var(--brand-orange);
+    .segment-chip:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .segment-chip.active {
+      background: rgba(255, 140, 66, 0.15);
+      border-color: rgba(255, 140, 66, 0.4);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(255, 140, 66, 0.15);
+    }
+
+    .chip-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ─── Tech Stack Chips ─── */
+    .tech-chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tech-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: none;
+    }
+
+    .tech-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
+    }
+
+    .tech-chip.active {
+      background: rgba(255, 140, 66, 0.18);
+      border-color: rgba(255, 140, 66, 0.45);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(255, 140, 66, 0.2);
+    }
+
+    .tech-chip-icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .tech-chip-badge {
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 999px;
+      line-height: 1.6;
+    }
+
+    .tech-chip.active .tech-chip-badge {
+      background: rgba(255, 140, 66, 0.35);
+      color: #fff;
+    }
+
+    /* Ripple Effect */
+    .tech-chip-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0);
+      animation: ripple-burst 0.5s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-burst {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
 
     /* Feed & Search */
@@ -79,18 +308,37 @@
     }
 
     .search-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: 16px;
-      padding: 4px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      gap: 12px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .search-box:focus-within {
+      transform: scale(1.02);
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 140, 66, 0.4);
+      box-shadow: 0 0 20px rgba(255, 140, 66, 0.15), 0 12px 40px rgba(0, 0, 0, 0.3);
     }
 
     .search-box i {
-      margin: 0 16px;
-      color: var(--text-tertiary);
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      margin: 0; /* Override previous margin */
+    }
+
+    .search-box:focus-within i {
+      color: #ff8c42;
     }
 
     .search-box input {
@@ -99,26 +347,239 @@
       border: none;
       padding: 12px 0;
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+      transition: color 0.3s ease;
+    }
+
+    .search-box:focus-within input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .search-shortcut {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 4px 8px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-box:focus-within .search-shortcut {
+      opacity: 0;
+      transform: translateX(10px);
     }
 
     /* Trending List */
-    .trending-item {
+    .trending-list {
       display: flex;
+      flex-direction: column;
       gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-soft);
     }
 
-    .trending-item:last-child {
-      border-bottom: none;
+    .trending-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trending-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 140, 66, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .trending-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255, 140, 66, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .trending-info {
+      flex: 1;
+      min-width: 0;
     }
 
     .trending-info h4 {
       color: #fff;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      font-weight: 600;
       margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .trending-info p {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.75rem;
+      margin: 0 0 6px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .trending-stats {
+      display: flex;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .trending-stats span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .trending-stats i {
+      width: 12px;
+      height: 12px;
+    }
+
+    .trending-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%) translateX(10px);
+      color: #ff8c42;
+      opacity: 0;
+      transition: all 0.3s ease;
+      width: 14px;
+      height: 14px;
+    }
+
+    .trending-card:hover .trending-arrow {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    /* Suggested Users */
+    .user-suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .user-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .user-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .user-card-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .user-card:hover .user-card-avatar {
+      border-color: #ff8c42;
+    }
+
+    .user-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-card-info h4 {
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-card-info p {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.7rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .view-profile-text {
+      color: #ff8c42;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 4px;
+      display: block;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: all 0.3s ease;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .user-card:hover .view-profile-text {
+      opacity: 1;
+      transform: translateY(0);
+      height: 14px;
+    }
+
+    .follow-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 6px 12px;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .follow-btn:hover {
+      background: #ff8c42;
+      border-color: #ff8c42;
+      transform: scale(1.05);
+    }
+
+    .follow-btn.following {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
     }
 
     .trending-info span {
@@ -261,23 +722,39 @@
 
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
-        <div class="logo-chars">
-          <span class="char" style="--i:0">D</span>
-          <span class="char" style="--i:1">e</span>
-          <span class="char" style="--i:2">v</span>
-          <div class="logo-separator"></div>
-          <span class="char outline" style="--i:3">S</span>
-          <span class="char outline" style="--i:4">t</span>
-          <span class="char outline" style="--i:5">a</span>
-          <span class="char outline" style="--i:6">g</span>
-          <span class="char outline" style="--i:7">e</span>
-          <div class="logo-dot"></div>
+      <div class="breadcrumb-header">
+        <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
+          <div class="logo-chars">
+            <span class="char" style="--i:0">D</span>
+            <span class="char" style="--i:1">e</span>
+            <span class="char" style="--i:2">v</span>
+            <div class="logo-separator"></div>
+            <span class="char outline" style="--i:3">S</span>
+            <span class="char outline" style="--i:4">t</span>
+            <span class="char outline" style="--i:5">a</span>
+            <span class="char outline" style="--i:6">g</span>
+            <span class="char outline" style="--i:7">e</span>
+            <div class="logo-dot"></div>
+          </div>
+          <div class="logo-underline"></div>
+        </a>
+        <div class="breadcrumb-trail">
+          <span class="breadcrumb-slash">/</span>
+          <span class="breadcrumb-current">Explore</span>
         </div>
-        <div class="logo-underline"></div>
-      </a>
-      <!-- Minimal empty right side for premium balance -->
-      <div></div>
+      </div>
+      <!-- Right side: Animated Hamburger Menu -->
+      <div class="nav-actions">
+        <label class="uiverse-hamburger">
+          <input type="checkbox">
+          <svg viewBox="0 0 32 32">
+            <path class="line line-top-bottom"
+              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+            </path>
+            <path class="line" d="M7 16 27 16"></path>
+          </svg>
+        </label>
+      </div>
     </div>
   </nav>
 
@@ -286,20 +763,55 @@
     <aside class="sidebar-left sidebar-sticky">
       <div class="sidebar-card">
         <h3 class="sidebar-title"><i data-lucide="filter"></i> Filter By</h3>
-        <ul class="filter-list">
-          <li class="filter-item">Latest <span>✓</span></li>
-          <li class="filter-item">Most Liked</li>
-          <li class="filter-item">Trending</li>
-        </ul>
+        <div class="segmented-control" id="filter-control">
+          <button class="segment-chip active" data-filter="latest">
+            <span class="chip-icon">🕒</span>
+            <span class="chip-text">Latest</span>
+          </button>
+          <button class="segment-chip" data-filter="most-liked">
+            <span class="chip-icon">❤️</span>
+            <span class="chip-text">Most Liked</span>
+          </button>
+          <button class="segment-chip" data-filter="trending">
+            <span class="chip-icon">🔥</span>
+            <span class="chip-text">Trending</span>
+          </button>
+        </div>
       </div>
       <div class="sidebar-card">
         <h3 class="sidebar-title"><i data-lucide="code"></i> Tech Stack</h3>
-        <ul class="filter-list">
-          <li class="filter-item">React <span>24</span></li>
-          <li class="filter-item">Python <span>18</span></li>
-          <li class="filter-item">TypeScript <span>12</span></li>
-          <li class="filter-item">UI/UX <span>30</span></li>
-        </ul>
+        <div class="tech-chip-grid" id="tech-chip-grid">
+          <button class="tech-chip" data-tech="react">
+            <span class="tech-chip-icon">⚛️</span>
+            React
+            <span class="tech-chip-badge">24</span>
+          </button>
+          <button class="tech-chip" data-tech="python">
+            <span class="tech-chip-icon">🐍</span>
+            Python
+            <span class="tech-chip-badge">18</span>
+          </button>
+          <button class="tech-chip" data-tech="typescript">
+            <span class="tech-chip-icon">🟦</span>
+            TypeScript
+            <span class="tech-chip-badge">12</span>
+          </button>
+          <button class="tech-chip" data-tech="ui-ux">
+            <span class="tech-chip-icon">🎨</span>
+            UI/UX
+            <span class="tech-chip-badge">30</span>
+          </button>
+          <button class="tech-chip" data-tech="nodejs">
+            <span class="tech-chip-icon">🟢</span>
+            Node.js
+            <span class="tech-chip-badge">15</span>
+          </button>
+          <button class="tech-chip" data-tech="flutter">
+            <span class="tech-chip-icon">🧩</span>
+            Flutter
+            <span class="tech-chip-badge">8</span>
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -308,7 +820,8 @@
       <div class="search-section">
         <div class="search-box">
           <i data-lucide="search"></i>
-          <input type="text" id="feed-search" placeholder="Search projects, users, or skills...">
+          <input type="text" id="feed-search" placeholder="Search projects, people, or technologies...">
+          <div class="search-shortcut">⌘ K</div>
         </div>
       </div>
 
@@ -324,24 +837,75 @@
       <div class="sidebar-card">
         <h3 class="sidebar-title"><i data-lucide="trending-up"></i> Trending Now</h3>
         <div class="trending-list">
-          <div class="trending-item">
+          <div class="trending-card">
+            <div class="trending-thumb">🤖</div>
             <div class="trending-info">
               <h4>AI Portfolio Engine</h4>
-              <span>1.2k likes • 48 comments</span>
+              <p>Next-gen portfolio generator with AI.</p>
+              <div class="trending-stats">
+                <span><i data-lucide="heart"></i> 1.2k</span>
+                <span><i data-lucide="message-circle"></i> 48</span>
+              </div>
             </div>
+            <i data-lucide="arrow-right" class="trending-arrow"></i>
           </div>
-          <div class="trending-item">
+          <div class="trending-card">
+            <div class="trending-thumb">🚀</div>
             <div class="trending-info">
               <h4>Modern SaaS Boilerplate</h4>
-              <span>850 likes • 12 comments</span>
+              <p>Full-stack SaaS template for startups.</p>
+              <div class="trending-stats">
+                <span><i data-lucide="heart"></i> 850</span>
+                <span><i data-lucide="message-circle"></i> 12</span>
+              </div>
             </div>
+            <i data-lucide="arrow-right" class="trending-arrow"></i>
+          </div>
+          <div class="trending-card">
+            <div class="trending-thumb">🔐</div>
+            <div class="trending-info">
+              <h4>Auth Flow Pro</h4>
+              <p>Production-ready authentication system.</p>
+              <div class="trending-stats">
+                <span><i data-lucide="heart"></i> 420</span>
+                <span><i data-lucide="message-circle"></i> 5</span>
+              </div>
+            </div>
+            <i data-lucide="arrow-right" class="trending-arrow"></i>
           </div>
         </div>
       </div>
       <div class="sidebar-card">
         <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
-        <!-- Users will be populated here -->
-        <p style="color:gray; font-size: 0.8rem;">Discover top creators</p>
+        <div class="user-suggestions">
+          <div class="user-card">
+            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers" class="user-card-avatar">
+            <div class="user-card-info">
+              <h4>Alex Rivers</h4>
+              <p>Full-stack Developer</p>
+              <span class="view-profile-text">View Profile</span>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+          <div class="user-card">
+            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen" class="user-card-avatar">
+            <div class="user-card-info">
+              <h4>Sarah Chen</h4>
+              <p>UI/UX Designer</p>
+              <span class="view-profile-text">View Profile</span>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+          <div class="user-card">
+            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane" class="user-card-avatar">
+            <div class="user-card-info">
+              <h4>Marcus Vane</h4>
+              <p>AI Engineer</p>
+              <span class="view-profile-text">View Profile</span>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+        </div>
       </div>
     </aside>
   </main>
@@ -425,6 +989,38 @@
       cards.forEach(card => {
         const text = card.innerText.toLowerCase();
         card.style.display = text.includes(term) ? 'block' : 'none';
+      });
+    });
+
+    // Segmented Control Logic
+    const chips = document.querySelectorAll('.segment-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+
+    // Tech Chip Logic — toggle active + ripple
+    const techChips = document.querySelectorAll('.tech-chip');
+    techChips.forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        // Toggle active state
+        chip.classList.toggle('active');
+
+        // Ripple micro-interaction
+        const ripple = document.createElement('span');
+        ripple.className = 'tech-chip-ripple';
+        const size = Math.max(chip.offsetWidth, chip.offsetHeight);
+        const rect = chip.getBoundingClientRect();
+        ripple.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${e.clientX - rect.left - size / 2}px;
+          top: ${e.clientY - rect.top - size / 2}px;
+        `;
+        chip.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
       });
     });
 
