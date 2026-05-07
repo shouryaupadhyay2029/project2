@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.files[0]) {
             fileLabel.innerText = `Selected: ${e.target.files[0].name}`;
             dropZone.classList.add('active');
+            updateTerminalStatus(`payload attached: ${e.target.files[0].name}`);
         }
     });
 
@@ -142,8 +143,55 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.dataTransfer.files[0]) {
             fileInput.files = e.dataTransfer.files;
             fileLabel.innerText = `Dropped: ${e.dataTransfer.files[0].name}`;
+            updateTerminalStatus(`payload dropped: ${e.dataTransfer.files[0].name}`);
         }
     });
+
+    // ─── 2.5 TERMINAL CARD INTERACTIONS ───────────────────────
+    const terminalCard = document.getElementById('terminal-card-container');
+    const terminalGlow = document.getElementById('terminal-cursor-glow');
+    const terminalStatusText = document.getElementById('terminal-live-status');
+
+    if (terminalCard && terminalGlow) {
+        terminalCard.addEventListener('mousemove', (e) => {
+            const rect = terminalCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Update glow position
+            terminalGlow.style.left = `${x}px`;
+            terminalGlow.style.top = `${y}px`;
+
+            // Perspective Tilt
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const tiltX = (y - centerY) / 35;
+            const tiltY = (centerX - x) / 35;
+
+            terminalCard.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+
+        terminalCard.addEventListener('mouseleave', () => {
+            terminalCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+    }
+
+    // Tech Chips Rendering
+    const techInput = document.getElementById('project-tech');
+    const techChipsContainer = document.getElementById('tech-chips');
+    if (techInput && techChipsContainer) {
+        techInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            const tags = value.split(',').map(t => t.trim()).filter(t => t);
+            techChipsContainer.innerHTML = tags.map(tag => `<span class="tech-chip">[ ${tag} ]</span>`).join('');
+        });
+    }
+
+    function updateTerminalStatus(text) {
+        if (terminalStatusText) {
+            terminalStatusText.innerText = text;
+        }
+    }
 
     // ─── 3. UPLOAD HANDLER ───────────────────────────────────
     uploadForm.addEventListener('submit', async (e) => {
@@ -154,9 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const desc = document.getElementById('project-desc').value;
         const tech = document.getElementById('project-tech').value;
 
-        if (!file || !user) return;
+        if (!file || !user) {
+            updateTerminalStatus("error: missing payload or authentication");
+            return;
+        }
 
         // Reset UI
+        updateTerminalStatus("validating payload...");
         statusMsg.style.display = 'block';
         statusMsg.innerText = "Starting secure upload...";
         statusMsg.className = "auth-message info";
@@ -166,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // A. Upload to Storage
+            updateTerminalStatus("optimizing assets & pushing to storage...");
             const storageRef = storage.ref(`projects/${user.uid}/${Date.now()}_${file.name}`);
             const uploadTask = storageRef.put(file);
 
@@ -173,11 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 (snap) => {
                     const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
                     progressBar.style.width = progress + '%';
-                    progressText.innerText = `${Math.round(progress)}% Complete`;
+                    progressText.innerText = `${Math.round(progress)}% Transferred`;
+                    if (progress > 90) updateTerminalStatus("finalizing cloud handshake...");
                 },
                 (err) => { throw err; },
                 async () => {
                     // B. Save to Firestore
+                    updateTerminalStatus("writing to decentralized ledger...");
                     const fileURL = await uploadTask.snapshot.ref.getDownloadURL();
                     const projectDoc = await db.collection('projects').add({
                         title,
@@ -193,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     // C. Log Activity
+                    updateTerminalStatus("logging event to activity stream...");
                     await db.collection('activity').add({
                         type: 'upload',
                         userId: user.uid,
@@ -204,13 +260,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     // D. Finalize
+                    updateTerminalStatus("deployment successful. system nominal.");
                     statusMsg.innerText = "Project shared successfully!";
                     statusMsg.className = "auth-message success";
+                    const badge = document.querySelector('.status-badge');
+                    if (badge) {
+                        badge.innerText = "DONE";
+                        badge.style.borderColor = "#00ff88";
+                        badge.style.color = "#00ff88";
+                    }
                     setTimeout(() => window.location.href = 'explore.html', 1500);
                 }
             );
         } catch (err) {
             console.error(err);
+            updateTerminalStatus("critical error: upload execution failed");
             statusMsg.innerText = "Upload failed. Please try again.";
             statusMsg.className = "auth-message error";
             submitBtn.disabled = false;

@@ -107,59 +107,95 @@
     <main class="upload-wrapper" style="padding-top: 120px; padding-bottom: 60px;">
         <div class="upload-grid-container">
 
-            <!-- LEFT: Upload Form -->
+            <!-- LEFT: Upload Form (Redesigned as Futuristic Terminal) -->
             <section class="upload-form-section">
-                <div class="upload-card glass-card">
-                    <div class="card-glow"></div>
-                    <div class="section-header">
-                        <i data-lucide="upload-cloud" class="brand-icon"></i>
-                        <h2>Share a New Project</h2>
-                        <p>Let the community discover your latest creation.</p>
+                <div class="upload-card terminal-card" id="terminal-card-container">
+                    <!-- Subtle Glow Track -->
+                    <div class="terminal-card-glow" id="terminal-cursor-glow"></div>
+
+                    <!-- Terminal Header -->
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="terminal-title">upload_project.sh</div>
+                        <div class="terminal-status">
+                            <span class="status-badge">READY</span>
+                        </div>
                     </div>
 
-                    <form id="project-upload-form" class="upload-form-layout">
-                        <div class="floating-group">
-                            <input type="text" id="project-title" required placeholder=" ">
-                            <label for="project-title">Project Title</label>
-                            <div class="input-accent"></div>
-                        </div>
+                    <!-- Terminal Body -->
+                    <div class="terminal-body">
+                        <div class="terminal-command">$ init share_a_new_project</div>
 
-                        <div class="floating-group">
-                            <textarea id="project-desc" required placeholder=" " rows="4"></textarea>
-                            <label for="project-desc">Description</label>
-                            <div class="input-accent"></div>
-                        </div>
-
-                        <div class="floating-group">
-                            <input type="text" id="project-tech" placeholder=" ">
-                            <label for="project-tech">Tech Stack (e.g. React, Node, GSAP)</label>
-                            <div class="input-accent"></div>
-                        </div>
-
-                        <div class="file-upload-area" id="drop-zone">
-                            <input type="file" id="project-file" accept="image/*,video/*" style="display: none;">
-                            <div class="file-dummy">
-                                <i data-lucide="image"></i>
-                                <p id="file-label">Click or drag to upload thumbnail/demo</p>
-                                <span class="file-hint">Supports PNG, JPG, WEBP (Max 5MB)</span>
+                        <form id="project-upload-form" class="terminal-form">
+                            <!-- Title Field -->
+                            <div class="terminal-row">
+                                <span class="row-prefix">› title =</span>
+                                <div class="terminal-input-wrapper">
+                                    <input type="text" id="project-title" required placeholder="project_name_here">
+                                    <div class="focus-underline"></div>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Progress Bar (Glassmorphic) -->
-                        <div id="upload-progress-container" style="display: none; margin: 20px 0;">
-                            <div class="glass-progress-track">
-                                <div id="upload-progress-bar" class="glass-progress-fill"></div>
+                            <!-- Description Field -->
+                            <div class="terminal-row">
+                                <span class="row-prefix">› desc =</span>
+                                <div class="terminal-input-wrapper">
+                                    <textarea id="project-desc" required placeholder="brief_execution_summary" rows="3"></textarea>
+                                    <div class="focus-underline"></div>
+                                </div>
                             </div>
-                            <p id="upload-progress-text" class="progress-info">0% Complete</p>
-                        </div>
 
-                        <div id="upload-status" class="auth-message" style="display: none;"></div>
+                            <!-- Tech Stack Field -->
+                            <div class="terminal-row">
+                                <span class="row-prefix">› stack =</span>
+                                <div class="terminal-input-wrapper">
+                                    <input type="text" id="project-tech" placeholder="react, node, gsap, etc.">
+                                    <div class="focus-underline"></div>
+                                </div>
+                                <div id="tech-chips" class="tech-chips-container"></div>
+                            </div>
 
-                        <button type="submit" id="upload-submit-btn" class="premium-btn"
-                            style="width: 100%; margin-top: 10px;">
-                            <span>Share Project</span>
-                        </button>
-                    </form>
+                            <!-- Attachment Terminal Zone -->
+                            <div class="terminal-zone" id="drop-zone">
+                                <div class="zone-bracket tl"></div>
+                                <div class="zone-bracket tr"></div>
+                                <div class="zone-bracket bl"></div>
+                                <div class="zone-bracket br"></div>
+                                
+                                <input type="file" id="project-file" accept="image/*,video/*" style="display: none;">
+                                <div class="zone-content">
+                                    <i data-lucide="terminal" class="zone-icon"></i>
+                                    <div class="zone-text">
+                                        <p id="file-label">attach thumbnail / demo</p>
+                                        <span>PNG • JPG • WEBP • max 5mb</span>
+                                    </div>
+                                </div>
+                                <div class="scan-line"></div>
+                            </div>
+
+                            <!-- Progress Bar (Integrated into Terminal) -->
+                            <div id="upload-progress-container" style="display: none; margin-top: 10px;">
+                                <div class="glass-progress-track">
+                                    <div id="upload-progress-bar" class="glass-progress-fill" style="background: #ff8c00;"></div>
+                                </div>
+                                <p id="upload-progress-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #ff8c00; margin-top: 5px;">0% Complete</p>
+                            </div>
+
+                            <div id="upload-status" class="auth-message" style="display: none; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;"></div>
+
+                            <button type="submit" id="upload-submit-btn" class="terminal-btn">
+                                <span>$ RUN UPLOAD</span>
+                            </button>
+
+                            <!-- Live Status Line -->
+                            <div class="terminal-status-line">
+                                <span class="status-cursor"></span>
+                                <span id="terminal-live-status">awaiting input • all systems nominal</span>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </section>
 

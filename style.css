@@ -3950,3 +3950,355 @@ body::before {
   white-space: nowrap;
   opacity: 0.6;
 }
+
+/* ============================================================
+   FUTURISTIC TERMINAL UPLOAD INTERFACE
+   ============================================================ */
+
+.terminal-card {
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 140, 0, 0.08);
+  border-radius: 16px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Terminal Header */
+.terminal-header {
+  height: 48px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.terminal-title {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.05em;
+  margin-left: -10%; /* Center adjustment */
+}
+
+.status-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #ff8c00;
+  border: 1px solid rgba(255, 140, 0, 0.3);
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  animation: badge-pulse 2s infinite ease-in-out;
+  background: rgba(255, 140, 0, 0.05);
+}
+
+@keyframes badge-pulse {
+  0%, 100% { opacity: 0.6; box-shadow: 0 0 0px rgba(255, 140, 0, 0); }
+  50% { opacity: 1; box-shadow: 0 0 10px rgba(255, 140, 0, 0.2); }
+}
+
+/* Terminal Body */
+.terminal-body {
+  padding: 24px 32px;
+}
+
+.terminal-command {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: #ff8c00;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.terminal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.terminal-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row-prefix {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+}
+
+.terminal-input-wrapper {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.terminal-input-wrapper:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.terminal-form input,
+.terminal-form textarea {
+  width: 100%;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.terminal-form input:focus,
+.terminal-form textarea:focus {
+  border-color: rgba(255, 140, 0, 0.2);
+  background: rgba(255, 140, 0, 0.02);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.05);
+}
+
+.focus-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ff8c00;
+  transition: width 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.terminal-form input:focus + .focus-underline,
+.terminal-form textarea:focus + .focus-underline {
+  width: 100%;
+}
+
+/* Tech Chips */
+.tech-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tech-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.tech-chip:hover {
+  border-color: #ff8c00;
+  color: #ff8c00;
+  background: rgba(255, 140, 0, 0.05);
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.1);
+}
+
+/* Attachment Terminal Zone */
+.terminal-zone {
+  position: relative;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.01);
+  transition: all 0.4s ease;
+  overflow: hidden;
+  cursor: none !important;
+}
+
+.terminal-zone:hover {
+  border-color: rgba(255, 140, 0, 0.3);
+  background: rgba(255, 140, 0, 0.02);
+}
+
+.zone-bracket {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(255, 140, 0, 0.3);
+  border-style: solid;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+}
+
+.terminal-zone:hover .zone-bracket {
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+}
+
+.tl { top: 15px; left: 15px; border-width: 2px 0 0 2px; }
+.tr { top: 15px; right: 15px; border-width: 2px 2px 0 0; }
+.bl { bottom: 15px; left: 15px; border-width: 0 0 2px 2px; }
+.br { bottom: 15px; right: 15px; border-width: 0 2px 2px 0; }
+
+.zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.zone-icon {
+  width: 32px;
+  height: 32px;
+  color: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.terminal-zone:hover .zone-icon {
+  color: #ff8c00;
+  transform: scale(1.1);
+}
+
+.zone-text p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.zone-text span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+  display: block;
+}
+
+.scan-line {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(180deg, transparent, rgba(255, 140, 0, 0.05), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.terminal-zone:hover .scan-line {
+  animation: scan 2.5s infinite linear;
+  opacity: 1;
+}
+
+@keyframes scan {
+  from { top: -50%; }
+  to { top: 100%; }
+}
+
+/* Terminal Execution Button */
+.terminal-btn {
+  width: 100%;
+  height: 52px;
+  background: #000;
+  border: 1px solid rgba(255, 140, 0, 0.4);
+  border-radius: 8px;
+  color: #ff8c00;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.terminal-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.15), transparent);
+  transition: left 0.6s ease;
+}
+
+.terminal-btn:hover {
+  border-color: #ff8c00;
+  box-shadow: 0 0 30px rgba(255, 140, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.terminal-btn:hover::before {
+  left: 100%;
+}
+
+.terminal-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Status Line */
+.terminal-status-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.05em;
+}
+
+.status-cursor {
+  width: 6px;
+  height: 12px;
+  background: #ff8c00;
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Card Glow Track */
+.terminal-card-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
