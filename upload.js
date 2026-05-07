@@ -13,6 +13,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressText = document.getElementById('upload-progress-text');
     const previousList = document.getElementById('previous-projects-list');
 
+    // ─── 0. LOGO BLOOM ANIMATION ────────────────────────────
+    const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+    if (logoWrapper) {
+        setTimeout(() => {
+            logoWrapper.classList.add('bloom');
+            setTimeout(() => {
+                logoWrapper.classList.add('is-breathing');
+            }, 1700);
+        }, 500);
+    }
+
+    // ─── 0.5 HAMBURGER DROPDOWN LOGIC ───────────────────────
+    const hamburgerCheckbox = document.getElementById('hamburger-checkbox');
+    const hamburgerDropdown = document.getElementById('hamburger-dropdown');
+    const hamburgerLabel = document.getElementById('hamburger-menu-label');
+    const navItems = hamburgerDropdown.querySelectorAll('.nav-item-anim');
+
+    if (hamburgerCheckbox) {
+        hamburgerCheckbox.addEventListener('change', () => {
+            if (hamburgerCheckbox.checked) {
+                hamburgerDropdown.classList.add('active');
+                navItems.forEach(item => {
+                    item.classList.remove('nav-item-visible');
+                    item.style.transitionDelay = '0ms';
+                });
+                requestAnimationFrame(() => {
+                    navItems.forEach((item, index) => {
+                        item.style.transitionDelay = `${index * 35}ms`;
+                        item.classList.add('nav-item-visible');
+                    });
+                });
+            } else {
+                hamburgerDropdown.classList.remove('active');
+                navItems.forEach(item => {
+                    item.classList.remove('nav-item-visible');
+                    item.style.transitionDelay = '0ms';
+                });
+            }
+        });
+
+        // Highlight follow mouse
+        hamburgerDropdown.addEventListener('mousemove', (e) => {
+            const rect = hamburgerDropdown.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            hamburgerDropdown.style.setProperty('--mouse-x', `${x}%`);
+            hamburgerDropdown.style.setProperty('--mouse-y', `${y}%`);
+        });
+
+        // Close on click outside
+        document.addEventListener('click', (e) => {
+            if (!hamburgerLabel.contains(e.target) && hamburgerCheckbox.checked) {
+                hamburgerCheckbox.checked = false;
+                hamburgerDropdown.classList.remove('active');
+            }
+        });
+
+        // Close on ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && hamburgerCheckbox.checked) {
+                hamburgerCheckbox.checked = false;
+                hamburgerDropdown.classList.remove('active');
+            }
+        });
+    }
+
     // ─── 1. AUTH CHECK & INITIAL FETCH ────────────────────────
     auth.onAuthStateChanged(user => {
         if (user) {

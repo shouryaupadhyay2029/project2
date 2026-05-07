@@ -20,109 +20,133 @@
   <link rel="stylesheet" href="grid-background.css">
 
   <style>
-    /* ─── Contextual Breadcrumb ─── */
-    .breadcrumb-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .breadcrumb-trail {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: -2px;
-      animation: breadcrumbFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      animation-delay: 0.3s;
-      opacity: 0;
-      transform: translateY(6px);
-    }
-
-    @keyframes breadcrumbFadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .breadcrumb-slash {
-      color: rgba(255, 255, 255, 0.15);
-      font-family: 'Syne', sans-serif;
-      font-weight: 500;
-      font-size: 1.5rem;
-      user-select: none;
-    }
-
-    .breadcrumb-current {
-      color: #ff8c42;
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      font-size: 1.5rem;
-      letter-spacing: -0.01em;
-      position: relative;
-      text-shadow: 0 0 16px rgba(255, 140, 66, 0.25);
-      cursor: default;
-    }
-
-    .breadcrumb-current::after {
-      content: "";
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: #ff8c42;
-      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 0 8px rgba(255, 140, 66, 0.6);
-    }
-
-    .breadcrumb-trail:hover .breadcrumb-current::after {
-      width: 100%;
-    }
-
     /* ─── Uiverse Hamburger Menu ─── */
     .uiverse-hamburger {
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-    }
-
-    .uiverse-hamburger input {
-      display: none;
+      width: 40px;
+      height: 40px;
+      position: relative;
     }
 
     .uiverse-hamburger svg {
-      height: 48px;
-      width: 48px;
+      height: 38px;
+      width: 38px;
       transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .line {
-      fill: none;
-      stroke: #ff8c42;
-      /* Requested Orange Color */
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-width: 3;
-      transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
-        stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    /* ─── Command Palette ─── */
+    .palette-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 180ms ease-out;
+      display: flex;
+      justify-content: center;
     }
 
-    .line-top-bottom {
-      stroke-dasharray: 12 63;
+    .palette-backdrop.active {
+      opacity: 1;
+      visibility: visible;
     }
 
-    .uiverse-hamburger input:checked+svg {
-      transform: rotate(-45deg);
+    .palette-container {
+      position: relative;
+      top: 80px;
+      width: min(640px, 90vw);
+      height: fit-content;
+      background: #1e1e1e;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+      transform: translateY(-6px);
+      transition: transform 180ms ease-out;
+      overflow: hidden;
     }
 
-    .uiverse-hamburger input:checked+svg .line-top-bottom {
-      stroke-dasharray: 20 300;
-      stroke-dashoffset: -32.42;
+    .palette-backdrop.active .palette-container {
+      transform: translateY(0);
     }
+
+    .palette-header {
+      padding: 0 16px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .palette-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #f0f0f0;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .palette-shortcut {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: #888;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .palette-results {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .palette-category label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .palette-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .palette-chip {
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      color: #ccc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .palette-chip:hover {
+      background: rgba(232, 129, 58, 0.15);
+      border-color: #E8813A;
+      color: #E8813A;
+    }
+
+    .palette-chip.hidden {
+      display: none;
+    }
+
+    /* ─── Premium Dropdown Menu ─── */
+
 
 
     /* ─── Explore Platform Layout ─── */
@@ -153,10 +177,10 @@
       margin-bottom: 24px;
 
       /* Subtle inner highlight & soft matte shadow */
-      box-shadow: 
+      box-shadow:
         inset 1px 1px 1px rgba(255, 255, 255, 0.05),
         0 8px 32px rgba(0, 0, 0, 0.25);
-        
+
       /* Smooth Interaction */
       transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform, box-shadow, border-color;
@@ -166,7 +190,7 @@
       transform: translateY(-4px);
       background: linear-gradient(135deg, rgba(255, 140, 66, 0.08) 0%, transparent 100%), rgba(255, 255, 255, 0.06);
       border-color: rgba(255, 140, 66, 0.25);
-      box-shadow: 
+      box-shadow:
         inset 1px 1px 1px rgba(255, 255, 255, 0.08),
         0 16px 40px rgba(0, 0, 0, 0.3),
         0 0 20px rgba(255, 140, 66, 0.1);
@@ -334,7 +358,8 @@
       color: rgba(255, 255, 255, 0.4);
       font-size: 1.2rem;
       transition: color 0.3s ease;
-      margin: 0; /* Override previous margin */
+      margin: 0;
+      /* Override previous margin */
     }
 
     .search-box:focus-within i {
@@ -745,14 +770,31 @@
       </div>
       <!-- Right side: Animated Hamburger Menu -->
       <div class="nav-actions">
-        <label class="uiverse-hamburger">
-          <input type="checkbox">
+        <label class="uiverse-hamburger" id="hamburger-menu-label">
+          <input type="checkbox" id="hamburger-checkbox">
           <svg viewBox="0 0 32 32">
             <path class="line line-top-bottom"
               d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
             </path>
             <path class="line" d="M7 16 27 16"></path>
           </svg>
+
+          <!-- Premium Dropdown Menu -->
+          <div class="premium-dropdown" id="hamburger-dropdown">
+            <div class="dropdown-group primary-nav">
+              <a href="index.html" class="dropdown-item nav-item-anim">Home</a>
+              <a href="explore.html" class="dropdown-item nav-item-anim active-page">Explore</a>
+              <a href="#" class="dropdown-item nav-item-anim">Feed</a>
+              <a href="#" class="dropdown-item nav-item-anim">Beginner Zone</a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group secondary-nav">
+              <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
+              <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
+              <a href="#" class="dropdown-item nav-item-anim">Settings</a>
+              <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
+            </div>
+          </div>
         </label>
       </div>
     </div>
@@ -879,7 +921,8 @@
         <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
         <div class="user-suggestions">
           <div class="user-card">
-            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers" class="user-card-avatar">
+            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers"
+              class="user-card-avatar">
             <div class="user-card-info">
               <h4>Alex Rivers</h4>
               <p>Full-stack Developer</p>
@@ -888,7 +931,8 @@
             <button class="follow-btn">Follow</button>
           </div>
           <div class="user-card">
-            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen" class="user-card-avatar">
+            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen"
+              class="user-card-avatar">
             <div class="user-card-info">
               <h4>Sarah Chen</h4>
               <p>UI/UX Designer</p>
@@ -897,7 +941,8 @@
             <button class="follow-btn">Follow</button>
           </div>
           <div class="user-card">
-            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane" class="user-card-avatar">
+            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane"
+              class="user-card-avatar">
             <div class="user-card-info">
               <h4>Marcus Vane</h4>
               <p>AI Engineer</p>
@@ -940,7 +985,43 @@
         feed.innerHTML = '';
 
         if (snapshot.empty) {
-          feed.innerHTML = '<div style="text-align:center; padding: 40px; color: gray;">No projects found matching your criteria.</div>';
+          feed.innerHTML = `
+            <div id="empty-state" style="text-align:center; padding: 40px;">
+              <span style="color: rgba(255,255,255,0.3); font-size: 15px;">Try searching </span>
+              <span id="tw-text" style="color: rgba(255,255,255,0.6); font-size: 15px;"></span>
+              <span id="tw-cursor" style="
+                display: inline-block;
+                width: 1px; height: 16px;
+                background: #E8813A;
+                margin-left: 2px;
+                vertical-align: middle;
+                animation: tw-blink 900ms step-end infinite;
+              "></span>
+              <style>
+                @keyframes tw-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+              </style>
+            </div>
+          `;
+
+          // Typewriter Logic
+          const suggestions = ['"React dashboard"...', '"AI tools"...', '"Sarah Chen"...', '"TypeScript starter"...', '"Node.js API"...', '"Marcus Vane"...'];
+          let si = 0, ci = 0, typing = true;
+          const el = document.getElementById('tw-text');
+
+          const tick = () => {
+            if (!document.getElementById('tw-text')) return; // Stop if removed
+            const target = suggestions[si];
+            if (typing) {
+              el.textContent = target.slice(0, ++ci);
+              if (ci === target.length) { typing = false; setTimeout(tick, 1600); return; }
+              setTimeout(tick, 52);
+            } else {
+              el.textContent = target.slice(0, --ci);
+              if (ci === 0) { typing = true; si = (si + 1) % suggestions.length; setTimeout(tick, 300); return; }
+              setTimeout(tick, 28);
+            }
+          };
+          tick();
           return;
         }
 
@@ -1005,10 +1086,7 @@
     const techChips = document.querySelectorAll('.tech-chip');
     techChips.forEach(chip => {
       chip.addEventListener('click', (e) => {
-        // Toggle active state
         chip.classList.toggle('active');
-
-        // Ripple micro-interaction
         const ripple = document.createElement('span');
         ripple.className = 'tech-chip-ripple';
         const size = Math.max(chip.offsetWidth, chip.offsetHeight);
@@ -1017,21 +1095,181 @@
           width: ${size}px;
           height: ${size}px;
           left: ${e.clientX - rect.left - size / 2}px;
-          top: ${e.clientY - rect.top - size / 2}px;
+          top: ${e.client - rect.ize / 2}px;
         `;
         chip.appendChild(ripple);
         setTimeout(() => ripple.remove(), 500);
       });
     });
 
+    // Hamburger Dropdown Logic
+    const hamburgerCheckbox = document.getElementById('hamburger-checkbox');
+    const hamburgerDropdown = document.getElementById('hamburger-dropdown');
+    const hamburgerLabel = document.getElementById('hamburger-menu-label');
+    const navItems = hamburgerDropdown.querySelectorAll('.nav-item-anim');
+
+    hamburgerCheckbox.addEventListener('change', () => {
+      if (hamburgerCheckbox.checked) {
+        hamburgerDropdown.classList.add('active');
+
+        // Staggered Entrance Animation
+        navItems.forEach((item, index) => {
+          item.classList.remove('nav-item-visible');
+          item.style.transitionDelay = '0ms';
+        });
+
+        requestAnimationFrame(() => {
+          navItems.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 35}ms`;
+            item.classList.add('nav-item-visible');
+          });
+        });
+      } else {
+        hamburgerDropdown.classList.remove('active');
+        // Instantly reset
+        navItems.forEach(item => {
+          item.classList.remove('nav-item-visible');
+          item.style.transitionDelay = '0ms';
+        });
+      }
+    });
+
+    // Cursor Following Highlight inside dropdown
+    hamburgerDropdown.addEventListener('mousemove', (e) => {
+      const rect = hamburgerDropdown.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      hamburgerDropdown.style.setProperty('--mouse-x', `${x}%`);
+      hamburgerDropdown.style.setProperty('--mouse-y', `${y}%`);
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!hamburgerLabel.contains(e.target) && hamburgerCheckbox.checked) {
+        hamburgerCheckbox.checked = false;
+        hamburgerDropdown.classList.remove('active');
+      }
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && hamburgerCheckbox.checked) {
+        hamburgerCheckbox.checked = false;
+        hamburgerDropdn.classmove('active');
+      }
+    });
+
+    // Command Palette Logic
+    const initCommandPalette = () => {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'palette-backdrop';
+      backdrop.innerHTML = `
+        <div class="palette-container">
+          <div class="palette-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" class="palette-input" placeholder="Search projects, people, or tech stacks...">
+            <span class="palette-shortcut">Esc</span>
+          </div>
+          <div class="palette-results">
+            <div class="palette-category">
+              <label>Jump to User</label>
+              <div class="palette-chips">
+                <span class="palette-chip">Alex Rivers</span>
+                <span class="palette-chip">Sarah Chen</span>
+                <span class="palette-chip">Marcus Vane</span>
+              </div>
+            </div>
+            <div class="palette-category">
+              <label>Filter by Stack</label>
+              <div class="palette-chips">
+                <span class="palette-chip">React</span>
+                <span class="palette-chip">Python</span>
+                <span class="palette-chip">TypeScript</span>
+                <span class="palette-chip">Node.js</span>
+                <span class="palette-chip">Flutter</span>
+              </div>
+            </div>
+            <div class="palette-category">
+              <label>Quick Actions</label>
+              <div class="palette-chips">
+                <span class="palette-chip">Trending now</span>
+                <span class="palette-chip">Most liked</span>
+                <span class="palette-chip">Latest projects</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(backdrop);
+
+      const input = backdrop.querySelector('.palette-input');
+      const chips = backdrop.querySelectorAll('.palette-chip');
+
+      const openPalette = () => {
+        backdrop.classList.add('active');
+        setTimeout(() => input.focus(), 50);
+      };
+
+      const closePalette = () => {
+        backdrop.classList.remove('active');
+        input.value = '';
+        chips.forEach(c => c.classList.remove('hidden'));
+      };
+
+      // Shortcut ⌘K / Ctrl+K
+      window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault();
+          openPalette();
+        }
+        if (e.key === 'Escape') closePalette();
+      });
+
+      // Existing search bar trigger
+      const mainSearch = document.getElementById('feed-search');
+      if (mainSearch) {
+        mainSearch.addEventListener('click', (e) => {
+          e.preventDefault();
+          openPalette();
+        });
+        mainSearch.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab') {
+            e.preventDefault();
+            openPalette();
+          }
+        });
+      }
+
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closePalette();
+      });
+
+      // Filtering logic
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        chips.forEach(chip => {
+          if (chip.textContent.toLowerCase().includes(val)) {
+            chip.classList.remove('hidden');
+          } else {
+            chip.classList.add('hidden');
+          }
+        });
+      });
+    };
+
     // Initialize
     fetchProjects();
     lucide.createIcons();
+    initCommandPalette();
   </script>
 
   <script src="script.js" defer></script>
   <script src="grid-distortion.js" defer></script>
   <script src="cursor.js" defer></script>
+</body>
+
+</html>pt src="grid-distortion.js" defer></script>
+<script src="cursor.js" defer></script>
 </body>
 
 </html>

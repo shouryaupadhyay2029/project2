@@ -27,7 +27,7 @@
 
 /* ──── LAYER 1: FINE DETAIL (High-Speed) ──── */
 .layer-1 {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
   background-size: 24px 24px;
@@ -38,7 +38,7 @@
 
 /* ──── LAYER 2: STRUCTURAL (Mid-Depth) ──── */
 .layer-2 {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
   background-size: 64px 64px;
@@ -49,7 +49,7 @@
 
 /* ──── LAYER 3: DEPTH MESH (Distant) ──── */
 .layer-3 {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px);
   background-size: 128px 128px;
@@ -60,7 +60,7 @@
 
 /* ──── LAYER 4: MASSIVE (Horizon) ──── */
 .layer-4 {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.04) 2px, transparent 2px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 2px, transparent 2px);
   background-size: 256px 256px;
@@ -91,28 +91,48 @@
 /* ─── SEAMLESS MULTI-DIRECTIONAL ANIMATIONS (GPU Optimized) ─── */
 
 @keyframes moveFine {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-24px); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-24px);
+  }
 }
 
 @keyframes moveStructural {
-  from { transform: translateX(0); }
-  to   { transform: translateX(64px); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(64px);
+  }
 }
 
 @keyframes moveDepth {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(128px, 128px); }
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(128px, 128px);
+  }
 }
 
 @keyframes moveAtmosphere {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(-256px, 128px); }
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-256px, 128px);
+  }
 }
 
 /* ─── Content Glassmorphism Support ─── */
-.explore-page .sidebar-card, 
-.explore-page .project-card, 
+.explore-page .sidebar-card,
+.explore-page .project-card,
 .explore-page .search-box {
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);

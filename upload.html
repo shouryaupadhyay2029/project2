@@ -1,53 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share Your Project | DevStage</title>
-    
+
     <!-- Premium Typography -->
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
+        rel="stylesheet">
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cursor.css">
+
+    <style>
+        body {
+            background-color: #111111 !important;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Ensure all existing content sits above the background canvas */
+        .navbar, .upload-wrapper, #loader-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        #upload-mesh-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: auto; /* Required for click ripples */
+        }
+    </style>
+
 </head>
+
 <body class="upload-page">
+    <canvas id="upload-mesh-canvas"></canvas>
     <script src="loader.js"></script>
+
+
     <nav class="navbar" id="main-navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
-              <div class="logo-chars">
-                <span class="char" style="--i:0">D</span>
-                <span class="char" style="--i:1">e</span>
-                <span class="char" style="--i:2">v</span>
-                <div class="logo-separator"></div>
-                <span class="char outline" style="--i:3">S</span>
-                <span class="char outline" style="--i:4">t</span>
-                <span class="char outline" style="--i:5">a</span>
-                <span class="char outline" style="--i:6">g</span>
-                <span class="char outline" style="--i:7">e</span>
-                <div class="logo-dot"></div>
-              </div>
-              <div class="logo-underline"></div>
-            </a>
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="explore.html" class="nav-link">Explore</a></li>
-                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-                </ul>
+            <div class="breadcrumb-header">
+                <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
+                    <div class="logo-chars">
+                        <span class="char" style="--i:0">D</span>
+                        <span class="char" style="--i:1">e</span>
+                        <span class="char" style="--i:2">v</span>
+                        <div class="logo-separator"></div>
+                        <span class="char outline" style="--i:3">S</span>
+                        <span class="char outline" style="--i:4">t</span>
+                        <span class="char outline" style="--i:5">a</span>
+                        <span class="char outline" style="--i:6">g</span>
+                        <span class="char outline" style="--i:7">e</span>
+                        <div class="logo-dot"></div>
+                    </div>
+                    <div class="logo-underline"></div>
+                </a>
+                <div class="breadcrumb-trail">
+                    <span class="breadcrumb-slash">/</span>
+                    <span class="breadcrumb-current">Upload</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <label class="uiverse-hamburger" id="hamburger-menu-label">
+                    <input type="checkbox" id="hamburger-checkbox">
+                    <svg viewBox="0 0 32 32">
+                        <path class="line line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        </path>
+                        <path class="line" d="M7 16 27 16"></path>
+                    </svg>
+
+                    <!-- Premium Dropdown Menu -->
+                    <div class="premium-dropdown" id="hamburger-dropdown">
+                        <div class="dropdown-group primary-nav">
+                            <a href="index.html" class="dropdown-item nav-item-anim">Home</a>
+                            <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
+                            <a href="#" class="dropdown-item nav-item-anim">Feed</a>
+                            <a href="#" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-group secondary-nav">
+                            <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
+                            <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
+                            <a href="#" class="dropdown-item nav-item-anim">Settings</a>
+                            <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                </label>
             </div>
         </div>
     </nav>
 
     <main class="upload-wrapper" style="padding-top: 120px; padding-bottom: 60px;">
         <div class="upload-grid-container">
-            
+
             <!-- LEFT: Upload Form -->
             <section class="upload-form-section">
                 <div class="upload-card glass-card">
@@ -96,7 +155,8 @@
 
                         <div id="upload-status" class="auth-message" style="display: none;"></div>
 
-                        <button type="submit" id="upload-submit-btn" class="premium-btn" style="width: 100%; margin-top: 10px;">
+                        <button type="submit" id="upload-submit-btn" class="premium-btn"
+                            style="width: 100%; margin-top: 10px;">
                             <span>Share Project</span>
                         </button>
                     </form>
@@ -127,9 +187,12 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script src="upload.js"></script>
+    <script src="upload-background.js"></script>
     <script src="cursor.js" defer></script>
     <script>
         lucide.createIcons();
     </script>
+
 </body>
+
 </html>
