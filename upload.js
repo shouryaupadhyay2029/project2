@@ -118,13 +118,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─── 2. DRAG & DROP LOGIC ────────────────────────────────
+    const previewImg = document.getElementById('preview-img');
+    const previewPlaceholderUI = document.getElementById('preview-placeholder-ui');
+    const previewOverlay = document.getElementById('preview-empty-overlay');
+    const previewTitle = document.getElementById('preview-title');
+    const previewDesc = document.getElementById('preview-desc');
+    const previewTech = document.getElementById('preview-tech-stack');
+
     dropZone.addEventListener('click', () => fileInput.click());
 
     fileInput.addEventListener('change', (e) => {
         if (e.target.files[0]) {
-            fileLabel.innerText = `Selected: ${e.target.files[0].name}`;
+            const file = e.target.files[0];
+            fileLabel.innerText = `Selected: ${file.name}`;
             dropZone.classList.add('active');
-            updateTerminalStatus(`payload attached: ${e.target.files[0].name}`);
+            updateTerminalStatus(`payload attached: ${file.name}`);
+            
+            // Live Preview Thumbnail
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                previewImg.src = event.target.result;
+                previewImg.style.display = 'block';
+                previewPlaceholderUI.style.display = 'none';
+                revealPreview();
+            };
+            reader.readAsDataURL(file);
         }
     });
 
@@ -141,9 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         dropZone.classList.remove('drag-over');
         if (e.dataTransfer.files[0]) {
+            const file = e.dataTransfer.files[0];
             fileInput.files = e.dataTransfer.files;
-            fileLabel.innerText = `Dropped: ${e.dataTransfer.files[0].name}`;
-            updateTerminalStatus(`payload dropped: ${e.dataTransfer.files[0].name}`);
+            fileLabel.innerText = `Dropped: ${file.name}`;
+            updateTerminalStatus(`payload dropped: ${file.name}`);
+
+            // Live Preview Thumbnail
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                previewImg.src = event.target.result;
+                previewImg.style.display = 'block';
+                previewPlaceholderUI.style.display = 'none';
+                revealPreview();
+            };
+            reader.readAsDataURL(file);
         }
     });
 
@@ -151,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminalCard = document.getElementById('terminal-card-container');
     const terminalGlow = document.getElementById('terminal-cursor-glow');
     const terminalStatusText = document.getElementById('terminal-live-status');
+    const previewCard = document.getElementById('project-preview-card');
 
     if (terminalCard && terminalGlow) {
         terminalCard.addEventListener('mousemove', (e) => {
@@ -176,15 +206,79 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Tech Chips Rendering
+    // Preview Card Tilt
+    if (previewCard) {
+        previewCard.addEventListener('mousemove', (e) => {
+            const rect = previewCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            previewCard.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+            previewCard.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const tiltX = (y - centerY) / 25;
+            const tiltY = (centerX - x) / 25;
+
+            previewCard.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+
+        previewCard.addEventListener('mouseleave', () => {
+            previewCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+    }
+
+    // Tech Chips & Live Sync
+    const titleInput = document.getElementById('project-title');
+    const descInput = document.getElementById('project-desc');
     const techInput = document.getElementById('project-tech');
     const techChipsContainer = document.getElementById('tech-chips');
+    const categoryInput = document.getElementById('project-category');
+    const categoryPills = document.querySelectorAll('.category-pill');
+
+    categoryPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            categoryPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            categoryInput.value = pill.dataset.category;
+            updateTerminalStatus(`category updated: ${pill.dataset.category}`);
+        });
+    });
+
+    if (titleInput) {
+        titleInput.addEventListener('input', (e) => {
+            previewTitle.innerText = e.target.value || "Project Title";
+            revealPreview();
+        });
+    }
+
+    if (descInput) {
+        descInput.addEventListener('input', (e) => {
+            previewDesc.innerText = e.target.value || "Description will appear here as you type...";
+            revealPreview();
+        });
+    }
+
     if (techInput && techChipsContainer) {
         techInput.addEventListener('input', (e) => {
             const value = e.target.value;
             const tags = value.split(',').map(t => t.trim()).filter(t => t);
+            
+            // Terminal chips
             techChipsContainer.innerHTML = tags.map(tag => `<span class="tech-chip">[ ${tag} ]</span>`).join('');
+            
+            // Preview chips
+            previewTech.innerHTML = tags.map(tag => `<span class="preview-tech-chip">${tag}</span>`).join('');
+            
+            revealPreview();
         });
+    }
+
+    function revealPreview() {
+        if (previewOverlay) {
+            previewOverlay.classList.add('hidden');
+        }
     }
 
     function updateTerminalStatus(text) {
@@ -237,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const projectDoc = await db.collection('projects').add({
                         title,
                         description: desc,
+                        category: categoryInput.value,
                         techStack: tech.split(',').map(s => s.trim()).filter(s => s),
                         userId: user.uid,
                         userName: user.displayName || 'Developer',

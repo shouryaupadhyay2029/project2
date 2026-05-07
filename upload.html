@@ -147,6 +147,23 @@
                                 </div>
                             </div>
 
+                            <!-- Category Selector -->
+                            <div class="terminal-row">
+                                <span class="row-prefix">› category =</span>
+                                <div class="category-selector-container">
+                                    <input type="hidden" id="project-category" value="Web App">
+                                    <div class="category-pills">
+                                        <div class="category-pill active" data-category="Web App">Web App</div>
+                                        <div class="category-pill" data-category="AI">AI</div>
+                                        <div class="category-pill" data-category="UI/UX">UI/UX</div>
+                                        <div class="category-pill" data-category="Open Source">Open Source</div>
+                                        <div class="category-pill" data-category="Mobile">Mobile</div>
+                                        <div class="category-pill" data-category="Robotics">Robotics</div>
+                                        <div class="category-pill" data-category="Cybersecurity">Cybersecurity</div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Tech Stack Field -->
                             <div class="terminal-row">
                                 <span class="row-prefix">› stack =</span>
@@ -199,17 +216,76 @@
                 </div>
             </section>
 
-            <!-- RIGHT: Previous Uploads -->
-            <aside class="previous-uploads-section">
-                <div class="section-header-compact">
-                    <i data-lucide="history"></i>
-                    <h3>Your Previous Uploads</h3>
-                </div>
+            <!-- RIGHT: Live Preview & History -->
+            <aside class="upload-sidebar" style="display: flex; flex-direction: column; gap: 40px;">
+                
+                <!-- 1. LIVE PREVIEW PANEL -->
+                <section class="preview-section">
+                    <div class="preview-panel-header">
+                        <span class="preview-badge">LIVE PREVIEW</span>
+                        <div class="live-indicator">
+                            <span class="pulse-dot"></span>
+                            LIVE
+                        </div>
+                    </div>
 
-                <div id="previous-projects-list" class="mini-upload-list">
-                    <!-- Skeletons while loading -->
-                    <div class="mini-skeleton"></div>
-                    <div class="mini-skeleton"></div>
+                    <div class="project-preview-card" id="project-preview-card">
+                        <div class="preview-card-glow" id="preview-card-glow"></div>
+                        <div class="preview-thumbnail">
+                            <img id="preview-img" src="" alt="" style="display: none;">
+                            <div class="preview-placeholder" id="preview-placeholder-ui">
+                                <i data-lucide="image"></i>
+                                <p>Thumbnail Preview</p>
+                            </div>
+                            <div class="preview-scan-line"></div>
+                        </div>
+                        
+                        <div class="preview-content">
+                            <div class="preview-header">
+                                <div class="creator-mini">
+                                    <div class="creator-avatar-placeholder"></div>
+                                    <span class="creator-name-placeholder">Developer</span>
+                                </div>
+                                <div class="preview-stats">
+                                    <span><i data-lucide="heart" style="width: 12px;"></i> 0</span>
+                                    <span><i data-lucide="eye" style="width: 12px;"></i> 0</span>
+                                </div>
+                            </div>
+
+                            <h3 id="preview-title" class="preview-title-text">Project Title</h3>
+                            <p id="preview-desc" class="preview-desc-text">Description will appear here as you type...</p>
+                            
+                            <div id="preview-tech-stack" class="preview-tech-chips">
+                                <!-- Chips dynamically injected -->
+                            </div>
+                        </div>
+
+                        <!-- Empty State Overlay -->
+                        <div class="preview-empty-overlay" id="preview-empty-overlay">
+                            <div class="empty-content">
+                                <i data-lucide="monitor" class="empty-icon"></i>
+                                <p>Your project preview will appear here.</p>
+                                <div class="placeholder-bars">
+                                    <div class="bar bar-short"></div>
+                                    <div class="bar bar-long"></div>
+                                    <div class="bar bar-mid"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. PREVIOUS DEPLOYMENTS -->
+                <div class="previous-uploads-sidebar">
+                    <div class="section-header-compact" style="margin-bottom: 20px;">
+                        <i data-lucide="history"></i>
+                        <h3>Your Previous Uploads</h3>
+                    </div>
+                    <div id="previous-projects-list" class="mini-upload-list">
+                        <!-- Skeletons while loading -->
+                        <div class="mini-skeleton"></div>
+                        <div class="mini-skeleton"></div>
+                    </div>
                 </div>
             </aside>
 
