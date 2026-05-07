@@ -27,7 +27,9 @@
         }
 
         /* Ensure all existing content sits above the background canvas */
-        .navbar, .upload-wrapper, #loader-wrapper {
+        .navbar,
+        .upload-wrapper,
+        #loader-wrapper {
             position: relative;
             z-index: 1;
         }
@@ -39,7 +41,8 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            pointer-events: auto; /* Required for click ripples */
+            pointer-events: auto;
+            /* Required for click ripples */
         }
     </style>
 
@@ -142,7 +145,8 @@
                             <div class="terminal-row">
                                 <span class="row-prefix">› desc =</span>
                                 <div class="terminal-input-wrapper">
-                                    <textarea id="project-desc" required placeholder="brief_execution_summary" rows="3"></textarea>
+                                    <textarea id="project-desc" required placeholder="brief_execution_summary"
+                                        rows="3"></textarea>
                                     <div class="focus-underline"></div>
                                 </div>
                             </div>
@@ -180,7 +184,7 @@
                                 <div class="zone-bracket tr"></div>
                                 <div class="zone-bracket bl"></div>
                                 <div class="zone-bracket br"></div>
-                                
+
                                 <input type="file" id="project-file" accept="image/*,video/*" style="display: none;">
                                 <div class="zone-content">
                                     <i data-lucide="terminal" class="zone-icon"></i>
@@ -195,12 +199,17 @@
                             <!-- Progress Bar (Integrated into Terminal) -->
                             <div id="upload-progress-container" style="display: none; margin-top: 10px;">
                                 <div class="glass-progress-track">
-                                    <div id="upload-progress-bar" class="glass-progress-fill" style="background: #ff8c00;"></div>
+                                    <div id="upload-progress-bar" class="glass-progress-fill"
+                                        style="background: #ff8c00;"></div>
                                 </div>
-                                <p id="upload-progress-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #ff8c00; margin-top: 5px;">0% Complete</p>
+                                <p id="upload-progress-text"
+                                    style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #ff8c00; margin-top: 5px;">
+                                    0% Complete</p>
                             </div>
 
-                            <div id="upload-status" class="auth-message" style="display: none; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;"></div>
+                            <div id="upload-status" class="auth-message"
+                                style="display: none; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+                            </div>
 
                             <button type="submit" id="upload-submit-btn" class="terminal-btn">
                                 <span>$ RUN UPLOAD</span>
@@ -218,7 +227,7 @@
 
             <!-- RIGHT: Live Preview & History -->
             <aside class="upload-sidebar" style="display: flex; flex-direction: column; gap: 40px;">
-                
+
                 <!-- 1. LIVE PREVIEW PANEL -->
                 <section class="preview-section">
                     <div class="preview-panel-header">
@@ -239,7 +248,7 @@
                             </div>
                             <div class="preview-scan-line"></div>
                         </div>
-                        
+
                         <div class="preview-content">
                             <div class="preview-header">
                                 <div class="creator-mini">
@@ -253,8 +262,9 @@
                             </div>
 
                             <h3 id="preview-title" class="preview-title-text">Project Title</h3>
-                            <p id="preview-desc" class="preview-desc-text">Description will appear here as you type...</p>
-                            
+                            <p id="preview-desc" class="preview-desc-text">Description will appear here as you type...
+                            </p>
+
                             <div id="preview-tech-stack" class="preview-tech-chips">
                                 <!-- Chips dynamically injected -->
                             </div>

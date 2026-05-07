@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fileLabel.innerText = `Selected: ${file.name}`;
             dropZone.classList.add('active');
             updateTerminalStatus(`payload attached: ${file.name}`);
-            
+
             // Live Preview Thumbnail
             const reader = new FileReader();
             reader.onload = (event) => {
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = previewCard.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             previewCard.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
             previewCard.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
 
@@ -264,13 +264,13 @@ document.addEventListener('DOMContentLoaded', () => {
         techInput.addEventListener('input', (e) => {
             const value = e.target.value;
             const tags = value.split(',').map(t => t.trim()).filter(t => t);
-            
+
             // Terminal chips
             techChipsContainer.innerHTML = tags.map(tag => `<span class="tech-chip">[ ${tag} ]</span>`).join('');
-            
+
             // Preview chips
             previewTech.innerHTML = tags.map(tag => `<span class="preview-tech-chip">${tag}</span>`).join('');
-            
+
             revealPreview();
         });
     }
@@ -287,6 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
     // ─── 3. UPLOAD HANDLER ───────────────────────────────────
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -295,20 +297,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.getElementById('project-title').value;
         const desc = document.getElementById('project-desc').value;
         const tech = document.getElementById('project-tech').value;
+        const category = categoryInput.value;
 
         if (!file || !user) {
             updateTerminalStatus("error: missing payload or authentication");
             return;
         }
 
-        // Reset UI
-        updateTerminalStatus("validating payload...");
+        // Deployment Sequence
+        const submitBtn = document.getElementById('upload-submit-btn');
+        submitBtn.disabled = true;
+
+        updateTerminalStatus("initializing payload...");
+        await sleep(800);
+        updateTerminalStatus("compressing assets...");
+        await sleep(1000);
+        updateTerminalStatus("validating metadata...");
+        await sleep(800);
+        updateTerminalStatus("pushing to discovery...");
+        await sleep(600);
+
+        // Reset UI for actual upload
         statusMsg.style.display = 'block';
         statusMsg.innerText = "Starting secure upload...";
         statusMsg.className = "auth-message info";
         progressContainer.style.display = 'block';
-        const submitBtn = document.getElementById('upload-submit-btn');
-        submitBtn.disabled = true;
 
         try {
             // A. Upload to Storage
@@ -316,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const storageRef = storage.ref(`projects/${user.uid}/${Date.now()}_${file.name}`);
             const uploadTask = storageRef.put(file);
 
-            uploadTask.on('state_changed', 
+            uploadTask.on('state_changed',
                 (snap) => {
                     const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
                     progressBar.style.width = progress + '%';
@@ -331,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const projectDoc = await db.collection('projects').add({
                         title,
                         description: desc,
-                        category: categoryInput.value,
+                        category,
                         techStack: tech.split(',').map(s => s.trim()).filter(s => s),
                         userId: user.uid,
                         userName: user.displayName || 'Developer',
