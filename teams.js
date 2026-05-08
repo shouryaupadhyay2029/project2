@@ -249,10 +249,34 @@ document.addEventListener('DOMContentLoaded', () => {
         pageTag.style.opacity = '1';
     }
 
-    // ─── 4. AUTH STATE (UI ONLY FOR NOW) ─────────────────────
+    // ─── 4. CARD INTERACTION (3D TILT) ───────────────────────────
+    const teamCards = document.querySelectorAll('.featured-team-card');
+    
+    teamCards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 15;
+            const rotateY = (centerX - x) / 15;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+        });
+    });
+
+    // ─── 5. AUTH STATE (UI ONLY FOR NOW) ─────────────────────
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
             // Optional: Redirect if needed
+            // window.location.href = 'index.html';
         }
     });
 });
