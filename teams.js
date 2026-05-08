@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height = canvas.height = window.innerHeight;
 
             seeds = [];
-            for (let i = 0; i < 9; i++) {
+            for (let i = 0; i < 7; i++) {
                 seeds.push({
                     x: 80 + Math.random() * (Math.max(10, width - 160)),
                     y: 80 + Math.random() * (Math.max(10, height - 160)),
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             nodes = [];
-            for (let i = 0; i < 42; i++) {
+            for (let i = 0; i < 72; i++) {
                 nodes.push({
                     x: 18 + Math.random() * (Math.max(10, width - 36)),
                     y: 18 + Math.random() * (Math.max(10, height - 36)),
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.040)';
             for (let r = 0; r < rows - 1; r++) {
                 for (let c = 0; c < cols - 1; c++) {
                     let current = vMap[r][c];
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             let strength = Math.max(0, 1 - dist / 200);
                             ctx.fillStyle = `rgba(224, 120, 32, ${0.20 + strength * 0.50})`;
                             ctx.fillRect(bx - 1.25, by - 1.25, 2.5, 2.5);
-                            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+                            ctx.fillStyle = 'rgba(255, 255, 255, 0.040)';
                         } else {
                             ctx.fillRect((c * ST) - 0.9, (r * ST) - 0.9, 1.8, 1.8);
                         }
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let dx = nearestSeed.x - n.x;
                 let dy = nearestSeed.y - n.y;
 
-                let force = d > 90 ? 0.028 : 0.008;
+                let force = d > 90 ? 0.038 : 0.012;
                 if (d > 0) {
                     n.vx += (dx / d) * force;
                     n.vy += (dy / d) * force;
@@ -200,15 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 n.x += n.vx;
                 n.y += n.vy;
-                n.vx *= 0.91;
-                n.vy *= 0.91;
+                n.vx *= 0.89;
+                n.vy *= 0.89;
 
                 if (n.x < 18) { n.x = 18; n.vx *= -1; }
                 else if (n.x > width - 18) { n.x = width - 18; n.vx *= -1; }
                 if (n.y < 18) { n.y = 18; n.vy *= -1; }
                 else if (n.y > height - 18) { n.y = height - 18; n.vy *= -1; }
 
-                if (d < 100) n.assembled = Math.min(1, n.assembled + 0.022);
+                if (d < 130) n.assembled = Math.min(1, n.assembled + 0.022);
                 else n.assembled = Math.max(0, n.assembled - 0.018);
 
                 n.twinkle += n.twinkleSpd;
@@ -221,14 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     let n2 = nodes[j];
                     if (n1.ci !== n2.ci) continue;
                     let minAssembled = Math.min(n1.assembled, n2.assembled);
-                    if (minAssembled < 0.22) continue;
+                    if (minAssembled < 0.12) continue;
 
                     let dx = n1.x - n2.x;
                     let dy = n1.y - n2.y;
                     let d = Math.sqrt(dx * dx + dy * dy);
-                    if (d > 118) continue;
+                    if (d > 150) continue;
 
-                    let str = minAssembled * (1 - d / 118);
+                    let str = minAssembled * (1 - d / 150);
                     let mx = (n1.x + n2.x) / 2;
                     let my = (n1.y + n2.y) / 2;
                     
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (cdist < 140) glowL = ((140 - cdist) / 140) * 0.15;
                     }
 
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${str * 0.35 + glowL})`;
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${str * 0.26 + glowL})`;
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 let near = dm < 155;
                 let twink = 0.75 + Math.sin(n.twinkle) * 0.25;
-                let brightness = near ? 1 : (0.45 + n.assembled * 0.55) * twink;
+                let brightness = near ? 1 : (0.35 + n.assembled * 0.55) * twink;
 
                 if (n.assembled > 0.45 || near) {
                     let radius = near ? 10 : 7;
@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.fill();
                 }
 
-                let coreRadius = 1.3 + n.assembled * 0.7;
+                let coreRadius = 1.5 + n.assembled * 0.9;
                 ctx.fillStyle = near ? `rgba(224, 120, 32, 0.92)` : `rgba(255, 255, 255, ${brightness})`;
                 ctx.beginPath();
                 ctx.arc(n.x, n.y, coreRadius, 0, Math.PI * 2);
