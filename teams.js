@@ -188,11 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const px = p1[0] + vx * tProj;
                                     const py = p1[1] + vy * tProj;
                                     const dist = Math.hypot(mouse.x - px, mouse.y - py);
-                                    const hoverRadius = 240;
+                                    const hoverRadius = 140; // Reduced from 240
 
                                     if (dist < hoverRadius) {
                                         const intensity = 1 - (dist / hoverRadius);
-                                        const span = 0.18 + intensity * 0.34;
+                                        const span = 0.12 + intensity * 0.22; // Reduced span
                                         const a = clamp(tProj - span * .5, 0, 1);
                                         const b = clamp(tProj + span * .5, 0, 1);
                                         orangeSegments.push([[p1[0] + vx * a, p1[1] + vy * a], [p1[0] + vx * b, p1[1] + vy * b]]);

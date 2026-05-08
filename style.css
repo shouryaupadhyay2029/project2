@@ -19,9 +19,9 @@
   --border-strong: rgba(255, 255, 255, 0.12);
 
   /* Brand */
-  --brand-orange: #ff8c00;
-  --brand-orange-dark: #e67e00;
-  --brand-orange-shadow: rgba(255, 140, 0, 0.3);
+  --brand-orange: #d78a2f;
+  --brand-orange-dark: #b87326;
+  --brand-orange-shadow: rgba(215, 138, 47, 0.2);
 
   /* Shadows — Tight & Controlled (Apple / Linear) */
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -212,6 +212,31 @@ label,
 .lower-section,
 .filter-select {
   cursor: none !important;
+}
+
+/* ─── Premium Topographic Background Styles ─── */
+:root {
+  --terrain-bg: #161718;
+  --terrain-white: rgba(245, 245, 242, 0.9);
+  --terrain-orange: rgba(180, 130, 80, 0.6); /* Muted, desaturated amber */
+}
+
+.crosshair {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.12); /* Lowered crosshair contrast */
 }
 
 /* ─── 3D Hollow Cursor System ─── */
@@ -5706,5 +5731,118 @@ body::before {
   
   .collab-project-info {
     text-align: left;
+  }
+}
+
+/* ─── Live Team Activity Panel ─── */
+.live-activity-section {
+  padding: 0 40px 20px;
+  margin-top: -30px; /* Pull it up closer to the hero */
+}
+
+.activity-panel {
+  display: flex;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px 24px;
+  align-items: center;
+  gap: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.activity-panel::before {
+  content: 'LIVE_UPLINK:';
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.4); /* Muted from orange */
+  letter-spacing: 0.1em;
+  padding-right: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.activity-feed {
+  display: flex;
+  gap: 40px;
+  white-space: nowrap;
+  animation: activityMarquee 60s linear infinite;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.activity-item:hover {
+  transform: scale(1.05);
+  opacity: 1 !important;
+}
+
+.activity-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3); /* Muted from orange */
+  position: relative;
+}
+
+.activity-pulse::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Muted from orange */
+  animation: pulseScale 2s infinite;
+}
+
+@keyframes pulseScale {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+.activity-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.activity-text strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.activity-time {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.25);
+  margin-left: 4px;
+}
+
+.activity-item:hover .activity-time {
+  color: rgba(215, 138, 47, 0.8);
+}
+
+@keyframes activityMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .live-activity-section {
+    padding: 0 20px;
+  }
+  
+  .activity-panel::before {
+    display: none;
   }
 }
