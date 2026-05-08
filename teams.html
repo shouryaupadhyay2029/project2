@@ -19,13 +19,14 @@
     <link rel="stylesheet" href="cursor.css">
 </head>
 
-<body class="matte-theme">
-    <!-- Cursor System -->
-    <div class="custom-cursor"></div>
-    <div class="cursor-glow"></div>
+<body class="matte-theme" style="background-color: #111111;">
+    <!-- GPU-Accelerated Background Canvas (Voronoi & Constellations) -->
+    <canvas id="teams-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></canvas>
 
-    <!-- GPU-Accelerated Background Canvas -->
-    <canvas id="wave-canvas"></canvas>
+    <div style="position: relative; z-index: 1;">
+        <!-- Cursor System -->
+        <div class="custom-cursor"></div>
+        <div class="cursor-glow"></div>
 
     <!-- Navbar -->
     <nav class="navbar">
@@ -90,18 +91,6 @@
 
         <!-- Empty State Section -->
         <section class="teams-empty-state">
-            <div class="empty-state-graphic">
-                <!-- Abstract Technical Graphic -->
-                <div class="node-network">
-                    <div class="node n1"></div>
-                    <div class="node n2"></div>
-                    <div class="node n3"></div>
-                    <div class="node n4"></div>
-                    <div class="connection c1"></div>
-                    <div class="connection c2"></div>
-                    <div class="connection c3"></div>
-                </div>
-            </div>
             <div class="empty-state-content">
                 <h2>No active teams yet.</h2>
                 <p>The next great breakthrough starts with a single invitation. Initialize your own squad or wait for an uplink request.</p>
@@ -148,6 +137,7 @@
             </div>
         </section>
     </main>
+    </div>
 
     <!-- Firebase System (Standard for DevStage) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
