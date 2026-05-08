@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!navDropdown.contains(e.target) && !navToggle.parentElement.contains(e.target)) {
                 navToggle.checked = false;
@@ -21,270 +20,219 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ─── 2. VORONOI & CONSTELLATION BACKGROUND ───────────────────────────
+    // ─── 2. TERRAIN BACKGROUND ──────────────────────────────────────────
     const canvas = document.getElementById('teams-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
+        const xhair = document.getElementById('xhair');
 
-        let width, height;
-        let seeds = [];
-        let nodes = [];
-        let mouseX = -999, mouseY = -999;
-        let isMouseOnCanvas = false;
+        let W, H;
+        let t = 0;
 
-        function initSystem() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+        const mouse = {
+            x: -9999,
+            y: -9999,
+            inside: false
+        };
 
-            seeds = [];
-            for (let i = 0; i < 7; i++) {
-                seeds.push({
-                    x: 80 + Math.random() * (Math.max(10, width - 160)),
-                    y: 80 + Math.random() * (Math.max(10, height - 160)),
-                    vx: (Math.random() - 0.5) * 0.25,
-                    vy: (Math.random() - 0.5) * 0.25,
-                    index: i
-                });
-            }
+        let pulses = [];
 
-            nodes = [];
-            for (let i = 0; i < 72; i++) {
-                nodes.push({
-                    x: 18 + Math.random() * (Math.max(10, width - 36)),
-                    y: 18 + Math.random() * (Math.max(10, height - 36)),
-                    vx: (Math.random() - 0.5) * 0.85,
-                    vy: (Math.random() - 0.5) * 0.85,
-                    ci: -1,
-                    assembled: Math.random(),
-                    twinkle: Math.random() * Math.PI * 2,
-                    twinkleSpd: 0.020 + Math.random() * 0.018
-                });
-            }
+        function resize() {
+            W = canvas.width = innerWidth;
+            H = canvas.height = innerHeight;
         }
 
-        window.addEventListener('resize', initSystem);
-        
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            isMouseOnCanvas = true; 
+        resize();
+        window.addEventListener('resize', resize);
+
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            mouse.inside = true;
+
+            if (xhair) {
+                xhair.style.left = e.clientX + 'px';
+                xhair.style.top = e.clientY + 'px';
+                xhair.style.opacity = '1';
+            }
         });
+
         window.addEventListener('mouseleave', () => {
-            isMouseOnCanvas = false;
-            mouseX = -999;
-            mouseY = -999;
+            mouse.inside = false;
+            if (xhair) xhair.style.opacity = '0';
         });
+
+        window.addEventListener('click', e => {
+            pulses.push({
+                x: e.clientX,
+                y: e.clientY,
+                born: t
+            });
+        });
+
+        function noise(x, y, t) {
+            return (
+                Math.sin(x * 1.2 + t * .34) * Math.cos(y * 1.0 + t * .27) * .44 +
+                Math.sin(x * 2.2 - t * .19 + y * .82) * .25 +
+                Math.cos(x * .75 + y * 1.9 + t * .48) * .17 +
+                Math.sin(x * 3.0 + y * 2.4 - t * .15) * .09 +
+                Math.cos(x * .38 - y * 2.8 + t * .31) * .10 +
+                Math.sin(x * 4.1 + y * 3.3 - t * .22) * .045
+            );
+        }
+
+        const SEGS = [
+            [], [[3, 0]], [[0, 1]], [[3, 1]],
+            [[1, 2]], [[3, 0], [1, 2]], [[0, 2]], [[3, 2]],
+            [[2, 3]], [[0, 2], [2, 3]], [[2, 1], [0, 3]], [[2, 1]],
+            [[1, 3]], [[0, 3], [1, 0]], [[2, 0]], []
+        ];
+
+        function edgePt(edge, x, y, s, v) {
+            const cx = [x, x + s, x + s, x];
+            const cy = [y, y, y + s, y + s];
+            const p = [[0, 1], [1, 2], [2, 3], [3, 0]];
+            const [a, b] = p[edge];
+            const tt = (v[a] === v[b]) ? .5 : (-v[a]) / (v[b] - v[a]);
+            return [cx[a] + tt * (cx[b] - cx[a]), cy[a] + tt * (cy[b] - cy[a])];
+        }
+
+        function clamp(v, min, max) {
+            return Math.max(min, Math.min(max, v));
+        }
+
+        const STEP = 18;
+        const LEVELS = 18;
+        const SCALE = 0.0042;
+        const CR = 220;
+        const CS = 0.52;
+        const PULSE_MAX_R = 300;
 
         function draw() {
-            ctx.clearRect(0, 0, width, height);
+            t += 0.0055;
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#161718';
+            ctx.fillRect(0, 0, W, H);
 
-            // --- UPDATE SEEDS ---
-            for (let i = 0; i < seeds.length; i++) {
-                let s = seeds[i];
-                s.x += s.vx;
-                s.y += s.vy;
-                s.vx *= 0.995;
-                s.vy *= 0.995;
+            const cols = Math.ceil(W / STEP) + 2;
+            const rows = Math.ceil(H / STEP) + 2;
+            const field = [];
 
-                if (s.x < 70) { s.x = 70; s.vx *= -1; }
-                else if (s.x > width - 70) { s.x = width - 70; s.vx *= -1; }
-                if (s.y < 70) { s.y = 70; s.vy *= -1; }
-                else if (s.y > height - 70) { s.y = height - 70; s.vy *= -1; }
-
-                for (let j = i + 1; j < seeds.length; j++) {
-                    let s2 = seeds[j];
-                    let dx = s.x - s2.x;
-                    let dy = s.y - s2.y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120 && dist > 0) {
-                        let force = ((120 - dist) / 120) * 0.012;
-                        let fx = (dx / dist) * force;
-                        let fy = (dy / dist) * force;
-                        s.vx += fx; s.vy += fy;
-                        s2.vx -= fx; s2.vy -= fy;
-                    }
-                }
-            }
-
-            // --- VORONOI MAP ---
-            const ST = 7;
-            const cols = Math.ceil(width / ST) + 1;
-            const rows = Math.ceil(height / ST) + 1;
-            
-            let activeSeeds = [...seeds];
-            const CI = seeds.length;
-            if (isMouseOnCanvas) {
-                activeSeeds.push({ x: mouseX, y: mouseY, index: CI });
-            }
-
-            let vMap = new Array(rows);
             for (let r = 0; r < rows; r++) {
-                vMap[r] = new Int32Array(cols);
-                let cy = r * ST;
+                field[r] = [];
                 for (let c = 0; c < cols; c++) {
-                    let cx = c * ST;
-                    let minDist = Infinity;
-                    let nearestIdx = -1;
-                    for (let i = 0; i < activeSeeds.length; i++) {
-                        let s = activeSeeds[i];
-                        let dx = cx - s.x;
-                        let dy = cy - s.y;
-                        let dsq = dx * dx + dy * dy;
-                        if (dsq < minDist) {
-                            minDist = dsq;
-                            nearestIdx = s.index;
+                    let wx = c * STEP;
+                    let wy = r * STEP;
+                    const dx = wx - mouse.x;
+                    const dy = wy - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+
+                    if (d < CR) {
+                        const pull = (1 - d / CR);
+                        const eased = pull * pull * (3 - 2 * pull);
+                        wx -= dx * eased * CS;
+                        wy -= dy * eased * CS;
+                    }
+
+                    for (const p of pulses) {
+                        const pd = Math.sqrt((wx - p.x) ** 2 + (wy - p.y) ** 2);
+                        const pr = (t - p.born) * 320;
+                        const pw = 50;
+                        if (pd > pr - pw && pd < pr + pw) {
+                            const env = 1 - Math.abs(pd - pr) / pw;
+                            wx += Math.cos(pd * .08) * env * 18;
+                            wy += Math.sin(pd * .08) * env * 18;
                         }
                     }
-                    vMap[r][c] = nearestIdx;
+                    field[r][c] = noise(wx * SCALE, wy * SCALE, t);
                 }
             }
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.040)';
-            for (let r = 0; r < rows - 1; r++) {
-                for (let c = 0; c < cols - 1; c++) {
-                    let current = vMap[r][c];
-                    if (current !== vMap[r][c + 1] || current !== vMap[r + 1][c]) {
-                        if (current === CI || vMap[r][c+1] === CI || vMap[r+1][c] === CI) {
-                            let bx = c * ST;
-                            let by = r * ST;
-                            let dx = bx - mouseX;
-                            let dy = by - mouseY;
-                            let dist = Math.sqrt(dx * dx + dy * dy);
-                            let strength = Math.max(0, 1 - dist / 200);
-                            ctx.fillStyle = `rgba(224, 120, 32, ${0.20 + strength * 0.50})`;
-                            ctx.fillRect(bx - 1.25, by - 1.25, 2.5, 2.5);
-                            ctx.fillStyle = 'rgba(255, 255, 255, 0.040)';
-                        } else {
-                            ctx.fillRect((c * ST) - 0.9, (r * ST) - 0.9, 1.8, 1.8);
+            pulses = pulses.filter(p => (t - p.born) * 320 < PULSE_MAX_R + 80);
+
+            for (let lvl = 0; lvl < LEVELS; lvl++) {
+                const iso = -0.88 + (lvl / (LEVELS - 1)) * 1.76;
+                const isPrimary = lvl % 3 === 0;
+                const isAccent = lvl % 9 === 0;
+
+                const baseAlpha = isPrimary
+                    ? 0.08 + 0.11 * Math.pow(Math.sin((lvl / (LEVELS - 1)) * Math.PI), 1.2)
+                    : 0.03 + 0.05 * Math.pow(Math.sin((lvl / (LEVELS - 1)) * Math.PI), 1.5);
+
+                const baseSegments = [];
+                const orangeSegments = [];
+
+                for (let r = 0; r < rows - 1; r++) {
+                    for (let c = 0; c < cols - 1; c++) {
+                        const x = c * STEP;
+                        const y = r * STEP;
+                        const v = [
+                            field[r][c] - iso,
+                            field[r][c + 1] - iso,
+                            field[r + 1][c + 1] - iso,
+                            field[r + 1][c] - iso
+                        ];
+                        const idx = (v[0] > 0 ? 8 : 0) | (v[1] > 0 ? 4 : 0) | (v[2] > 0 ? 2 : 0) | (v[3] > 0 ? 1 : 0);
+
+                        for (const [e1, e2] of SEGS[idx]) {
+                            const p1 = edgePt(e1, x, y, STEP, v);
+                            const p2 = edgePt(e2, x, y, STEP, v);
+                            baseSegments.push([p1, p2]);
+
+                            if (mouse.inside) {
+                                const vx = p2[0] - p1[0];
+                                const vy = p2[1] - p1[1];
+                                const len2 = vx * vx + vy * vy;
+                                if (len2 > 0.0001) {
+                                    const tProj = clamp(((mouse.x - p1[0]) * vx + (mouse.y - p1[1]) * vy) / len2, 0, 1);
+                                    const px = p1[0] + vx * tProj;
+                                    const py = p1[1] + vy * tProj;
+                                    const dist = Math.hypot(mouse.x - px, mouse.y - py);
+                                    const hoverRadius = 240;
+
+                                    if (dist < hoverRadius) {
+                                        const intensity = 1 - (dist / hoverRadius);
+                                        const span = 0.18 + intensity * 0.34;
+                                        const a = clamp(tProj - span * .5, 0, 1);
+                                        const b = clamp(tProj + span * .5, 0, 1);
+                                        orangeSegments.push([[p1[0] + vx * a, p1[1] + vy * a], [p1[0] + vx * b, p1[1] + vy * b]]);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-            }
 
-            // --- UPDATE & DRAW CONSTELLATION ---
-            for (let i = 0; i < nodes.length; i++) {
-                let n = nodes[i];
-                let minDist = Infinity;
-                let nearestSeed = null;
-                for (let j = 0; j < seeds.length; j++) {
-                    let s = seeds[j];
-                    let dx = s.x - n.x;
-                    let dy = s.y - n.y;
-                    let dsq = dx * dx + dy * dy;
-                    if (dsq < minDist) {
-                        minDist = dsq;
-                        nearestSeed = s;
-                    }
+                ctx.beginPath();
+                for (const [p1, p2] of baseSegments) {
+                    ctx.moveTo(p1[0], p1[1]);
+                    ctx.lineTo(p2[0], p2[1]);
                 }
-                n.ci = nearestSeed.index;
+                ctx.strokeStyle = `rgba(245,245,242,${baseAlpha})`;
+                ctx.lineWidth = isAccent ? 1.15 : isPrimary ? .8 : .45;
+                ctx.stroke();
 
-                let d = Math.sqrt(minDist);
-                let dx = nearestSeed.x - n.x;
-                let dy = nearestSeed.y - n.y;
-
-                let force = d > 90 ? 0.038 : 0.012;
-                if (d > 0) {
-                    n.vx += (dx / d) * force;
-                    n.vy += (dy / d) * force;
-                }
-
-                if (isMouseOnCanvas) {
-                    let cursorDX = mouseX - n.x;
-                    let cursorDY = mouseY - n.y;
-                    let cursorDist = Math.sqrt(cursorDX * cursorDX + cursorDY * cursorDY);
-                    if (cursorDist < 170 && cursorDist > 0) {
-                        n.vx += (cursorDX / cursorDist) * 0.045;
-                        n.vy += (cursorDY / cursorDist) * 0.045;
-                    }
-                }
-
-                n.x += n.vx;
-                n.y += n.vy;
-                n.vx *= 0.89;
-                n.vy *= 0.89;
-
-                if (n.x < 18) { n.x = 18; n.vx *= -1; }
-                else if (n.x > width - 18) { n.x = width - 18; n.vx *= -1; }
-                if (n.y < 18) { n.y = 18; n.vy *= -1; }
-                else if (n.y > height - 18) { n.y = height - 18; n.vy *= -1; }
-
-                if (d < 130) n.assembled = Math.min(1, n.assembled + 0.022);
-                else n.assembled = Math.max(0, n.assembled - 0.018);
-
-                n.twinkle += n.twinkleSpd;
-            }
-
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i < nodes.length; i++) {
-                for (let j = i + 1; j < nodes.length; j++) {
-                    let n1 = nodes[i];
-                    let n2 = nodes[j];
-                    if (n1.ci !== n2.ci) continue;
-                    let minAssembled = Math.min(n1.assembled, n2.assembled);
-                    if (minAssembled < 0.12) continue;
-
-                    let dx = n1.x - n2.x;
-                    let dy = n1.y - n2.y;
-                    let d = Math.sqrt(dx * dx + dy * dy);
-                    if (d > 150) continue;
-
-                    let str = minAssembled * (1 - d / 150);
-                    let mx = (n1.x + n2.x) / 2;
-                    let my = (n1.y + n2.y) / 2;
-                    
-                    let glowL = 0;
-                    if (isMouseOnCanvas) {
-                        let cdx = mouseX - mx;
-                        let cdy = mouseY - my;
-                        let cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-                        if (cdist < 140) glowL = ((140 - cdist) / 140) * 0.15;
-                    }
-
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${str * 0.26 + glowL})`;
+                if (orangeSegments.length) {
                     ctx.beginPath();
-                    ctx.moveTo(n1.x, n1.y);
-                    ctx.lineTo(n2.x, n2.y);
+                    for (const [p1, p2] of orangeSegments) {
+                        ctx.moveTo(p1[0], p1[1]);
+                        ctx.lineTo(p2[0], p2[1]);
+                    }
+                    ctx.strokeStyle = 'rgba(215,138,47,.95)';
+                    ctx.lineWidth = isAccent ? 1.35 : 1.1;
                     ctx.stroke();
                 }
             }
 
-            for (let i = 0; i < nodes.length; i++) {
-                let n = nodes[i];
-                let dm = 999;
-                if (isMouseOnCanvas) {
-                    let cdx = mouseX - n.x;
-                    let cdy = mouseY - n.y;
-                    dm = Math.sqrt(cdx * cdx + cdy * cdy);
-                }
-                let near = dm < 155;
-                let twink = 0.75 + Math.sin(n.twinkle) * 0.25;
-                let brightness = near ? 1 : (0.35 + n.assembled * 0.55) * twink;
-
-                if (n.assembled > 0.45 || near) {
-                    let radius = near ? 10 : 7;
-                    let grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, radius);
-                    let centerColor = near ? `rgba(224, 120, 32, ${0.30 + n.assembled * 0.15})` : `rgba(255, 255, 255, ${0.10 + n.assembled * 0.15})`;
-                    grad.addColorStop(0, centerColor);
-                    grad.addColorStop(1, 'rgba(0,0,0,0)');
-                    ctx.fillStyle = grad;
-                    ctx.beginPath();
-                    ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                let coreRadius = 1.5 + n.assembled * 0.9;
-                ctx.fillStyle = near ? `rgba(224, 120, 32, 0.92)` : `rgba(255, 255, 255, ${brightness})`;
-                ctx.beginPath();
-                ctx.arc(n.x, n.y, coreRadius, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-
+            const vign = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * .7);
+            vign.addColorStop(0, 'rgba(255,255,255,0)');
+            vign.addColorStop(.65, 'rgba(0,0,0,.12)');
+            vign.addColorStop(1, 'rgba(0,0,0,.34)');
+            ctx.fillStyle = vign;
+            ctx.fillRect(0, 0, W, H);
 
             requestAnimationFrame(draw);
         }
-
-        initSystem();
         draw();
     }
 
@@ -296,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 100);
 
-    // Ensure page tag is also sharp
     const pageTag = document.querySelector('.logo-page-tag');
     if (pageTag) {
         pageTag.style.opacity = '1';
@@ -306,7 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
             // Optional: Redirect if needed
-            // window.location.href = 'index.html';
         }
     });
 });

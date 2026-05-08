@@ -10,8 +10,10 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@800&display=swap"
+        rel="stylesheet">
+
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Global Styles -->
@@ -19,124 +21,126 @@
     <link rel="stylesheet" href="cursor.css">
 </head>
 
-<body class="matte-theme" style="background-color: #111111;">
-    <!-- GPU-Accelerated Background Canvas (Voronoi & Constellations) -->
+<body class="matte-theme" style="background-color: #161718;">
+    <!-- GPU-Accelerated Background Canvas (Topographic Terrain) -->
     <canvas id="teams-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></canvas>
+    <div class="crosshair" id="xhair"></div>
 
     <div style="position: relative; z-index: 1;">
         <!-- Cursor System -->
         <div class="custom-cursor"></div>
         <div class="cursor-glow"></div>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="index.html" class="logo-bloom-wrapper">
-                    <div class="logo-chars">
-                        <span class="char" style="--i:0">D</span>
-                        <span class="char" style="--i:1">e</span>
-                        <span class="char" style="--i:2">v</span>
-                        <div class="logo-separator"></div>
-                        <span class="char outline" style="--i:3">S</span>
-                        <span class="char outline" style="--i:4">t</span>
-                        <span class="char outline" style="--i:5">a</span>
-                        <span class="char outline" style="--i:6">g</span>
-                        <span class="char outline" style="--i:7">e</span>
-                        <div class="logo-dot"></div>
-                        <span class="tag-separator">|</span>
-                        <span class="logo-page-tag">Teams</span>
-                    </div>
-                    <div class="logo-underline"></div>
-                </a>
-            </div>
-
-            <div class="nav-right">
-                <div class="hamburger-wrapper">
-                    <label class="uiverse-hamburger">
-                        <input type="checkbox" id="nav-toggle">
-                        <svg viewBox="0 0 32 32">
-                            <path class="line line-top-bottom"
-                                d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
-                            </path>
-                            <path class="line" d="M7 16 27 16"></path>
-                        </svg>
-                    </label>
-
-                    <!-- Nav Dropdown -->
-                    <div class="premium-dropdown" id="nav-dropdown">
-                        <div class="dropdown-group">
-                            <a href="index.html" class="dropdown-item">Home</a>
-                            <a href="explore.html" class="dropdown-item">Explore</a>
-                            <a href="feed.html" class="dropdown-item">Feed</a>
-                            <a href="teams.html" class="dropdown-item active-page">Teams</a>
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-left">
+                    <a href="index.html" class="logo-bloom-wrapper">
+                        <div class="logo-chars">
+                            <span class="char" style="--i:0">D</span>
+                            <span class="char" style="--i:1">e</span>
+                            <span class="char" style="--i:2">v</span>
+                            <div class="logo-separator"></div>
+                            <span class="char outline" style="--i:3">S</span>
+                            <span class="char outline" style="--i:4">t</span>
+                            <span class="char outline" style="--i:5">a</span>
+                            <span class="char outline" style="--i:6">g</span>
+                            <span class="char outline" style="--i:7">e</span>
+                            <div class="logo-dot"></div>
+                            <span class="tag-separator">|</span>
+                            <span class="logo-page-tag">Teams</span>
                         </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-group">
-                            <a href="profile.html" class="dropdown-item">Profile</a>
-                            <a href="upload.html" class="dropdown-item">Upload Project</a>
+                        <div class="logo-underline"></div>
+                    </a>
+                </div>
+
+                <div class="nav-right">
+                    <div class="hamburger-wrapper">
+                        <label class="uiverse-hamburger">
+                            <input type="checkbox" id="nav-toggle">
+                            <svg viewBox="0 0 32 32">
+                                <path class="line line-top-bottom"
+                                    d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                                </path>
+                                <path class="line" d="M7 16 27 16"></path>
+                            </svg>
+                        </label>
+
+                        <!-- Nav Dropdown -->
+                        <div class="premium-dropdown" id="nav-dropdown">
+                            <div class="dropdown-group">
+                                <a href="index.html" class="dropdown-item">Home</a>
+                                <a href="explore.html" class="dropdown-item">Explore</a>
+                                <a href="feed.html" class="dropdown-item">Feed</a>
+                                <a href="teams.html" class="dropdown-item active-page">Teams</a>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-group">
+                                <a href="profile.html" class="dropdown-item">Profile</a>
+                                <a href="upload.html" class="dropdown-item">Upload Project</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <main class="teams-container">
-        <!-- Teams Hero -->
-        <header class="teams-hero">
-            <h1 class="teams-title">Collaborative Ecosystem</h1>
-            <p class="teams-subtitle">Find your tribe, build the future, and scale together.</p>
-        </header>
+        <main class="teams-container">
+            <!-- Teams Hero -->
+            <header class="teams-hero">
+                <h1 class="teams-title">Collaborative Ecosystem</h1>
+                <p class="teams-subtitle">Find your tribe, build the future, and scale together.</p>
+            </header>
 
-        <!-- Empty State Section -->
-        <section class="teams-empty-state">
-            <div class="empty-state-content">
-                <h2>No active teams yet.</h2>
-                <p>The next great breakthrough starts with a single invitation. Initialize your own squad or wait for an uplink request.</p>
-                <button class="terminal-btn create-team-btn" style="max-width: 240px; margin: 30px auto 0;">
-                    <i data-lucide="plus" style="width: 18px; margin-right: 8px;"></i>
-                    CREATE TEAM
-                </button>
-            </div>
-        </section>
+            <!-- Empty State Section -->
+            <section class="teams-empty-state">
+                <div class="empty-state-content">
+                    <h2>No active teams yet.</h2>
+                    <p>The next great breakthrough starts with a single invitation. Initialize your own squad or wait
+                        for an uplink request.</p>
+                    <button class="terminal-btn create-team-btn" style="max-width: 240px; margin: 30px auto 0;">
+                        <i data-lucide="plus" style="width: 18px; margin-right: 8px;"></i>
+                        CREATE TEAM
+                    </button>
+                </div>
+            </section>
 
-        <!-- Placeholder Sections -->
-        <section class="teams-grid">
-            <div class="team-placeholder-card">
-                <div class="card-header">
-                    <span class="card-tag">Active Teams</span>
-                    <i data-lucide="users" class="card-icon"></i>
+            <!-- Placeholder Sections -->
+            <section class="teams-grid">
+                <div class="team-placeholder-card">
+                    <div class="card-header">
+                        <span class="card-tag">Active Teams</span>
+                        <i data-lucide="users" class="card-icon"></i>
+                    </div>
+                    <div class="placeholder-content">
+                        <div class="skeleton-line long"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
                 </div>
-                <div class="placeholder-content">
-                    <div class="skeleton-line long"></div>
-                    <div class="skeleton-line short"></div>
-                </div>
-            </div>
 
-            <div class="team-placeholder-card">
-                <div class="card-header">
-                    <span class="card-tag">Requests</span>
-                    <i data-lucide="bell" class="card-icon"></i>
+                <div class="team-placeholder-card">
+                    <div class="card-header">
+                        <span class="card-tag">Requests</span>
+                        <i data-lucide="bell" class="card-icon"></i>
+                    </div>
+                    <div class="placeholder-content">
+                        <div class="skeleton-line mid"></div>
+                        <div class="skeleton-line long"></div>
+                    </div>
                 </div>
-                <div class="placeholder-content">
-                    <div class="skeleton-line mid"></div>
-                    <div class="skeleton-line long"></div>
-                </div>
-            </div>
 
-            <div class="team-placeholder-card">
-                <div class="card-header">
-                    <span class="card-tag">Shared Projects</span>
-                    <i data-lucide="layers" class="card-icon"></i>
+                <div class="team-placeholder-card">
+                    <div class="card-header">
+                        <span class="card-tag">Shared Projects</span>
+                        <i data-lucide="layers" class="card-icon"></i>
+                    </div>
+                    <div class="placeholder-content">
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line mid"></div>
+                    </div>
                 </div>
-                <div class="placeholder-content">
-                    <div class="skeleton-line short"></div>
-                    <div class="skeleton-line mid"></div>
-                </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
     </div>
 
     <!-- Firebase System (Standard for DevStage) -->
