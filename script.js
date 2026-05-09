@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Lucide Icons immediately
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+
   // ─── Weight Bloom Logo Animation ───
   const logoWrapper = document.querySelector('.logo-bloom-wrapper');
   if (logoWrapper) {
@@ -174,91 +179,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animateCursor();
 
-  // ─── GPU-Accelerated Wave Engine ───
-  const canvas = document.getElementById('wave-canvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d', { alpha: true });
+  // ─── Feature Terminal Card Interactions (3D Tilt & Glow) ───
+  const featureCards = document.querySelectorAll('.feature-terminal-card');
+  featureCards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-    let width, height;
-    let waves = [];
-    const waveCount = 5;
+      // Update glow position via CSS variables
+      card.style.setProperty('--glow-x', `${x}px`);
+      card.style.setProperty('--glow-y', `${y}px`);
 
-  function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    initWaves();
-  }
+      // 3D Tilt calculation
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 45; // Increased divisor for reduced intensity (~40% less)
+      const rotateY = (centerX - x) / 45;
 
-  class Wave {
-    constructor(index) {
-      this.index = index;
-      // Layer depth: front waves (large index) are brighter/thicker
-      const depthFactor = (index + 1) / waveCount;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+    });
 
-      this.amplitude = 30 + depthFactor * 40;
-      this.frequency = 0.001 + (1 - depthFactor) * 0.0015;
-      this.speed = 0.004 + depthFactor * 0.006;
-      this.yBase = height * (0.3 + depthFactor * 0.4);
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+    });
+  });
 
-      this.color = `rgba(255, 255, 255, ${0.05 + depthFactor * 0.15})`;
-      this.lineWidth = 0.5 + depthFactor * 1.5;
-      this.offset = Math.random() * Math.PI * 2;
-    }
 
-    draw(t) {
-      this.offset += this.speed;
-
-      ctx.beginPath();
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = this.lineWidth;
-      ctx.lineCap = 'round';
-
-      for (let x = 0; x <= width; x += 2) {
-        // Base sine wave
-        let y = Math.sin(x * this.frequency + this.offset) * this.amplitude;
-
-        // Cursor Distortion Field
-        const dx = x - mouseX;
-        const dy = (this.yBase + y) - mouseY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const radius = 200;
-
-        if (dist < radius) {
-          // Smooth bell-curve falloff
-          const force = Math.pow(1 - dist / radius, 2);
-          const distortion = force * 60; // Max 60px bend
-
-          // Pull toward/away from cursor
-          y -= distortion * (dy / dist);
-        }
-
-        if (x === 0) ctx.moveTo(x, this.yBase + y);
-        else ctx.lineTo(x, this.yBase + y);
-      }
-
-      ctx.stroke();
-    }
-  }
-
-  function initWaves() {
-    waves = [];
-    for (let i = 0; i < waveCount; i++) {
-      waves.push(new Wave(i));
-    }
-  }
-
-  function renderWaves(t) {
-    ctx.clearRect(0, 0, width, height);
-
-    waves.forEach(wave => wave.draw(t));
-
-    requestAnimationFrame(renderWaves);
-  }
-
-    window.addEventListener('resize', resize);
-    resize();
-    renderWaves(0);
-  }
 
   // Navbar scroll effect
   window.addEventListener('scroll', () => {
@@ -405,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── Discovery Engine (Awwwards Style) ───
   // ─── 4. DISCOVERY FEED ENGINE (Real-time) ────────────────
   const discoveryGrid = document.getElementById('explore-grid');
-  
+
   const getFilterValue = (dropdownId) => {
     const activeOpt = document.querySelector(`#${dropdownId} .menu-col a.active`);
     return activeOpt ? activeOpt.getAttribute('data-value') : 'all';
@@ -430,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tech = getFilterValue('tech-dropdown');
     const diff = getFilterValue('difficulty-dropdown');
     const sortBy = getFilterValue('sort-dropdown');
-    
+
     let query = db.collection('projects');
 
     // Apply Client-side filtering if needed or order by
@@ -669,29 +616,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── 5. FILTER DROPDOWNS ENGINE ────────────────
   const setupFilterDropdowns = () => {
     const dropdowns = document.querySelectorAll('.filter-dropdown');
-    
+
     dropdowns.forEach(dropdown => {
       const trigger = dropdown.querySelector('.filter-trigger');
       const options = dropdown.querySelectorAll('.filter-menu a');
-      
+
       trigger.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdowns.forEach(d => { if (d !== dropdown) d.classList.remove('active'); });
         dropdown.classList.toggle('active');
       });
-      
+
       options.forEach(opt => {
         opt.addEventListener('click', (e) => {
           e.stopPropagation();
           const text = opt.innerText;
-          
+
           trigger.innerHTML = `${text} <span class="tilt-line"></span>`;
           lucide.createIcons();
-          
+
           options.forEach(o => o.classList.remove('active'));
           opt.classList.add('active');
           dropdown.classList.remove('active');
-          
+
           initDiscoveryFeed();
         });
       });

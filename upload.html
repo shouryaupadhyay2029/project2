@@ -21,13 +21,17 @@
 
     <style>
         body {
-            background-color: #111111 !important;
+
             margin: 0;
             overflow-x: hidden;
         }
 
         /* Ensure all existing content sits above the background canvas */
-        .navbar,
+        .navbar {
+            position: relative;
+            z-index: 1000;
+        }
+
         .upload-wrapper,
         #loader-wrapper {
             position: relative;
@@ -91,8 +95,10 @@
                         <div class="dropdown-group primary-nav">
                             <a href="index.html" class="dropdown-item nav-item-anim">Home</a>
                             <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
-                            <a href="#" class="dropdown-item nav-item-anim">Feed</a>
-                            <a href="#" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                            <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
+                            <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                            <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
+                            <a href="upload.html" class="dropdown-item nav-item-anim active-page">Upload Project</a>
                         </div>
                         <div class="dropdown-divider"></div>
                         <div class="dropdown-group secondary-nav">

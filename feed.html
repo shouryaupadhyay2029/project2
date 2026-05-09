@@ -4,80 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Discovery Feed | DevStage</title>
+    
+    <!-- Premium Typography -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cursor.css">
-    <link rel="stylesheet" href="wave.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+        }
+
+
+
         .feed-container {
+            position: relative;
+            z-index: 10;
             max-width: 600px;
             margin: 100px auto;
             padding: 0 20px;
         }
+
         .feed-header {
             margin-bottom: 40px;
             text-align: center;
         }
+
         .feed-header h1 {
-            font-size: 2.2rem;
+            font-family: var(--font-heading);
+            font-size: 2.8rem;
             color: #fff;
             margin-bottom: 10px;
+            letter-spacing: -0.02em;
         }
+
         .feed-header p {
             color: var(--text-tertiary);
+            font-size: 1rem;
         }
+
         .project-card-mini {
-            background: var(--bg-card);
-            border: 1px solid var(--border-default);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 24px;
-            transition: border-color 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
+
         .project-card-mini:hover {
-            border-color: rgba(255, 138, 0, 0.4);
+            transform: translateY(-8px);
+            border-color: rgba(215, 138, 47, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
+
         .creator-info {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 16px;
         }
+
         .creator-info img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .creator-name {
-            color: #fff;
+            color: rgba(255,255,255,0.8);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-family: var(--font-body);
         }
+
         .project-title {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 600;
             color: #fff;
             margin-bottom: 8px;
         }
+
         .project-preview {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
+
+        .navbar {
+            position: fixed;
+            z-index: 100;
+        }
+
+        /* Hide default scrollbar */
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="home-page">
     <script src="loader.js"></script>
-    <div class="wave-container">
-        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
-            <g class="parallax">
-                <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
-            </g>
-        </svg>
-    </div>
+    
+    <canvas id="c"></canvas>
 
-    <nav class="navbar">
+
+    <nav class="navbar" id="main-navbar" style="background: transparent; border: none; box-shadow: none;">
         <div class="nav-container">
             <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
               <div class="logo-chars">
@@ -94,7 +145,7 @@
               </div>
               <div class="logo-underline"></div>
             </a>
-            <a href="index.html" class="button-secondary" style="padding: 8px 16px;">Back to Home</a>
+            <a href="index.html" class="button-secondary" style="padding: 8px 16px; border-radius: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease;">Back to Home</a>
         </div>
     </nav>
 
@@ -105,14 +156,106 @@
         </header>
         <div id="feed-list">
             <!-- Dynamic projects will load here -->
-            <div class="project-card-mini" style="opacity: 0.2; height: 150px; background: #fff;"></div>
-            <div class="project-card-mini" style="opacity: 0.2; height: 150px; background: #fff;"></div>
+            <div class="project-card-mini" style="opacity: 0.05; height: 120px;"></div>
+            <div class="project-card-mini" style="opacity: 0.05; height: 120px;"></div>
         </div>
     </main>
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <script>
+        'use strict';
+        
+        // --- Scientific Mesh Engine ---
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        let W = 0, H = 0, DPR = 1;
+        let mouseX = 0, mouseY = 0, curX = 0, curY = 0, warpX = 0, warpY = 0;
+
+        const LAYERS = [
+          { cell:26, alpha:0.038 },
+          { cell:24, alpha:0.115 }
+        ];
+
+        const springs = LAYERS.map(() => ({ x:0, y:0, vx:0, vy:0 }));
+        const PARALLAX = 110, STIFFNESS = 0.026, DAMPING = 0.105;
+        const WARP_RADIUS = 210, WARP_STRENGTH = 30, WARP_STEP = 4;
+        const ORANGE_RADIUS = 34;
+        const ORANGE = { r:215, g:138, b:47 };
+        const CURSOR_LERP = 0.18, WARP_LERP = 0.09;
+
+        function resize(){
+          DPR = window.devicePixelRatio || 1;
+          W = window.innerWidth; H = window.innerHeight;
+          canvas.width = W * DPR; canvas.height = H * DPR;
+          canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+          ctx.setTransform(DPR,0,0,DPR,0,0);
+        }
+        window.addEventListener('resize', resize, { passive:true });
+        resize();
+
+        mouseX = W * 0.5; mouseY = H * 0.5; curX = mouseX; curY = mouseY; warpX = mouseX; warpY = mouseY;
+        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive:true });
+
+        function warpPoint(px, py){
+          const dx = warpX - px, dy = warpY - py, distSq = dx * dx + dy * dy, r2 = WARP_RADIUS * WARP_RADIUS;
+          if(distSq > r2 * 9){ return [px, py]; }
+          const falloff = Math.exp(-distSq / (2 * r2)), dist = Math.sqrt(distSq), pull = WARP_STRENGTH * falloff / Math.max(dist, 1);
+          return [ px + dx * pull, py + dy * pull ];
+        }
+
+        function gridColorAt(x, y, baseAlpha){
+          const dx = x - warpX, dy = y - warpY, dist = Math.sqrt(dx * dx + dy * dy);
+          if(dist < ORANGE_RADIUS){
+            const t = 1 - (dist / ORANGE_RADIUS), alpha = 0.20 + (t * 0.85);
+            return `rgba(${ORANGE.r}, ${ORANGE.g}, ${ORANGE.b}, ${alpha})`;
+          }
+          return `rgba(255, 255, 255, ${baseAlpha})`;
+        }
+
+        function drawLayer(layer, sp){
+          const cell = layer.cell, ox = sp.x, oy = sp.y;
+          const sx = (((ox % cell) + cell) % cell) - cell * 2, sy = (((oy % cell) + cell) % cell) - cell * 2;
+          ctx.lineWidth = 0.55; ctx.lineCap = 'round';
+          for(let gy = sy; gy < H + cell * 2; gy += cell){
+            ctx.beginPath(); let first = true;
+            for(let px = -WARP_STEP; px <= W + WARP_STEP; px += WARP_STEP){
+              const [wx, wy] = warpPoint(px, gy);
+              if(first){ ctx.moveTo(wx, wy); first = false; } else{ ctx.lineTo(wx, wy); }
+            }
+            ctx.strokeStyle = gridColorAt(W * 0.5, gy, layer.alpha); ctx.stroke();
+          }
+          for(let gx = sx; gx < W + cell * 2; gx += cell){
+            ctx.beginPath(); let first = true;
+            for(let py = -WARP_STEP; py <= H + WARP_STEP; py += WARP_STEP){
+              const [wx, wy] = warpPoint(gx, py);
+              if(first){ ctx.moveTo(wx, wy); first = false; } else{ ctx.lineTo(wx, wy); }
+            }
+            ctx.strokeStyle = gridColorAt(gx, H * 0.5, layer.alpha); ctx.stroke();
+          }
+        }
+
+
+
+        function animate(){
+          requestAnimationFrame(animate);
+          curX += (mouseX - curX) * CURSOR_LERP; curY += (mouseY - curY) * CURSOR_LERP;
+          warpX += (mouseX - warpX) * WARP_LERP; warpY += (mouseY - warpY) * WARP_LERP;
+          const cx = W * 0.5, cy = H * 0.5;
+          springs.forEach(sp => {
+            const tx = ((mouseX - cx) / cx) * PARALLAX, ty = ((mouseY - cy) / cy) * PARALLAX;
+            const fx = (tx - sp.x) * STIFFNESS, fy = (ty - sp.y) * STIFFNESS;
+            sp.vx = sp.vx * (1 - DAMPING) + fx; sp.vy = sp.vy * (1 - DAMPING) + fy;
+            sp.x += sp.vx; sp.y += sp.vy;
+          });
+          ctx.clearRect(0,0,W,H);
+          drawLayer(LAYERS[0], springs[0]); drawLayer(LAYERS[1], springs[1]);
+        }
+        animate();
+
+        // --- Firebase Data Flow ---
         const firebaseConfig = {
           apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
           authDomain: "devstage-872b1.firebaseapp.com",

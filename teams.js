@@ -4,18 +4,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const navDropdown = document.getElementById('nav-dropdown');
 
     if (navToggle && navDropdown) {
+        const navItems = navDropdown.querySelectorAll('.nav-item-anim');
+
         navToggle.addEventListener('change', () => {
             if (navToggle.checked) {
                 navDropdown.classList.add('active');
+
+                // Staggered Entrance Animation
+                navItems.forEach((item) => {
+                    item.classList.remove('nav-item-visible');
+                    item.style.transitionDelay = '0ms';
+                });
+
+                requestAnimationFrame(() => {
+                    navItems.forEach((item, index) => {
+                        item.style.transitionDelay = `${index * 35}ms`;
+                        item.classList.add('nav-item-visible');
+                    });
+                });
             } else {
                 navDropdown.classList.remove('active');
+                // Instantly reset
+                navItems.forEach(item => {
+                    item.classList.remove('nav-item-visible');
+                    item.style.transitionDelay = '0ms';
+                });
             }
         });
 
+        // Cursor Following Highlight inside dropdown
+        navDropdown.addEventListener('mousemove', (e) => {
+            const rect = navDropdown.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            navDropdown.style.setProperty('--mouse-x', `${x}%`);
+            navDropdown.style.setProperty('--mouse-y', `${y}%`);
+        });
+
         document.addEventListener('click', (e) => {
-            if (!navDropdown.contains(e.target) && !navToggle.parentElement.contains(e.target)) {
+            const hamburgerWrapper = document.querySelector('.hamburger-wrapper');
+            if (navToggle.checked && !hamburgerWrapper.contains(e.target)) {
                 navToggle.checked = false;
                 navDropdown.classList.remove('active');
+                navItems.forEach(item => {
+                    item.classList.remove('nav-item-visible');
+                });
             }
         });
     }
@@ -249,7 +282,158 @@ document.addEventListener('DOMContentLoaded', () => {
         pageTag.style.opacity = '1';
     }
 
-    // ─── 4. CARD INTERACTION (3D TILT) ───────────────────────────
+    // ─── 4. PREMIUM FILTER & SORT SYSTEM ───────────────────────────
+    const dropdowns = document.querySelectorAll('.custom-dropdown');
+    const filterTagsContainer = document.getElementById('active-filters-tags');
+    const clearAllBtn = document.getElementById('clear-all-filters');
+    const searchInput = document.querySelector('.filter-search-input');
+    const featuredSection = document.querySelector('.featured-teams-section');
+    const collabSection = document.querySelector('.collab-requests-section');
+    const emptyStateSection = document.querySelector('.teams-empty-state');
+    const noResultsState = document.getElementById('no-results-state');
+
+    const activeFilters = {
+        skills: [],
+        type: [],
+        status: [],
+        search: ''
+    };
+
+    // Dropdown Toggle Logic
+    dropdowns.forEach(dropdown => {
+        const trigger = dropdown.querySelector('.dropdown-trigger');
+        const options = dropdown.querySelectorAll('.dropdown-option');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Close other dropdowns
+            dropdowns.forEach(d => {
+                if (d !== dropdown) d.classList.remove('active');
+            });
+            dropdown.classList.toggle('active');
+        });
+
+        options.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                const category = dropdown.id.split('-')[0]; // skill, type, status, sort
+
+                if (category !== 'sort') {
+                    toggleFilter(category, value, option);
+                } else {
+                    // Handle Sort
+                    dropdown.querySelector('.dropdown-trigger span').innerText = option.innerText;
+                    dropdown.classList.remove('active');
+                    // Add sort logic here if needed
+                }
+            });
+        });
+    });
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', () => {
+        dropdowns.forEach(d => d.classList.remove('active'));
+    });
+
+    function toggleFilter(category, value, optionElement) {
+        const index = activeFilters[category].indexOf(value);
+        if (index === -1) {
+            activeFilters[category].push(value);
+            optionElement.classList.add('selected');
+        } else {
+            activeFilters[category].splice(index, 1);
+            optionElement.classList.remove('selected');
+        }
+        updateFilterTags();
+        applyFilters();
+    }
+
+    function updateFilterTags() {
+        // Clear current tags except "Clear All" btn
+        const currentTags = filterTagsContainer.querySelectorAll('.filter-tag');
+        currentTags.forEach(t => t.remove());
+
+        let hasFilters = false;
+
+        ['skills', 'type', 'status'].forEach(cat => {
+            activeFilters[cat].forEach(val => {
+                hasFilters = true;
+                const tag = document.createElement('div');
+                tag.className = 'filter-tag';
+                tag.innerHTML = `
+                    <span>${val}</span>
+                    <div class="filter-tag-remove" data-cat="${cat}" data-val="${val}">
+                        <i data-lucide="x" style="width:10px;"></i>
+                    </div>
+                `;
+                filterTagsContainer.insertBefore(tag, clearAllBtn);
+            });
+        });
+
+        if (searchInput.value) hasFilters = true;
+
+        clearAllBtn.style.display = hasFilters ? 'block' : 'none';
+        lucide.createIcons();
+
+        // Tag remove listeners
+        filterTagsContainer.querySelectorAll('.filter-tag-remove').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.dataset.cat;
+                const val = btn.dataset.val;
+                const option = document.querySelector(`#${cat}-dropdown [data-value="${val}"]`);
+                toggleFilter(cat, val, option);
+            });
+        });
+    }
+
+    searchInput.addEventListener('input', () => {
+        activeFilters.search = searchInput.value.toLowerCase();
+        applyFilters();
+        updateFilterTags();
+    });
+
+    clearAllBtn.addEventListener('click', () => {
+        activeFilters.skills = [];
+        activeFilters.type = [];
+        activeFilters.status = [];
+        activeFilters.search = '';
+        searchInput.value = '';
+        document.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+        updateFilterTags();
+        applyFilters();
+    });
+
+    function applyFilters() {
+        const hasFilters = activeFilters.skills.length > 0 || 
+                           activeFilters.type.length > 0 || 
+                           activeFilters.status.length > 0 || 
+                           activeFilters.search.length > 0;
+
+        // For demo purposes, we'll just toggle sections
+        // In a real app, this would filter card visibility
+        if (hasFilters) {
+            emptyStateSection.style.display = 'none';
+            
+            // Mock filtering: if "Research" is in search, show nothing to demonstrate no-results
+            if (activeFilters.search === 'empty_test') {
+                featuredSection.style.display = 'none';
+                collabSection.style.display = 'none';
+                noResultsState.style.display = 'block';
+            } else {
+                featuredSection.style.display = 'block';
+                collabSection.style.display = 'block';
+                noResultsState.style.display = 'none';
+            }
+        } else {
+            emptyStateSection.style.display = 'block';
+            featuredSection.style.display = 'block';
+            collabSection.style.display = 'block';
+            noResultsState.style.display = 'none';
+        }
+    }
+
+    // ─── 5. CARD INTERACTION (3D TILT) ───────────────────────────
     const teamCards = document.querySelectorAll('.featured-team-card');
     
     teamCards.forEach(card => {
@@ -272,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ─── 5. AUTH STATE (UI ONLY FOR NOW) ─────────────────────
+    // ─── 6. AUTH STATE (UI ONLY FOR NOW) ─────────────────────
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
             // Optional: Redirect if needed

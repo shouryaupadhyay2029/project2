@@ -3,12 +3,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
-  authDomain: "devstage-872b1.firebaseapp.com",
-  projectId: "devstage-872b1",
-  storageBucket: "devstage-872b1.firebasestorage.app",
-  messagingSenderId: "993834630425",
-  appId: "1:993834630425:web:b063407a7d47a0830d5988"
+    apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
+    authDomain: "devstage-872b1.firebaseapp.com",
+    projectId: "devstage-872b1",
+    storageBucket: "devstage-872b1.firebasestorage.app",
+    messagingSenderId: "993834630425",
+    appId: "1:993834630425:web:b063407a7d47a0830d5988"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -19,32 +19,32 @@ window.auth = auth;
 window.db = db;
 
 // ─── GLOBAL USER UI LOADER ───
-window.loadUserUI = function() {
-  const cachedUser = JSON.parse(localStorage.getItem("devstageUser"));
-  
-  const guestSection = document.getElementById("guestSection");
-  const userSection = document.getElementById("userSection");
-  const navAvatar = document.getElementById("navAvatar");
-  const navName = document.getElementById("navName");
-  const dropdownName = document.getElementById("dropdown-user-name");
-  const dropdownEmail = document.getElementById("dropdown-user-email");
+window.loadUserUI = function () {
+    const cachedUser = JSON.parse(localStorage.getItem("devstageUser"));
 
-  if (!cachedUser) {
-    if (guestSection) guestSection.style.display = "flex";
-    if (userSection) userSection.style.display = "none";
-    return;
-  }
+    const guestSection = document.getElementById("guestSection");
+    const userSection = document.getElementById("userSection");
+    const navAvatar = document.getElementById("navAvatar");
+    const navName = document.getElementById("navName");
+    const dropdownName = document.getElementById("dropdown-user-name");
+    const dropdownEmail = document.getElementById("dropdown-user-email");
 
-  // Populate UI
-  if (guestSection) guestSection.style.display = "none";
-  if (userSection) userSection.style.display = "flex";
-  
-  if (navAvatar) navAvatar.src = cachedUser.photoURL || `https://ui-avatars.com/api/?name=${cachedUser.displayName}`;
-  if (navName) navName.textContent = cachedUser.displayName || 'User';
-  
-  // Also update dropdown if present
-  if (dropdownName) dropdownName.textContent = cachedUser.displayName || 'User';
-  if (dropdownEmail) dropdownEmail.textContent = cachedUser.email || '';
+    if (!cachedUser) {
+        if (guestSection) guestSection.style.display = "flex";
+        if (userSection) userSection.style.display = "none";
+        return;
+    }
+
+    // Populate UI
+    if (guestSection) guestSection.style.display = "none";
+    if (userSection) userSection.style.display = "flex";
+
+    if (navAvatar) navAvatar.src = cachedUser.photoURL || `https://ui-avatars.com/api/?name=${cachedUser.displayName}`;
+    if (navName) navName.textContent = cachedUser.displayName || 'User';
+
+    // Also update dropdown if present
+    if (dropdownName) dropdownName.textContent = cachedUser.displayName || 'User';
+    if (dropdownEmail) dropdownEmail.textContent = cachedUser.email || '';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -86,18 +86,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const provider = new GoogleAuthProvider();
 
-    window.loginWithGoogle = function() {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          saveUserToFirestore(result.user);
-          if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-              window.location.href = "dashboard.html";
-          }
-        })
-        .catch((error) => {
-          console.error("Login error:", error);
-          if (authMessage) showMessage("Login failed: " + error.message, "error");
-        });
+    window.loginWithGoogle = function () {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                saveUserToFirestore(result.user);
+                if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+                    window.location.href = "dashboard.html";
+                }
+            })
+            .catch((error) => {
+                console.error("Login error:", error);
+                if (authMessage) showMessage("Login failed: " + error.message, "error");
+            });
     };
 
     async function saveUserToFirestore(user) {

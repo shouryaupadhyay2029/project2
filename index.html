@@ -20,28 +20,13 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="cursor.css">
-  <link rel="stylesheet" href="wave.css">
 </head>
 
 <body class="home-page">
   <!-- Core Loader Logic -->
   <script src="loader.js"></script>
 
-  <canvas id="wave-canvas" aria-hidden="true"></canvas>
-
-  <div class="wave-container">
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-      <defs>
-        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-      </defs>
-      <g class="parallax">
-        <use href="#gentle-wave" x="48" y="0" />
-        <use href="#gentle-wave" x="48" y="3" />
-        <use href="#gentle-wave" x="48" y="5" />
-        <use href="#gentle-wave" x="48" y="7" />
-      </g>
-    </svg>
-  </div>
+  <canvas id="c" aria-hidden="true"></canvas>
 
   <div class="main-wrapper">
     <div class="hero-section">
@@ -227,29 +212,71 @@
 
         <div class="card-preview">
           <!-- Card 1: Discovery Feed -->
-          <a href="feed.html" class="card clickable-module">
-            <div class="card-icon"><i data-lucide="layout-list"></i></div>
-            <h3 class="card-title">Live Discovery Feed</h3>
-            <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.
-            </p>
-            <span class="card-action-text">Open Feed <i data-lucide="arrow-right"></i></span>
+          <a href="feed.html" class="clickable-module feature-terminal-card">
+            <div class="card-terminal-bar">
+              <div class="window-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="system-label">discover_feed.sys</div>
+              <div class="status-chip recruiting"
+                style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
+                LIVE</div>
+            </div>
+            <div class="card-inner-content">
+              <div class="card-icon"><i data-lucide="layout-list"></i></div>
+              <h3 class="card-title">Live Discovery Feed</h3>
+              <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.
+              </p>
+              <span class="card-action-text">→ OPEN FEED</span>
+            </div>
+            <div class="card-glow"></div>
           </a>
 
           <!-- Card 2: Beginner Zone -->
-          <a href="beginner.html" class="card clickable-module">
-            <div class="card-icon"><i data-lucide="seedling"></i></div>
-            <h3 class="card-title">Beginner Zone</h3>
-            <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided inspiration.
-            </p>
-            <span class="card-action-text">Start Exploring <i data-lucide="arrow-right"></i></span>
+          <a href="beginner.html" class="clickable-module feature-terminal-card">
+            <div class="card-terminal-bar">
+              <div class="window-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="system-label">beginner_zone.init</div>
+              <div class="status-chip active"
+                style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
+                READY</div>
+            </div>
+            <div class="card-inner-content">
+              <div class="card-icon"><i data-lucide="seedling"></i></div>
+              <h3 class="card-title">Beginner Zone</h3>
+              <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided
+                inspiration.</p>
+              <span class="card-action-text">→ START EXPLORING</span>
+            </div>
+            <div class="card-glow"></div>
           </a>
 
           <!-- Card 3: Weekly Challenges -->
-          <a href="challenges.html" class="card clickable-module">
-            <div class="card-icon"><i data-lucide="trophy"></i></div>
-            <h3 class="card-title">Weekly Challenges</h3>
-            <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
-            <span class="card-action-text">View Challenges <i data-lucide="arrow-right"></i></span>
+          <a href="challenges.html" class="clickable-module feature-terminal-card">
+            <div class="card-terminal-bar">
+              <div class="window-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="system-label">weekly_challenges.exe</div>
+              <div class="status-chip recruiting"
+                style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
+                ACTIVE</div>
+            </div>
+            <div class="card-inner-content">
+              <div class="card-icon"><i data-lucide="trophy"></i></div>
+              <h3 class="card-title">Weekly Challenges</h3>
+              <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
+              <span class="card-action-text">→ VIEW CHALLENGES</span>
+            </div>
+            <div class="card-glow"></div>
           </a>
         </div>
       </main>
@@ -444,6 +471,7 @@
   <!-- App Logic -->
   <script src="auth.js" type="module" defer></script>
   <script src="script.js" defer></script>
+  <script src="grid-terrain.js" defer></script>
   <script src="cursor.js" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
