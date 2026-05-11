@@ -42,9 +42,9 @@
         .feed-container {
             position: relative;
             z-index: 10;
-            max-width: 800px;
+            max-width: 1300px;
             margin: 120px auto 100px;
-            padding: 0 20px;
+            padding: 0 40px;
         }
 
         .feed-header {
@@ -65,9 +65,15 @@
             font-size: 1rem;
         }
 
-        /* --- Premium Project Card --- */
+        /* --- Premium Project Grid --- */
+        #feed-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 32px;
+            width: 100%;
+        }
+
         .project-feed-card {
-            margin-bottom: 40px;
             width: 100%;
             min-height: auto;
             background: rgba(255, 255, 255, 0.02);
@@ -215,7 +221,7 @@
 
         .project-thumbnail {
             width: 100%;
-            height: 240px;
+            height: 210px;
             position: relative;
             overflow: hidden;
             background: #000;
@@ -637,7 +643,26 @@
             align-items: center;
         }
 
+        @media (max-width: 1100px) {
+            #feed-list {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 24px;
+            }
+            .feed-container {
+                padding: 0 24px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            #feed-list {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         @media (max-width: 600px) {
+            #feed-list {
+                grid-template-columns: 1fr;
+            }
             .filter-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -650,7 +675,7 @@
         }
 
         .project-info {
-            padding: 30px;
+            padding: 24px;
             position: relative;
         }
 
@@ -658,7 +683,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .creator-avatar {
@@ -708,7 +733,7 @@
         .tech-stack {
             display: flex;
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
@@ -734,7 +759,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 24px;
+            padding-top: 18px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
