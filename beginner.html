@@ -115,9 +115,178 @@
           <stop offset="100%" stop-color="#ffc98f" stop-opacity="0.16" />
         </linearGradient>
       </defs>
-      </g>
+      <g id="wave-paths"></g>
     </svg>
+
+    <!-- Cinematic vignette -->
+    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.2) 100%);"></div>
   </div>
+
+  <script>
+    (function() {
+      function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const svg = document.getElementById('wave-svg');
+        const pathsGroup = document.getElementById('wave-paths');
+        
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        
+        const strands = 40;
+        const points = 72;
+        const pathElements = [];
+        let wavesData = [];
+
+        // Interactive cursor state
+        const cursor = { x: 0, y: 0, active: false };
+        let hoveredLine = -1;
+
+        // Create path elements
+        for (let s = 0; s < strands; s++) {
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke-linecap", "round");
+          path.setAttribute("stroke-linejoin", "round");
+          path.style.transition = "stroke 220ms ease, opacity 220ms ease, stroke-width 220ms ease";
+          pathsGroup.appendChild(path);
+          pathElements.push(path);
+        }
+
+        function resize() {
+          width = window.innerWidth;
+          height = window.innerHeight;
+          svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        function buildWave(phase) {
+          const centerX = width * 0.58;
+          const topY = -height * 0.08;
+          const bottomY = height * 1.08;
+          const lines = [];
+
+          for (let s = 0; s < strands; s++) {
+            const u = s / (strands - 1);
+            const offset = (u - 0.5) * 2;
+            const centerStrength = 1 - Math.abs(offset);
+
+            const profile = 0.16 + Math.pow(centerStrength, 1.55) * 1.22;
+            const pts = [];
+
+            for (let i = 0; i < points; i++) {
+              const t = i / (points - 1);
+              const y = topY + (bottomY - topY) * t;
+
+              const widthProfile = 28 +
+                168 * (Math.pow(t, 1.45) + Math.pow(1 - t, 1.45)) +
+                36 * Math.exp(-Math.pow((t - 0.5) / 0.18, 2));
+
+              const spineX = centerX +
+                Math.sin(t * Math.PI * 2.2 + phase * 0.55) * width * 0.085 +
+                Math.sin(t * Math.PI * 4.2 + phase * 0.22) * width * 0.018;
+
+              const helix = Math.sin(t * Math.PI * 3.8 + phase * 1.15 + u * Math.PI * 2.2);
+              const ripple = Math.sin(t * Math.PI * 9.0 + phase * 2.1 + u * 6.0);
+              const drift = Math.cos(t * Math.PI * 1.5 + phase * 0.75);
+
+              const x = spineX +
+                offset * widthProfile * profile * (0.92 + 0.18 * helix) +
+                helix * 8 +
+                ripple * 3;
+
+              const yy = y +
+                Math.sin(t * Math.PI * 2.15 + phase * 1.05 + u * 2.8) * 8 * profile +
+                Math.cos(t * Math.PI * 5.6 - phase * 0.7) * 2.2 +
+                drift * 1.2;
+
+              pts.push([x, yy]);
+            }
+
+            let d = `M ${pts[0][0]} ${pts[0][1]}`;
+            for (let i = 1; i < pts.length; i++) {
+              d += ` L ${pts[i][0]} ${pts[i][1]}`;
+            }
+
+            lines.push({
+              d,
+              pts,
+              opacity: clamp(0.05 + centerStrength * 0.34, 0.05, 0.42),
+              width: 0.7 + centerStrength * 1.55,
+            });
+          }
+          return lines;
+        }
+
+        function getNearestLine(lines, c) {
+          if (!c.active) return -1;
+          let best = Infinity;
+          let bestIndex = -1;
+
+          for (let i = 0; i < lines.length; i++) {
+            const pts = lines[i].pts;
+            for (let j = 0; j < pts.length; j += 4) {
+              const dx = pts[j][0] - c.x;
+              const dy = pts[j][1] - c.y;
+              const dist = dx * dx + dy * dy;
+
+              if (dist < best) {
+                best = dist;
+                bestIndex = i;
+              }
+            }
+          }
+          return best < 18000 ? bestIndex : -1;
+        }
+
+        // Pointer events for interactivity
+        const bgContainer = document.getElementById('premium-wave-bg');
+        
+        let tickingPointer = false;
+        window.addEventListener("pointermove", (e) => {
+          if (tickingPointer) return;
+          tickingPointer = true;
+          requestAnimationFrame(() => {
+            const rect = bgContainer.getBoundingClientRect();
+            cursor.x = e.clientX - rect.left;
+            cursor.y = e.clientY - rect.top;
+            cursor.active = true;
+            
+            hoveredLine = getNearestLine(wavesData, cursor);
+            tickingPointer = false;
+          });
+        });
+
+        window.addEventListener("pointerleave", () => {
+          cursor.active = false;
+          hoveredLine = -1;
+        });
+
+        let phase = 0;
+        function loop() {
+          phase += 0.01;
+          wavesData = buildWave(phase);
+
+          for (let s = 0; s < strands; s++) {
+            const line = wavesData[s];
+            const active = s === hoveredLine;
+            const path = pathElements[s];
+
+            path.setAttribute('d', line.d);
+            path.setAttribute('stroke', active ? "url(#orange)" : "url(#silver)");
+            path.setAttribute('stroke-width', active ? line.width * 1.22 : line.width);
+            path.setAttribute('opacity', active ? 1 : line.opacity);
+          }
+
+          requestAnimationFrame(loop);
+        }
+        
+        requestAnimationFrame(loop);
+      });
+    })();
+  </script>
 
   <nav class="navbar" id="main-navbar">
     <div class="nav-container">
