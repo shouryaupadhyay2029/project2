@@ -122,47 +122,47 @@
 
         .status-badge {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 3px 10px;
+            border-radius: 100px; /* Pill shape */
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
-        .status-live {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 1px solid rgba(34, 197, 94, 0.2);
+        .status-concept { background: rgba(168, 85, 247, 0.08); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.15); }
+        .status-in-progress { background: rgba(14, 165, 233, 0.08); color: #0ea5e9; border: 1px solid rgba(14, 165, 233, 0.15); }
+        .status-beta { background: rgba(245, 158, 11, 0.08); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.15); }
+        .status-shipping { background: rgba(16, 185, 129, 0.08); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.15); }
+        .status-completed { background: rgba(251, 191, 36, 0.08); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.15); }
+
+        .project-feed-card:hover .status-concept { box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); border-color: rgba(168, 85, 247, 0.4); }
+        .project-feed-card:hover .status-in-progress { box-shadow: 0 0 15px rgba(14, 165, 233, 0.3); border-color: rgba(14, 165, 233, 0.4); }
+        .project-feed-card:hover .status-beta { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); border-color: rgba(245, 158, 11, 0.4); }
+        .project-feed-card:hover .status-shipping { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); border-color: rgba(16, 185, 129, 0.4); }
+        .project-feed-card:hover .status-completed { box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); border-color: rgba(251, 191, 36, 0.4); }
+
+        .status-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: currentColor;
         }
 
-        .project-feed-card:hover .status-live {
-            box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
-            border-color: rgba(34, 197, 94, 0.5);
+        .status-in-progress .status-dot, 
+        .status-shipping .status-dot {
+            animation: statusPulse 2s infinite;
         }
 
-        .status-trending {
-            background: rgba(215, 138, 47, 0.1);
-            color: #d78a2f;
-            border: 1px solid rgba(215, 138, 47, 0.2);
-        }
-
-        .project-feed-card:hover .status-trending {
-            box-shadow: 0 0 12px rgba(215, 138, 47, 0.3);
-            border-color: rgba(215, 138, 47, 0.5);
-        }
-
-        .status-shipping {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        .project-feed-card:hover .status-shipping {
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
-            border-color: rgba(59, 130, 246, 0.5);
+        @keyframes statusPulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         .live-dot {
@@ -208,7 +208,8 @@
             filter: brightness(0.85);
         }
 
-        .project-feed-card:hover .project-thumbnail img {
+        .project-feed-card:hover .project-thumbnail img,
+        .project-feed-card:hover .project-thumbnail video {
             transform: scale(1.08);
             opacity: 1;
             filter: brightness(1.05);
@@ -253,6 +254,84 @@
             background: #d78a2f;
             border-color: #d78a2f;
             transform: scale(1.1);
+        }
+
+        /* --- Premium Bookmark/Save System --- */
+        .bookmark-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .bookmark-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .bookmark-btn.is-saved {
+            background: rgba(215, 138, 47, 0.1);
+            border-color: rgba(215, 138, 47, 0.3);
+            color: #d78a2f;
+            box-shadow: 0 0 20px rgba(215, 138, 47, 0.15);
+            animation: pulseSave 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .bookmark-btn.is-saved i {
+            fill: #d78a2f;
+        }
+
+        @keyframes pulseSave {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .stat-item i.is-saved {
+            color: #d78a2f;
+            fill: #d78a2f;
+        }
+
+        /* --- Filter System Styles --- */
+        .feed-filter-system {
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 50;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #sort-dropdown {
+                margin-left: 0 !important;
+                margin-top: 10px;
+            }
         }
 
         .project-info {
@@ -365,9 +444,17 @@
             transform: translateY(0);
         }
 
-        .project-feed-card:hover .stat-item:nth-child(1) { transition-delay: 0.05s; }
-        .project-feed-card:hover .stat-item:nth-child(2) { transition-delay: 0.1s; }
-        .project-feed-card:hover .stat-item:nth-child(3) { transition-delay: 0.15s; }
+        .project-feed-card:hover .stat-item:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+
+        .project-feed-card:hover .stat-item:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .project-feed-card:hover .stat-item:nth-child(3) {
+            transition-delay: 0.15s;
+        }
 
         .stat-item:hover {
             color: #d78a2f !important;
@@ -412,13 +499,15 @@
             z-index: 2;
             pointer-events: none;
         }
+
         .activity-strip::before {
             left: 0;
-            background: linear-gradient(to right, rgba(10,10,12,0.9), transparent);
+            background: linear-gradient(to right, rgba(10, 10, 12, 0.9), transparent);
         }
+
         .activity-strip::after {
             right: 0;
-            background: linear-gradient(to left, rgba(10,10,12,0.9), transparent);
+            background: linear-gradient(to left, rgba(10, 10, 12, 0.9), transparent);
         }
 
         .ticker-track {
@@ -431,8 +520,13 @@
         }
 
         @keyframes ticker-scroll {
-            0%   { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); }
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            100% {
+                transform: translate3d(-50%, 0, 0);
+            }
         }
 
         .ticker-item {
@@ -472,8 +566,17 @@
         }
 
         @keyframes t-pulse {
-            0%,100% { opacity: 0.35; transform: scale(0.85); }
-            50%      { opacity: 1;    transform: scale(1.35); }
+
+            0%,
+            100% {
+                opacity: 0.35;
+                transform: scale(0.85);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.35);
+            }
         }
 
         .ticker-divider {
@@ -489,7 +592,9 @@
         }
 
         /* Hide default scrollbar */
-        ::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
 
@@ -560,30 +665,42 @@
     <div class="activity-strip" aria-hidden="true">
         <div class="ticker-track">
             <!-- Set A -->
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Aarav K.</strong> uploaded <strong>AI Resume Analyzer</strong></span><span class="t-stamp">2m ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Aarav K.</strong> uploaded
+                    <strong>AI Resume Analyzer</strong></span><span class="t-stamp">2m ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>PixelLabs</strong> started <span class="t-amber">recruiting</span></span><span class="t-stamp">12m ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>PixelLabs</strong> started <span
+                        class="t-amber">recruiting</span></span><span class="t-stamp">12m ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>NeuralForge</strong> hit <span class="t-amber">1k views</span></span><span class="t-stamp">34m ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>NeuralForge</strong> hit <span
+                        class="t-amber">1k views</span></span><span class="t-stamp">34m ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span>Weekly Challenge updated → <strong>Shader Mastery</strong></span><span class="t-stamp">1h ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span>Weekly Challenge updated → <strong>Shader
+                        Mastery</strong></span><span class="t-stamp">1h ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Meera S.</strong> open-sourced <strong>DataFlow CLI</strong></span><span class="t-stamp">2h ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Meera S.</strong> open-sourced
+                    <strong>DataFlow CLI</strong></span><span class="t-stamp">2h ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>CodeCraft</strong> team reached <span class="t-amber">500 stars</span></span><span class="t-stamp">3h ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>CodeCraft</strong> team reached
+                    <span class="t-amber">500 stars</span></span><span class="t-stamp">3h ago</span></div>
             <div class="ticker-divider"></div>
             <!-- Set B — identical, enables seamless -50% loop -->
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Aarav K.</strong> uploaded <strong>AI Resume Analyzer</strong></span><span class="t-stamp">2m ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Aarav K.</strong> uploaded
+                    <strong>AI Resume Analyzer</strong></span><span class="t-stamp">2m ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>PixelLabs</strong> started <span class="t-amber">recruiting</span></span><span class="t-stamp">12m ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>PixelLabs</strong> started <span
+                        class="t-amber">recruiting</span></span><span class="t-stamp">12m ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>NeuralForge</strong> hit <span class="t-amber">1k views</span></span><span class="t-stamp">34m ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>NeuralForge</strong> hit <span
+                        class="t-amber">1k views</span></span><span class="t-stamp">34m ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span>Weekly Challenge updated → <strong>Shader Mastery</strong></span><span class="t-stamp">1h ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span>Weekly Challenge updated → <strong>Shader
+                        Mastery</strong></span><span class="t-stamp">1h ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Meera S.</strong> open-sourced <strong>DataFlow CLI</strong></span><span class="t-stamp">2h ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Meera S.</strong> open-sourced
+                    <strong>DataFlow CLI</strong></span><span class="t-stamp">2h ago</span></div>
             <div class="ticker-divider"></div>
-            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>CodeCraft</strong> team reached <span class="t-amber">500 stars</span></span><span class="t-stamp">3h ago</span></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>CodeCraft</strong> team reached
+                    <span class="t-amber">500 stars</span></span><span class="t-stamp">3h ago</span></div>
         </div>
     </div>
 
@@ -593,6 +710,51 @@
             <p>A real-time ecosystem of premium developer creations. Explore the next generation of digital experiences.
             </p>
         </header>
+
+        <!-- Premium Filter & Sort System -->
+        <section class="feed-filter-system">
+            <div class="filter-bar">
+                <!-- Category Filter -->
+                <div class="custom-dropdown" id="category-dropdown">
+                    <div class="dropdown-trigger">
+                        <span>FILTER PROJECTS</span>
+                        <i data-lucide="chevron-down"></i>
+                    </div>
+                    <div class="dropdown-panel">
+                        <div class="dropdown-option" data-value="Frontend">Frontend</div>
+                        <div class="dropdown-option" data-value="Backend">Backend</div>
+                        <div class="dropdown-option" data-value="AI/ML">AI/ML</div>
+                        <div class="dropdown-option" data-value="UI/UX">UI/UX</div>
+                        <div class="dropdown-option" data-value="Hardware">Hardware</div>
+                        <div class="dropdown-option" data-value="Open Source">Open Source</div>
+                        <div class="dropdown-option" data-value="Hackathon">Hackathon</div>
+                        <div class="dropdown-option" data-value="Beginner Friendly">Beginner Friendly</div>
+                    </div>
+                </div>
+
+                <!-- Sort By -->
+                <div class="custom-dropdown" id="sort-dropdown" style="margin-left: auto;">
+                    <div class="dropdown-trigger">
+                        <span>SORT BY: LATEST</span>
+                        <i data-lucide="chevron-down"></i>
+                    </div>
+                    <div class="dropdown-panel">
+                        <div class="dropdown-option" data-value="Latest">Latest</div>
+                        <div class="dropdown-option" data-value="Trending">Trending</div>
+                        <div class="dropdown-option" data-value="Most Liked">Most Liked</div>
+                        <div class="dropdown-option" data-value="Most Discussed">Most Discussed</div>
+                        <div class="dropdown-option" data-value="Recently Updated">Recently Updated</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Filter Chips -->
+            <div class="active-filters-row" id="active-filters-tags">
+                <button class="clear-all-filters" id="clear-all-filters" style="display: none;">Clear all uplink
+                    parameters</button>
+            </div>
+        </section>
+
         <div id="feed-list">
             <!-- Premium projects will load here -->
             <div class="project-feed-card feature-terminal-card skeleton" style="height: 500px; opacity: 0.1;"></div>
@@ -701,7 +863,7 @@
                 userName: "Alex Thorne",
                 userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
                 tags: ["WebGL", "Rust", "Wasm"],
-                status: "live",
+                status: "shipping",
                 sys: "astro_engine.sys",
                 recruiting: true,
                 likes: 245, comments: 12, saves: 56,
@@ -714,7 +876,7 @@
                 userName: "Sarah Chen",
                 userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
                 tags: ["TypeScript", "Next.js", "Socket.io"],
-                status: "trending",
+                status: "beta",
                 sys: "lumina_core.sys",
                 recruiting: false,
                 likes: 890, comments: 45, saves: 120,
@@ -727,7 +889,7 @@
                 userName: "Marcus Vane",
                 userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
                 tags: ["D3.js", "React", "Go"],
-                status: "shipping",
+                status: "in progress",
                 sys: "nexus_visual.sys",
                 recruiting: true,
                 likes: 156, comments: 8, saves: 32,
@@ -740,7 +902,7 @@
                 userName: "Elena Rossi",
                 userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
                 tags: ["PyTorch", "Python", "Tailwind"],
-                status: "live",
+                status: "completed",
                 sys: "dream_weaver.sys",
                 recruiting: false,
                 likes: 3.2, comments: 112, saves: 450,
@@ -858,7 +1020,209 @@
                 }, { passive: true });
             });
         }
-        loadFeed();
+        // ─── PREMIUM FILTER & SORT SYSTEM ───────────────────────────
+        const dropdowns = document.querySelectorAll('.custom-dropdown');
+        const filterTagsContainer = document.getElementById('active-filters-tags');
+        const clearAllBtn = document.getElementById('clear-all-filters');
+        
+        const activeFilters = {
+            categories: [],
+            sort: 'Latest'
+        };
+
+        // Dropdown Toggle Logic
+        dropdowns.forEach(dropdown => {
+            const trigger = dropdown.querySelector('.dropdown-trigger');
+            const options = dropdown.querySelectorAll('.dropdown-option');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdowns.forEach(d => { if (d !== dropdown) d.classList.remove('active'); });
+                dropdown.classList.toggle('active');
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = option.dataset.value;
+                    const category = dropdown.id.split('-')[0];
+
+                    if (category === 'category') {
+                        toggleFilter('categories', value, option);
+                    } else if (category === 'sort') {
+                        activeFilters.sort = value;
+                        dropdown.querySelector('.dropdown-trigger span').innerText = `SORT BY: ${value.toUpperCase()}`;
+                        dropdown.classList.remove('active');
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        applyFilters();
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('click', () => { dropdowns.forEach(d => d.classList.remove('active')); });
+
+        function toggleFilter(category, value, optionElement) {
+            const index = activeFilters[category].indexOf(value);
+            if (index === -1) {
+                activeFilters[category].push(value);
+                optionElement.classList.add('selected');
+            } else {
+                activeFilters[category].splice(index, 1);
+                optionElement.classList.remove('selected');
+            }
+            updateFilterTags();
+            applyFilters();
+        }
+
+        function updateFilterTags() {
+            const currentTags = filterTagsContainer.querySelectorAll('.filter-tag');
+            currentTags.forEach(t => t.remove());
+            let hasFilters = activeFilters.categories.length > 0;
+            activeFilters.categories.forEach(val => {
+                const tag = document.createElement('div');
+                tag.className = 'filter-tag';
+                tag.innerHTML = `<span>${val}</span><div class="filter-tag-remove" datl="$<i data-lucide="x" style="width:10px;"></i></div>`;
+                filterTagsContainer.insertBefore(tag, clearAllBtn);
+            });
+            clearAllBtn.style.display = hasFilters ? 'block' : 'none';
+            lucide.createIcons();
+            filterTagsContainer.querySelectorAll('.filter-tag-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const val = btn.dataset.val;
+                    const option = document.querySelector(`#category-dropdown [data-value="${val}"]`);
+                    toggleFilter('categories', val, option);
+                });
+            });
+        }
+
+        clearAllBtn.addEventListener('click', () => {
+            activeFilters.categories = [];
+            document.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+            updateFilterTags();
+            applyFilters();
+        });
+
+        function applyFilters() {
+            let filtered = [...PLACEHOLDER_PROJECTS];
+            if (activeFilters.categories.length > 0) {
+                filtered = filtered.filter(p => p.tags.some(t => activeFilters.categories.includes(t)) || (p.status === 'live' && activeFilters.categories.includes('Live')) || (activeFilters.categories.includes('Beginner Friendly') && p.desc.toLowerCase().includes('beginner')));
+            }
+            if (activeFilters.sort === 'Trending') filtered.sort((a, b) => b.likes - a.likes);
+            else if (activeFilters.sort === 'Most Liked') filtered.sort((a, b) => b.likes - a.likes);
+            else if (activeFilters.sort === 'Most Discussed') filtered.sort((a, b) => b.comments - a.comments);
+            else filtered.sort((a, b) => a.time.localeCompare(b.time));
+            renderFeed(filtered);
+        }
+
+        function renderFeed(projects) {
+            const list = document.getElementById('feed-list');
+            list.innerHTML = '';
+            
+            const savedIds = JSON.parse(localStorage.getItem('devstage_saved_ids') || '[]');
+
+            if (projects.length === 0) {
+                list.innerHTML = `<div class="no-results-state"><div class="no-results-content"><i data-lucide="search-x" style="width:48px;height:48px;opacity:0.3;margin-bottom:20px;"></i><h3 style="color:#fff;margin-bottom:10px;">No matching projects found.</h3><p style="color:rgba(255,255,255,0.4);">Try adjusting your uplink parameters.</p></div></div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            projects.forEach(p => {
+                const isSaved = savedIds.includes(p.sys);
+                
+                let statusClass = 'status-concept';
+                let statusLabel = 'CONCEPT';
+                
+                if (p.status === 'in progress') { statusClass = 'status-in-progress'; statusLabel = 'IN PROGRESS'; }
+                else if (p.status === 'beta') { statusClass = 'status-beta'; statusLabel = 'BETA'; }
+                else if (p.status === 'shipping') { statusClass = 'status-shipping'; statusLabel = 'SHIPPING'; }
+                else if (p.status === 'completed') { statusClass = 'status-completed'; statusLabel = 'COMPLETED'; }
+                
+                const statusHtml = `<span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span>`;
+                
+                list.innerHTML += `
+                    <div class="project-feed-card feature-terminal-card" data-sys="${p.sys}">
+                        <div class="card-terminal-bar">
+                            <div class="bar-left">
+                                <span class="bar-dot"></span>
+                                <span class="bar-filename">${p.sys}</span>
+                            </div>
+                            <div class="bar-right">
+                                ${statusHtml}
+                            </div>
+                        </div>
+                        <div class="project-thumbnail">
+                            <img src="${p.img}" alt="${p.title}">
+                            <div class="thumbnail-overlay">
+                                <button class="view-btn"><i data-lucide="eye"></i></button>
+                            </div>
+                            <button class="bookmark-btn ${isSaved ? 'is-saved' : ''}" onclick="toggleSave('${p.sys}')">
+                                <i data-lucide="bookmark"></i>
+                            </button>
+                        </div>
+                        <div class="project-info">
+                            <div class="creator-row">
+                                <div class="creator-avatar">
+                                    <img src="${p.userAvatar}" alt="User">
+                                </div>
+                                <div class="creator-details">
+                                    <span class="creator-name">${p.userName}</span>
+                                    <span class="creation-time">${p.time}</span>
+                                </div>
+                                ${p.recruiting ? `<div class="recruitment-badge"><i data-lucide="users" style="width:10px;"></i> RECRUITING</div>` : ''}
+                            </div>
+                            <h3 class="card-title">${p.title}</h3>
+                            <p class="card-desc">${p.desc}</p>
+                            <div class="tech-stack">
+                                ${p.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <span class="stat-item"><i data-lucide="heart"></i> ${p.likes}${p.likes > 1000 ? 'k' : ''}</span>
+                                    <span class="stat-item"><i data-lucide="message-square"></i> ${p.comments}</span>
+                                    <span class="stat-item"><i data-lucide="bookmark" class="${isSaved ? 'is-saved' : ''}"></i> <span class="save-count">${isSaved ? p.saves + 1 : p.saves}</span></span>
+                                </div>
+                                <div class="card-action-text">
+                                    VIEW PROJECT <i data-lucide="arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-glow"></div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+            initCardInteractions();
+        }
+
+        window.toggleSave = (sys) => {
+            let savedIds = JSON.parse(localStorage.getItem('devstage_saved_ids') || '[]');
+            const index = savedIds.indexOf(sys);
+            const card = document.querySelector(`.project-feed-card[data-sys="${sys}"]`);
+            const btn = card.querySelector('.bookmark-btn');
+            const icon = card.querySelector('.stat-item i[data-lucide="bookmark"]');
+            const count = card.querySelector('.save-count');
+            
+            if (index === -1) {
+                savedIds.push(sys);
+                btn.classList.add('is-saved');
+                icon.classList.add('is-saved');
+                count.innerText = parseInt(count.innerText) + 1;
+            } else {
+                savedIds.splice(index, 1);
+                btn.classList.remove('is-saved');
+                icon.classList.remove('is-saved');
+                count.innerText = parseInt(count.innerText) - 1;
+            }
+            
+            localStorage.setItem('devstage_saved_ids', JSON.stringify(savedIds));
+            lucide.createIcons();
+        };
+        
+        // Initial load
+        renderFeed(PLACEHOLDER_PROJECTS);
 
         // ─── Weight Bloom Logo Animation ───
         const logoWrapper = document.querySelector('.logo-bloom-wrapper');
