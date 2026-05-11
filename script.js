@@ -179,30 +179,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animateCursor();
 
-  // ─── Feature Terminal Card Interactions (3D Tilt & Glow) ───
+  // ─── Premium Localized Card Interaction Engine ───
   const featureCards = document.querySelectorAll('.feature-terminal-card');
   featureCards.forEach(card => {
-    card.addEventListener('mousemove', e => {
+    let ticking = false;
+    let mouseEvt = null;
+    let isHovered = false;
+
+    // Sub-elements for Depth Shift
+    const icon = card.querySelector('.card-icon');
+    const title = card.querySelector('.card-title');
+    const bar = card.querySelector('.card-terminal-bar');
+
+    const resetCard = () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)`;
+      if (icon) icon.style.transform = `translate3d(0, 0, 0)`;
+      if (title) title.style.transform = `translate3d(0, 0, 0)`;
+      if (bar) bar.style.transform = `translate3d(0, 0, 0)`;
+      card.style.setProperty('--mouse-x', `50%`);
+      card.style.setProperty('--mouse-y', `50%`);
+    };
+
+    const updateCard = () => {
+      if (!mouseEvt || !isHovered) return;
+
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = mouseEvt.clientX - rect.left;
+      const y = mouseEvt.clientY - rect.top;
 
-      // Update glow position via CSS variables
-      card.style.setProperty('--glow-x', `${x}px`);
-      card.style.setProperty('--glow-y', `${y}px`);
-
-      // 3D Tilt calculation
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 45; // Increased divisor for reduced intensity (~40% less)
-      const rotateY = (centerX - x) / 45;
 
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
-    });
+      // 1. 3D Perspective Tilt (Subtle: 4-6deg max)
+      const rotateX = (y - centerY) / 25; 
+      const rotateY = (centerX - x) / 25;
+
+      // 2. Inner Depth Shift (Subtle Parallax)
+      const moveX = (x - centerX) / 40;
+      const moveY = (y - centerY) / 40;
+
+      if (icon) icon.style.transform = `translate3d(${moveX * 1.5}px, ${moveY * 1.5}px, 20px)`;
+      if (title) title.style.transform = `translate3d(${moveX * 0.8}px, ${moveY * 0.8}px, 10px)`;
+      if (bar) bar.style.transform = `translate3d(${moveX * 0.5}px, ${moveY * 0.5}px, 5px)`;
+
+      // 3. Glass Light Follow
+      const px = (x / rect.width) * 100;
+      const py = (y / rect.height) * 100;
+      card.style.setProperty('--mouse-x', `${px}%`);
+      card.style.setProperty('--mouse-y', `${py}%`);
+
+      // 4. Main Card Transform (Tilt + Float)
+      card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(0, -8px, 0)`;
+
+      ticking = false;
+    };
+
+    card.addEventListener('mousemove', e => {
+      mouseEvt = e;
+      isHovered = true;
+      if (!ticking) {
+        requestAnimationFrame(updateCard);
+        ticking = true;
+      }
+    }, { passive: true });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-    });
+      isHovered = false;
+      mouseEvt = null;
+      resetCard();
+    }, { passive: true });
   });
 
 

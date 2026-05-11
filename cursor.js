@@ -9,7 +9,7 @@ const init3DCursor = () => {
     // 2. Dynamically Create 3D Cursor Structure
     const cursor = document.createElement('div');
     cursor.id = 'hollow-3d-cursor';
-    
+
     cursor.innerHTML = `
         <div class="halo-glow"></div>
         <div class="border-ring"></div>
@@ -19,18 +19,18 @@ const init3DCursor = () => {
             <div class="cross-v"></div>
         </div>
     `;
-    
+
     document.body.appendChild(cursor);
 
     const borderRing = cursor.querySelector('.border-ring');
-    
+
     // 3. State & Physics Engine
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let currentX = mouseX, currentY = mouseY;
     let currentW = 24, currentH = 24;
     let currentR = 50;
-    
+
     let targetX = mouseX, targetY = mouseY;
     let targetW = 24, targetH = 24;
     let targetR = 50;

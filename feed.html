@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Discovery Feed | DevStage</title>
-    
+
     <!-- Premium Typography -->
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cursor.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <style>
+        html,
         html, body {
             width: 100%;
             height: 100%;
             overflow-x: hidden;
             cursor: none;
+            /* Using global background from style.css */
         }
 
         canvas {
@@ -29,16 +33,15 @@
             width: 100%;
             height: 100%;
             display: block;
-            z-index: 0;
+            z-index: 0; /* On top of body bg, but behind container */
+            pointer-events: none;
         }
-
-
 
         .feed-container {
             position: relative;
             z-index: 10;
-            max-width: 600px;
-            margin: 100px auto;
+            max-width: 800px;
+            margin: 120px auto 100px;
             padding: 0 20px;
         }
 
@@ -60,57 +63,254 @@
             font-size: 1rem;
         }
 
-        .project-card-mini {
+        /* --- Premium Project Card --- */
+        .project-feed-card {
+            margin-bottom: 40px;
+            width: 100%;
+            min-height: auto;
+        }
+
+        .card-terminal-bar {
+            height: 32px;
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-radius: 18px 18px 0 0;
         }
 
-        .project-card-mini:hover {
-            transform: translateY(-8px);
-            border-color: rgba(215, 138, 47, 0.3);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        .bar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .creator-info {
+        .bar-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(215, 138, 47, 0.5);
+            box-shadow: 0 0 8px rgba(215, 138, 47, 0.3);
+        }
+
+        .bar-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-live {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .status-trending {
+            background: rgba(215, 138, 47, 0.1);
+            color: #d78a2f;
+            border: 1px solid rgba(215, 138, 47, 0.2);
+        }
+
+        .status-shipping {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .live-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        .project-thumbnail {
+            width: 100%;
+            height: 240px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .project-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.8;
+        }
+
+        .project-feed-card:hover .project-thumbnail img {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        .thumbnail-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-feed-card:hover .thumbnail-overlay {
+            opacity: 1;
+        }
+
+        .view-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .project-feed-card:hover .view-btn {
+            transform: translateY(0);
+        }
+
+        .view-btn:hover {
+            background: #d78a2f;
+            border-color: #d78a2f;
+            transform: scale(1.1);
+        }
+
+        .project-info {
+            padding: 30px;
+            position: relative;
+        }
+
+        .creator-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        .creator-info img {
+        .creator-avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .creator-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .creator-details {
+            display: flex;
+            flex-direction: column;
         }
 
         .creator-name {
-            color: rgba(255,255,255,0.8);
-            font-weight: 600;
-            font-size: 0.85rem;
-            font-family: var(--font-body);
-        }
-
-        .project-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            font-weight: 600;
             color: #fff;
-            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
 
-        .project-preview {
-            color: rgba(255, 255, 255, 0.45);
-            font-size: 0.9rem;
-            line-height: 1.6;
+        .creation-time {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.7rem;
+        }
+
+        .recruitment-badge {
+            margin-left: auto;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #d78a2f;
+            background: rgba(215, 138, 47, 0.1);
+            padding: 4px 10px;
+            border-radius: 100px;
+            border: 1px solid rgba(215, 138, 47, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .stat-item:hover {
+            color: #d78a2f;
+        }
+
+        .stat-item i {
+            width: 14px;
+            height: 14px;
         }
 
         .navbar {
@@ -119,55 +319,95 @@
         }
 
         /* Hide default scrollbar */
-        ::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
+
 <body class="home-page">
     <script src="loader.js"></script>
-    
+
     <canvas id="c"></canvas>
 
 
-    <nav class="navbar" id="main-navbar" style="background: transparent; border: none; box-shadow: none;">
+    <nav class="navbar" id="main-navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
-              <div class="logo-chars">
-                <span class="char" style="--i:0">D</span>
-                <span class="char" style="--i:1">e</span>
-                <span class="char" style="--i:2">v</span>
-                <div class="logo-separator"></div>
-                <span class="char outline" style="--i:3">S</span>
-                <span class="char outline" style="--i:4">t</span>
-                <span class="char outline" style="--i:5">a</span>
-                <span class="char outline" style="--i:6">g</span>
-                <span class="char outline" style="--i:7">e</span>
-                <div class="logo-dot"></div>
-              </div>
-              <div class="logo-underline"></div>
-            </a>
-            <a href="index.html" class="button-secondary" style="padding: 8px 16px; border-radius: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease;">Back to Home</a>
+            <div class="breadcrumb-header">
+                <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
+                    <div class="logo-chars">
+                        <span class="char" style="--i:0">D</span>
+                        <span class="char" style="--i:1">e</span>
+                        <span class="char" style="--i:2">v</span>
+                        <div class="logo-separator"></div>
+                        <span class="char outline" style="--i:3">S</span>
+                        <span class="char outline" style="--i:4">t</span>
+                        <span class="char outline" style="--i:5">a</span>
+                        <span class="char outline" style="--i:6">g</span>
+                        <span class="char outline" style="--i:7">e</span>
+                        <div class="logo-dot"></div>
+                    </div>
+                    <div class="logo-underline"></div>
+                </a>
+                <div class="breadcrumb-trail">
+                    <span class="breadcrumb-slash">/</span>
+                    <span class="breadcrumb-current">Feed</span>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <label class="uiverse-hamburger" id="hamburger-menu-label">
+                    <input type="checkbox" id="hamburger-checkbox">
+                    <svg viewBox="0 0 32 32">
+                        <path class="line line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        </path>
+                        <path class="line" d="M7 16 27 16"></path>
+                    </svg>
+
+                    <!-- Premium Dropdown Menu -->
+                    <div class="premium-dropdown" id="hamburger-dropdown">
+                        <div class="dropdown-group primary-nav">
+                            <a href="index.html" class="dropdown-item nav-item-anim">Home</a>
+                            <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
+                            <a href="feed.html" class="dropdown-item nav-item-anim active-page">Feed</a>
+                            <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                            <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
+                            <a href="upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-group secondary-nav">
+                            <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
+                            <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
+                            <a href="#" class="dropdown-item nav-item-anim">Settings</a>
+                            <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                </label>
+            </div>
         </div>
     </nav>
 
     <main class="feed-container">
         <header class="feed-header">
             <h1>Discovery Feed</h1>
-            <p>A simple, live stream of what the community is building.</p>
+            <p>A real-time ecosystem of premium developer creations. Explore the next generation of digital experiences.</p>
         </header>
         <div id="feed-list">
-            <!-- Dynamic projects will load here -->
-            <div class="project-card-mini" style="opacity: 0.05; height: 120px;"></div>
-            <div class="project-card-mini" style="opacity: 0.05; height: 120px;"></div>
+            <!-- Premium projects will load here -->
+            <div class="project-feed-card feature-terminal-card skeleton" style="height: 500px; opacity: 0.1;"></div>
         </div>
     </main>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    
+    <script src="firebase-config.js"></script>
+
     <script>
         'use strict';
-        
+
         // --- Scientific Mesh Engine ---
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d');
@@ -175,119 +415,324 @@
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0, warpX = 0, warpY = 0;
 
         const LAYERS = [
-          { cell:26, alpha:0.038 },
-          { cell:24, alpha:0.115 }
+            { cell: 26, alpha: 0.038 },
+            { cell: 24, alpha: 0.115 }
         ];
 
-        const springs = LAYERS.map(() => ({ x:0, y:0, vx:0, vy:0 }));
+        const springs = LAYERS.map(() => ({ x: 0, y: 0, vx: 0, vy: 0 }));
         const PARALLAX = 110, STIFFNESS = 0.026, DAMPING = 0.105;
         const WARP_RADIUS = 210, WARP_STRENGTH = 30, WARP_STEP = 4;
         const ORANGE_RADIUS = 34;
-        const ORANGE = { r:215, g:138, b:47 };
+        const ORANGE = { r: 215, g: 138, b: 47 };
         const CURSOR_LERP = 0.18, WARP_LERP = 0.09;
 
-        function resize(){
-          DPR = window.devicePixelRatio || 1;
-          W = window.innerWidth; H = window.innerHeight;
-          canvas.width = W * DPR; canvas.height = H * DPR;
-          canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-          ctx.setTransform(DPR,0,0,DPR,0,0);
+        function resize() {
+            DPR = window.devicePixelRatio || 1;
+            W = window.innerWidth; H = window.innerHeight;
+            canvas.width = W * DPR; canvas.height = H * DPR;
+            canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         }
-        window.addEventListener('resize', resize, { passive:true });
+        window.addEventListener('resize', resize, { passive: true });
         resize();
 
         mouseX = W * 0.5; mouseY = H * 0.5; curX = mouseX; curY = mouseY; warpX = mouseX; warpY = mouseY;
-        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive:true });
+        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
 
-        function warpPoint(px, py){
-          const dx = warpX - px, dy = warpY - py, distSq = dx * dx + dy * dy, r2 = WARP_RADIUS * WARP_RADIUS;
-          if(distSq > r2 * 9){ return [px, py]; }
-          const falloff = Math.exp(-distSq / (2 * r2)), dist = Math.sqrt(distSq), pull = WARP_STRENGTH * falloff / Math.max(dist, 1);
-          return [ px + dx * pull, py + dy * pull ];
+        function warpPoint(px, py) {
+            const dx = warpX - px, dy = warpY - py, distSq = dx * dx + dy * dy, r2 = WARP_RADIUS * WARP_RADIUS;
+            if (distSq > r2 * 9) { return [px, py]; }
+            const falloff = Math.exp(-distSq / (2 * r2)), dist = Math.sqrt(distSq), pull = WARP_STRENGTH * falloff / Math.max(dist, 1);
+            return [px + dx * pull, py + dy * pull];
         }
 
-        function gridColorAt(x, y, baseAlpha){
-          const dx = x - warpX, dy = y - warpY, dist = Math.sqrt(dx * dx + dy * dy);
-          if(dist < ORANGE_RADIUS){
-            const t = 1 - (dist / ORANGE_RADIUS), alpha = 0.20 + (t * 0.85);
-            return `rgba(${ORANGE.r}, ${ORANGE.g}, ${ORANGE.b}, ${alpha})`;
-          }
-          return `rgba(255, 255, 255, ${baseAlpha})`;
-        }
-
-        function drawLayer(layer, sp){
-          const cell = layer.cell, ox = sp.x, oy = sp.y;
-          const sx = (((ox % cell) + cell) % cell) - cell * 2, sy = (((oy % cell) + cell) % cell) - cell * 2;
-          ctx.lineWidth = 0.55; ctx.lineCap = 'round';
-          for(let gy = sy; gy < H + cell * 2; gy += cell){
-            ctx.beginPath(); let first = true;
-            for(let px = -WARP_STEP; px <= W + WARP_STEP; px += WARP_STEP){
-              const [wx, wy] = warpPoint(px, gy);
-              if(first){ ctx.moveTo(wx, wy); first = false; } else{ ctx.lineTo(wx, wy); }
+        function gridColorAt(x, y, baseAlpha) {
+            const dx = x - warpX, dy = y - warpY, dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < ORANGE_RADIUS) {
+                const t = 1 - (dist / ORANGE_RADIUS), alpha = 0.20 + (t * 0.85);
+                return `rgba(${ORANGE.r}, ${ORANGE.g}, ${ORANGE.b}, ${alpha})`;
             }
-            ctx.strokeStyle = gridColorAt(W * 0.5, gy, layer.alpha); ctx.stroke();
-          }
-          for(let gx = sx; gx < W + cell * 2; gx += cell){
-            ctx.beginPath(); let first = true;
-            for(let py = -WARP_STEP; py <= H + WARP_STEP; py += WARP_STEP){
-              const [wx, wy] = warpPoint(gx, py);
-              if(first){ ctx.moveTo(wx, wy); first = false; } else{ ctx.lineTo(wx, wy); }
-            }
-            ctx.strokeStyle = gridColorAt(gx, H * 0.5, layer.alpha); ctx.stroke();
-          }
+            return `rgba(255, 255, 255, ${baseAlpha})`;
         }
 
+        function drawLayer(layer, sp) {
+            const cell = layer.cell, ox = sp.x, oy = sp.y;
+            const sx = (((ox % cell) + cell) % cell) - cell * 2, sy = (((oy % cell) + cell) % cell) - cell * 2;
+            ctx.lineWidth = 0.55; ctx.lineCap = 'round';
+            for (let gy = sy; gy < H + cell * 2; gy += cell) {
+                ctx.beginPath(); let first = true;
+                for (let px = -WARP_STEP; px <= W + WARP_STEP; px += WARP_STEP) {
+                    const [wx, wy] = warpPoint(px, gy);
+                    if (first) { ctx.moveTo(wx, wy); first = false; } else { ctx.lineTo(wx, wy); }
+                }
+                ctx.strokeStyle = gridColorAt(W * 0.5, gy, layer.alpha); ctx.stroke();
+            }
+            for (let gx = sx; gx < W + cell * 2; gx += cell) {
+                ctx.beginPath(); let first = true;
+                for (let py = -WARP_STEP; py <= H + WARP_STEP; py += WARP_STEP) {
+                    const [wx, wy] = warpPoint(gx, py);
+                    if (first) { ctx.moveTo(wx, wy); first = false; } else { ctx.lineTo(wx, wy); }
+                }
+                ctx.strokeStyle = gridColorAt(gx, H * 0.5, layer.alpha); ctx.stroke();
+            }
+        }
 
-
-        function animate(){
-          requestAnimationFrame(animate);
-          curX += (mouseX - curX) * CURSOR_LERP; curY += (mouseY - curY) * CURSOR_LERP;
-          warpX += (mouseX - warpX) * WARP_LERP; warpY += (mouseY - warpY) * WARP_LERP;
-          const cx = W * 0.5, cy = H * 0.5;
-          springs.forEach(sp => {
-            const tx = ((mouseX - cx) / cx) * PARALLAX, ty = ((mouseY - cy) / cy) * PARALLAX;
-            const fx = (tx - sp.x) * STIFFNESS, fy = (ty - sp.y) * STIFFNESS;
-            sp.vx = sp.vx * (1 - DAMPING) + fx; sp.vy = sp.vy * (1 - DAMPING) + fy;
-            sp.x += sp.vx; sp.y += sp.vy;
-          });
-          ctx.clearRect(0,0,W,H);
-          drawLayer(LAYERS[0], springs[0]); drawLayer(LAYERS[1], springs[1]);
+        function animate() {
+            requestAnimationFrame(animate);
+            curX += (mouseX - curX) * CURSOR_LERP; curY += (mouseY - curY) * CURSOR_LERP;
+            warpX += (mouseX - warpX) * WARP_LERP; warpY += (mouseY - warpY) * WARP_LERP;
+            const cx = W * 0.5, cy = H * 0.5;
+            springs.forEach(sp => {
+                const tx = ((mouseX - cx) / cx) * PARALLAX, ty = ((mouseY - cy) / cy) * PARALLAX;
+                const fx = (tx - sp.x) * STIFFNESS, fy = (ty - sp.y) * STIFFNESS;
+                sp.vx = sp.vx * (1 - DAMPING) + fx; sp.vy = sp.vy * (1 - DAMPING) + fy;
+                sp.x += sp.vx; sp.y += sp.vy;
+            });
+            ctx.clearRect(0, 0, W, H);
+            drawLayer(LAYERS[0], springs[0]); drawLayer(LAYERS[1], springs[1]);
         }
         animate();
 
-        // --- Firebase Data Flow ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
-          authDomain: "devstage-872b1.firebaseapp.com",
-          projectId: "devstage-872b1",
-          storageBucket: "devstage-872b1.firebasestorage.app",
-          messagingSenderId: "993834630425",
-          appId: "1:993834630425:web:b063407a7d47a0830d5988"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // --- Realistic Placeholder Projects ---
+        const PLACEHOLDER_PROJECTS = [
+            {
+                title: "AstroEngine v2",
+                desc: "Next-gen orbital physics engine for web-based space simulators. Real-time N-body integration.",
+                userName: "Alex Thorne",
+                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+                tags: ["WebGL", "Rust", "Wasm"],
+                status: "live",
+                sys: "astro_engine.sys",
+                recruiting: true,
+                likes: 245, comments: 12, saves: 56,
+                img: "orbital_engine_demo_1778407862622.png",
+                time: "2h ago"
+            },
+            {
+                title: "Lumina Editor",
+                desc: "Minimalist cloud-native code editor with zero-latency collaborative features and AI assistance.",
+                userName: "Sarah Chen",
+                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+                tags: ["TypeScript", "Next.js", "Socket.io"],
+                status: "trending",
+                sys: "lumina_core.sys",
+                recruiting: false,
+                likes: 890, comments: 45, saves: 120,
+                img: "code_editor_ui_1778407878084.png",
+                time: "4h ago"
+            },
+            {
+                title: "Nexus Dashboard",
+                desc: "High-performance data visualization system for monitoring distributed microservices in real-time.",
+                userName: "Marcus Vane",
+                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+                tags: ["D3.js", "React", "Go"],
+                status: "shipping",
+                sys: "nexus_visual.sys",
+                recruiting: true,
+                likes: 156, comments: 8, saves: 32,
+                img: "data_viz_dashboard_1778407912100.png",
+                time: "6h ago"
+            },
+            {
+                title: "DreamWeaver AI",
+                desc: "Generative AI interface focused on rapid architectural concept visualization and 3D modeling.",
+                userName: "Elena Rossi",
+                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+                tags: ["PyTorch", "Python", "Tailwind"],
+                status: "live",
+                sys: "dream_weaver.sys",
+                recruiting: false,
+                likes: 3.2, comments: 112, saves: 450,
+                img: "ai_image_gen_ui_1778408100299.png",
+                time: "8h ago"
+            }
+        ];
 
-        const loadFeed = async () => {
-            const snap = await db.collection('projects').orderBy('createdAt', 'desc').limit(10).get();
+        const loadFeed = () => {
             const list = document.getElementById('feed-list');
             list.innerHTML = '';
-            snap.forEach(doc => {
-                const p = doc.data();
+            
+            PLACEHOLDER_PROJECTS.forEach(p => {
+                const statusHtml = p.status === 'live' 
+                    ? `<span class="status-badge status-live"><span class="live-dot"></span>LIVE</span>`
+                    : p.status === 'trending'
+                    ? `<span class="status-badge status-trending">TRENDING</span>`
+                    : `<span class="status-badge status-shipping">SHIPPING</span>`;
+
                 list.innerHTML += `
-                    <div class="project-card-mini">
-                        <div class="creator-info">
-                            <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name='+p.userName}" alt="User">
-                            <span class="creator-name">${p.userName || 'Anonymous'}</span>
+                    <div class="project-feed-card feature-terminal-card">
+                        <div class="card-terminal-bar">
+                            <div class="bar-left">
+                                <span class="bar-dot"></span>
+                                <span class="bar-filename">${p.sys}</span>
+                            </div>
+                            <div class="bar-right">
+                                ${statusHtml}
+                            </div>
                         </div>
-                        <h2 class="project-title">${p.title}</h2>
-                        <p class="project-preview">${p.description.substring(0, 100)}...</p>
+                        <div class="project-thumbnail">
+                            <img src="${p.img}" alt="${p.title}">
+                            <div class="thumbnail-overlay">
+                                <button class="view-btn"><i data-lucide="eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="creator-row">
+                                <div class="creator-avatar">
+                                    <img src="${p.userAvatar}" alt="User">
+                                </div>
+                                <div class="creator-details">
+                                    <span class="creator-name">${p.userName}</span>
+                                    <span class="creation-time">${p.time}</span>
+                                </div>
+                                ${p.recruiting ? `<div class="recruitment-badge"><i data-lucide="users" style="width:10px;"></i> RECRUITING</div>` : ''}
+                            </div>
+                            <h3 class="card-title">${p.title}</h3>
+                            <p class="card-desc">${p.desc}</p>
+                            <div class="tech-stack">
+                                ${p.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <span class="stat-item"><i data-lucide="heart"></i> ${p.likes}${p.likes > 1000 ? 'k' : ''}</span>
+                                    <span class="stat-item"><i data-lucide="message-square"></i> ${p.comments}</span>
+                                    <span class="stat-item"><i data-lucide="bookmark"></i> ${p.saves}</span>
+                                </div>
+                                <div class="card-action-text">
+                                    VIEW PROJECT <i data-lucide="arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-glow"></div>
                     </div>
                 `;
             });
+
+            lucide.createIcons();
+            initCardInteractions();
         };
+
+        function initCardInteractions() {
+            const cards = document.querySelectorAll('.project-feed-card');
+            cards.forEach(card => {
+                let ticking = false;
+                let mouseEvt = null;
+                let isHovered = false;
+
+                const updateCard = () => {
+                    if (!mouseEvt || !isHovered) return;
+                    const rect = card.getBoundingClientRect();
+                    const x = mouseEvt.clientX - rect.left;
+                    const y = mouseEvt.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / 35;
+                    const rotateY = (centerX - x) / 35;
+
+                    card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(0, -10px, 0)`;
+                    
+                    const px = (x / rect.width) * 100;
+                    const py = (y / rect.height) * 100;
+                    card.style.setProperty('--mouse-x', `${px}%`);
+                    card.style.setProperty('--mouse-y', `${py}%`);
+
+                    ticking = false;
+                };
+
+                card.addEventListener('mousemove', e => {
+                    mouseEvt = e;
+                    isHovered = true;
+                    if (!ticking) {
+                        requestAnimationFrame(updateCard);
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                card.addEventListener('mouseleave', () => {
+                    isHovered = false;
+                    card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)`;
+                    card.style.setProperty('--mouse-x', `50%`);
+                    card.style.setProperty('--mouse-y', `50%`);
+                }, { passive: true });
+            });
+        }
         loadFeed();
+
+        // ─── Weight Bloom Logo Animation ───
+        const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+        if (logoWrapper) {
+            setTimeout(() => {
+                logoWrapper.classList.add('bloom');
+                setTimeout(() => {
+                    logoWrapper.classList.add('is-breathing');
+                }, 1700);
+            }, 500);
+        }
+
+        // ─── NAVBAR & DROPDOWN ───
+        const navToggle = document.getElementById('hamburger-checkbox');
+        const navDropdown = document.getElementById('hamburger-dropdown');
+
+        if (navToggle && navDropdown) {
+            const navItems = navDropdown.querySelectorAll('.nav-item-anim');
+
+            navToggle.addEventListener('change', () => {
+                if (navToggle.checked) {
+                    navDropdown.classList.add('active');
+                    navItems.forEach((item) => {
+                        item.classList.remove('nav-item-visible');
+                        item.style.transitionDelay = '0ms';
+                    });
+                    requestAnimationFrame(() => {
+                        navItems.forEach((item, index) => {
+                            item.style.transitionDelay = `${index * 35}ms`;
+                            item.classList.add('nav-item-visible');
+                        });
+                    });
+                } else {
+                    navDropdown.classList.remove('active');
+                    navItems.forEach(item => {
+                        item.classList.remove('nav-item-visible');
+                    });
+                }
+            });
+
+            navDropdown.addEventListener('mousemove', (e) => {
+                const rect = navDropdown.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                navDropdown.style.setProperty('--mouse-x', `${x}%`);
+                navDropdown.style.setProperty('--mouse-y', `${y}%`);
+            });
+
+            document.addEventListener('click', (e) => {
+                const hamburgerLabel = document.getElementById('hamburger-menu-label');
+                if (navToggle.checked && !hamburgerLabel.contains(e.target)) {
+                    navToggle.checked = false;
+                    navDropdown.classList.remove('active');
+                    navItems.forEach(item => {
+                        item.classList.remove('nav-item-visible');
+                    });
+                }
+            });
+        }
+
+        // Logout
+        const logoutBtn = document.getElementById('nav-logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                firebase.auth().signOut().then(() => {
+                    window.location.href = 'index.html';
+                });
+            });
+        }
+
         lucide.createIcons();
     </script>
     <script src="cursor.js" defer></script>
 </body>
+
 </html>

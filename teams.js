@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ─── 1. NAVBAR & DROPDOWN ────────────────────────────────
+    const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+    if (logoWrapper) {
+        setTimeout(() => {
+            logoWrapper.classList.add('bloom');
+            setTimeout(() => {
+                logoWrapper.classList.add('is-breathing');
+            }, 1700);
+        }, 500);
+    }
+
     const navToggle = document.getElementById('nav-toggle');
     const navDropdown = document.getElementById('nav-dropdown');
 

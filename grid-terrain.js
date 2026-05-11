@@ -9,13 +9,13 @@ let W, H, t = 0;
 const M = { x: -9999, y: -9999, on: false };
 
 // Grid density - Reduced for performance
-const COLS = 64; 
-const ROWS = 36; 
+const COLS = 64;
+const ROWS = 36;
 
 // Perspective camera
-const FOV    = 300;
+const FOV = 300;
 const NEAR_Z = 90;
-const FAR_Z  = 1000; // Reduced slightly to tighten the view
+const FAR_Z = 1000; // Reduced slightly to tighten the view
 
 // Pixel ratio safety
 let DPR = Math.max(1, window.devicePixelRatio || 1);
@@ -24,9 +24,9 @@ function resize() {
   W = window.innerWidth;
   H = window.innerHeight;
   DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1)); // Cap DPR at 2 for performance
-  cv.width  = Math.floor(W * DPR);
+  cv.width = Math.floor(W * DPR);
   cv.height = Math.floor(H * DPR);
-  cv.style.width  = W + 'px';
+  cv.style.width = W + 'px';
   cv.style.height = H + 'px';
   cx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
@@ -40,11 +40,11 @@ function pk(x) {
 
 // Multi-directional wave superposition
 function waveH(nx, nz, time) {
-  const w1 = pk( nx *  9.2 + nz * 20.0 - time * 0.72) * 0.52;
-  const w2 = pk(-nx *  5.8 + nz * 13.5 + time * 0.55) * 0.26;
-  const w3 = pk( nx * 16.0 - nz *  8.0 - time * 0.88) * 0.14;
-  const w4 = Math.sin( nx * 28.0 + nz *  5.5 + time * 1.05) * 0.05;
-  const w5 = Math.sin(-nx *  7.0 + nz * 32.0 - time * 1.30) * 0.04;
+  const w1 = pk(nx * 9.2 + nz * 20.0 - time * 0.72) * 0.52;
+  const w2 = pk(-nx * 5.8 + nz * 13.5 + time * 0.55) * 0.26;
+  const w3 = pk(nx * 16.0 - nz * 8.0 - time * 0.88) * 0.14;
+  const w4 = Math.sin(nx * 28.0 + nz * 5.5 + time * 1.05) * 0.05;
+  const w5 = Math.sin(-nx * 7.0 + nz * 32.0 - time * 1.30) * 0.04;
   return (w1 + w2 + w3 + w4 + w5) / 1.01;
 }
 
@@ -59,14 +59,14 @@ function swayX(nx, nz, time) {
 const pts = [];
 
 function buildPts() {
-  const AMP  = H * 0.15; // Reduced from 0.195 to reduce spread
+  const AMP = H * 0.15; // Reduced from 0.195 to reduce spread
   const CAMH = H * 0.260;
-  const HY   = H * 0.268;
+  const HY = H * 0.268;
 
   for (let ri = 0; ri < ROWS; ri++) {
     if (!pts[ri]) pts[ri] = [];
     const rf = ri / (ROWS - 1);   // 0 = near, 1 = far
-    const z  = NEAR_Z + (FAR_Z - NEAR_Z) * rf;
+    const z = NEAR_Z + (FAR_Z - NEAR_Z) * rf;
     const scl = FOV / z;
     const nz = 1 - rf;            // wave coordinate: 0 = far, 1 = near
 
@@ -106,7 +106,7 @@ function buildPts() {
 function seg(p1, p2, alphaMult, widthMult) {
   const a = (p1.alpha + p2.alpha) * 0.5 * alphaMult;
   if (a < 0.02) return; // Skip nearly invisible lines
-  
+
   const lw = Math.max(0.12, ((p1.scl + p2.scl) * 0.5) * widthMult);
   cx.beginPath();
   cx.moveTo(p1.sx, p1.sy);
@@ -118,7 +118,7 @@ function seg(p1, p2, alphaMult, widthMult) {
 
 function dot(p) {
   if (p.alpha < 0.05) return; // Skip dots for faint points
-  
+
   const r = Math.max(0.45, Math.min(2.35, 0.55 + p.scl * 0.20));
   cx.beginPath();
   cx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
