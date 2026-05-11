@@ -93,16 +93,28 @@
 
 <body class="home-page">
   <script src="loader.js"></script>
-  <div class="wave-container">
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+  <!-- Premium Wave Background -->
+  <div id="premium-wave-bg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: radial-gradient(circle at 82% 18%, rgba(72,72,72,0.12) 0%, rgba(36,36,36,0.18) 34%, rgba(16,16,16,0.32) 100%), linear-gradient(115deg, #121212 0%, #181818 42%, #262626 100%);">
+    
+    <!-- Atmospheric matte texture -->
+    <div style="position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle at 20% 20%, white 0px, transparent 1px), radial-gradient(circle at 80% 60%, white 0px, transparent 1px); background-size: 4px 4px;"></div>
+
+    <svg id="wave-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; transform: translateZ(0);" preserveAspectRatio="none">
       <defs>
-        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f4f4f4" stop-opacity="0.04" />
+          <stop offset="28%" stop-color="#ffffff" stop-opacity="0.15" />
+          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.82" />
+          <stop offset="72%" stop-color="#dadada" stop-opacity="0.24" />
+          <stop offset="100%" stop-color="#f0f0f0" stop-opacity="0.05" />
+        </linearGradient>
+
+        <linearGradient id="orange" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffd1a4" stop-opacity="0.10" />
+          <stop offset="45%" stop-color="#ff8a1e" stop-opacity="1" />
+          <stop offset="100%" stop-color="#ffc98f" stop-opacity="0.16" />
+        </linearGradient>
       </defs>
-      <g class="parallax">
-        <use href="#gentle-wave" x="48" y="0" />
-        <use href="#gentle-wave" x="48" y="3" />
-        <use href="#gentle-wave" x="48" y="5" />
-        <use href="#gentle-wave" x="48" y="7" />
       </g>
     </svg>
   </div>

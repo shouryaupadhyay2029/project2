@@ -19,7 +19,8 @@
 
     <style>
         html,
-        html, body {
+        html,
+        body {
             width: 100%;
             height: 100%;
             overflow-x: hidden;
@@ -33,7 +34,8 @@
             width: 100%;
             height: 100%;
             display: block;
-            z-index: 0; /* On top of body bg, but behind container */
+            z-index: 0;
+            /* On top of body bg, but behind container */
             pointer-events: none;
         }
 
@@ -141,9 +143,20 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0.4; transform: scale(1); }
+            0% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
         }
 
         .project-thumbnail {
@@ -171,7 +184,7 @@
         .thumbnail-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -318,10 +331,113 @@
             z-index: 100;
         }
 
-        /* Hide default scrollbar */
-        ::-webkit-scrollbar {
-            display: none;
+        /* ─── Real-Time Activity Strip ─────────────────────────── */
+        .activity-strip {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            width: 100%;
+            height: 36px;
+            z-index: 89;
+            overflow: hidden;
+            background: rgba(10, 10, 12, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
         }
+
+        /* Edge fade masks */
+        .activity-strip::before,
+        .activity-strip::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .activity-strip::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(10,10,12,0.9), transparent);
+        }
+        .activity-strip::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(10,10,12,0.9), transparent);
+        }
+
+        .ticker-track {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            /* Two identical sets → translate -50% = perfect loop */
+            animation: ticker-scroll 70s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes ticker-scroll {
+            0%   { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 44px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.67rem;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.38);
+        }
+
+        .ticker-item strong {
+            color: rgba(255, 255, 255, 0.82);
+            font-weight: 500;
+        }
+
+        .ticker-item .t-amber {
+            color: #d78a2f;
+        }
+
+        .ticker-item .t-stamp {
+            color: rgba(255, 255, 255, 0.18);
+            font-size: 0.58rem;
+            margin-left: 2px;
+        }
+
+        .ticker-pulse {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #d78a2f;
+            box-shadow: 0 0 8px rgba(215, 138, 47, 0.7);
+            animation: t-pulse 2.2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes t-pulse {
+            0%,100% { opacity: 0.35; transform: scale(0.85); }
+            50%      { opacity: 1;    transform: scale(1.35); }
+        }
+
+        .ticker-divider {
+            width: 1px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+
+        /* ─── Feed container clears both navbar + strip ─────────── */
+        .feed-container {
+            margin-top: 160px !important;
+        }
+
+        /* Hide default scrollbar */
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 
@@ -388,10 +504,42 @@
         </div>
     </nav>
 
+    <!-- ─── Real-Time Activity Strip ─── -->
+    <div class="activity-strip" aria-hidden="true">
+        <div class="ticker-track">
+            <!-- Set A -->
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Aarav K.</strong> uploaded <strong>AI Resume Analyzer</strong></span><span class="t-stamp">2m ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>PixelLabs</strong> started <span class="t-amber">recruiting</span></span><span class="t-stamp">12m ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>NeuralForge</strong> hit <span class="t-amber">1k views</span></span><span class="t-stamp">34m ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span>Weekly Challenge updated → <strong>Shader Mastery</strong></span><span class="t-stamp">1h ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Meera S.</strong> open-sourced <strong>DataFlow CLI</strong></span><span class="t-stamp">2h ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>CodeCraft</strong> team reached <span class="t-amber">500 stars</span></span><span class="t-stamp">3h ago</span></div>
+            <div class="ticker-divider"></div>
+            <!-- Set B — identical, enables seamless -50% loop -->
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Aarav K.</strong> uploaded <strong>AI Resume Analyzer</strong></span><span class="t-stamp">2m ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>PixelLabs</strong> started <span class="t-amber">recruiting</span></span><span class="t-stamp">12m ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>NeuralForge</strong> hit <span class="t-amber">1k views</span></span><span class="t-stamp">34m ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span>Weekly Challenge updated → <strong>Shader Mastery</strong></span><span class="t-stamp">1h ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>Meera S.</strong> open-sourced <strong>DataFlow CLI</strong></span><span class="t-stamp">2h ago</span></div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item"><span class="ticker-pulse"></span><span><strong>CodeCraft</strong> team reached <span class="t-amber">500 stars</span></span><span class="t-stamp">3h ago</span></div>
+        </div>
+    </div>
+
     <main class="feed-container">
         <header class="feed-header">
             <h1>Discovery Feed</h1>
-            <p>A real-time ecosystem of premium developer creations. Explore the next generation of digital experiences.</p>
+            <p>A real-time ecosystem of premium developer creations. Explore the next generation of digital experiences.
+            </p>
         </header>
         <div id="feed-list">
             <!-- Premium projects will load here -->
@@ -552,13 +700,13 @@
         const loadFeed = () => {
             const list = document.getElementById('feed-list');
             list.innerHTML = '';
-            
+
             PLACEHOLDER_PROJECTS.forEach(p => {
-                const statusHtml = p.status === 'live' 
+                const statusHtml = p.status === 'live'
                     ? `<span class="status-badge status-live"><span class="live-dot"></span>LIVE</span>`
                     : p.status === 'trending'
-                    ? `<span class="status-badge status-trending">TRENDING</span>`
-                    : `<span class="status-badge status-shipping">SHIPPING</span>`;
+                        ? `<span class="status-badge status-trending">TRENDING</span>`
+                        : `<span class="status-badge status-shipping">SHIPPING</span>`;
 
                 list.innerHTML += `
                     <div class="project-feed-card feature-terminal-card">
@@ -632,7 +780,7 @@
                     const rotateY = (centerX - x) / 35;
 
                     card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(0, -10px, 0)`;
-                    
+
                     const px = (x / rect.width) * 100;
                     const py = (y / rect.height) * 100;
                     card.style.setProperty('--mouse-x', `${px}%`);
