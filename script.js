@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const centerY = rect.height / 2;
 
       // 1. 3D Perspective Tilt (Subtle: 4-6deg max)
-      const rotateX = (y - centerY) / 25; 
+      const rotateX = (y - centerY) / 25;
       const rotateY = (centerX - x) / 25;
 
       // 2. Inner Depth Shift (Subtle Parallax)

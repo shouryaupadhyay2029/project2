@@ -90,10 +90,11 @@
         .project-feed-card:hover {
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(215, 138, 47, 0.3);
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.6), 
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.6),
                 0 0 30px rgba(215, 138, 47, 0.05),
-                inset 0 0 1px 1px rgba(215, 138, 47, 0.1); /* Amber edge */
+                inset 0 0 1px 1px rgba(215, 138, 47, 0.1);
+            /* Amber edge */
             z-index: 20;
         }
 
@@ -101,11 +102,9 @@
             position: absolute;
             inset: 0;
             border-radius: 18px;
-            background: radial-gradient(
-                600px circle at var(--mouse-x) var(--mouse-y),
-                rgba(255, 255, 255, 0.06),
-                transparent 40%
-            );
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+                    rgba(255, 255, 255, 0.06),
+                    transparent 40%);
             z-index: 1;
             pointer-events: none;
             opacity: 0;
@@ -154,7 +153,8 @@
             font-size: 0.58rem;
             font-weight: 700;
             padding: 3px 10px;
-            border-radius: 100px; /* Pill shape */
+            border-radius: 100px;
+            /* Pill shape */
             display: flex;
             align-items: center;
             gap: 6px;
@@ -164,17 +164,60 @@
             -webkit-backdrop-filter: blur(4px);
         }
 
-        .status-concept { background: rgba(168, 85, 247, 0.08); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.15); }
-        .status-in-progress { background: rgba(14, 165, 233, 0.08); color: #0ea5e9; border: 1px solid rgba(14, 165, 233, 0.15); }
-        .status-beta { background: rgba(245, 158, 11, 0.08); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.15); }
-        .status-shipping { background: rgba(16, 185, 129, 0.08); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.15); }
-        .status-completed { background: rgba(251, 191, 36, 0.08); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.15); }
+        .status-concept {
+            background: rgba(168, 85, 247, 0.08);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.15);
+        }
 
-        .project-feed-card:hover .status-concept { box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); border-color: rgba(168, 85, 247, 0.4); }
-        .project-feed-card:hover .status-in-progress { box-shadow: 0 0 15px rgba(14, 165, 233, 0.3); border-color: rgba(14, 165, 233, 0.4); }
-        .project-feed-card:hover .status-beta { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); border-color: rgba(245, 158, 11, 0.4); }
-        .project-feed-card:hover .status-shipping { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); border-color: rgba(16, 185, 129, 0.4); }
-        .project-feed-card:hover .status-completed { box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); border-color: rgba(251, 191, 36, 0.4); }
+        .status-in-progress {
+            background: rgba(14, 165, 233, 0.08);
+            color: #0ea5e9;
+            border: 1px solid rgba(14, 165, 233, 0.15);
+        }
+
+        .status-beta {
+            background: rgba(245, 158, 11, 0.08);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+
+        .status-shipping {
+            background: rgba(16, 185, 129, 0.08);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .status-completed {
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.15);
+        }
+
+        .project-feed-card:hover .status-concept {
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        .project-feed-card:hover .status-in-progress {
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+            border-color: rgba(14, 165, 233, 0.4);
+        }
+
+        .project-feed-card:hover .status-beta {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .project-feed-card:hover .status-shipping {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .project-feed-card:hover .status-completed {
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+            border-color: rgba(251, 191, 36, 0.4);
+        }
 
         .status-dot {
             width: 4px;
@@ -183,15 +226,26 @@
             background: currentColor;
         }
 
-        .status-in-progress .status-dot, 
+        .status-in-progress .status-dot,
         .status-shipping .status-dot {
             animation: statusPulse 2s infinite;
         }
 
         @keyframes statusPulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .live-dot {
@@ -229,7 +283,8 @@
         }
 
         .project-thumbnail img {
-            width: 110%; /* Extra width for parallax */
+            width: 110%;
+            /* Extra width for parallax */
             height: 110%;
             object-fit: cover;
             position: absolute;
@@ -329,6 +384,7 @@
         .bookmark-btn.is-saved i {
             fill: #d78a2f;
         }
+
         /* --- Developer Feedback System --- */
         .feedback-overlay {
             position: absolute;
@@ -372,7 +428,9 @@
             transition: color 0.2s;
         }
 
-        .close-feedback:hover { color: #fff; }
+        .close-feedback:hover {
+            color: #fff;
+        }
 
         .feedback-types {
             display: flex;
@@ -393,7 +451,8 @@
             transition: all 0.3s ease;
         }
 
-        .feedback-type-btn:hover, .feedback-type-btn.active {
+        .feedback-type-btn:hover,
+        .feedback-type-btn.active {
             background: rgba(215, 138, 47, 0.1);
             border-color: rgba(215, 138, 47, 0.4);
             color: #d78a2f;
@@ -501,7 +560,9 @@
             font-family: 'Inter', sans-serif;
         }
 
-        #command-search-input:focus { outline: none; }
+        #command-search-input:focus {
+            outline: none;
+        }
 
         .command-results {
             max-height: 400px;
@@ -528,7 +589,8 @@
             transition: all 0.2s ease;
         }
 
-        .command-item:hover, .command-item.selected {
+        .command-item:hover,
+        .command-item.selected {
             background: rgba(255, 255, 255, 0.04);
         }
 
@@ -543,7 +605,8 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        .command-item:hover .command-item-icon, .command-item.selected .command-item-icon {
+        .command-item:hover .command-item-icon,
+        .command-item.selected .command-item-icon {
             color: #d78a2f;
             background: rgba(215, 138, 47, 0.1);
         }
@@ -620,9 +683,17 @@
         }
 
         @keyframes pulseSave {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .stat-item i.is-saved {
@@ -648,6 +719,7 @@
                 grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
                 gap: 24px;
             }
+
             .feed-container {
                 padding: 0 24px;
             }
@@ -663,6 +735,7 @@
             #feed-list {
                 grid-template-columns: 1fr;
             }
+
             .filter-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -806,14 +879,14 @@
         }
 
         .navbar {
-            position: fixed;
+            position: absolute;
             z-index: 100;
         }
 
         /* ─── Real-Time Activity Strip ─────────────────────────── */
         .activity-strip {
-            position: fixed;
-            top: 68px;
+            position: absolute;
+            top: 72px;
             left: 0;
             width: 100%;
             height: 36px;
@@ -1106,7 +1179,8 @@
         <div class="command-palette">
             <div class="command-input-wrapper">
                 <i data-lucide="terminal"></i>
-                <input type="text" id="command-search-input" placeholder="Search projects, builders, stacks, or teams..." autocomplete="off">
+                <input type="text" id="command-search-input"
+                    placeholder="Search projects, builders, stacks, or teams..." autocomplete="off">
             </div>
             <div class="command-results" id="command-results">
                 <div class="command-group-title">Suggestions</div>
@@ -1414,7 +1488,7 @@
         const dropdowns = document.querySelectorAll('.custom-dropdown');
         const filterTagsContainer = document.getElementById('active-filters-tags');
         const clearAllBtn = document.getElementById('clear-all-filters');
-        
+
         const activeFilters = {
             categories: [],
             sort: 'Latest'
@@ -1510,7 +1584,7 @@
         function renderFeed(projects) {
             const list = document.getElementById('feed-list');
             list.innerHTML = '';
-            
+
             const savedIds = JSON.parse(localStorage.getItem('devstage_saved_ids') || '[]');
 
             if (projects.length === 0) {
@@ -1521,17 +1595,17 @@
 
             projects.forEach(p => {
                 const isSaved = savedIds.includes(p.sys);
-                
+
                 let statusClass = 'status-concept';
                 let statusLabel = 'CONCEPT';
-                
+
                 if (p.status === 'in progress') { statusClass = 'status-in-progress'; statusLabel = 'IN PROGRESS'; }
                 else if (p.status === 'beta') { statusClass = 'status-beta'; statusLabel = 'BETA'; }
                 else if (p.status === 'shipping') { statusClass = 'status-shipping'; statusLabel = 'SHIPPING'; }
                 else if (p.status === 'completed') { statusClass = 'status-completed'; statusLabel = 'COMPLETED'; }
-                
+
                 const statusHtml = `<span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span>`;
-                
+
                 list.innerHTML += `
                     <div class="project-feed-card feature-terminal-card" data-sys="${p.sys}">
                         <div class="feedback-overlay" id="feedback-${p.sys}">
@@ -1612,7 +1686,7 @@
             const btn = card.querySelector('.bookmark-btn');
             const icon = card.querySelector('.stat-item i[data-lucide="bookmark"]');
             const count = card.querySelector('.save-count');
-            
+
             if (index === -1) {
                 savedIds.push(sys);
                 btn.classList.add('is-saved');
@@ -1624,11 +1698,11 @@
                 icon.classList.remove('is-saved');
                 count.innerText = parseInt(count.innerText) - 1;
             }
-            
+
             localStorage.setItem('devstage_saved_ids', JSON.stringify(savedIds));
             lucide.createIcons();
         };
-        
+
         // Initial load
         renderFeed(PLACEHOLDER_PROJECTS);
 
@@ -1717,7 +1791,7 @@
             const overlay = document.getElementById(`feedback-${sys}`);
             const btn = overlay.querySelector('.submit-feedback-btn');
             const originalHtml = btn.innerHTML;
-            
+
             btn.innerHTML = '<i data-lucide="loader-2" class="spin" style="width:16px;"></i><span>Processing...</span>';
             lucide.createIcons();
 
@@ -1725,7 +1799,7 @@
                 btn.style.background = '#22c55e';
                 btn.innerHTML = '<i data-lucide="check" style="width:16px;"></i><span>Feedback Sent!</span>';
                 lucide.createIcons();
-                
+
                 setTimeout(() => {
                     overlay.classList.remove('active');
                     btn.style.background = '';

@@ -1417,7 +1417,7 @@ body::before {
 .feature-terminal-card:hover {
   border-color: rgba(215, 138, 47, 0.35) !important;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(15, 15, 18, 0.25) !important;
-  box-shadow: 
+  box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.45),
     0 0 35px rgba(215, 138, 47, 0.05) !important;
 }

@@ -20,7 +20,7 @@
 
   <style>
     .explore-page {
-      background: #2a2928;
+      background: #0f0f0f;
     }
 
     #particle-wave-canvas {
@@ -66,6 +66,7 @@
         transform: rotate(360deg);
       }
     }
+
     /* ─── Uiverse Hamburger Menu ─── */
     .uiverse-hamburger {
       cursor: pointer;
@@ -213,43 +214,116 @@
     }
 
     .sidebar-card {
-      /* Premium Glassmorphism Base */
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.05) 0%, transparent 100%), rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 24px;
+      background: rgba(20, 20, 24, 0.42);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 0;
       margin-bottom: 24px;
-
-      /* Subtle inner highlight & soft matte shadow */
-      box-shadow:
-        inset 1px 1px 1px rgba(255, 255, 255, 0.05),
-        0 8px 32px rgba(0, 0, 0, 0.25);
-
-      /* Smooth Interaction */
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform, box-shadow, border-color;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     }
 
     .sidebar-card:hover {
-      transform: translateY(-4px);
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.08) 0%, transparent 100%), rgba(255, 255, 255, 0.06);
+      transform: translateY(-5px);
       border-color: rgba(255, 140, 66, 0.25);
       box-shadow:
-        inset 1px 1px 1px rgba(255, 255, 255, 0.08),
-        0 16px 40px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(255, 140, 66, 0.1);
+        0 16px 48px rgba(0, 0, 0, 0.4),
+        0 0 24px rgba(255, 140, 66, 0.04);
+    }
+
+    /* Terminal Header System */
+    .card-terminal-header {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .terminal-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .terminal-filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .terminal-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      color: #ff8c42;
+      opacity: 0.85;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .status-pulse {
+      width: 5px;
+      height: 5px;
+      background: #ff8c42;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff8c42;
+      animation: pulse-amber 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse-amber {
+      0% {
+        opacity: 0.4;
+        transform: scale(0.9);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+
+      100% {
+        opacity: 0.4;
+        transform: scale(0.9);
+      }
+    }
+
+    .sidebar-card-content {
+      padding: 20px;
     }
 
     .sidebar-title {
       color: #fff;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      letter-spacing: 0.02em;
+      opacity: 0.9;
     }
 
     .segmented-control {
@@ -259,524 +333,545 @@
     }
 
     .segment-chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px 16px;
-      color: var(--text-tertiary);
-      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.78rem;
       font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-      width: 100%;
-      text-align: left;
-    }
+      font-family: 'JetBrains Mono', monospace;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        width: 100%;
+        text-align: left;
+        position: relative;
+      }
 
-    .segment-chip:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+      .segment-chip:hover {
+        background: rgba(255, 140, 66, 0.04);
+        border-color: rgba(255, 140, 66, 0.2);
+        color: #fff;
+        transform: translateX(6px);
+      }
 
-    .segment-chip.active {
-      background: rgba(255, 140, 66, 0.15);
-      border-color: rgba(255, 140, 66, 0.4);
-      color: #fff;
-      box-shadow: 0 4px 16px rgba(255, 140, 66, 0.15);
-    }
+      .segment-chip.active {
+        background: rgba(255, 140, 66, 0.08);
+        border-color: #ff8c42;
+        color: #ff8c42;
+        box-shadow: 0 0 20px rgba(255, 140, 66, 0.06);
+      }
 
-    .chip-icon {
-      font-size: 1.1rem;
-    }
+      .chip-icon {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.3);
+        transition: color 0.3s ease;
+      }
 
-    /* ─── Tech Stack Chips ─── */
-    .tech-chip-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+      .segment-chip.active .chip-icon {
+        color: #ff8c42;
+      }
 
-    .tech-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--text-tertiary);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-      user-select: none;
-    }
+      /* ─── Tech Stack Chips ─── */
+      .tech-chip-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
 
-    .tech-chip:hover {
-      transform: scale(1.06);
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
-    }
+      .tech-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: 'JetBrains Mono', monospace;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        user-select: none;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
 
-    .tech-chip.active {
-      background: rgba(255, 140, 66, 0.18);
-      border-color: rgba(255, 140, 66, 0.45);
-      color: #fff;
-      box-shadow: 0 0 18px rgba(255, 140, 66, 0.2);
-    }
+      .tech-chip:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        transform: translateY(-2px);
+      }
 
-    .tech-chip-icon {
-      font-size: 1rem;
-      line-height: 1;
-    }
+      .tech-chip.active {
+        background: rgba(255, 140, 66, 0.1);
+        border-color: #ff8c42;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(255, 140, 66, 0.08);
+      }
 
-    .tech-chip-badge {
-      background: rgba(255, 255, 255, 0.12);
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 1px 6px;
-      border-radius: 999px;
-      line-height: 1.6;
-    }
+      .tech-chip-icon {
+        font-size: 0.8rem;
+        filter: grayscale(1) brightness(2);
+        opacity: 0.5;
+        transition: all 0.3s ease;
+      }
 
-    .tech-chip.active .tech-chip-badge {
-      background: rgba(255, 140, 66, 0.35);
-      color: #fff;
-    }
+      .tech-chip.active .tech-chip-icon {
+        filter: none;
+        opacity: 1;
+      }
 
-    /* Ripple Effect */
-    .tech-chip-ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(0);
-      animation: ripple-burst 0.5s linear;
-      pointer-events: none;
-    }
+      .tech-chip-badge {
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        line-height: 1.2;
+        margin-left: 4px;
+      }
 
-    @keyframes ripple-burst {
-      to {
-        transform: scale(4);
+      .tech-chip.active .tech-chip-badge {
+        background: #ff8c42;
+        color: #000;
+      }
+
+      /* Ripple Effect */
+      .tech-chip-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(0);
+        animation: ripple-burst 0.5s linear;
+        pointer-events: none;
+      }
+
+      @keyframes ripple-burst {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      /* Feed & Search */
+      .search-section {
+        margin-bottom: 32px;
+      }
+
+      .search-box {
+        height: 56px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+
+      .search-box:focus-within {
+        transform: scale(1.02);
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 140, 66, 0.4);
+        box-shadow: 0 0 20px rgba(255, 140, 66, 0.15), 0 12px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .search-box i {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        margin: 0;
+        /* Override previous margin */
+      }
+
+      .search-box:focus-within i {
+        color: #ff8c42;
+      }
+
+      .search-box input {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 12px 0;
+        color: #fff;
+        font-size: 1.05rem;
+        outline: none;
+      }
+
+      .search-box input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+        transition: color 0.3s ease;
+      }
+
+      .search-box:focus-within input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .search-shortcut {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        padding: 4px 8px;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        pointer-events: none;
+        user-select: none;
+        transition: all 0.3s ease;
+      }
+
+      .search-box:focus-within .search-shortcut {
         opacity: 0;
-      }
-    }
-
-    /* Feed & Search */
-    .search-section {
-      margin-bottom: 32px;
-    }
-
-    .search-box {
-      height: 56px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 14px;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      position: relative;
-    }
-
-    .search-box:focus-within {
-      transform: scale(1.02);
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 140, 66, 0.4);
-      box-shadow: 0 0 20px rgba(255, 140, 66, 0.15), 0 12px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .search-box i {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 1.2rem;
-      transition: color 0.3s ease;
-      margin: 0;
-      /* Override previous margin */
-    }
-
-    .search-box:focus-within i {
-      color: #ff8c42;
-    }
-
-    .search-box input {
-      flex: 1;
-      background: none;
-      border: none;
-      padding: 12px 0;
-      color: #fff;
-      font-size: 1.05rem;
-      outline: none;
-    }
-
-    .search-box input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-      transition: color 0.3s ease;
-    }
-
-    .search-box:focus-within input::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .search-shortcut {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      padding: 4px 8px;
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      pointer-events: none;
-      user-select: none;
-      transition: all 0.3s ease;
-    }
-
-    .search-box:focus-within .search-shortcut {
-      opacity: 0;
-      transform: translateX(10px);
-    }
-
-    /* Trending List */
-    .trending-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .trending-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      gap: 12px;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .trending-card:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 140, 66, 0.2);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .trending-thumb {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }
-
-    .trending-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .trending-info h4 {
-      color: #fff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .trending-info p {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.75rem;
-      margin: 0 0 6px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .trending-stats {
-      display: flex;
-      gap: 12px;
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 0.7rem;
-      font-weight: 500;
-    }
-
-    .trending-stats span {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .trending-stats i {
-      width: 12px;
-      height: 12px;
-    }
-
-    .trending-arrow {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%) translateX(10px);
-      color: #ff8c42;
-      opacity: 0;
-      transition: all 0.3s ease;
-      width: 14px;
-      height: 14px;
-    }
-
-    .trending-card:hover .trending-arrow {
-      opacity: 1;
-      transform: translateY(-50%) translateX(0);
-    }
-
-    /* Suggested Users */
-    .user-suggestions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .user-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-    }
-
-    .user-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .user-card-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .user-card:hover .user-card-avatar {
-      border-color: #ff8c42;
-    }
-
-    .user-card-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .user-card-info h4 {
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .user-card-info p {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.7rem;
-      margin: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .view-profile-text {
-      color: #ff8c42;
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-top: 4px;
-      display: block;
-      opacity: 0;
-      transform: translateY(5px);
-      transition: all 0.3s ease;
-      height: 0;
-      overflow: hidden;
-    }
-
-    .user-card:hover .view-profile-text {
-      opacity: 1;
-      transform: translateY(0);
-      height: 14px;
-    }
-
-    .follow-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 6px 12px;
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 2;
-    }
-
-    .follow-btn:hover {
-      background: #ff8c42;
-      border-color: #ff8c42;
-      transform: scale(1.05);
-    }
-
-    .follow-btn.following {
-      background: transparent;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .trending-info span {
-      color: var(--text-tertiary);
-      font-size: 0.75rem;
-    }
-
-    /* Project Cards (Hybrid Style) */
-    .project-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: 20px;
-      overflow: hidden;
-      transition: border-color 0.3s ease;
-    }
-
-    .project-card:hover {
-      border-color: rgba(255, 138, 0, 0.3);
-    }
-
-    .card-head {
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .card-head img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
-
-    .card-head .meta {
-      flex: 1;
-    }
-
-    .card-head h4 {
-      color: #fff;
-      font-size: 0.95rem;
-    }
-
-    .card-head span {
-      color: var(--text-tertiary);
-      font-size: 0.75rem;
-    }
-
-    .card-body {
-      padding: 0 24px 20px;
-    }
-
-    .card-body h3 {
-      color: #fff;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-
-    .card-body p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    .card-footer {
-      padding: 12px 24px;
-      border-top: 1px solid var(--border-soft);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .stats {
-      display: flex;
-      gap: 20px;
-      color: var(--text-tertiary);
-      font-size: 0.8rem;
-    }
-
-    .stats span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .stats i {
-      width: 16px;
-      height: 16px;
-    }
-
-    .view-btn {
-      color: var(--brand-orange);
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Responsive */
-    @media (max-width: 1100px) {
-      .explore-layout {
-        grid-template-columns: 260px 1fr;
+        transform: translateX(10px);
       }
 
-      .sidebar-right {
-        display: none;
-      }
-    }
-
-    @media (max-width: 850px) {
-      .explore-layout {
-        grid-template-columns: 1fr;
+      /* Trending List */
+      .trending-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
       }
 
-      .sidebar-left {
-        display: none;
+      .trending-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 8px;
+        padding: 14px;
+        display: flex;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
       }
-    }
+
+      .trending-card:hover {
+        background: rgba(255, 140, 66, 0.03);
+        border-color: rgba(255, 140, 66, 0.15);
+        transform: translateX(4px);
+      }
+
+      .trending-thumb {
+        width: 48px;
+        height: 48px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ff8c42;
+        transition: all 0.3s ease;
+      }
+
+      .trending-card:hover .trending-thumb {
+        border-color: #ff8c42;
+        box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
+      }
+
+      .trending-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .trending-info h4 {
+        color: #fff;
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        letter-spacing: 0.01em;
+      }
+
+      .trending-info p {
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 0.72rem;
+        line-height: 1.4;
+        margin-bottom: 10px;
+      }
+
+      .trending-stats {
+        display: flex;
+        gap: 14px;
+        color: rgba(255, 255, 255, 0.3);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.65rem;
+        font-weight: 600;
+      }
+
+      .trending-stats span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .trending-arrow {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%) translateX(10px);
+        color: #ff8c42;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        width: 16px;
+        height: 16px;
+      }
+
+      .trending-card:hover .trending-arrow {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+      }
+
+      /* Suggested Users */
+      .user-suggestions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .user-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+
+      .user-card:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .user-card-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 2px;
+        background: rgba(255, 255, 255, 0.02);
+        transition: all 0.3s ease;
+      }
+
+      .user-card:hover .user-card-avatar {
+        border-color: #ff8c42;
+        box-shadow: 0 0 10px rgba(255, 140, 66, 0.15);
+      }
+
+      .user-card-info h4 {
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+        letter-spacing: 0.01em;
+      }
+
+      .user-card-info p {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.7rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .view-profile-text {
+        color: #ff8c42;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-top: 4px;
+        display: block;
+        opacity: 0;
+        transform: translateY(5px);
+        transition: all 0.3s ease;
+        height: 0;
+        overflow: hidden;
+      }
+
+      .user-card:hover .view-profile-text {
+        opacity: 1;
+        transform: translateY(0);
+        height: 14px;
+      }
+
+      .follow-btn {
+        background: rgba(255, 140, 66, 0.06);
+        border: 1px solid rgba(255, 140, 66, 0.2);
+        border-radius: 6px;
+        padding: 8px 14px;
+        color: #ff8c42;
+        font-size: 0.68rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .follow-btn:hover {
+        background: #ff8c42;
+        border-color: #ff8c42;
+        color: #000;
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 140, 66, 0.2);
+      }
+
+      .follow-btn.following {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .trending-info span {
+        color: var(--text-tertiary);
+        font-size: 0.75rem;
+      }
+
+      /* Project Cards (Hybrid Style) */
+      .project-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .project-card {
+        background: rgba(20, 20, 24, 0.42);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform, border-color;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      .project-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 140, 66, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 140, 66, 0.05);
+      }
+
+      .card-head {
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .card-head img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      .card-head .meta {
+        flex: 1;
+      }
+
+      .card-head h4 {
+        color: #fff;
+        font-size: 0.95rem;
+      }
+
+      .card-head span {
+        color: var(--text-tertiary);
+        font-size: 0.75rem;
+      }
+
+      .card-body {
+        padding: 0 24px 20px;
+      }
+
+      .card-body h3 {
+        color: #fff;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .card-body p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+
+      .card-footer {
+        padding: 12px 24px;
+        border-top: 1px solid var(--border-soft);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .stats {
+        display: flex;
+        gap: 20px;
+        color: var(--text-tertiary);
+        font-size: 0.8rem;
+      }
+
+      .stats span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .stats i {
+        width: 16px;
+        height: 16px;
+      }
+
+      .view-btn {
+        color: var(--brand-orange);
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Responsive */
+      @media (max-width: 1100px) {
+        .explore-layout {
+          grid-template-columns: 260px 1fr;
+        }
+
+        .sidebar-right {
+          display: none;
+        }
+      }
+
+      @media (max-width: 850px) {
+        .explore-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar-left {
+          display: none;
+        }
+      }
   </style>
 </head>
 
@@ -849,55 +944,87 @@
     <!-- Left Sidebar: Filters -->
     <aside class="sidebar-left sidebar-sticky">
       <div class="sidebar-card">
-        <h3 class="sidebar-title"><i data-lucide="filter"></i> Filter By</h3>
-        <div class="segmented-control" id="filter-control">
-          <button class="segment-chip active" data-filter="latest">
-            <span class="chip-icon">🕒</span>
-            <span class="chip-text">Latest</span>
-          </button>
-          <button class="segment-chip" data-filter="most-liked">
-            <span class="chip-icon">❤️</span>
-            <span class="chip-text">Most Liked</span>
-          </button>
-          <button class="segment-chip" data-filter="trending">
-            <span class="chip-icon">🔥</span>
-            <span class="chip-text">Trending</span>
-          </button>
+        <div class="card-terminal-header">
+          <div class="terminal-header-left">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="terminal-filename">DISCOVERY_FILTER.INIT</span>
+          </div>
+          <div class="terminal-status">
+            <div class="status-pulse"></div>
+            LIVE
+          </div>
+        </div>
+        <div class="sidebar-card-content">
+          <h3 class="sidebar-title"><i data-lucide="filter"></i> Filter By</h3>
+          <div class="segmented-control" id="filter-control">
+            <button class="segment-chip active" data-filter="latest">
+              <i data-lucide="clock" class="chip-icon"></i>
+              <span class="chip-text">Latest</span>
+            </button>
+            <button class="segment-chip" data-filter="most-liked">
+              <i data-lucide="heart" class="chip-icon"></i>
+              <span class="chip-text">Most Liked</span>
+            </button>
+            <button class="segment-chip" data-filter="trending">
+              <i data-lucide="zap" class="chip-icon"></i>
+              <span class="chip-text">Trending</span>
+            </button>
+          </div>
         </div>
       </div>
       <div class="sidebar-card">
-        <h3 class="sidebar-title"><i data-lucide="code"></i> Tech Stack</h3>
-        <div class="tech-chip-grid" id="tech-chip-grid">
-          <button class="tech-chip" data-tech="react">
-            <span class="tech-chip-icon">⚛️</span>
-            React
-            <span class="tech-chip-badge">24</span>
-          </button>
-          <button class="tech-chip" data-tech="python">
-            <span class="tech-chip-icon">🐍</span>
-            Python
-            <span class="tech-chip-badge">18</span>
-          </button>
-          <button class="tech-chip" data-tech="typescript">
-            <span class="tech-chip-icon">🟦</span>
-            TypeScript
-            <span class="tech-chip-badge">12</span>
-          </button>
-          <button class="tech-chip" data-tech="ui-ux">
-            <span class="tech-chip-icon">🎨</span>
-            UI/UX
-            <span class="tech-chip-badge">30</span>
-          </button>
-          <button class="tech-chip" data-tech="nodejs">
-            <span class="tech-chip-icon">🟢</span>
-            Node.js
-            <span class="tech-chip-badge">15</span>
-          </button>
-          <button class="tech-chip" data-tech="flutter">
-            <span class="tech-chip-icon">🧩</span>
-            Flutter
-            <span class="tech-chip-badge">8</span>
-          </button>
+        <div class="card-terminal-header">
+          <div class="terminal-header-left">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="terminal-filename">STACK_INDEX.LOG</span>
+          </div>
+          <div class="terminal-status">
+            <div class="status-pulse"></div>
+            ACTIVE
+          </div>
+        </div>
+        <div class="sidebar-card-content">
+          <h3 class="sidebar-title"><i data-lucide="code"></i> Tech Stack</h3>
+          <div class="tech-chip-grid" id="tech-chip-grid">
+            <button class="tech-chip" data-tech="react">
+              <i data-lucide="box" class="tech-chip-icon"></i>
+              REACT
+              <span class="tech-chip-badge">24</span>
+            </button>
+            <button class="tech-chip" data-tech="python">
+              <i data-lucide="binary" class="tech-chip-icon"></i>
+              PYTHON
+              <span class="tech-chip-badge">18</span>
+            </button>
+            <button class="tech-chip" data-tech="typescript">
+              <i data-lucide="shield" class="tech-chip-icon"></i>
+              TYPESCRIPT
+              <span class="tech-chip-badge">12</span>
+            </button>
+            <button class="tech-chip" data-tech="ui-ux">
+              <i data-lucide="layout" class="tech-chip-icon"></i>
+              UI/UX
+              <span class="tech-chip-badge">30</span>
+            </button>
+            <button class="tech-chip" data-tech="nodejs">
+              <i data-lucide="server" class="tech-chip-icon"></i>
+              NODE.JS
+              <span class="tech-chip-badge">15</span>
+            </button>
+            <button class="tech-chip" data-tech="flutter">
+              <i data-lucide="layers" class="tech-chip-icon"></i>
+              FLUTTER
+              <span class="tech-chip-badge">8</span>
+            </button>
+          </div>
         </div>
       </div>
     </aside>
@@ -922,78 +1049,110 @@
     <!-- Right Sidebar: Suggested -->
     <aside class="sidebar-right sidebar-sticky">
       <div class="sidebar-card">
-        <h3 class="sidebar-title"><i data-lucide="trending-up"></i> Trending Now</h3>
-        <div class="trending-list">
-          <div class="trending-card">
-            <div class="trending-thumb">🤖</div>
-            <div class="trending-info">
-              <h4>AI Portfolio Engine</h4>
-              <p>Next-gen portfolio generator with AI.</p>
-              <div class="trending-stats">
-                <span><i data-lucide="heart"></i> 1.2k</span>
-                <span><i data-lucide="message-circle"></i> 48</span>
-              </div>
+        <div class="card-terminal-header">
+          <div class="terminal-header-left">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
             </div>
-            <i data-lucide="arrow-right" class="trending-arrow"></i>
+            <span class="terminal-filename">TRENDING_NOW.SYS</span>
           </div>
-          <div class="trending-card">
-            <div class="trending-thumb">🚀</div>
-            <div class="trending-info">
-              <h4>Modern SaaS Boilerplate</h4>
-              <p>Full-stack SaaS template for startups.</p>
-              <div class="trending-stats">
-                <span><i data-lucide="heart"></i> 850</span>
-                <span><i data-lucide="message-circle"></i> 12</span>
-              </div>
-            </div>
-            <i data-lucide="arrow-right" class="trending-arrow"></i>
+          <div class="terminal-status">
+            <div class="status-pulse"></div>
+            HOT
           </div>
-          <div class="trending-card">
-            <div class="trending-thumb">🔐</div>
-            <div class="trending-info">
-              <h4>Auth Flow Pro</h4>
-              <p>Production-ready authentication system.</p>
-              <div class="trending-stats">
-                <span><i data-lucide="heart"></i> 420</span>
-                <span><i data-lucide="message-circle"></i> 5</span>
+        </div>
+        <div class="sidebar-card-content">
+          <h3 class="sidebar-title"><i data-lucide="trending-up"></i> Trending Now</h3>
+          <div class="trending-list">
+            <div class="trending-card">
+              <div class="trending-thumb"><i data-lucide="cpu"></i></div>
+              <div class="trending-info">
+                <h4>AI Portfolio Engine</h4>
+                <p>Next-gen portfolio generator with AI.</p>
+                <div class="trending-stats">
+                  <span><i data-lucide="heart"></i> 1.2k</span>
+                  <span><i data-lucide="message-circle"></i> 48</span>
+                </div>
               </div>
+              <i data-lucide="arrow-right" class="trending-arrow"></i>
             </div>
-            <i data-lucide="arrow-right" class="trending-arrow"></i>
+            <div class="trending-card">
+              <div class="trending-thumb"><i data-lucide="rocket"></i></div>
+              <div class="trending-info">
+                <h4>Modern SaaS Boilerplate</h4>
+                <p>Full-stack SaaS template for startups.</p>
+                <div class="trending-stats">
+                  <span><i data-lucide="heart"></i> 850</span>
+                  <span><i data-lucide="message-circle"></i> 12</span>
+                </div>
+              </div>
+              <i data-lucide="arrow-right" class="trending-arrow"></i>
+            </div>
+            <div class="trending-card">
+              <div class="trending-thumb"><i data-lucide="lock"></i></div>
+              <div class="trending-info">
+                <h4>Auth Flow Pro</h4>
+                <p>Production-ready authentication system.</p>
+                <div class="trending-stats">
+                  <span><i data-lucide="heart"></i> 420</span>
+                  <span><i data-lucide="message-circle"></i> 5</span>
+                </div>
+              </div>
+              <i data-lucide="arrow-right" class="trending-arrow"></i>
+            </div>
           </div>
         </div>
       </div>
       <div class="sidebar-card">
-        <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
-        <div class="user-suggestions">
-          <div class="user-card">
-            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers"
-              class="user-card-avatar">
-            <div class="user-card-info">
-              <h4>Alex Rivers</h4>
-              <p>Full-stack Developer</p>
-              <span class="view-profile-text">View Profile</span>
+        <div class="card-terminal-header">
+          <div class="terminal-header-left">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
             </div>
-            <button class="follow-btn">Follow</button>
+            <span class="terminal-filename">USER_NETWORK.EXE</span>
           </div>
-          <div class="user-card">
-            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen"
-              class="user-card-avatar">
-            <div class="user-card-info">
-              <h4>Sarah Chen</h4>
-              <p>UI/UX Designer</p>
-              <span class="view-profile-text">View Profile</span>
-            </div>
-            <button class="follow-btn">Follow</button>
+          <div class="terminal-status">
+            <div class="status-pulse"></div>
+            SYNCED
           </div>
-          <div class="user-card">
-            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane"
-              class="user-card-avatar">
-            <div class="user-card-info">
-              <h4>Marcus Vane</h4>
-              <p>AI Engineer</p>
-              <span class="view-profile-text">View Profile</span>
+        </div>
+        <div class="sidebar-card-content">
+          <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
+          <div class="user-suggestions">
+            <div class="user-card">
+              <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers"
+                class="user-card-avatar">
+              <div class="user-card-info">
+                <h4>Alex Rivers</h4>
+                <p>Full-stack Developer</p>
+                <span class="view-profile-text">View Profile</span>
+              </div>
+              <button class="follow-btn">Follow</button>
             </div>
-            <button class="follow-btn">Follow</button>
+            <div class="user-card">
+              <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen"
+                class="user-card-avatar">
+              <div class="user-card-info">
+                <h4>Sarah Chen</h4>
+                <p>UI/UX Designer</p>
+                <span class="view-profile-text">View Profile</span>
+              </div>
+              <button class="follow-btn">Follow</button>
+            </div>
+            <div class="user-card">
+              <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane"
+                class="user-card-avatar">
+              <div class="user-card-info">
+                <h4>Marcus Vane</h4>
+                <p>AI Engineer</p>
+                <span class="view-profile-text">View Profile</span>
+              </div>
+              <button class="follow-btn">Follow</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1083,25 +1242,40 @@
       const card = document.createElement('div');
       card.className = 'project-card';
       card.innerHTML = `
-        <div class="card-head">
-          <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name=' + (p.userName || 'User')}" alt="User">
-          <div class="meta">
-            <h4>${p.userName || 'Anonymous'}</h4>
-            <span>${p.createdAt ? new Date(p.createdAt.toDate()).toDateString() : 'Recent'}</span>
+        <div class="card-terminal-header">
+          <div class="terminal-header-left">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="terminal-filename">PROJECT_DATA_${id.substring(0, 6).toUpperCase()}.SYS</span>
           </div>
-          <button class="action-btn" style="background:none; border:none; color:gray;"><i data-lucide="more-horizontal"></i></button>
-        </div>
-        <div class="card-body">
-          <h3>${p.title}</h3>
-          <p>${p.description}</p>
-        </div>
-        <div class="card-footer">
-          <div class="stats">
-            <span><i data-lucide="thumbs-up"></i> ${p.likes?.length || 0}</span>
-            <span><i data-lucide="message-square"></i> ${p.commentCount || 0}</span>
-            <span><i data-lucide="bookmark"></i></span>
+          <div class="terminal-status">
+            <div class="status-pulse"></div>
+            STABLE
           </div>
-          <a href="${p.fileURL}" target="_blank" class="view-btn">View Project <i data-lucide="arrow-right"></i></a>
+        </div>
+        <div class="sidebar-card-content">
+          <div class="card-head">
+            <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name=' + (p.userName || 'User')}" alt="User">
+            <div class="meta">
+              <h4>${p.userName || 'Anonymous'}</h4>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.3);">${p.createdAt ? new Date(p.createdAt.toDate()).toDateString() : 'RECENT_ENTRY'}</span>
+            </div>
+            <button class="action-btn" style="background:none; border:none; color:gray;"><i data-lucide="more-horizontal"></i></button>
+          </div>
+          <div class="card-body">
+            <h3 style="font-family: var(--font-heading); color: #fff; font-size: 1.25rem; margin-bottom: 8px;">${p.title}</h3>
+            <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.6;">${p.description}</p>
+          </div>
+          <div class="card-footer" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+            <div class="stats" style="display: flex; gap: 16px; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+              <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="thumbs-up" style="width:14px; height:14px;"></i> ${p.likes?.length || 0}</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="message-square" style="width:14px; height:14px;"></i> ${p.commentCount || 0}</span>
+            </div>
+            <a href="${p.fileURL}" target="_blank" class="view-btn" style="color: #ff8c42; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">EXECUTE <i data-lucide="terminal" style="width:14px; height:14px;"></i></a>
+          </div>
         </div>
       `;
       feed.appendChild(card);
@@ -1140,7 +1314,7 @@
           width: ${size}px;
           height: ${size}px;
           left: ${e.clientX - rect.left - size / 2}px;
-          top: ${e.client - rect.ize / 2}px;
+          top: ${e.clientY - rect.top - size / 2}px;
         `;
         chip.appendChild(ripple);
         setTimeout(() => ripple.remove(), 500);
@@ -1200,7 +1374,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && hamburgerCheckbox.checked) {
         hamburgerCheckbox.checked = false;
-        hamburgerDropdn.classmove('active');
+        hamburgerDropdown.classList.remove('active');
       }
     });
 
