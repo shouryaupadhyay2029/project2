@@ -388,44 +388,82 @@
       overflow: hidden;
       transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
+      transform-style: preserve-3d;
+      perspective: 1000px;
     }
 
     .mission-card:hover {
-      transform: translateY(-10px);
-      border-color: rgba(255, 140, 66, 0.25);
+      transform: translateY(-10px) rotateX(2deg) rotateY(2deg);
+      border-color: rgba(255, 140, 66, 0.35);
       box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(255, 140, 66, 0.03);
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(255, 140, 66, 0.06);
+    }
+
+    /* Edge Lighting Follow */
+    .mission-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 140, 66, 0.12) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .mission-card:hover::after {
+      opacity: 1;
     }
 
     .mission-terminal-strip {
       padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.015);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.025);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      z-index: 2;
     }
 
     .mission-codename {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.6rem;
-      color: #ff8c42;
+      color: rgba(255, 255, 255, 0.4);
       letter-spacing: 0.1em;
       font-weight: 700;
+      transition: color 0.3s ease;
+    }
+
+    .mission-card:hover .mission-codename {
+      color: #ff8c42;
     }
 
     .mission-xp {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.55rem;
-      color: rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.03);
-      padding: 2px 8px;
+      color: rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px 10px;
       border-radius: 20px;
+      transition: all 0.4s ease;
+    }
+
+    .mission-card:hover .mission-xp {
+      background: rgba(255, 140, 66, 0.12);
+      color: #ff8c42;
+      box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
     }
 
     .mission-content {
       padding: 24px;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mission-card:hover .mission-content {
+      transform: translateZ(20px);
     }
 
     .mission-header {
@@ -446,22 +484,24 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.55rem;
       color: rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.03);
-      padding: 4px 8px;
-      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
       letter-spacing: 0.05em;
+      backdrop-filter: blur(4px);
     }
 
     .mission-desc {
       font-size: 0.88rem;
       color: rgba(255, 255, 255, 0.45);
       margin-bottom: 24px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .mission-stats {
       display: flex;
-      gap: 20px;
+      gap: 24px;
       margin-bottom: 24px;
       padding-bottom: 20px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -486,59 +526,148 @@
       color: rgba(255, 255, 255, 0.7);
     }
 
+    /* Animated Progress Line */
+    .mission-progress-container {
+      margin-bottom: 24px;
+      opacity: 0.3;
+      transition: opacity 0.4s ease;
+    }
+
+    .mission-card:hover .mission-progress-container {
+      opacity: 1;
+    }
+
+    .mission-progress-line {
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+
+    .progress-energy {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, #ff8c42, transparent);
+      animation: energy-sweep 3s infinite linear;
+    }
+
+    @keyframes energy-sweep {
+      from { left: -100%; }
+      to { left: 100%; }
+    }
+
     /* Interactive Checklist */
     .mission-checklist {
       max-height: 0;
       opacity: 0;
       overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-bottom: 0;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: -12px;
     }
 
     .mission-card:hover .mission-checklist {
-      max-height: 150px;
+      max-height: 200px;
       opacity: 1;
+      margin-top: 0;
       margin-bottom: 24px;
     }
 
     .checklist-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 8px;
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 10px;
+      transform: translateX(-10px);
+      transition: all 0.4s ease;
     }
 
+    .mission-card:hover .checklist-item {
+      transform: translateX(0);
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Staggered Checklist Entry */
+    .mission-card:hover .checklist-item:nth-child(1) { transition-delay: 0.1s; }
+    .mission-card:hover .checklist-item:nth-child(2) { transition-delay: 0.2s; }
+    .mission-card:hover .checklist-item:nth-child(3) { transition-delay: 0.3s; }
+    .mission-card:hover .checklist-item:nth-child(4) { transition-delay: 0.4s; }
+
     .checklist-box {
-      width: 12px;
-      height: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 2px;
+      width: 14px;
+      height: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 3px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .mission-card:hover .checklist-box {
+      border-color: rgba(255, 140, 66, 0.2);
     }
 
     .mission-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .skill-unlock {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease 0.5s;
+    }
+
+    .mission-card:hover .skill-unlock {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .unlock-label {
+      font-size: 0.6rem;
+      color: rgba(255, 140, 66, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .unlock-value {
+      font-size: 0.75rem;
+      color: #fff;
+      font-weight: 600;
     }
 
     .mission-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: #ff8c42;
+      font-size: 0.78rem;
+      color: rgba(255, 140, 66, 0.8);
       text-decoration: none;
       font-weight: 700;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 10px 18px;
+      background: rgba(255, 140, 66, 0.03);
+      border: 1px solid rgba(255, 140, 66, 0.15);
+      border-radius: 8px;
     }
 
     .mission-btn:hover {
-      gap: 15px;
-      text-shadow: 0 0 10px rgba(255, 140, 66, 0.4);
+      background: rgba(255, 140, 66, 0.12);
+      color: #ff8c42;
+      border-color: #ff8c42;
+      box-shadow: 0 0 20px rgba(255, 140, 66, 0.15);
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -862,6 +991,12 @@
               </div>
             </div>
 
+            <div class="mission-progress-container">
+              <div class="mission-progress-line">
+                <div class="progress-energy"></div>
+              </div>
+            </div>
+
             <div class="mission-checklist">
               <div class="checklist-item"><div class="checklist-box"></div> Setup Project</div>
               <div class="checklist-item"><div class="checklist-box"></div> Build UI Layout</div>
@@ -870,6 +1005,10 @@
             </div>
 
             <div class="mission-footer">
+              <div class="skill-unlock">
+                <span class="unlock-label">SKILL UNLOCK</span>
+                <span class="unlock-value">CORE_STRUCTURE</span>
+              </div>
               <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
             </div>
           </div>
@@ -903,6 +1042,12 @@
               </div>
             </div>
 
+            <div class="mission-progress-container">
+              <div class="mission-progress-line">
+                <div class="progress-energy"></div>
+              </div>
+            </div>
+
             <div class="mission-checklist">
               <div class="checklist-item"><div class="checklist-box"></div> Create State</div>
               <div class="checklist-item"><div class="checklist-box"></div> Render Lists</div>
@@ -911,6 +1056,10 @@
             </div>
 
             <div class="mission-footer">
+              <div class="skill-unlock">
+                <span class="unlock-label">SKILL UNLOCK</span>
+                <span class="unlock-value">STATE_CONTROL</span>
+              </div>
               <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
             </div>
           </div>
@@ -944,6 +1093,12 @@
               </div>
             </div>
 
+            <div class="mission-progress-container">
+              <div class="mission-progress-line">
+                <div class="progress-energy"></div>
+              </div>
+            </div>
+
             <div class="mission-checklist">
               <div class="checklist-item"><div class="checklist-box"></div> Analyze Layout</div>
               <div class="checklist-item"><div class="checklist-box"></div> Build Grid</div>
@@ -952,6 +1107,10 @@
             </div>
 
             <div class="mission-footer">
+              <div class="skill-unlock">
+                <span class="unlock-label">SKILL UNLOCK</span>
+                <span class="unlock-value">GRID_ARCHITECT</span>
+              </div>
               <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
             </div>
           </div>
@@ -985,6 +1144,12 @@
               </div>
             </div>
 
+            <div class="mission-progress-container">
+              <div class="mission-progress-line">
+                <div class="progress-energy"></div>
+              </div>
+            </div>
+
             <div class="mission-checklist">
               <div class="checklist-item"><div class="checklist-box"></div> Fetch API</div>
               <div class="checklist-item"><div class="checklist-box"></div> Parse JSON</div>
@@ -993,6 +1158,10 @@
             </div>
 
             <div class="mission-footer">
+              <div class="skill-unlock">
+                <span class="unlock-label">SKILL UNLOCK</span>
+                <span class="unlock-value">API_PROTOCOL</span>
+              </div>
               <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
             </div>
           </div>
@@ -1007,7 +1176,7 @@
           <div class="mission-content">
             <div class="mission-header">
               <h3 class="mission-title">Kinetic<br>Navigation</h3>
-              <span class="status-label">STYLE_UPGRADE</span>
+              <span class="status-label">TRENDING_STARTER</span>
             </div>
             <p class="mission-desc">Master motion. Build a high-fidelity navigation system with liquid animations.</p>
             
@@ -1026,6 +1195,12 @@
               </div>
             </div>
 
+            <div class="mission-progress-container">
+              <div class="mission-progress-line">
+                <div class="progress-energy"></div>
+              </div>
+            </div>
+
             <div class="mission-checklist">
               <div class="checklist-item"><div class="checklist-box"></div> SVG Assets</div>
               <div class="checklist-item"><div class="checklist-box"></div> Timeline Setup</div>
@@ -1034,6 +1209,10 @@
             </div>
 
             <div class="mission-footer">
+              <div class="skill-unlock">
+                <span class="unlock-label">SKILL UNLOCK</span>
+                <span class="unlock-value">MOTION_DYNAMICS</span>
+              </div>
               <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
             </div>
           </div>
@@ -1120,6 +1299,28 @@
           });
         });
       }
+    });
+
+    // --- Mission Card Tilt & Glow Effects ---
+    document.addEventListener('mousemove', (e) => {
+      const cards = document.querySelectorAll('.mission-card');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', `${x}%`);
+        card.style.setProperty('--mouse-y', `${y}%`);
+
+        if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const rotateX = (e.clientY - centerY) / 25;
+          const rotateY = (centerX - e.clientX) / 25;
+          card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        } else {
+          card.style.transform = '';
+        }
+      });
     });
 
     lucide.createIcons();
