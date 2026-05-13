@@ -10,283 +10,542 @@
   <link rel="stylesheet" href="wave.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
+    /* Mesh Background Layering */
+    #upload-mesh-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: auto;
+    }
+
+    .navbar {
+      position: absolute !important;
+      z-index: 1000;
+    }
+
+    .zone-container,
+    #loader-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
     .zone-container {
-      max-width: 1000px;
-      margin: 100px auto;
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 0 40px;
     }
 
-    .header {
-      margin-bottom: 60px;
+    /* Cinematic Hero Section */
+    .hero-beginner {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
+      position: relative;
+      padding: 120px 20px 80px;
+      overflow: hidden;
     }
 
-    .header h1 {
-      font-size: 2.8rem;
+    .hero-labels {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .system-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .label-dot {
+      width: 4px;
+      height: 4px;
+      background: #ff8c42;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff8c42;
+      animation: pulse-amber 2s infinite;
+    }
+
+    .hero-beginner h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 8vw, 5.5rem);
       color: #fff;
-      margin-bottom: 12px;
+      line-height: 1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     }
 
-    .header p {
-      color: var(--text-tertiary);
-      font-size: 1.1rem;
+    .hero-beginner h1 span {
+      color: #ff8c42;
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-subtitle {
+      max-width: 600px;
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.7;
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    }
+
+    .hero-btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .hero-btn.primary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-btn.primary:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-btn.secondary {
+      background: rgba(255, 140, 66, 0.05);
+      border: 1px solid rgba(255, 140, 66, 0.15);
+      color: #ff8c42;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-btn.secondary:hover {
+      background: rgba(255, 140, 66, 0.1);
+      border-color: #ff8c42;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(255, 140, 66, 0.15);
+    }
+
+    @keyframes hero-fade-up {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-amber {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* Ambient Hero Background Elements */
+    .hero-grid-depth {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: center center;
+      mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+      pointer-events: none;
+      z-index: -1;
+      transform: perspective(1000px) rotateX(60deg) translateY(0);
+      animation: grid-drift 20s linear infinite;
+    }
+
+    @keyframes grid-drift {
+      from { background-position: 0 0; }
+      to { background-position: 0 60px; }
     }
 
     .section {
-      margin-bottom: 60px;
+      margin-top: 100px;
+      margin-bottom: 120px;
     }
 
     .section-title {
       font-size: 1.5rem;
       color: #fff;
-      margin-bottom: 24px;
+      margin-bottom: 48px;
       display: flex;
       align-items: center;
       gap: 12px;
+      opacity: 0.8;
+      font-family: 'Syne', sans-serif;
     }
 
-    .section-title i {
-      color: var(--brand-orange);
-    }
-
-    .idea-grid {
+    /* Learning Path Cards */
+    .paths-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 32px;
     }
 
-    .idea-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
+    .path-card {
+      background: rgba(20, 20, 24, 0.45);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .path-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: rgba(255, 140, 66, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 140, 66, 0.05);
+    }
+
+    /* Top Sweep Animation */
+    .path-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ff8c42, transparent);
+      transition: all 0.6s ease;
+    }
+
+    .path-card:hover::before {
+      left: 100%;
+    }
+
+    .path-terminal-header {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .path-filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 0.05em;
+    }
+
+    .path-body {
+      padding: 24px;
+      flex-grow: 1;
+    }
+
+    .path-body h3 {
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 12px;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .path-desc {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .path-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .path-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .path-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #ff8c42;
+      background: rgba(255, 140, 66, 0.05);
+      padding: 4px 8px;
+      border: 1px solid rgba(255, 140, 66, 0.1);
+      border-radius: 4px;
+    }
+
+    .progress-preview {
+      margin-bottom: 24px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.25);
+      margin-bottom: 8px;
+    }
+
+    .progress-line {
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: #ff8c42;
+      opacity: 0.6;
+    }
+
+    .path-btn {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .path-btn:hover {
+      background: #ff8c42;
+      border-color: #ff8c42;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    /* Beginner Mission Cards */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 32px;
+    }
+
+    .mission-card {
+      background: rgba(18, 18, 22, 0.45);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .mission-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(255, 140, 66, 0.25);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(255, 140, 66, 0.03);
+    }
+
+    .mission-terminal-strip {
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.015);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mission-codename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: #ff8c42;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+    }
+
+    .mission-xp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2px 8px;
       border-radius: 20px;
-      padding: 32px;
+    }
+
+    .mission-content {
+      padding: 24px;
+    }
+
+    .mission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .mission-title {
+      font-size: 1.3rem;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      line-height: 1.2;
+    }
+
+    .status-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .mission-desc {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .mission-stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Interactive Checklist */
+    .mission-checklist {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-bottom: 0;
+    }
+
+    .mission-card:hover .mission-checklist {
+      max-height: 150px;
+      opacity: 1;
+      margin-bottom: 24px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 8px;
+    }
+
+    .checklist-box {
+      width: 12px;
+      height: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+
+    .mission-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mission-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #ff8c42;
+      text-decoration: none;
+      font-weight: 700;
       transition: all 0.3s ease;
     }
 
-    .idea-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255, 138, 0, 0.4);
-    }
-
-    .idea-tag {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--brand-orange);
-      font-weight: 700;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .idea-card h3 {
-      color: #fff;
-      margin-bottom: 12px;
-    }
-
-    .idea-card p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      line-height: 1.6;
+    .mission-btn:hover {
+      gap: 15px;
+      text-shadow: 0 0 10px rgba(255, 140, 66, 0.4);
     }
   </style>
 </head>
 
-<body class="home-page">
+  <body class="home-page">
+  <canvas id="upload-mesh-canvas"></canvas>
   <script src="loader.js"></script>
-  <!-- Premium Wave Background -->
-  <div id="premium-wave-bg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: radial-gradient(circle at 82% 18%, rgba(72,72,72,0.12) 0%, rgba(36,36,36,0.18) 34%, rgba(16,16,16,0.32) 100%), linear-gradient(115deg, #121212 0%, #181818 42%, #262626 100%);">
-    
-    <!-- Atmospheric matte texture -->
-    <div style="position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle at 20% 20%, white 0px, transparent 1px), radial-gradient(circle at 80% 60%, white 0px, transparent 1px); background-size: 4px 4px;"></div>
-
-    <svg id="wave-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; transform: translateZ(0);" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#f4f4f4" stop-opacity="0.04" />
-          <stop offset="28%" stop-color="#ffffff" stop-opacity="0.15" />
-          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.82" />
-          <stop offset="72%" stop-color="#dadada" stop-opacity="0.24" />
-          <stop offset="100%" stop-color="#f0f0f0" stop-opacity="0.05" />
-        </linearGradient>
-
-        <linearGradient id="orange" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#ffd1a4" stop-opacity="0.10" />
-          <stop offset="45%" stop-color="#ff8a1e" stop-opacity="1" />
-          <stop offset="100%" stop-color="#ffc98f" stop-opacity="0.16" />
-        </linearGradient>
-      </defs>
-      <g id="wave-paths"></g>
-    </svg>
-
-    <!-- Cinematic vignette -->
-    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.2) 100%);"></div>
-  </div>
-
-  <script>
-    (function() {
-      function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const svg = document.getElementById('wave-svg');
-        const pathsGroup = document.getElementById('wave-paths');
-        
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        
-        const strands = 40;
-        const points = 72;
-        const pathElements = [];
-        let wavesData = [];
-
-        // Interactive cursor state
-        const cursor = { x: 0, y: 0, active: false };
-        let hoveredLine = -1;
-
-        // Create path elements
-        for (let s = 0; s < strands; s++) {
-          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          path.setAttribute("fill", "none");
-          path.setAttribute("stroke-linecap", "round");
-          path.setAttribute("stroke-linejoin", "round");
-          path.style.transition = "stroke 220ms ease, opacity 220ms ease, stroke-width 220ms ease";
-          pathsGroup.appendChild(path);
-          pathElements.push(path);
-        }
-
-        function resize() {
-          width = window.innerWidth;
-          height = window.innerHeight;
-          svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        function buildWave(phase) {
-          const centerX = width * 0.58;
-          const topY = -height * 0.08;
-          const bottomY = height * 1.08;
-          const lines = [];
-
-          for (let s = 0; s < strands; s++) {
-            const u = s / (strands - 1);
-            const offset = (u - 0.5) * 2;
-            const centerStrength = 1 - Math.abs(offset);
-
-            const profile = 0.16 + Math.pow(centerStrength, 1.55) * 1.22;
-            const pts = [];
-
-            for (let i = 0; i < points; i++) {
-              const t = i / (points - 1);
-              const y = topY + (bottomY - topY) * t;
-
-              const widthProfile = 28 +
-                168 * (Math.pow(t, 1.45) + Math.pow(1 - t, 1.45)) +
-                36 * Math.exp(-Math.pow((t - 0.5) / 0.18, 2));
-
-              const spineX = centerX +
-                Math.sin(t * Math.PI * 2.2 + phase * 0.55) * width * 0.085 +
-                Math.sin(t * Math.PI * 4.2 + phase * 0.22) * width * 0.018;
-
-              const helix = Math.sin(t * Math.PI * 3.8 + phase * 1.15 + u * Math.PI * 2.2);
-              const ripple = Math.sin(t * Math.PI * 9.0 + phase * 2.1 + u * 6.0);
-              const drift = Math.cos(t * Math.PI * 1.5 + phase * 0.75);
-
-              const x = spineX +
-                offset * widthProfile * profile * (0.92 + 0.18 * helix) +
-                helix * 8 +
-                ripple * 3;
-
-              const yy = y +
-                Math.sin(t * Math.PI * 2.15 + phase * 1.05 + u * 2.8) * 8 * profile +
-                Math.cos(t * Math.PI * 5.6 - phase * 0.7) * 2.2 +
-                drift * 1.2;
-
-              pts.push([x, yy]);
-            }
-
-            let d = `M ${pts[0][0]} ${pts[0][1]}`;
-            for (let i = 1; i < pts.length; i++) {
-              d += ` L ${pts[i][0]} ${pts[i][1]}`;
-            }
-
-            lines.push({
-              d,
-              pts,
-              opacity: clamp(0.05 + centerStrength * 0.34, 0.05, 0.42),
-              width: 0.7 + centerStrength * 1.55,
-            });
-          }
-          return lines;
-        }
-
-        function getNearestLine(lines, c) {
-          if (!c.active) return -1;
-          let best = Infinity;
-          let bestIndex = -1;
-
-          for (let i = 0; i < lines.length; i++) {
-            const pts = lines[i].pts;
-            for (let j = 0; j < pts.length; j += 4) {
-              const dx = pts[j][0] - c.x;
-              const dy = pts[j][1] - c.y;
-              const dist = dx * dx + dy * dy;
-
-              if (dist < best) {
-                best = dist;
-                bestIndex = i;
-              }
-            }
-          }
-          return best < 18000 ? bestIndex : -1;
-        }
-
-        // Pointer events for interactivity
-        const bgContainer = document.getElementById('premium-wave-bg');
-        
-        let tickingPointer = false;
-        window.addEventListener("pointermove", (e) => {
-          if (tickingPointer) return;
-          tickingPointer = true;
-          requestAnimationFrame(() => {
-            const rect = bgContainer.getBoundingClientRect();
-            cursor.x = e.clientX - rect.left;
-            cursor.y = e.clientY - rect.top;
-            cursor.active = true;
-            
-            hoveredLine = getNearestLine(wavesData, cursor);
-            tickingPointer = false;
-          });
-        });
-
-        window.addEventListener("pointerleave", () => {
-          cursor.active = false;
-          hoveredLine = -1;
-        });
-
-        let phase = 0;
-        function loop() {
-          phase += 0.01;
-          wavesData = buildWave(phase);
-
-          for (let s = 0; s < strands; s++) {
-            const line = wavesData[s];
-            const active = s === hoveredLine;
-            const path = pathElements[s];
-
-            path.setAttribute('d', line.d);
-            path.setAttribute('stroke', active ? "url(#orange)" : "url(#silver)");
-            path.setAttribute('stroke-width', active ? line.width * 1.22 : line.width);
-            path.setAttribute('opacity', active ? 1 : line.opacity);
-          }
-
-          requestAnimationFrame(loop);
-        }
-        
-        requestAnimationFrame(loop);
-      });
-    })();
-  </script>
 
   <nav class="navbar" id="main-navbar">
     <div class="nav-container">
@@ -346,45 +605,438 @@
   </nav>
 
   <main class="zone-container">
-    <header class="header">
-      <h1>Beginner Zone</h1>
-      <p>Every expert was once a beginner. Start your journey here.</p>
-    </header>
+    <section class="hero-beginner">
+      <div class="hero-grid-depth"></div>
+      
+      <div class="hero-labels">
+        <div class="system-label">
+          <div class="label-dot"></div>
+          BEGINNER_PROTOCOL.ACTIVE
+        </div>
+        <div class="system-label">
+          <div class="label-dot"></div>
+          LEARNING_PATHS.READY
+        </div>
+        <div class="system-label">
+          <div class="label-dot"></div>
+          FIRST_BUILD_SEQUENCE.ONLINE
+        </div>
+      </div>
 
-    <section class="section">
-      <h2 class="section-title"><i data-lucide="lightbulb"></i> Easy Project Ideas</h2>
-      <div class="idea-grid">
-        <div class="idea-card">
-          <span class="idea-tag">Web Dev</span>
-          <h3>Personal Portfolio</h3>
-          <p>Build a simple one-page site to introduce yourself and show your contact info. Perfect for learning
-            HTML/CSS.</p>
+      <h1>INITIALIZE YOUR<br><span>DEV JOURNEY</span></h1>
+      
+      <p class="hero-subtitle">
+        Start building real projects, learn modern tools, and grow step by step inside the DevStage ecosystem.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#paths" class="hero-btn primary">
+          START YOUR FIRST PATH <i data-lucide="arrow-right"></i>
+        </a>
+        <a href="#missions" class="hero-btn secondary">
+          EXPLORE MISSIONS <i data-lucide="compass"></i>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="paths">
+      <h2 class="section-title"><i data-lucide="map"></i> Developer Learning Paths</h2>
+      <div class="paths-grid">
+        <!-- 1. Frontend Systems -->
+        <div class="path-card">
+          <div class="path-terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="path-filename">FRONTEND_PATH.SYS</span>
+            <div class="terminal-status"><div class="label-dot"></div></div>
+          </div>
+          <div class="path-body">
+            <h3>Frontend Systems</h3>
+            <p class="path-desc">Master the art of building immersive, high-performance web interfaces with modern frameworks.</p>
+            <div class="path-meta">
+              <span class="meta-item"><i data-lucide="clock"></i> 12 Weeks</span>
+              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+            </div>
+            <div class="path-tags">
+              <span class="path-tag">HTML5</span>
+              <span class="path-tag">CSS3</span>
+              <span class="path-tag">React</span>
+              <span class="path-tag">Vite</span>
+            </div>
+            <div class="progress-preview">
+              <div class="progress-label"><span>SEQUENCE_INIT</span><span>0%</span></div>
+              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
+            </div>
+            <a href="#" class="path-btn">Start Path <i data-lucide="terminal"></i></a>
+          </div>
         </div>
-        <div class="idea-card">
-          <span class="idea-tag">JS Basics</span>
-          <h3>To-Do List App</h3>
-          <p>Create an app where you can add, complete, and delete tasks. Master DOM manipulation and state.</p>
+
+        <!-- 2. UI/UX Design -->
+        <div class="path-card">
+          <div class="path-terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="path-filename">UX_STREAM.LOG</span>
+            <div class="terminal-status"><div class="label-dot"></div></div>
+          </div>
+          <div class="path-body">
+            <h3>UI/UX Design</h3>
+            <p class="path-desc">Learn the principles of high-end product design, micro-interactions, and visual storytelling.</p>
+            <div class="path-meta">
+              <span class="meta-item"><i data-lucide="clock"></i> 8 Weeks</span>
+              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+            </div>
+            <div class="path-tags">
+              <span class="path-tag">Figma</span>
+              <span class="path-tag">Spline</span>
+              <span class="path-tag">Typography</span>
+            </div>
+            <div class="progress-preview">
+              <div class="progress-label"><span>DESIGN_SYNC</span><span>0%</span></div>
+              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
+            </div>
+            <a href="#" class="path-btn">Start Path <i data-lucide="layout"></i></a>
+          </div>
         </div>
-        <div class="idea-card">
-          <span class="idea-tag">Design</span>
-          <h3>Landing Page Clone</h3>
-          <p>Try to replicate the design of your favorite simple website using pure CSS. Great for layout skills.</p>
+
+        <!-- 3. Backend Foundations -->
+        <div class="path-card">
+          <div class="path-terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="path-filename">BACKEND_CORE.INIT</span>
+            <div class="terminal-status"><div class="label-dot"></div></div>
+          </div>
+          <div class="path-body">
+            <h3>Backend Foundations</h3>
+            <p class="path-desc">Build the architecture behind modern apps. Focus on scalability, security, and data flow.</p>
+            <div class="path-meta">
+              <span class="meta-item"><i data-lucide="clock"></i> 14 Weeks</span>
+              <span class="meta-item"><i data-lucide="bar-chart"></i> Intermediate</span>
+            </div>
+            <div class="path-tags">
+              <span class="path-tag">Node.js</span>
+              <span class="path-tag">PostgreSQL</span>
+              <span class="path-tag">Redis</span>
+            </div>
+            <div class="progress-preview">
+              <div class="progress-label"><span>SERVER_BOOT</span><span>0%</span></div>
+              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
+            </div>
+            <a href="#" class="path-btn">Start Path <i data-lucide="server"></i></a>
+          </div>
+        </div>
+
+        <!-- 4. AI + ML Starter -->
+        <div class="path-card">
+          <div class="path-terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="path-filename">AI_MODEL.EXEC</span>
+            <div class="terminal-status"><div class="label-dot"></div></div>
+          </div>
+          <div class="path-body">
+            <h3>AI + ML Starter</h3>
+            <p class="path-desc">Enter the world of intelligent systems. Learn to integrate neural networks into your builds.</p>
+            <div class="path-meta">
+              <span class="meta-item"><i data-lucide="clock"></i> 16 Weeks</span>
+              <span class="meta-item"><i data-lucide="bar-chart"></i> Intermediate</span>
+            </div>
+            <div class="path-tags">
+              <span class="path-tag">Python</span>
+              <span class="path-tag">PyTorch</span>
+              <span class="path-tag">OpenAI</span>
+            </div>
+            <div class="progress-preview">
+              <div class="progress-label"><span>NEURAL_LOAD</span><span>0%</span></div>
+              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
+            </div>
+            <a href="#" class="path-btn">Start Path <i data-lucide="cpu"></i></a>
+          </div>
+        </div>
+
+        <!-- 5. App Development -->
+        <div class="path-card">
+          <div class="path-terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="path-filename">MOBILE_OS.SYS</span>
+            <div class="terminal-status"><div class="label-dot"></div></div>
+          </div>
+          <div class="path-body">
+            <h3>App Development</h3>
+            <p class="path-desc">Create high-performance native applications for iOS and Android with cross-platform tools.</p>
+            <div class="path-meta">
+              <span class="meta-item"><i data-lucide="clock"></i> 10 Weeks</span>
+              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+            </div>
+            <div class="path-tags">
+              <span class="path-tag">Flutter</span>
+              <span class="path-tag">Dart</span>
+              <span class="path-tag">Firebase</span>
+            </div>
+            <div class="progress-preview">
+              <div class="progress-label"><span>MOBILE_INIT</span><span>0%</span></div>
+              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
+            </div>
+            <a href="#" class="path-btn">Start Path <i data-lucide="smartphone"></i></a>
+          </div>
+        </div>
+
+        <!-- 6. Creative Coding -->
+        <div class="path-card">
+          <div class="path-terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+            </div>
+            <span class="path-filename">GEN_ART.LOG</span>
+            <div class="terminal-status"><div class="label-dot"></div></div>
+          </div>
+          <div class="path-body">
+            <h3>Creative Coding</h3>
+            <p class="path-desc">Where code meets art. Learn to build generative visuals, shaders, and interactive motion.</p>
+            <div class="path-meta">
+              <span class="meta-item"><i data-lucide="clock"></i> 6 Weeks</span>
+              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+            </div>
+            <div class="path-tags">
+              <span class="path-tag">Three.js</span>
+              <span class="path-tag">GSAP</span>
+              <span class="path-tag">Canvas</span>
+            </div>
+            <div class="progress-preview">
+              <div class="progress-label"><span>RENDER_READY</span><span>0%</span></div>
+              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
+            </div>
+            <a href="#" class="path-btn">Start Path <i data-lucide="palette"></i></a>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <h2 class="section-title"><i data-lucide="book-open"></i> Guided Inspiration</h2>
-      <div class="idea-grid">
-        <div class="idea-card">
-          <span class="idea-tag">Path</span>
-          <h3>The Frontend Roadmap</h3>
-          <p>A step-by-step guide on what to learn first to become a web developer in 2024.</p>
+    <section class="section" id="missions">
+      <h2 class="section-title"><i data-lucide="target"></i> Guided Beginner Missions</h2>
+      <div class="mission-grid">
+        <!-- Mission 01 -->
+        <div class="mission-card">
+          <div class="mission-terminal-strip">
+            <span class="mission-codename">MISSION_01.PORTFOLIO</span>
+            <span class="mission-xp">+500 XP</span>
+          </div>
+          <div class="mission-content">
+            <div class="mission-header">
+              <h3 class="mission-title">The Digital<br>Identity</h3>
+              <span class="status-label">BEGINNER_SAFE</span>
+            </div>
+            <p class="mission-desc">Build your professional presence. Construct a minimal, one-page terminal portfolio.</p>
+            
+            <div class="mission-stats">
+              <div class="stat-box">
+                <span class="stat-label">Time</span>
+                <span class="stat-value">3.0 HR</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Stack</span>
+                <span class="stat-value">HTML/CSS</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Reward</span>
+                <span class="stat-value">BADGE_V01</span>
+              </div>
+            </div>
+
+            <div class="mission-checklist">
+              <div class="checklist-item"><div class="checklist-box"></div> Setup Project</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Build UI Layout</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Add Content</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Deploy Site</div>
+            </div>
+
+            <div class="mission-footer">
+              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="idea-card">
-          <span class="idea-tag">Resource</span>
-          <h3>Free Asset Packs</h3>
-          <p>A curated list of free icons, fonts, and illustrations to make your first projects look professional.</p>
+
+        <!-- Mission 02 -->
+        <div class="mission-card">
+          <div class="mission-terminal-strip">
+            <span class="mission-codename">MISSION_02.TASKFLOW</span>
+            <span class="mission-xp">+750 XP</span>
+          </div>
+          <div class="mission-content">
+            <div class="mission-header">
+              <h3 class="mission-title">TaskFlow<br>Engine</h3>
+              <span class="status-label">FAST_TRACK</span>
+            </div>
+            <p class="mission-desc">Master the DOM. Create a high-performance task manager with persistent storage.</p>
+            
+            <div class="mission-stats">
+              <div class="stat-box">
+                <span class="stat-label">Time</span>
+                <span class="stat-value">4.5 HR</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Stack</span>
+                <span class="stat-value">JS/STORAGE</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Reward</span>
+                <span class="stat-value">LOGIC_KEY</span>
+              </div>
+            </div>
+
+            <div class="mission-checklist">
+              <div class="checklist-item"><div class="checklist-box"></div> Create State</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Render Lists</div>
+              <div class="checklist-item"><div class="checklist-box"></div> LocalStorage</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Filter Logic</div>
+            </div>
+
+            <div class="mission-footer">
+              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission 03 -->
+        <div class="mission-card">
+          <div class="mission-terminal-strip">
+            <span class="mission-codename">MISSION_03.UI_CLONE</span>
+            <span class="mission-xp">+900 XP</span>
+          </div>
+          <div class="mission-content">
+            <div class="mission-header">
+              <h3 class="mission-title">Architectural<br>Clone</h3>
+              <span class="status-label">POPULAR_STARTER</span>
+            </div>
+            <p class="mission-desc">Deconstruct excellence. Replicate the landing page of a top-tier tech product.</p>
+            
+            <div class="mission-stats">
+              <div class="stat-box">
+                <span class="stat-label">Time</span>
+                <span class="stat-value">6.0 HR</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Stack</span>
+                <span class="stat-value">SCSS/FLEX</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Reward</span>
+                <span class="stat-value">STYLE_CORE</span>
+              </div>
+            </div>
+
+            <div class="mission-checklist">
+              <div class="checklist-item"><div class="checklist-box"></div> Analyze Layout</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Build Grid</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Add Typography</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Micro-Anims</div>
+            </div>
+
+            <div class="mission-footer">
+              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission 04 -->
+        <div class="mission-card">
+          <div class="mission-terminal-strip">
+            <span class="mission-codename">MISSION_04.WEATHER_CORE</span>
+            <span class="mission-xp">+1200 XP</span>
+          </div>
+          <div class="mission-content">
+            <div class="mission-header">
+              <h3 class="mission-title">Atmospheric<br>Observer</h3>
+              <span class="status-label">HIGH_VALUE</span>
+            </div>
+            <p class="mission-desc">Connect to the world. Integrate real-time weather APIs into a futuristic dashboard.</p>
+            
+            <div class="mission-stats">
+              <div class="stat-box">
+                <span class="stat-label">Time</span>
+                <span class="stat-value">5.0 HR</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Stack</span>
+                <span class="stat-value">API/FETCH</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Reward</span>
+                <span class="stat-value">DATA_NODE</span>
+              </div>
+            </div>
+
+            <div class="mission-checklist">
+              <div class="checklist-item"><div class="checklist-box"></div> Fetch API</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Parse JSON</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Dynamic Icons</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Error States</div>
+            </div>
+
+            <div class="mission-footer">
+              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission 05 -->
+        <div class="mission-card">
+          <div class="mission-terminal-strip">
+            <span class="mission-codename">MISSION_05.ANIMATED_NAV</span>
+            <span class="mission-xp">+800 XP</span>
+          </div>
+          <div class="mission-content">
+            <div class="mission-header">
+              <h3 class="mission-title">Kinetic<br>Navigation</h3>
+              <span class="status-label">STYLE_UPGRADE</span>
+            </div>
+            <p class="mission-desc">Master motion. Build a high-fidelity navigation system with liquid animations.</p>
+            
+            <div class="mission-stats">
+              <div class="stat-box">
+                <span class="stat-label">Time</span>
+                <span class="stat-value">2.5 HR</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Stack</span>
+                <span class="stat-value">GSAP/SVG</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Reward</span>
+                <span class="stat-value">MOTION_MOD</span>
+              </div>
+            </div>
+
+            <div class="mission-checklist">
+              <div class="checklist-item"><div class="checklist-box"></div> SVG Assets</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Timeline Setup</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Hover States</div>
+              <div class="checklist-item"><div class="checklist-box"></div> Responsive Fix</div>
+            </div>
+
+            <div class="mission-footer">
+              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -395,6 +1047,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
+  <script src="upload-background.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
