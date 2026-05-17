@@ -301,9 +301,20 @@
         }
 
         @keyframes glow-float {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) translate(-30px, 20px) scale(1.1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 0.5; }
+            0% {
+                transform: translate(-50%, -50%) translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) translate(-30px, 20px) scale(1.1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
         }
 
         /* Responsive grid of terminal cards */
@@ -346,16 +357,16 @@
             transform-style: preserve-3d;
             will-change: transform;
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03),
-                        0 0 30px rgba(218, 108, 32, 0.005);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03),
+                0 0 30px rgba(218, 108, 32, 0.005);
         }
 
         .active-challenge-card:hover {
             border-color: rgba(218, 108, 32, 0.15);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                        0 0 40px rgba(218, 108, 32, 0.02);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 40px rgba(218, 108, 32, 0.02);
         }
 
         /* Top Terminal Bar */
@@ -426,8 +437,15 @@
         }
 
         @keyframes pulse-ring {
-            0% { transform: scale(0.6); opacity: 1; }
-            100% { transform: scale(1.8); opacity: 0; }
+            0% {
+                transform: scale(0.6);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
         }
 
         /* Main Content */
@@ -694,6 +712,7 @@
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
+
             .analysis-section {
                 padding-top: 130px;
             }
@@ -709,8 +728,8 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
             position: relative;
         }
 
@@ -786,8 +805,8 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
             transition: border-color 0.4s ease;
         }
 
@@ -936,8 +955,15 @@
         }
 
         @keyframes text-glow-pulse {
-            0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0); }
-            50% { text-shadow: 0 0 25px rgba(255,255,255,0.06); }
+
+            0%,
+            100% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0);
+            }
+
+            50% {
+                text-shadow: 0 0 25px rgba(255, 255, 255, 0.06);
+            }
         }
 
         /* ─── Premium Futuristic Team Discovery Section Styles ─── */
@@ -1049,8 +1075,13 @@
         }
 
         @keyframes ticker-scrolling {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         .ticker-item {
@@ -1076,8 +1107,15 @@
         }
 
         @keyframes ticker-pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* Filter Controls */
@@ -1148,7 +1186,7 @@
             -webkit-backdrop-filter: blur(28px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
             opacity: 0;
             transform: translateY(10px);
             pointer-events: none;
@@ -1209,6 +1247,7 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+
             .recruitment-section {
                 padding-top: 130px;
             }
@@ -1224,8 +1263,8 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
             position: relative;
             transform-style: preserve-3d;
             transform: perspective(1000px);
@@ -1304,8 +1343,13 @@
         }
 
         @keyframes match-pulse-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Status Badge modularity */
@@ -1355,8 +1399,15 @@
         }
 
         @keyframes urgent-pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* Current Members avatars row */
@@ -1547,490 +1598,18 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .squad-btn-secondary:hover span {
-            color: #ffffff;
-        }
-
-        /* ─── Matchmaking Engine styles ─── */
-        .matchmaking-section {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 110px 4% 60px;
-            pointer-events: none;
-            z-index: 10;
-            overflow-y: auto;
-            opacity: 0;
-            transform: translateY(120px);
-            scrollbar-width: thin;
-            scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
-        }
-
-        .matchmaking-section::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .matchmaking-section::-webkit-scrollbar-thumb {
-            background: rgba(218, 108, 32, 0.2);
-            border-radius: 10px;
-        }
-
-        .matchmaking-header {
-            text-align: center;
-            margin-bottom: 32px;
-            max-width: 600px;
-        }
-
-        .matchmaking-eyebrow {
+        .squad-btn-secondary span {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
             font-weight: 500;
-            letter-spacing: 0.35em;
-            color: rgb(218, 108, 32);
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
-        }
-
-        .matchmaking-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-weight: 300;
-            font-size: clamp(28px, 4.5vw, 42px);
-            color: #ffffff;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-            text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
-        }
-
-        .matchmaking-subtext {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 300;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            line-height: 1.6;
-        }
-
-        /* Split Grid Layout */
-        .matchmaking-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 28px;
-            max-width: 1140px;
-            width: 100%;
-            z-index: 10;
-        }
-
-        @media (max-width: 992px) {
-            .matchmaking-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        /* Futuristic terminal panel styling */
-        .matchmaking-terminal {
-            background: rgba(15, 16, 17, 0.45);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            position: relative;
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
-            transition: border-color 0.4s ease;
-        }
-
-        .matchmaking-terminal:hover {
-            border-color: rgba(218, 108, 32, 0.15);
-        }
-
-        .terminal-scanlines {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 5;
-            pointer-events: none;
-            opacity: 0.15;
-        }
-
-        .matchmaking-body {
-            padding: 24px;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Status & Telemetry scanning */
-        .ai-status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            padding-bottom: 12px;
-        }
-
-        .ai-status-label {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .ai-scanning-state {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .scanner-flicker-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: rgb(218, 108, 32);
-            box-shadow: 0 0 8px rgb(218, 108, 32);
-            animation: ticker-pulse 2s infinite;
-        }
-
-        .ai-status-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 500;
-            color: rgb(218, 108, 32);
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        /* Match profile info stack */
-        .personal-insight-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 13px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.85);
-            line-height: 1.7;
-            letter-spacing: 0.02em;
-        }
-
-        .insight-highlight {
-            color: rgb(218, 108, 32);
-            font-weight: 500;
-            text-shadow: 0 0 10px rgba(218, 108, 32, 0.1);
-        }
-
-        .param-matrix {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 16px 0;
-        }
-
-        .param-cell {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .param-lbl {
-            font-family: 'Outfit', sans-serif;
-            font-size: 7.5px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.35);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .param-val {
-            font-family: 'Outfit', sans-serif;
-            font-size: 10px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
-            letter-spacing: 0.05em;
-        }
-
-        /* Radial circular indicators */
-        .compatibility-gauges-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-top: 6px;
-        }
-
-        .gauge-cell {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .radial-progress-container {
-            position: relative;
-            width: 58px;
-            height: 58px;
-        }
-
-        .radial-progress-container svg {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .radial-bg-ring {
-            fill: none;
-            stroke: rgba(255, 255, 255, 0.03);
-            stroke-width: 2.5;
-        }
-
-        .radial-progress-ring {
-            fill: none;
-            stroke: rgb(218, 108, 32);
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-dasharray: 157; /* 2 * PI * r (r=25) */
-            stroke-dashoffset: 157;
-            transition: stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1);
-            filter: drop-shadow(0 0 4px rgba(218, 108, 32, 0.25));
-        }
-
-        .radial-percentage-text {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Outfit', sans-serif;
-            font-size: 10px;
-            font-weight: 600;
-            color: #ffffff;
-            letter-spacing: -0.02em;
-        }
-
-        .gauge-label {
-            font-family: 'Outfit', sans-serif;
-            font-size: 7px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.45);
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            text-align: center;
-            line-height: 1.3;
+            transition: color 0.4s ease;
         }
 
-        /* Compact recommendation cards */
-        .recommended-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .recommendation-card {
-            background: rgba(15, 16, 17, 0.45);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
-        }
-
-        .recommendation-card:hover {
-            border-color: rgba(218, 108, 32, 0.25);
-            transform: perspective(1000px) translateY(-3px);
-            box-shadow: 0 10px 25px rgba(218, 108, 32, 0.05);
-        }
-
-        .rec-top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .rec-title-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .rec-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-weight: 400;
-            font-size: 16px;
+        .squad-btn-secondary:hover span {
             color: #ffffff;
-            letter-spacing: 0.02em;
-        }
-
-        .rec-why-desc {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8.5px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.38);
-            letter-spacing: 0.03em;
-            line-height: 1.4;
-        }
-
-        .rec-score-pill {
-            background: rgba(218, 108, 32, 0.04);
-            border: 1px solid rgba(218, 108, 32, 0.15);
-            border-radius: 20px;
-            padding: 2.5px 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 7.5px;
-            font-weight: 600;
-            color: rgb(218, 108, 32);
-            letter-spacing: 0.05em;
-        }
-
-        .rec-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px dashed rgba(255, 255, 255, 0.03);
-            padding-top: 8px;
-            margin-top: 4px;
-        }
-
-        .rec-spec-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .rec-spec-lbl {
-            font-family: 'Outfit', sans-serif;
-            font-size: 6.5px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.25);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .rec-spec-val {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.65);
-        }
-
-        /* Team Compatibility modules */
-        .team-comp-panel {
-            background: rgba(15, 16, 17, 0.45);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-        }
-
-        .comp-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 9px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            padding-bottom: 8px;
-        }
-
-        .comp-users-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .comp-user-card {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.35s ease;
-        }
-
-        .comp-user-card:hover {
-            border-color: rgba(218, 108, 32, 0.15);
-            background: rgba(255, 255, 255, 0.025);
-        }
-
-        .user-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-mini-avatar {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(218, 108, 32, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .user-info-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .user-name {
-            font-family: 'Outfit', sans-serif;
-            font-size: 9.5px;
-            font-weight: 500;
-            color: #ffffff;
-        }
-
-        .user-role-label {
-            font-family: 'Outfit', sans-serif;
-            font-size: 7.5px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .user-comp-percentage {
-            font-family: 'Outfit', sans-serif;
-            font-size: 10px;
-            font-weight: 600;
-            color: rgb(218, 108, 32);
-            letter-spacing: -0.01em;
         }
     </style>
 </head>
@@ -2121,7 +1700,7 @@
         <!-- Futuristic Active Challenge Grid -->
         <div id="challengeSection" class="challenge-section">
             <div class="active-card-glow-overlay"></div>
-            
+
             <div class="cards-grid">
                 <!-- Challenge Card 1: The Modern Portfolio -->
                 <div class="active-challenge-card" id="card-1">
@@ -2143,7 +1722,8 @@
                     <div class="card-content">
                         <h2 class="challenge-title">The Modern Portfolio</h2>
                         <p class="challenge-desc">
-                            Architect and implement a GPU-accelerated, cursor-responsive portfolio using cinematic layouts.
+                            Architect and implement a GPU-accelerated, cursor-responsive portfolio using cinematic
+                            layouts.
                         </p>
 
                         <!-- Info tags -->
@@ -2179,7 +1759,8 @@
                             <span>Join</span>
                             <i data-lucide="arrow-right" class="cta-arrow"></i>
                         </button>
-                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="0">View Brief</a>
+                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="0">View
+                            Brief</a>
                     </div>
                 </div>
 
@@ -2203,7 +1784,8 @@
                     <div class="card-content">
                         <h2 class="challenge-title">System Design Engine</h2>
                         <p class="challenge-desc">
-                            Design and benchmark a distributed real-time messaging pipeline handling up to 100k requests/sec.
+                            Design and benchmark a distributed real-time messaging pipeline handling up to 100k
+                            requests/sec.
                         </p>
 
                         <!-- Info tags -->
@@ -2239,7 +1821,8 @@
                             <span>Join</span>
                             <i data-lucide="arrow-right" class="cta-arrow"></i>
                         </button>
-                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="1">View Brief</a>
+                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="1">View
+                            Brief</a>
                     </div>
                 </div>
 
@@ -2263,7 +1846,8 @@
                     <div class="card-content">
                         <h2 class="challenge-title">Compiler Sandbox</h2>
                         <p class="challenge-desc">
-                            Build a minimal, performant custom parser and AST compiler evaluating lightweight scripting syntax.
+                            Build a minimal, performant custom parser and AST compiler evaluating lightweight scripting
+                            syntax.
                         </p>
 
                         <!-- Info tags -->
@@ -2299,7 +1883,8 @@
                             <span>Join</span>
                             <i data-lucide="arrow-right" class="cta-arrow"></i>
                         </button>
-                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="2">View Brief</a>
+                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="2">View
+                            Brief</a>
                     </div>
                 </div>
             </div>
@@ -2311,7 +1896,8 @@
             <div class="analysis-header">
                 <span class="analysis-eyebrow">CHALLENGE SCANNER</span>
                 <h2 class="analysis-title">CHALLENGE ANALYSIS</h2>
-                <p class="analysis-subtext">Understand the complexity, required skills, and team dynamics before entering the arena.</p>
+                <p class="analysis-subtext">Understand the complexity, required skills, and team dynamics before
+                    entering the arena.</p>
             </div>
 
             <div class="analysis-grid">
@@ -2329,7 +1915,7 @@
                             <span class="scanner-status-text" id="scanner-status-text">ONLINE</span>
                         </div>
                     </div>
-                    
+
                     <div class="radar-canvas-container">
                         <canvas id="radarCanvas"></canvas>
                     </div>
@@ -2337,7 +1923,7 @@
 
                 <!-- Right Column: Interactive Analysis Panels -->
                 <div class="analysis-panels-container">
-                    
+
                     <!-- Panel 1: Skill & Stack breakdown -->
                     <div class="console-panel" id="skills-panel">
                         <div class="panel-header">
@@ -2382,7 +1968,8 @@
                         </div>
                         <div class="panel-body">
                             <p class="insight-text" id="insight-text">
-                                Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.
+                                Best suited for creators interested in: interactive UI systems, cinematic web
+                                experiences, and modern frontend engineering.
                             </p>
                         </div>
                     </div>
@@ -2402,17 +1989,27 @@
             <!-- Horizontal flowing live activity recruitment feed ticker -->
             <div class="recruitment-ticker-bar">
                 <div class="ticker-track">
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI Designer</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL Specialist</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI
+                        Designer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer
+                    </div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert
+                    </div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots
+                    </div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL
+                        Specialist</div>
                     <!-- Duplicate for infinite marquee loop -->
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI Designer</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots</div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL Specialist</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI
+                        Designer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer
+                    </div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert
+                    </div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots
+                    </div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL
+                        Specialist</div>
                 </div>
             </div>
 
@@ -2465,828 +2062,644 @@
             <div class="squad-cards-grid" id="squad-cards-grid">
                 <!-- Dynamically loaded terminal squad cards -->
             </div>
+            <canvas id="fgCanvas"></canvas>
+            <div id="hint">scroll to descend</div>
         </div>
 
-        <!-- Futuristic AI Skill-Based Matchmaking Section -->
-        <div id="matchmakingSection" class="matchmaking-section">
-            <div class="matchmaking-header">
-                <span class="matchmaking-eyebrow">MATCHMAKING ENGINE</span>
-                <h2 class="matchmaking-title">MATCHMAKING ENGINE</h2>
-                <p class="matchmaking-subtext">Precision pairing for builders, designers, and innovators.</p>
-            </div>
+        <!-- Scripts -->
+        <script>
+            lucide.createIcons();
 
-            <div class="matchmaking-grid">
-                <!-- Left Column: Personal Match Panel & Progress Gauges -->
-                <div class="matchmaking-terminal">
-                    <div class="terminal-scanlines"></div>
-                    <div class="terminal-bar">
-                        <div class="terminal-dots">
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                        </div>
-                        <div class="terminal-file">ai_pair_core.py</div>
-                        <div class="ai-scanning-state">
-                            <span class="scanner-flicker-dot"></span>
-                            <span class="ai-status-value" id="ai-matchmaking-status">READY</span>
-                        </div>
-                    </div>
-                    
-                    <div class="matchmaking-body">
-                        <!-- Scanning telemetry state / Status indicators -->
-                        <div class="ai-status-row">
-                            <span class="ai-status-label">ANALYSIS TELEMETRY:</span>
-                            <span class="ai-status-value">CORE OPERATIONAL</span>
-                        </div>
-
-                        <!-- Personal insight AI analysis text -->
-                        <p class="personal-insight-text">
-                            Your <span class="insight-highlight">frontend motion-design profile</span> aligns strongly with cinematic UI challenges. The pairing heuristics recommend focusing on <span class="insight-highlight">Creative Technology</span> roles where layout kinetics, spatial physics, and matte textures dominate the interface composition.
-                        </p>
-
-                        <!-- Param cell table metadata -->
-                        <div class="param-matrix">
-                            <div class="param-cell">
-                                <span class="param-lbl">IDEAL CATEGORY:</span>
-                                <span class="param-val">Cinematic Frontend / Advanced UX</span>
-                            </div>
-                            <div class="param-cell">
-                                <span class="param-lbl">RECOMMENDED ROLE:</span>
-                                <span class="param-val">Creative Technologist / UI Architect</span>
-                            </div>
-                            <div class="param-cell">
-                                <span class="param-lbl">GROWTH FOCUS:</span>
-                                <span class="param-val">Advanced Shader kinetics & WebGL Canvas</span>
-                            </div>
-                            <div class="param-cell">
-                                <span class="param-lbl">IDEAL COLLABORATOR:</span>
-                                <span class="param-val">Systems Engineer / Rust backend developer</span>
-                            </div>
-                        </div>
-
-                        <!-- Match Score compatibility indicators -->
-                        <div class="compatibility-gauges-row">
-                            <!-- Gauge 1: Challenge Match -->
-                            <div class="gauge-cell">
-                                <div class="radial-progress-container">
-                                    <svg>
-                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
-                                        <circle class="radial-progress-ring" id="gauge-ring-1" cx="29" cy="29" r="25"></circle>
-                                    </svg>
-                                    <span class="radial-percentage-text" id="gauge-val-1">0%</span>
-                                </div>
-                                <span class="gauge-label">Challenge<br>Match</span>
-                            </div>
-
-                            <!-- Gauge 2: Team Compatibility -->
-                            <div class="gauge-cell">
-                                <div class="radial-progress-container">
-                                    <svg>
-                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
-                                        <circle class="radial-progress-ring" id="gauge-ring-2" cx="29" cy="29" r="25"></circle>
-                                    </svg>
-                                    <span class="radial-percentage-text" id="gauge-val-2">0%</span>
-                                </div>
-                                <span class="gauge-label">Team<br>Comp.</span>
-                            </div>
-
-                            <!-- Gauge 3: Creativity Alignment -->
-                            <div class="gauge-cell">
-                                <div class="radial-progress-container">
-                                    <svg>
-                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
-                                        <circle class="radial-progress-ring" id="gauge-ring-3" cx="29" cy="29" r="25"></circle>
-                                    </svg>
-                                    <span class="radial-percentage-text" id="gauge-val-3">0%</span>
-                                </div>
-                                <span class="gauge-label">Creativity<br>Align.</span>
-                            </div>
-
-                            <!-- Gauge 4: Growth Potential -->
-                            <div class="gauge-cell">
-                                <div class="radial-progress-container">
-                                    <svg>
-                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
-                                        <circle class="radial-progress-ring" id="gauge-ring-4" cx="29" cy="29" r="25"></circle>
-                                    </svg>
-                                    <span class="radial-percentage-text" id="gauge-val-4">0%</span>
-                                </div>
-                                <span class="gauge-label">Growth<br>Potential</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Right Column: Recommended Challenges & Team Compatibility Modules -->
-                <div class="recommended-stack">
-                    
-                    <!-- Teammate Compatibility Module -->
-                    <div class="team-comp-panel">
-                        <span class="comp-title">COMPATIBLE COLLABORATORS</span>
-                        <div class="comp-users-list">
-                            <!-- User 1 -->
-                            <div class="comp-user-card">
-                                <div class="user-left">
-                                    <div class="user-mini-avatar">SC</div>
-                                    <div class="user-info-stack">
-                                        <span class="user-name">Sarah Chen</span>
-                                        <span class="user-role-label">Ideal: Systems Engineer / Rust lead</span>
-                                    </div>
-                                </div>
-                                <span class="user-comp-percentage">96% FIT</span>
-                            </div>
-
-                            <!-- User 2 -->
-                            <div class="comp-user-card">
-                                <div class="user-left">
-                                    <div class="user-mini-avatar">MD</div>
-                                    <div class="user-info-stack">
-                                        <span class="user-name">Marcus Dupré</span>
-                                        <span class="user-role-label">Ideal: Creative WebGL Lead</span>
-                                    </div>
-                                </div>
-                                <span class="user-comp-percentage">91% FIT</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recommended Challenges Stack -->
-                    <div class="recommended-stack" id="matchmaker-challenge-stack">
-                        <!-- Dynamically loaded compact challenge cards -->
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <canvas id="fgCanvas"></canvas>
-        <div id="hint">scroll to descend</div>
-    </div>
-
-    <!-- Scripts -->
-    <script>
-        lucide.createIcons();
-
-        // DevStage Logo Bloom Animation
-        const logoWrapper = document.querySelector('.logo-bloom-wrapper');
-        if (logoWrapper) {
-            setTimeout(() => {
-                logoWrapper.classList.add('bloom');
+            // DevStage Logo Bloom Animation
+            const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+            if (logoWrapper) {
                 setTimeout(() => {
-                    logoWrapper.classList.add('is-breathing');
-                }, 1700);
-            }, 500);
-        }
-
-        // Countdown Timer Logic
-        const targetDates = [
-            new Date(Date.now() + 4 * 24 * 60 * 60 * 1000 + 12 * 60 * 60 * 1000 + 45 * 60 * 1000), // Card 1
-            new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 15 * 60 * 1000),  // Card 2
-            new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 19 * 60 * 60 * 1000 + 30 * 60 * 1000)  // Card 3
-        ];
-        
-        function updateValueWithTick(el, newVal) {
-            if (el && el.textContent !== newVal) {
-                el.textContent = newVal;
-                el.classList.remove('tick');
-                void el.offsetWidth; // Trigger reflow
-                el.classList.add('tick');
+                    logoWrapper.classList.add('bloom');
+                    setTimeout(() => {
+                        logoWrapper.classList.add('is-breathing');
+                    }, 1700);
+                }, 500);
             }
-        }
-        
-        function updateAllCountdowns() {
-            const now = new Date();
-            for (let i = 1; i <= 3; i++) {
-                const diff = targetDates[i - 1] - now;
-                const daysEl = document.getElementById(`days-val-${i}`);
-                const hoursEl = document.getElementById(`hours-val-${i}`);
-                const minsEl = document.getElementById(`minutes-val-${i}`);
-                
-                if (diff <= 0) {
-                    updateValueWithTick(daysEl, '00');
-                    updateValueWithTick(hoursEl, '00');
-                    updateValueWithTick(minsEl, '00');
-                    continue;
+
+            // Countdown Timer Logic
+            const targetDates = [
+                new Date(Date.now() + 4 * 24 * 60 * 60 * 1000 + 12 * 60 * 60 * 1000 + 45 * 60 * 1000), // Card 1
+                new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 15 * 60 * 1000),  // Card 2
+                new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 19 * 60 * 60 * 1000 + 30 * 60 * 1000)  // Card 3
+            ];
+
+            function updateValueWithTick(el, newVal) {
+                if (el && el.textContent !== newVal) {
+                    el.textContent = newVal;
+                    el.classList.remove('tick');
+                    void el.offsetWidth; // Trigger reflow
+                    el.classList.add('tick');
                 }
-                
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                
-                updateValueWithTick(daysEl, String(days).padStart(2, '0'));
-                updateValueWithTick(hoursEl, String(hours).padStart(2, '0'));
-                updateValueWithTick(minsEl, String(minutes).padStart(2, '0'));
             }
-        }
-        
-        setInterval(updateAllCountdowns, 1000);
-        updateAllCountdowns();
 
-        // 3D Depth Card Tilt Logic
-        const challengeCards = document.querySelectorAll('.active-challenge-card');
-        const challengeSection = document.getElementById('challengeSection');
-        if (challengeCards.length > 0 && challengeSection) {
-            challengeCards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    if (!challengeSection.classList.contains('active')) return;
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const tiltX = (y / rect.height) * -8; // soft cinematic tilt
-                    const tiltY = (x / rect.width) * 8;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translate3d(0, -2px, 0)`;
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)`;
-                }, { passive: true });
-            });
-        }
+            function updateAllCountdowns() {
+                const now = new Date();
+                for (let i = 1; i <= 3; i++) {
+                    const diff = targetDates[i - 1] - now;
+                    const daysEl = document.getElementById(`days-val-${i}`);
+                    const hoursEl = document.getElementById(`hours-val-${i}`);
+                    const minsEl = document.getElementById(`minutes-val-${i}`);
 
-        // Hamburger Dropdown Logic
-        const hamburgerCheckbox = document.getElementById('hamburger-checkbox');
-        const hamburgerDropdown = document.getElementById('hamburger-dropdown');
-        const hamburgerLabel = document.getElementById('hamburger-menu-label');
-        const navItems = hamburgerDropdown.querySelectorAll('.nav-item-anim');
+                    if (diff <= 0) {
+                        updateValueWithTick(daysEl, '00');
+                        updateValueWithTick(hoursEl, '00');
+                        updateValueWithTick(minsEl, '00');
+                        continue;
+                    }
 
-        hamburgerCheckbox.addEventListener('change', () => {
-            if (hamburgerCheckbox.checked) {
-                hamburgerDropdown.classList.add('active');
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-                // Staggered Entrance Animation
-                navItems.forEach((item) => {
-                    item.classList.remove('nav-item-visible');
-                    item.style.transitionDelay = '0ms';
-                });
+                    updateValueWithTick(daysEl, String(days).padStart(2, '0'));
+                    updateValueWithTick(hoursEl, String(hours).padStart(2, '0'));
+                    updateValueWithTick(minsEl, String(minutes).padStart(2, '0'));
+                }
+            }
 
-                requestAnimationFrame(() => {
-                    navItems.forEach((item, index) => {
-                        item.style.transitionDelay = `${index * 35}ms`;
-                        item.classList.add('nav-item-visible');
+            setInterval(updateAllCountdowns, 1000);
+            updateAllCountdowns();
+
+            // 3D Depth Card Tilt Logic
+            const challengeCards = document.querySelectorAll('.active-challenge-card');
+            const challengeSection = document.getElementById('challengeSection');
+            if (challengeCards.length > 0 && challengeSection) {
+                challengeCards.forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        if (!challengeSection.classList.contains('active')) return;
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left - rect.width / 2;
+                        const y = e.clientY - rect.top - rect.height / 2;
+                        const tiltX = (y / rect.height) * -8; // soft cinematic tilt
+                        const tiltY = (x / rect.width) * 8;
+
+                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translate3d(0, -2px, 0)`;
                     });
-                });
-            } else {
-                hamburgerDropdown.classList.remove('active');
-                navItems.forEach(item => {
-                    item.classList.remove('nav-item-visible');
-                    item.style.transitionDelay = '0ms';
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)`;
+                    }, { passive: true });
                 });
             }
-        });
 
-        // Close on click outside
-        document.addEventListener('click', (e) => {
-            if (!hamburgerLabel.contains(e.target) && hamburgerCheckbox.checked) {
-                hamburgerCheckbox.checked = false;
-                hamburgerDropdown.classList.remove('active');
-            }
-        });
+            // Hamburger Dropdown Logic
+            const hamburgerCheckbox = document.getElementById('hamburger-checkbox');
+            const hamburgerDropdown = document.getElementById('hamburger-dropdown');
+            const hamburgerLabel = document.getElementById('hamburger-menu-label');
+            const navItems = hamburgerDropdown.querySelectorAll('.nav-item-anim');
 
-        // Close on ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && hamburgerCheckbox.checked) {
-                hamburgerCheckbox.checked = false;
-                hamburgerDropdown.classList.remove('active');
-            }
-        });
+            hamburgerCheckbox.addEventListener('change', () => {
+                if (hamburgerCheckbox.checked) {
+                    hamburgerDropdown.classList.add('active');
 
-        // ─────────────────────────────────────────────────────────────────────────────
-        // 3D DEPTH PARTICLE ENGINE & NOISE
-        // ─────────────────────────────────────────────────────────────────────────────
-        (() => {
-            'use strict';
+                    // Staggered Entrance Animation
+                    navItems.forEach((item) => {
+                        item.classList.remove('nav-item-visible');
+                        item.style.transitionDelay = '0ms';
+                    });
 
-            const stage = document.getElementById('stage');
-            const bgCv = document.getElementById('bgCanvas');
-            const bgCtx = bgCv.getContext('2d');
-            const fgCv = document.getElementById('fgCanvas');
-            const fgCtx = fgCv.getContext('2d');
-            const hint = document.getElementById('hint');
-            const content = document.getElementById('content');
+                    requestAnimationFrame(() => {
+                        navItems.forEach((item, index) => {
+                            item.style.transitionDelay = `${index * 35}ms`;
+                            item.classList.add('nav-item-visible');
+                        });
+                    });
+                } else {
+                    hamburgerDropdown.classList.remove('active');
+                    navItems.forEach(item => {
+                        item.classList.remove('nav-item-visible');
+                        item.style.transitionDelay = '0ms';
+                    });
+                }
+            });
 
-            let W, H, DPR;
-            let particles = [];
-            let t0 = performance.now(), last = t0;
-            let mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-            let targetScrollZ = 0;
-            let camVel = 0;
+            // Close on click outside
+            document.addEventListener('click', (e) => {
+                if (!hamburgerLabel.contains(e.target) && hamburgerCheckbox.checked) {
+                    hamburgerCheckbox.checked = false;
+                    hamburgerDropdown.classList.remove('active');
+                }
+            });
 
-            const CAM = { fov: 310, z: 0, tiltX: 0, tiltY: 0, near: 12 };
-            const VOL = { w: 2.6, h: 2.6, depth: 1700 };
-            const TEXT_Z = 440;
+            // Close on ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && hamburgerCheckbox.checked) {
+                    hamburgerCheckbox.checked = false;
+                    hamburgerDropdown.classList.remove('active');
+                }
+            });
 
-            setTimeout(() => {
-                if (hint) hint.style.opacity = '0';
-            }, 3400);
-
-            // PERLIN / CURL NOISE
-            const _p = new Uint8Array(512);
+            // ─────────────────────────────────────────────────────────────────────────────
+            // 3D DEPTH PARTICLE ENGINE & NOISE
+            // ─────────────────────────────────────────────────────────────────────────────
             (() => {
-                const a = new Uint8Array(256);
-                for (let i = 0; i < 256; i++) a[i] = i;
-                for (let i = 255; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; }
-                for (let i = 0; i < 512; i++) _p[i] = a[i & 255];
-            })();
-            const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
-            const lerp = (t, a, b) => a + (b - a) * t;
-            function grad(h, x, y, z) { h &= 15; const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); }
-            function noise3(x, y, z) {
-                const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
-                x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
-                const u = fade(x), v = fade(y), w = fade(z);
-                const A = _p[X] + Y, AA = _p[A] + Z, AB = _p[A + 1] + Z, B = _p[X + 1] + Y, BA = _p[B] + Z, BB = _p[B + 1] + Z;
-                return lerp(w, lerp(v, lerp(u, grad(_p[AA], x, y, z), grad(_p[BA], x - 1, y, z)), lerp(u, grad(_p[AB], x, y - 1, z), grad(_p[BB], x - 1, y - 1, z))), lerp(v, lerp(u, grad(_p[AA + 1], x, y, z - 1), grad(_p[BA + 1], x - 1, y, z - 1)), lerp(u, grad(_p[AB + 1], x, y - 1, z - 1), grad(_p[BB + 1], x - 1, y - 1, z - 1)))) * 0.5 + 0.5;
-            }
-            function fbm(x, y, z, o) { let v = 0, a = 0.5, f = 1, n = 0; for (let i = 0; i < o; i++) { v += a * noise3(x * f, y * f, z * f); n += a; a *= 0.5; f *= 2.1; } return v / n; }
-            const E = 0.009;
-            const curlX = (x, y, z) => (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3) - (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3))) / (2 * E);
-            const curlY = (x, y, z) => (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3) - (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3))) / (2 * E);
-            const curlZ = (x, y, z) => (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3) - (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3))) / (2 * E);
+                'use strict';
 
-            function orColor(temp) {
-                const t = Math.max(0, Math.min(1, temp));
-                return [
-                    Math.round(255 * Math.min(1, 0.32 + t * 0.88)),
-                    Math.round(255 * Math.min(1, Math.pow(t, 1.05) * 0.68)),
-                    Math.round(255 * Math.min(1, Math.pow(t, 6.0) * 0.18))
-                ];
-            }
+                const stage = document.getElementById('stage');
+                const bgCv = document.getElementById('bgCanvas');
+                const bgCtx = bgCv.getContext('2d');
+                const fgCv = document.getElementById('fgCanvas');
+                const fgCtx = fgCv.getContext('2d');
+                const hint = document.getElementById('hint');
+                const content = document.getElementById('content');
 
-            // PARTICLES — sparse, intentional, slow-burning
-            function spawn(init) {
-                return {
-                    x3: (Math.random() - .5) * VOL.w * W,
-                    y3: (Math.random() - .5) * VOL.h * H,
-                    z3: CAM.z + CAM.near + (Math.random() * VOL.depth),
-                    vx: 0, vy: 0, vz: 0,
-                    life: 7000 + Math.random() * 6000,
-                    age: init ? Math.random() * (7000 + Math.random() * 6000) : 0,
-                    seed: Math.random() * 400, seedY: Math.random() * 400, seedZ: Math.random() * 400,
-                    baseSize: 0.55 + Math.random() * 1.1,
-                    tempPeak: 0.36 + Math.random() * 0.48,
-                    flickPhase: Math.random() * Math.PI * 2,
-                    flickFreq: 0.7 + Math.random() * 1.6,
-                };
-            }
+                let W, H, DPR;
+                let particles = [];
+                let t0 = performance.now(), last = t0;
+                let mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+                let targetScrollZ = 0;
+                let camVel = 0;
 
-            function initParticles() {
-                particles = [];
-                const count = Math.min(110, Math.max(70, Math.floor(W * H / 7500)));
-                for (let i = 0; i < count; i++) particles.push(spawn(true));
-            }
+                const CAM = { fov: 310, z: 0, tiltX: 0, tiltY: 0, near: 12 };
+                const VOL = { w: 2.6, h: 2.6, depth: 1700 };
+                const TEXT_Z = 440;
 
-            function project(x3, y3, z3) {
-                const cz = z3 - CAM.z;
-                if (cz <= CAM.near) return null;
-                const scale = CAM.fov / cz;
-                return { sx: (x3 + CAM.tiltX * cz * 0.0013) * scale + W / 2, sy: (y3 + CAM.tiltY * cz * 0.0008) * scale + H / 2, scale, cz };
-            }
-
-            function paintParticle(c2d, p, elapsed, aMult) {
-                const proj = project(p.x3, p.y3, p.z3);
-                if (!proj) return;
-                const { sx, sy, scale } = proj;
-                if (sx < -130 || sx > W + 130 || sy < -130 || sy > H + 130) return;
-
-                const age01 = Math.min(p.age / p.life, 1);
-                const fadeIn = age01 < 0.09 ? age01 / 0.09 : 1;
-                const fadeOut = age01 > 0.72 ? 1 - (age01 - 0.72) / 0.28 : 1;
-                const lifeA = fadeIn * fadeOut;
-                if (lifeA < 0.003) return;
-
-                const tempRaw = age01 < 0.20 ? age01 / 0.20 : 1 - Math.pow((age01 - 0.20) / 0.80, 1.6);
-                const temp = tempRaw * p.tempPeak;
-                const flick = 1 + 0.05 * Math.sin(elapsed * p.flickFreq * 0.001 + p.flickPhase);
-                const depthA = Math.pow(Math.min(1, scale * 2.2), 0.5);
-                const alpha = lifeA * depthA * flick * aMult;
-                if (alpha < 0.004) return;
-
-                const sz = p.baseSize * scale * 17 * (0.82 + 0.18 * temp);
-                const [r, g, b] = orColor(temp);
-
-                c2d.save();
-                c2d.globalCompositeOperation = 'lighter';
-
-                const gr = Math.max(sz * 3.4, 1.5);
-                const glow = c2d.createRadialGradient(sx, sy, 0, sx, sy, gr);
-                const ga = alpha * 0.17;
-                glow.addColorStop(0, `rgba(${r},${g},${b},${ga})`);
-                glow.addColorStop(0.4, `rgba(${Math.round(r * .68)},${Math.round(g * .2)},0,${ga * .25})`);
-                glow.addColorStop(1, 'rgba(0,0,0,0)');
-                c2d.fillStyle = glow;
-                c2d.beginPath(); c2d.arc(sx, sy, gr, 0, Math.PI * 2); c2d.fill();
-
-                const cr = Math.max(sz * .5, 0.4);
-                const br2 = Math.min(1, temp + 0.22);
-                const core = c2d.createRadialGradient(sx, sy, 0, sx, sy, cr);
-                const ca = alpha * 0.95;
-                core.addColorStop(0, `rgba(255,${Math.round(200 * br2)},${Math.round(60 * br2 * br2)},${ca})`);
-                core.addColorStop(0.5, `rgba(${r},${Math.round(g * .45)},0,${ca * .58})`);
-                core.addColorStop(1, 'rgba(0,0,0,0)');
-                c2d.fillStyle = core;
-                c2d.beginPath(); c2d.arc(sx, sy, cr, 0, Math.PI * 2); c2d.fill();
-                c2d.restore();
-            }
-
-            const CS = 0.0021, CSTR = 28, FWD = 0.036;
-            function updateP(p, dt, elapsed) {
-                p.age += dt;
-                const T = elapsed * 0.000036;
-                const nx = p.x3 * CS + p.seed, ny = p.y3 * CS + p.seedY, nz = p.z3 * CS * 0.44 + p.seedZ + T;
-                const cx = curlX(nx, ny, nz), cy = curlY(nx, ny, nz), cz2 = curlZ(nx, ny, nz);
-                p.vx += (cx * CSTR) * dt * 0.001;
-                p.vy += (cy * CSTR - 0.14) * dt * 0.001;
-                p.vz += (cz2 * CSTR * 0.5 - FWD) * dt * 0.001;
-                const drag = Math.pow(0.975, dt / 16);
-                p.vx *= drag; p.vy *= drag; p.vz *= drag;
-                p.x3 += p.vx * dt * 0.06; p.y3 += p.vy * dt * 0.06; p.z3 += p.vz * dt * 0.06;
-                const hW = VOL.w * W * .5, hH = VOL.h * H * .5;
-                if (p.x3 > hW) p.x3 = -hW; if (p.x3 < -hW) p.x3 = hW;
-                if (p.y3 > hH) p.y3 = -hH; if (p.y3 < -hH) p.y3 = hH;
-                if (p.z3 - CAM.z < CAM.near) { p.z3 = CAM.z + VOL.depth; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
-                if (p.z3 > CAM.z + VOL.depth + 300) { p.z3 = CAM.z + CAM.near + 20; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
-            }
-
-            function drawBG() {
-                bgCtx.clearRect(0, 0, W, H);
-                bgCtx.fillStyle = '#0f1011';
-                bgCtx.fillRect(0, 0, W, H);
-                const atm = bgCtx.createRadialGradient(W * .5, H * .54, 0, W * .5, H * .54, W * .68);
-                atm.addColorStop(0, 'rgba(90,34,4,0.11)');
-                atm.addColorStop(0.5, 'rgba(52,18,2,0.04)');
-                atm.addColorStop(1, 'rgba(0,0,0,0)');
-                bgCtx.fillStyle = atm; bgCtx.fillRect(0, 0, W, H);
-                const vig = bgCtx.createRadialGradient(W * .5, H * .5, Math.min(W, H) * .15, W * .5, H * .5, Math.max(W, H) * .92);
-                vig.addColorStop(0, 'rgba(0,0,0,0)');
-                vig.addColorStop(0.52, 'rgba(0,0,0,0.09)');
-                vig.addColorStop(1, 'rgba(0,0,0,0.82)');
-                bgCtx.fillStyle = vig; bgCtx.fillRect(0, 0, W, H);
-            }
-
-            // TEXT PARALLAX — multi-layer organic float
-            const titleWrapEl = document.getElementById('titleWrap');
-            const eyebrowParEl = document.getElementById('eyebrow');
-            const subParEl = document.getElementById('subTitle');
-            const tagsParEl = document.querySelector('.tags');
-            const mainTitleEl = document.getElementById('mainTitle');
-
-            let pMX = 0, pMY = 0; // smoothed mouse
-
-            function applyTextParallax(elapsed) {
-                pMX += (mouse.x - pMX) * 0.038;
-                pMY += (mouse.y - pMY) * 0.038;
-                const mx = (pMX / W) - 0.5;
-                const my = (pMY / H) - 0.5;
-                const T = elapsed * 0.001;
-
-                const txA = Math.sin(T * 0.112 + 0.0) * 3.0 + Math.sin(T * 0.071) * 1.5;
-                const tyA = Math.cos(T * 0.093 + 1.2) * 2.0 + Math.cos(T * 0.134) * 1.0;
-
-                const exA = Math.sin(T * 0.131 + 2.1) * 2.4 + Math.sin(T * 0.062) * 1.1;
-                const eyA = Math.cos(T * 0.082 + 0.5) * 1.5 + Math.cos(T * 0.113) * 0.8;
-
-                const sxA = Math.sin(T * 0.098 + 1.0) * 1.8 + Math.sin(T * 0.079) * 0.9;
-                const syA = Math.cos(T * 0.118 + 3.0) * 1.3 + Math.cos(T * 0.068) * 0.6;
-
-                const gxA = Math.sin(T * 0.087 + 0.7) * 1.2;
-                const gyA = Math.cos(T * 0.141 + 2.4) * 0.8;
-
-                const tX = mx * -16 + txA, tY = my * -11 + tyA;
-                const eX = mx * -9 + exA, eY = my * -6 + eyA;
-                const sX = mx * -5 + sxA, sY = my * -4 + syA;
-                const gX = mx * -3 + gxA, gY = my * -2 + gyA;
-
-                const breathe = 1 + Math.sin(T * 0.19 + 0.3) * 0.004;
-
-                if (titleWrapEl) titleWrapEl.style.transform = `translate(${tX.toFixed(2)}px,${tY.toFixed(2)}px) scale(${breathe.toFixed(5)})`;
-                if (eyebrowParEl) eyebrowParEl.style.transform = `translate(${eX.toFixed(2)}px,${eY.toFixed(2)}px)`;
-                if (subParEl) subParEl.style.transform = `translate(${sX.toFixed(2)}px,${sY.toFixed(2)}px)`;
-                if (tagsParEl) tagsParEl.style.transform = `translate(${gX.toFixed(2)}px,${gY.toFixed(2)}px)`;
-            }
-
-            // SCROLL DEPTH DISSOLUTION
-            let scrollDepth = 0, smoothVel = 0;
-
-            function applyDepthDissolution(dt) {
-                // We map raw scroll over 2.95 times the VOL.depth for a breathtaking five-stage scroll narrative
-                const raw = Math.min(targetScrollZ / (VOL.depth * 2.95), 1);
-                scrollDepth += (raw - scrollDepth) * 0.05;
-                smoothVel += (Math.abs(camVel) - smoothVel) * 0.07;
-                smoothVel *= Math.pow(0.88, dt / 16);
-
-                const d = scrollDepth;
-
-                // 1. Content (Hero Text)
-                // Active: enters d = 0.0 -> exits d = 0.20
-                const heroProgress = Math.max(0, Math.min(1, d / 0.16));
-                const heroOpacity = Math.max(0, 1 - heroProgress * 2.0);
-                const heroY = -heroProgress * 140;
-                const scaleY = 1 - heroProgress * 0.05;
-                const lsExpand = heroProgress * heroProgress * 0.12;
-
-                if (content) {
-                    content.style.opacity = heroOpacity.toFixed(4);
-                    content.style.transform = `scaleY(${scaleY.toFixed(5)}) translateY(${heroY.toFixed(2)}px)`;
-                    
-                    const blurRamp = Math.max(0, (heroProgress - 0.22) / 0.78);
-                    const totalBlur = blurRamp * blurRamp * 22 + smoothVel * 0.018;
-                    content.style.filter = totalBlur > 0.3 ? `blur(${totalBlur.toFixed(2)}px)` : 'none';
-                }
-
-                if (mainTitleEl) {
-                    mainTitleEl.style.letterSpacing = `calc(0.18em + ${lsExpand.toFixed(4)}em)`;
-                }
-
-                // 2. Challenge Section (Active Grid)
-                // Active: enters d = 0.12 -> 0.28, exits d = 0.28 -> 0.44
-                const challengeSec = document.getElementById('challengeSection');
-                if (challengeSec) {
-                    let gridOpacity = 0;
-                    let gridY = 120;
-                    
-                    if (d <= 0.28) {
-                        const progress = Math.max(0, Math.min(1, (d - 0.12) / 0.16));
-                        gridOpacity = progress;
-                        gridY = (1 - progress) * 120;
-                    } else {
-                        const progress = Math.max(0, Math.min(1, (d - 0.28) / 0.16));
-                        gridOpacity = 1 - progress;
-                        gridY = -progress * 120;
-                    }
-                    
-                    challengeSec.style.opacity = gridOpacity.toFixed(4);
-                    challengeSec.style.transform = `translateY(${gridY.toFixed(2)}px)`;
-                    challengeSec.style.pointerEvents = (d > 0.18 && d < 0.38) ? 'auto' : 'none';
-                    
-                    if (d > 0.18 && d < 0.38) {
-                        challengeSec.classList.add('active');
-                    } else {
-                        challengeSec.classList.remove('active');
-                    }
-                }
-
-                // 3. Challenge Analysis Section (Radar Scanner)
-                // Active: enters d = 0.36 -> 0.52, exits d = 0.52 -> 0.68
-                const analysisSec = document.getElementById('analysisSection');
-                if (analysisSec) {
-                    let scanOpacity = 0;
-                    let scanY = 120;
-                    
-                    if (d <= 0.52) {
-                        const progress = Math.max(0, Math.min(1, (d - 0.36) / 0.16));
-                        scanOpacity = progress;
-                        scanY = (1 - progress) * 120;
-                    } else {
-                        const progress = Math.max(0, Math.min(1, (d - 0.52) / 0.16));
-                        scanOpacity = 1 - progress;
-                        scanY = -progress * 120;
-                    }
-                    
-                    analysisSec.style.opacity = scanOpacity.toFixed(4);
-                    analysisSec.style.transform = `translateY(${scanY.toFixed(2)}px)`;
-                    analysisSec.style.pointerEvents = (d > 0.42 && d < 0.62) ? 'auto' : 'none';
-                    
-                    if (d > 0.42 && d < 0.62) {
-                        analysisSec.classList.add('active');
-                    } else {
-                        analysisSec.classList.remove('active');
-                    }
-                }
-
-                // 4. Team Recruitment Network Section (Squad Discovery)
-                // Active: enters d = 0.60 -> 0.76, exits d = 0.76 -> 0.88
-                const recruitmentSec = document.getElementById('recruitmentSection');
-                if (recruitmentSec) {
-                    let recruitOpacity = 0;
-                    let recruitY = 120;
-                    
-                    if (d <= 0.76) {
-                        const progress = Math.max(0, Math.min(1, (d - 0.60) / 0.16));
-                        recruitOpacity = progress;
-                        recruitY = (1 - progress) * 120;
-                    } else {
-                        const progress = Math.max(0, Math.min(1, (d - 0.76) / 0.12));
-                        recruitOpacity = 1 - progress;
-                        recruitY = -progress * 120;
-                    }
-                    
-                    recruitmentSec.style.opacity = recruitOpacity.toFixed(4);
-                    recruitmentSec.style.transform = `translateY(${recruitY.toFixed(2)}px)`;
-                    recruitmentSec.style.pointerEvents = (d > 0.66 && d < 0.82) ? 'auto' : 'none';
-                    
-                    if (d > 0.66 && d < 0.82) {
-                        recruitmentSec.classList.add('active');
-                    } else {
-                        recruitmentSec.classList.remove('active');
-                    }
-                }
-
-                // 5. Skill-Based Matchmaking Engine Section
-                // Active: enters d = 0.80 -> 0.96
-                const matchmakingSec = document.getElementById('matchmakingSection');
-                if (matchmakingSec) {
-                    const progress = Math.max(0, Math.min(1, (d - 0.80) / 0.16));
-                    matchmakingSec.style.opacity = progress.toFixed(4);
-                    
-                    const matchY = (1 - progress) * 120;
-                    matchmakingSec.style.transform = `translateY(${matchY.toFixed(2)}px)`;
-                    matchmakingSec.style.pointerEvents = d > 0.85 ? 'auto' : 'none';
-                    
-                    if (d > 0.85) {
-                        matchmakingSec.classList.add('active');
-                        // Trigger AI loading progress indicators on entrance
-                        triggerAIProgressLoading();
-                    } else {
-                        matchmakingSec.classList.remove('active');
-                    }
-                }
-            }
-
-            // MAIN LOOP
-            function frame(now) {
-                requestAnimationFrame(frame);
-                const dt = Math.min(50, now - last); last = now;
-                const elapsed = now - t0;
-
-                const prevZ = CAM.z;
-                CAM.z += (targetScrollZ - CAM.z) * 0.055;
-                camVel = (CAM.z - prevZ) / Math.max(dt, 1) * 16;
-                CAM.tiltX += (mouse.tx - CAM.tiltX) * 0.040;
-                CAM.tiltY += (mouse.ty - CAM.tiltY) * 0.040;
-
-                for (let i = 0; i < particles.length; i++) updateP(particles[i], dt, elapsed);
-
-                const target = Math.min(110, Math.max(70, Math.floor(W * H / 7500)));
-                while (particles.length < target) particles.push(spawn(false));
-
-                particles.sort((a, b) => (b.z3 - CAM.z) - (a.z3 - CAM.z));
-
-                drawBG();
-                for (let i = 0; i < particles.length; i++) {
-                    if (particles[i].z3 - CAM.z > TEXT_Z) paintParticle(bgCtx, particles[i], elapsed, 1.0);
-                }
-
-                fgCtx.clearRect(0, 0, W, H);
-                for (let i = 0; i < particles.length; i++) {
-                    if (particles[i].z3 - CAM.z <= TEXT_Z) paintParticle(fgCtx, particles[i], elapsed, 0.68);
-                }
-
-                if (scrollDepth < 0.95) applyTextParallax(elapsed);
-                applyDepthDissolution(dt);
-                
-                // Draw Radar Visualization Console in standard high-performance compositor loop
-                if (typeof drawRadarChart === 'function' && scrollDepth > 0.55) {
-                    drawRadarChart(elapsed);
-                }
-            }
-
-            // RESIZE
-            function resize() {
-                DPR = Math.min(window.devicePixelRatio || 1, 2);
-                W = stage.clientWidth; H = stage.clientHeight;
-                [bgCv, fgCv].forEach(cv => {
-                    cv.width = Math.floor(W * DPR); cv.height = Math.floor(H * DPR);
-                    cv.style.width = W + 'px'; cv.style.height = H + 'px';
-                });
-                bgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
-                fgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
-                initParticles();
-            }
-
-            // INPUT
-            document.addEventListener('mousemove', e => {
-                mouse.x = e.clientX; mouse.y = e.clientY;
-                const r = stage.getBoundingClientRect();
-                mouse.tx = (e.clientX - r.left - W / 2) * 1.4;
-                mouse.ty = (e.clientY - r.top - H / 2) * 0.9;
-            }, { passive: true });
-
-            stage.addEventListener('mouseleave', () => { mouse.tx = 0; mouse.ty = 0; }, { passive: true });
-            stage.addEventListener('wheel', e => {
-                e.preventDefault();
-                targetScrollZ += e.deltaY * 2.0;
-                targetScrollZ = Math.max(0, targetScrollZ);
-            }, { passive: false });
-
-            let _lTY = null;
-            stage.addEventListener('touchstart', e => { _lTY = e.touches[0].clientY; }, { passive: true });
-            stage.addEventListener('touchmove', e => {
-                if (_lTY !== null) { const dy = _lTY - e.touches[0].clientY; targetScrollZ += dy * 3.4; targetScrollZ = Math.max(0, targetScrollZ); _lTY = e.touches[0].clientY; }
-            }, { passive: true });
-            stage.addEventListener('touchend', () => { _lTY = null; }, { passive: true });
-
-            window.addEventListener('resize', resize, { passive: true });
-            resize();
-            requestAnimationFrame(frame);
-
-            // TEXT REVEAL — Thermal ignition
-            const eyebrowEl = document.getElementById('eyebrow');
-            const eyebrowText = eyebrowEl.textContent;
-            eyebrowEl.innerHTML = '';
-            [...eyebrowText].forEach(ch => {
-                const s = document.createElement('span');
-                s.className = 'ch';
-                s.textContent = ch === ' ' ? '\u00A0' : ch;
-                eyebrowEl.appendChild(s);
-            });
-
-            const mainTitleDom = document.getElementById('mainTitle');
-            const titleText = mainTitleDom.textContent.trim();
-            mainTitleDom.innerHTML = '';
-            const charSpans = [];
-            [...titleText].forEach(ch => {
-                const s = document.createElement('span');
-                s.className = 'ch';
-                s.textContent = ch;
-                s.style.cssText = `display:inline-block;opacity:0;filter:blur(28px) brightness(3.0);transform:scale(1.04);color:rgba(255,140,60,1);text-shadow:none;transition:none;`;
-                mainTitleDom.appendChild(s);
-                charSpans.push(s);
-            });
-
-            const subEl = document.getElementById('subTitle');
-            const subText = subEl.textContent;
-            subEl.innerHTML = '';
-            subText.split(' ').forEach((word, i, arr) => {
-                const outer = document.createElement('span');
-                outer.className = 'word';
-                const inner = document.createElement('span');
-                inner.className = 'inner';
-                inner.textContent = word;
-                inner.style.transitionDelay = `${i * 0.06}s`;
-                outer.appendChild(inner);
-                subEl.appendChild(outer);
-                if (i < arr.length - 1) subEl.appendChild(document.createTextNode(' '));
-            });
-
-            const ruleEl = document.getElementById('rule');
-            const tagEls = [0, 1, 2, 3, 4].map(i => document.getElementById('t' + i));
-
-            function thermalIgnite(span, delay) {
                 setTimeout(() => {
-                    span.style.transition = 'none';
-                    span.style.opacity = '1';
-                    span.style.filter = 'blur(26px) brightness(2.8)';
-                    span.style.color = 'rgba(255,120,40,1)';
-                    span.style.transform = 'scale(1.06)';
-                    setTimeout(() => {
-                        span.style.transition = 'filter 0.55s cubic-bezier(0.4,0,0.2,1),color 0.55s ease,transform 0.5s cubic-bezier(0.16,1,0.3,1)';
-                        span.style.filter = 'blur(8px) brightness(2.0)';
-                        span.style.color = 'rgba(255,180,90,1)';
-                        span.style.transform = 'scale(1.02)';
-                    }, 40);
-                    setTimeout(() => {
-                        span.style.transition = 'filter 0.35s cubic-bezier(0.4,0,0.2,1),color 0.4s ease,transform 0.4s cubic-bezier(0.16,1,0.3,1)';
-                        span.style.filter = 'blur(0px) brightness(1.0)';
-                        span.style.color = '#ffffff';
-                        span.style.transform = 'scale(1.0)';
-                    }, 340);
-                }, delay);
-            }
+                    if (hint) hint.style.opacity = '0';
+                }, 3400);
 
-            const eyebrowChars = eyebrowEl.querySelectorAll('.ch');
-            setTimeout(() => {
-                eyebrowChars.forEach((ch, i) => { setTimeout(() => ch.classList.add('on'), i * 22); });
-            }, 400);
+                // PERLIN / CURL NOISE
+                const _p = new Uint8Array(512);
+                (() => {
+                    const a = new Uint8Array(256);
+                    for (let i = 0; i < 256; i++) a[i] = i;
+                    for (let i = 255; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; }
+                    for (let i = 0; i < 512; i++) _p[i] = a[i & 255];
+                })();
+                const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
+                const lerp = (t, a, b) => a + (b - a) * t;
+                function grad(h, x, y, z) { h &= 15; const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); }
+                function noise3(x, y, z) {
+                    const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+                    x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+                    const u = fade(x), v = fade(y), w = fade(z);
+                    const A = _p[X] + Y, AA = _p[A] + Z, AB = _p[A + 1] + Z, B = _p[X + 1] + Y, BA = _p[B] + Z, BB = _p[B + 1] + Z;
+                    return lerp(w, lerp(v, lerp(u, grad(_p[AA], x, y, z), grad(_p[BA], x - 1, y, z)), lerp(u, grad(_p[AB], x, y - 1, z), grad(_p[BB], x - 1, y - 1, z))), lerp(v, lerp(u, grad(_p[AA + 1], x, y, z - 1), grad(_p[BA + 1], x - 1, y, z - 1)), lerp(u, grad(_p[AB + 1], x, y - 1, z - 1), grad(_p[BB + 1], x - 1, y - 1, z - 1)))) * 0.5 + 0.5;
+                }
+                function fbm(x, y, z, o) { let v = 0, a = 0.5, f = 1, n = 0; for (let i = 0; i < o; i++) { v += a * noise3(x * f, y * f, z * f); n += a; a *= 0.5; f *= 2.1; } return v / n; }
+                const E = 0.009;
+                const curlX = (x, y, z) => (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3) - (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3))) / (2 * E);
+                const curlY = (x, y, z) => (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3) - (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3))) / (2 * E);
+                const curlZ = (x, y, z) => (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3) - (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3))) / (2 * E);
 
-            const N = charSpans.length, center = (N - 1) / 2;
-            setTimeout(() => {
-                charSpans.forEach((span, i) => {
-                    const dist = Math.abs(i - center);
-                    thermalIgnite(span, dist * 88 + Math.random() * 30);
+                function orColor(temp) {
+                    const t = Math.max(0, Math.min(1, temp));
+                    return [
+                        Math.round(255 * Math.min(1, 0.32 + t * 0.88)),
+                        Math.round(255 * Math.min(1, Math.pow(t, 1.05) * 0.68)),
+                        Math.round(255 * Math.min(1, Math.pow(t, 6.0) * 0.18))
+                    ];
+                }
+
+                // PARTICLES — sparse, intentional, slow-burning
+                function spawn(init) {
+                    return {
+                        x3: (Math.random() - .5) * VOL.w * W,
+                        y3: (Math.random() - .5) * VOL.h * H,
+                        z3: CAM.z + CAM.near + (Math.random() * VOL.depth),
+                        vx: 0, vy: 0, vz: 0,
+                        life: 7000 + Math.random() * 6000,
+                        age: init ? Math.random() * (7000 + Math.random() * 6000) : 0,
+                        seed: Math.random() * 400, seedY: Math.random() * 400, seedZ: Math.random() * 400,
+                        baseSize: 0.55 + Math.random() * 1.1,
+                        tempPeak: 0.36 + Math.random() * 0.48,
+                        flickPhase: Math.random() * Math.PI * 2,
+                        flickFreq: 0.7 + Math.random() * 1.6,
+                    };
+                }
+
+                function initParticles() {
+                    particles = [];
+                    const count = Math.min(110, Math.max(70, Math.floor(W * H / 7500)));
+                    for (let i = 0; i < count; i++) particles.push(spawn(true));
+                }
+
+                function project(x3, y3, z3) {
+                    const cz = z3 - CAM.z;
+                    if (cz <= CAM.near) return null;
+                    const scale = CAM.fov / cz;
+                    return { sx: (x3 + CAM.tiltX * cz * 0.0013) * scale + W / 2, sy: (y3 + CAM.tiltY * cz * 0.0008) * scale + H / 2, scale, cz };
+                }
+
+                function paintParticle(c2d, p, elapsed, aMult) {
+                    const proj = project(p.x3, p.y3, p.z3);
+                    if (!proj) return;
+                    const { sx, sy, scale } = proj;
+                    if (sx < -130 || sx > W + 130 || sy < -130 || sy > H + 130) return;
+
+                    const age01 = Math.min(p.age / p.life, 1);
+                    const fadeIn = age01 < 0.09 ? age01 / 0.09 : 1;
+                    const fadeOut = age01 > 0.72 ? 1 - (age01 - 0.72) / 0.28 : 1;
+                    const lifeA = fadeIn * fadeOut;
+                    if (lifeA < 0.003) return;
+
+                    const tempRaw = age01 < 0.20 ? age01 / 0.20 : 1 - Math.pow((age01 - 0.20) / 0.80, 1.6);
+                    const temp = tempRaw * p.tempPeak;
+                    const flick = 1 + 0.05 * Math.sin(elapsed * p.flickFreq * 0.001 + p.flickPhase);
+                    const depthA = Math.pow(Math.min(1, scale * 2.2), 0.5);
+                    const alpha = lifeA * depthA * flick * aMult;
+                    if (alpha < 0.004) return;
+
+                    const sz = p.baseSize * scale * 17 * (0.82 + 0.18 * temp);
+                    const [r, g, b] = orColor(temp);
+
+                    c2d.save();
+                    c2d.globalCompositeOperation = 'lighter';
+
+                    const gr = Math.max(sz * 3.4, 1.5);
+                    const glow = c2d.createRadialGradient(sx, sy, 0, sx, sy, gr);
+                    const ga = alpha * 0.17;
+                    glow.addColorStop(0, `rgba(${r},${g},${b},${ga})`);
+                    glow.addColorStop(0.4, `rgba(${Math.round(r * .68)},${Math.round(g * .2)},0,${ga * .25})`);
+                    glow.addColorStop(1, 'rgba(0,0,0,0)');
+                    c2d.fillStyle = glow;
+                    c2d.beginPath(); c2d.arc(sx, sy, gr, 0, Math.PI * 2); c2d.fill();
+
+                    const cr = Math.max(sz * .5, 0.4);
+                    const br2 = Math.min(1, temp + 0.22);
+                    const core = c2d.createRadialGradient(sx, sy, 0, sx, sy, cr);
+                    const ca = alpha * 0.95;
+                    core.addColorStop(0, `rgba(255,${Math.round(200 * br2)},${Math.round(60 * br2 * br2)},${ca})`);
+                    core.addColorStop(0.5, `rgba(${r},${Math.round(g * .45)},0,${ca * .58})`);
+                    core.addColorStop(1, 'rgba(0,0,0,0)');
+                    c2d.fillStyle = core;
+                    c2d.beginPath(); c2d.arc(sx, sy, cr, 0, Math.PI * 2); c2d.fill();
+                    c2d.restore();
+                }
+
+                const CS = 0.0021, CSTR = 28, FWD = 0.036;
+                function updateP(p, dt, elapsed) {
+                    p.age += dt;
+                    const T = elapsed * 0.000036;
+                    const nx = p.x3 * CS + p.seed, ny = p.y3 * CS + p.seedY, nz = p.z3 * CS * 0.44 + p.seedZ + T;
+                    const cx = curlX(nx, ny, nz), cy = curlY(nx, ny, nz), cz2 = curlZ(nx, ny, nz);
+                    p.vx += (cx * CSTR) * dt * 0.001;
+                    p.vy += (cy * CSTR - 0.14) * dt * 0.001;
+                    p.vz += (cz2 * CSTR * 0.5 - FWD) * dt * 0.001;
+                    const drag = Math.pow(0.975, dt / 16);
+                    p.vx *= drag; p.vy *= drag; p.vz *= drag;
+                    p.x3 += p.vx * dt * 0.06; p.y3 += p.vy * dt * 0.06; p.z3 += p.vz * dt * 0.06;
+                    const hW = VOL.w * W * .5, hH = VOL.h * H * .5;
+                    if (p.x3 > hW) p.x3 = -hW; if (p.x3 < -hW) p.x3 = hW;
+                    if (p.y3 > hH) p.y3 = -hH; if (p.y3 < -hH) p.y3 = hH;
+                    if (p.z3 - CAM.z < CAM.near) { p.z3 = CAM.z + VOL.depth; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
+                    if (p.z3 > CAM.z + VOL.depth + 300) { p.z3 = CAM.z + CAM.near + 20; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
+                }
+
+                function drawBG() {
+                    bgCtx.clearRect(0, 0, W, H);
+                    bgCtx.fillStyle = '#0f1011';
+                    bgCtx.fillRect(0, 0, W, H);
+                    const atm = bgCtx.createRadialGradient(W * .5, H * .54, 0, W * .5, H * .54, W * .68);
+                    atm.addColorStop(0, 'rgba(90,34,4,0.11)');
+                    atm.addColorStop(0.5, 'rgba(52,18,2,0.04)');
+                    atm.addColorStop(1, 'rgba(0,0,0,0)');
+                    bgCtx.fillStyle = atm; bgCtx.fillRect(0, 0, W, H);
+                    const vig = bgCtx.createRadialGradient(W * .5, H * .5, Math.min(W, H) * .15, W * .5, H * .5, Math.max(W, H) * .92);
+                    vig.addColorStop(0, 'rgba(0,0,0,0)');
+                    vig.addColorStop(0.52, 'rgba(0,0,0,0.09)');
+                    vig.addColorStop(1, 'rgba(0,0,0,0.82)');
+                    bgCtx.fillStyle = vig; bgCtx.fillRect(0, 0, W, H);
+                }
+
+                // TEXT PARALLAX — multi-layer organic float
+                const titleWrapEl = document.getElementById('titleWrap');
+                const eyebrowParEl = document.getElementById('eyebrow');
+                const subParEl = document.getElementById('subTitle');
+                const tagsParEl = document.querySelector('.tags');
+                const mainTitleEl = document.getElementById('mainTitle');
+
+                let pMX = 0, pMY = 0; // smoothed mouse
+
+                function applyTextParallax(elapsed) {
+                    pMX += (mouse.x - pMX) * 0.038;
+                    pMY += (mouse.y - pMY) * 0.038;
+                    const mx = (pMX / W) - 0.5;
+                    const my = (pMY / H) - 0.5;
+                    const T = elapsed * 0.001;
+
+                    const txA = Math.sin(T * 0.112 + 0.0) * 3.0 + Math.sin(T * 0.071) * 1.5;
+                    const tyA = Math.cos(T * 0.093 + 1.2) * 2.0 + Math.cos(T * 0.134) * 1.0;
+
+                    const exA = Math.sin(T * 0.131 + 2.1) * 2.4 + Math.sin(T * 0.062) * 1.1;
+                    const eyA = Math.cos(T * 0.082 + 0.5) * 1.5 + Math.cos(T * 0.113) * 0.8;
+
+                    const sxA = Math.sin(T * 0.098 + 1.0) * 1.8 + Math.sin(T * 0.079) * 0.9;
+                    const syA = Math.cos(T * 0.118 + 3.0) * 1.3 + Math.cos(T * 0.068) * 0.6;
+
+                    const gxA = Math.sin(T * 0.087 + 0.7) * 1.2;
+                    const gyA = Math.cos(T * 0.141 + 2.4) * 0.8;
+
+                    const tX = mx * -16 + txA, tY = my * -11 + tyA;
+                    const eX = mx * -9 + exA, eY = my * -6 + eyA;
+                    const sX = mx * -5 + sxA, sY = my * -4 + syA;
+                    const gX = mx * -3 + gxA, gY = my * -2 + gyA;
+
+                    const breathe = 1 + Math.sin(T * 0.19 + 0.3) * 0.004;
+
+                    if (titleWrapEl) titleWrapEl.style.transform = `translate(${tX.toFixed(2)}px,${tY.toFixed(2)}px) scale(${breathe.toFixed(5)})`;
+                    if (eyebrowParEl) eyebrowParEl.style.transform = `translate(${eX.toFixed(2)}px,${eY.toFixed(2)}px)`;
+                    if (subParEl) subParEl.style.transform = `translate(${sX.toFixed(2)}px,${sY.toFixed(2)}px)`;
+                    if (tagsParEl) tagsParEl.style.transform = `translate(${gX.toFixed(2)}px,${gY.toFixed(2)}px)`;
+                }
+
+                // SCROLL DEPTH DISSOLUTION
+                let scrollDepth = 0, smoothVel = 0;
+
+                function applyDepthDissolution(dt) {
+                    // We map raw scroll over 2.2 times the VOL.depth for a breathtaking four-stage scroll narrative
+                    const raw = Math.min(targetScrollZ / (VOL.depth * 2.2), 1);
+                    scrollDepth += (raw - scrollDepth) * 0.05;
+                    smoothVel += (Math.abs(camVel) - smoothVel) * 0.07;
+                    smoothVel *= Math.pow(0.88, dt / 16);
+
+                    const d = scrollDepth;
+
+                    // 1. Content (Hero Text)
+                    // Active: d = 0.0 -> 0.28
+                    const heroProgress = Math.max(0, Math.min(1, d / 0.24));
+                    const heroOpacity = Math.max(0, 1 - heroProgress * 2.0);
+                    const heroY = -heroProgress * 140;
+                    const scaleY = 1 - heroProgress * 0.05;
+                    const lsExpand = heroProgress * heroProgress * 0.12;
+
+                    if (content) {
+                        content.style.opacity = heroOpacity.toFixed(4);
+                        content.style.transform = `scaleY(${scaleY.toFixed(5)}) translateY(${heroY.toFixed(2)}px)`;
+
+                        const blurRamp = Math.max(0, (heroProgress - 0.22) / 0.78);
+                        const totalBlur = blurRamp * blurRamp * 22 + smoothVel * 0.018;
+                        content.style.filter = totalBlur > 0.3 ? `blur(${totalBlur.toFixed(2)}px)` : 'none';
+                    }
+
+                    if (mainTitleEl) {
+                        mainTitleEl.style.letterSpacing = `calc(0.18em + ${lsExpand.toFixed(4)}em)`;
+                    }
+
+                    // 2. Challenge Section (Active Grid)
+                    // Active: enters d = 0.16 -> 0.36, exits d = 0.36 -> 0.54
+                    const challengeSec = document.getElementById('challengeSection');
+                    if (challengeSec) {
+                        let gridOpacity = 0;
+                        let gridY = 120;
+
+                        if (d <= 0.36) {
+                            const progress = Math.max(0, Math.min(1, (d - 0.16) / 0.20));
+                            gridOpacity = progress;
+                            gridY = (1 - progress) * 120;
+                        } else {
+                            const progress = Math.max(0, Math.min(1, (d - 0.36) / 0.18));
+                            gridOpacity = 1 - progress;
+                            gridY = -progress * 120;
+                        }
+
+                        challengeSec.style.opacity = gridOpacity.toFixed(4);
+                        challengeSec.style.transform = `translateY(${gridY.toFixed(2)}px)`;
+                        challengeSec.style.pointerEvents = (d > 0.24 && d < 0.48) ? 'auto' : 'none';
+
+                        if (d > 0.24 && d < 0.48) {
+                            challengeSec.classList.add('active');
+                        } else {
+                            challengeSec.classList.remove('active');
+                        }
+                    }
+
+                    // 3. Challenge Analysis Section (Radar Scanner)
+                    // Active: enters d = 0.44 -> 0.64, exits d = 0.64 -> 0.78
+                    const analysisSec = document.getElementById('analysisSection');
+                    if (analysisSec) {
+                        let scanOpacity = 0;
+                        let scanY = 120;
+
+                        if (d <= 0.64) {
+                            const progress = Math.max(0, Math.min(1, (d - 0.44) / 0.20));
+                            scanOpacity = progress;
+                            scanY = (1 - progress) * 120;
+                        } else {
+                            const progress = Math.max(0, Math.min(1, (d - 0.64) / 0.14));
+                            scanOpacity = 1 - progress;
+                            scanY = -progress * 120;
+                        }
+
+                        analysisSec.style.opacity = scanOpacity.toFixed(4);
+                        analysisSec.style.transform = `translateY(${scanY.toFixed(2)}px)`;
+                        analysisSec.style.pointerEvents = (d > 0.50 && d < 0.72) ? 'auto' : 'none';
+
+                        if (d > 0.50 && d < 0.72) {
+                            analysisSec.classList.add('active');
+                        } else {
+                            analysisSec.classList.remove('active');
+                        }
+                    }
+
+                    // 4. Team Recruitment Network Section (Squad Discovery)
+                    // Active: enters d = 0.68 -> 0.94
+                    const recruitmentSec = document.getElementById('recruitmentSection');
+                    if (recruitmentSec) {
+                        const progress = Math.max(0, Math.min(1, (d - 0.68) / 0.26));
+                        recruitmentSec.style.opacity = progress.toFixed(4);
+
+                        const recruitY = (1 - progress) * 120;
+                        recruitmentSec.style.transform = `translateY(${recruitY.toFixed(2)}px)`;
+                        recruitmentSec.style.pointerEvents = d > 0.80 ? 'auto' : 'none';
+
+                        if (d > 0.80) {
+                            recruitmentSec.classList.add('active');
+                        } else {
+                            recruitmentSec.classList.remove('active');
+                        }
+                    }
+                }
+
+                // MAIN LOOP
+                function frame(now) {
+                    requestAnimationFrame(frame);
+                    const dt = Math.min(50, now - last); last = now;
+                    const elapsed = now - t0;
+
+                    const prevZ = CAM.z;
+                    CAM.z += (targetScrollZ - CAM.z) * 0.055;
+                    camVel = (CAM.z - prevZ) / Math.max(dt, 1) * 16;
+                    CAM.tiltX += (mouse.tx - CAM.tiltX) * 0.040;
+                    CAM.tiltY += (mouse.ty - CAM.tiltY) * 0.040;
+
+                    for (let i = 0; i < particles.length; i++) updateP(particles[i], dt, elapsed);
+
+                    const target = Math.min(110, Math.max(70, Math.floor(W * H / 7500)));
+                    while (particles.length < target) particles.push(spawn(false));
+
+                    particles.sort((a, b) => (b.z3 - CAM.z) - (a.z3 - CAM.z));
+
+                    drawBG();
+                    for (let i = 0; i < particles.length; i++) {
+                        if (particles[i].z3 - CAM.z > TEXT_Z) paintParticle(bgCtx, particles[i], elapsed, 1.0);
+                    }
+
+                    fgCtx.clearRect(0, 0, W, H);
+                    for (let i = 0; i < particles.length; i++) {
+                        if (particles[i].z3 - CAM.z <= TEXT_Z) paintParticle(fgCtx, particles[i], elapsed, 0.68);
+                    }
+
+                    if (scrollDepth < 0.95) applyTextParallax(elapsed);
+                    applyDepthDissolution(dt);
+
+                    // Draw Radar Visualization Console in standard high-performance compositor loop
+                    if (typeof drawRadarChart === 'function' && scrollDepth > 0.55) {
+                        drawRadarChart(elapsed);
+                    }
+                }
+
+                // RESIZE
+                function resize() {
+                    DPR = Math.min(window.devicePixelRatio || 1, 2);
+                    W = stage.clientWidth; H = stage.clientHeight;
+                    [bgCv, fgCv].forEach(cv => {
+                        cv.width = Math.floor(W * DPR); cv.height = Math.floor(H * DPR);
+                        cv.style.width = W + 'px'; cv.style.height = H + 'px';
+                    });
+                    bgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+                    fgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+                    initParticles();
+                }
+
+                // INPUT
+                document.addEventListener('mousemove', e => {
+                    mouse.x = e.clientX; mouse.y = e.clientY;
+                    const r = stage.getBoundingClientRect();
+                    mouse.tx = (e.clientX - r.left - W / 2) * 1.4;
+                    mouse.ty = (e.clientY - r.top - H / 2) * 0.9;
+                }, { passive: true });
+
+                stage.addEventListener('mouseleave', () => { mouse.tx = 0; mouse.ty = 0; }, { passive: true });
+                stage.addEventListener('wheel', e => {
+                    e.preventDefault();
+                    targetScrollZ += e.deltaY * 2.0;
+                    targetScrollZ = Math.max(0, targetScrollZ);
+                }, { passive: false });
+
+                let _lTY = null;
+                stage.addEventListener('touchstart', e => { _lTY = e.touches[0].clientY; }, { passive: true });
+                stage.addEventListener('touchmove', e => {
+                    if (_lTY !== null) { const dy = _lTY - e.touches[0].clientY; targetScrollZ += dy * 3.4; targetScrollZ = Math.max(0, targetScrollZ); _lTY = e.touches[0].clientY; }
+                }, { passive: true });
+                stage.addEventListener('touchend', () => { _lTY = null; }, { passive: true });
+
+                window.addEventListener('resize', resize, { passive: true });
+                resize();
+                requestAnimationFrame(frame);
+
+                // TEXT REVEAL — Thermal ignition
+                const eyebrowEl = document.getElementById('eyebrow');
+                const eyebrowText = eyebrowEl.textContent;
+                eyebrowEl.innerHTML = '';
+                [...eyebrowText].forEach(ch => {
+                    const s = document.createElement('span');
+                    s.className = 'ch';
+                    s.textContent = ch === ' ' ? '\u00A0' : ch;
+                    eyebrowEl.appendChild(s);
                 });
-            }, 900);
 
-            setTimeout(() => subEl.classList.add('wipe'), 2200);
-            setTimeout(() => ruleEl.classList.add('show'), 2650);
-            setTimeout(() => { tagEls.forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 130)); }, 3050);
+                const mainTitleDom = document.getElementById('mainTitle');
+                const titleText = mainTitleDom.textContent.trim();
+                mainTitleDom.innerHTML = '';
+                const charSpans = [];
+                [...titleText].forEach(ch => {
+                    const s = document.createElement('span');
+                    s.className = 'ch';
+                    s.textContent = ch;
+                    s.style.cssText = `display:inline-block;opacity:0;filter:blur(28px) brightness(3.0);transform:scale(1.04);color:rgba(255,140,60,1);text-shadow:none;transition:none;`;
+                    mainTitleDom.appendChild(s);
+                    charSpans.push(s);
+                });
 
-            // PREMIUM LETTER SWEEP
-            (function initSweep() {
-                const FILL_DUR = 680;
-                const HOLD_DUR = 140;
-                const EMPTY_DUR = 520;
-                const STEP_DUR = FILL_DUR + HOLD_DUR;
-                const CYCLE_PAUSE = 1400;
+                const subEl = document.getElementById('subTitle');
+                const subText = subEl.textContent;
+                subEl.innerHTML = '';
+                subText.split(' ').forEach((word, i, arr) => {
+                    const outer = document.createElement('span');
+                    outer.className = 'word';
+                    const inner = document.createElement('span');
+                    inner.className = 'inner';
+                    inner.textContent = word;
+                    inner.style.transitionDelay = `${i * 0.06}s`;
+                    outer.appendChild(inner);
+                    subEl.appendChild(outer);
+                    if (i < arr.length - 1) subEl.appendChild(document.createTextNode(' '));
+                });
 
-                charSpans.forEach(span => {
-                    span.style.position = 'relative';
-                    span.style.display = 'inline-block';
+                const ruleEl = document.getElementById('rule');
+                const tagEls = [0, 1, 2, 3, 4].map(i => document.getElementById('t' + i));
 
-                    const base = document.createElement('span');
-                    base.textContent = span.textContent;
-                    base.style.cssText = `
+                function thermalIgnite(span, delay) {
+                    setTimeout(() => {
+                        span.style.transition = 'none';
+                        span.style.opacity = '1';
+                        span.style.filter = 'blur(26px) brightness(2.8)';
+                        span.style.color = 'rgba(255,120,40,1)';
+                        span.style.transform = 'scale(1.06)';
+                        setTimeout(() => {
+                            span.style.transition = 'filter 0.55s cubic-bezier(0.4,0,0.2,1),color 0.55s ease,transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+                            span.style.filter = 'blur(8px) brightness(2.0)';
+                            span.style.color = 'rgba(255,180,90,1)';
+                            span.style.transform = 'scale(1.02)';
+                        }, 40);
+                        setTimeout(() => {
+                            span.style.transition = 'filter 0.35s cubic-bezier(0.4,0,0.2,1),color 0.4s ease,transform 0.4s cubic-bezier(0.16,1,0.3,1)';
+                            span.style.filter = 'blur(0px) brightness(1.0)';
+                            span.style.color = '#ffffff';
+                            span.style.transform = 'scale(1.0)';
+                        }, 340);
+                    }, delay);
+                }
+
+                const eyebrowChars = eyebrowEl.querySelectorAll('.ch');
+                setTimeout(() => {
+                    eyebrowChars.forEach((ch, i) => { setTimeout(() => ch.classList.add('on'), i * 22); });
+                }, 400);
+
+                const N = charSpans.length, center = (N - 1) / 2;
+                setTimeout(() => {
+                    charSpans.forEach((span, i) => {
+                        const dist = Math.abs(i - center);
+                        thermalIgnite(span, dist * 88 + Math.random() * 30);
+                    });
+                }, 900);
+
+                setTimeout(() => subEl.classList.add('wipe'), 2200);
+                setTimeout(() => ruleEl.classList.add('show'), 2650);
+                setTimeout(() => { tagEls.forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 130)); }, 3050);
+
+                // PREMIUM LETTER SWEEP
+                (function initSweep() {
+                    const FILL_DUR = 680;
+                    const HOLD_DUR = 140;
+                    const EMPTY_DUR = 520;
+                    const STEP_DUR = FILL_DUR + HOLD_DUR;
+                    const CYCLE_PAUSE = 1400;
+
+                    charSpans.forEach(span => {
+                        span.style.position = 'relative';
+                        span.style.display = 'inline-block';
+
+                        const base = document.createElement('span');
+                        base.textContent = span.textContent;
+                        base.style.cssText = `
                     position:absolute;inset:0;
                     color:#ffffff;
                     pointer-events:none;
                     font-family:inherit;font-size:inherit;font-weight:inherit;
                     font-style:inherit;letter-spacing:inherit;line-height:inherit;
                 `;
-                    span.insertBefore(base, span.firstChild);
+                        span.insertBefore(base, span.firstChild);
 
-                    const fill = document.createElement('span');
-                    fill.textContent = span.textContent;
-                    fill.style.cssText = `
+                        const fill = document.createElement('span');
+                        fill.textContent = span.textContent;
+                        fill.style.cssText = `
                     position:absolute;inset:0;
                     color:rgb(218, 108, 32);
                     clip-path:inset(100% 0 0 0);
@@ -3296,501 +2709,501 @@
                     font-style:inherit;letter-spacing:inherit;line-height:inherit;
                     opacity:0;
                 `;
-                    span.appendChild(fill);
-                    span._fillEl = fill;
-                });
+                        span.appendChild(fill);
+                        span._fillEl = fill;
+                    });
 
-                function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-                function easeInCubic(t) { return t * t * t; }
+                    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+                    function easeInCubic(t) { return t * t * t; }
 
-                function animateFill(fillEl, fromPct, toPct, dur, easeFn, opFrom, opTo, cb) {
-                    const start = performance.now();
-                    function step(now) {
-                        const raw = Math.min((now - start) / dur, 1);
-                        const t = easeFn(raw);
-                        const pct = fromPct + (toPct - fromPct) * t;
-                        const op = opFrom + (opTo - opFrom) * t;
-                        fillEl.style.clipPath = `inset(${(100 - pct).toFixed(3)}% 0 0 0)`;
-                        fillEl.style.opacity = op.toFixed(4);
-                        if (raw < 1) requestAnimationFrame(step);
-                        else {
-                            fillEl.style.clipPath = `inset(${(100 - toPct).toFixed(3)}% 0 0 0)`;
-                            fillEl.style.opacity = opTo.toFixed(4);
-                            if (cb) cb();
+                    function animateFill(fillEl, fromPct, toPct, dur, easeFn, opFrom, opTo, cb) {
+                        const start = performance.now();
+                        function step(now) {
+                            const raw = Math.min((now - start) / dur, 1);
+                            const t = easeFn(raw);
+                            const pct = fromPct + (toPct - fromPct) * t;
+                            const op = opFrom + (opTo - opFrom) * t;
+                            fillEl.style.clipPath = `inset(${(100 - pct).toFixed(3)}% 0 0 0)`;
+                            fillEl.style.opacity = op.toFixed(4);
+                            if (raw < 1) requestAnimationFrame(step);
+                            else {
+                                fillEl.style.clipPath = `inset(${(100 - toPct).toFixed(3)}% 0 0 0)`;
+                                fillEl.style.opacity = opTo.toFixed(4);
+                                if (cb) cb();
+                            }
                         }
+                        requestAnimationFrame(step);
                     }
-                    requestAnimationFrame(step);
-                }
 
-                function runCycle() {
-                    let i = 0;
-                    function nextLetter() {
-                        if (i >= charSpans.length) {
-                            setTimeout(runCycle, CYCLE_PAUSE + EMPTY_DUR);
-                            return;
+                    function runCycle() {
+                        let i = 0;
+                        function nextLetter() {
+                            if (i >= charSpans.length) {
+                                setTimeout(runCycle, CYCLE_PAUSE + EMPTY_DUR);
+                                return;
+                            }
+                            const fill = charSpans[i]._fillEl;
+
+                            animateFill(fill, 0, 100, FILL_DUR, easeOutCubic, 0, 1, () => {
+                                setTimeout(() => {
+                                    animateFill(fill, 100, 0, EMPTY_DUR, easeInCubic, 1, 0, null);
+                                }, HOLD_DUR);
+                            });
+
+                            i++;
+                            setTimeout(nextLetter, STEP_DUR);
                         }
-                        const fill = charSpans[i]._fillEl;
-
-                        animateFill(fill, 0, 100, FILL_DUR, easeOutCubic, 0, 1, () => {
-                            setTimeout(() => {
-                                animateFill(fill, 100, 0, EMPTY_DUR, easeInCubic, 1, 0, null);
-                            }, HOLD_DUR);
-                        });
-
-                        i++;
-                        setTimeout(nextLetter, STEP_DUR);
+                        nextLetter();
                     }
-                    nextLetter();
-                }
 
-                setTimeout(runCycle, 3000);
-            })();
+                    setTimeout(runCycle, 3000);
+                })();
 
-            // ─────────────────────────────────────────────────────────────────────────────
-            // FUTURISTIC CHALLENGE SCANNER (RADAR CHART) ENGINE
-            // ─────────────────────────────────────────────────────────────────────────────
-            const CHALLENGE_PROFILES = [
-                {
-                    filename: "portfolio.sh",
-                    stack: "Next.js + Three.js + Tailwind",
-                    role: "Creative Technologist / Frontend Lead",
-                    skills: ["React", "GSAP", "WebGL", "CSS Grid"],
-                    team: [
-                        { role: "1 Frontend Dev", desc: "Interactive Expert" },
-                        { role: "1 UI Designer", desc: "Matte/Layout Specialist" },
-                        { role: "1 Motion Designer", desc: "Cinematic Director" }
-                    ],
-                    insight: "Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.",
-                    metrics: [0.90, 0.95, 0.20, 0.95, 0.40, 0.30, 0.95, 0.60] // Creativity, Frontend, Backend, UI/UX, AI/Logic, Teamwork, Motion, Problem Solving
-                },
-                {
-                    filename: "scale_sys.rs",
-                    stack: "Rust + Tokio + Prometheus",
-                    role: "Systems Engineer / Infrastructure Lead",
-                    skills: ["Rust", "gRPC", "Redis", "Kubernetes"],
-                    team: [
-                        { role: "1 Systems Architect", desc: "Concurrency Architect" },
-                        { role: "1 Backend Engineer", desc: "Tokio/gRPC Developer" },
-                        { role: "1 DevOps Specialist", desc: "Grafana/K8s Deployer" }
-                    ],
-                    insight: "Best suited for developers interested in: highly concurrent microservices, distributed consensus protocols, and low-latency system profiling.",
-                    metrics: [0.40, 0.15, 0.95, 0.10, 0.90, 0.80, 0.05, 0.95]
-                },
-                {
-                    filename: "compiler.go",
-                    stack: "Go + WebAssembly + TypeScript",
-                    role: "Language Designer / Core Developer",
-                    skills: ["Go", "Lexing/Parsing", "AST Generation", "WebAssembly"],
-                    team: [
-                        { role: "1 Compiler Engineer", desc: "Language Designer" },
-                        { role: "1 WASM Integrator", desc: "TypeScript Interface Dev" }
-                    ],
-                    insight: "Best suited for engineers interested in: lexical analysis, formal language design, and optimizing AST parsing execution pipelines.",
-                    metrics: [0.50, 0.25, 0.80, 0.30, 0.95, 0.40, 0.10, 0.90]
-                }
-            ];
+                // ─────────────────────────────────────────────────────────────────────────────
+                // FUTURISTIC CHALLENGE SCANNER (RADAR CHART) ENGINE
+                // ─────────────────────────────────────────────────────────────────────────────
+                const CHALLENGE_PROFILES = [
+                    {
+                        filename: "portfolio.sh",
+                        stack: "Next.js + Three.js + Tailwind",
+                        role: "Creative Technologist / Frontend Lead",
+                        skills: ["React", "GSAP", "WebGL", "CSS Grid"],
+                        team: [
+                            { role: "1 Frontend Dev", desc: "Interactive Expert" },
+                            { role: "1 UI Designer", desc: "Matte/Layout Specialist" },
+                            { role: "1 Motion Designer", desc: "Cinematic Director" }
+                        ],
+                        insight: "Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.",
+                        metrics: [0.90, 0.95, 0.20, 0.95, 0.40, 0.30, 0.95, 0.60] // Creativity, Frontend, Backend, UI/UX, AI/Logic, Teamwork, Motion, Problem Solving
+                    },
+                    {
+                        filename: "scale_sys.rs",
+                        stack: "Rust + Tokio + Prometheus",
+                        role: "Systems Engineer / Infrastructure Lead",
+                        skills: ["Rust", "gRPC", "Redis", "Kubernetes"],
+                        team: [
+                            { role: "1 Systems Architect", desc: "Concurrency Architect" },
+                            { role: "1 Backend Engineer", desc: "Tokio/gRPC Developer" },
+                            { role: "1 DevOps Specialist", desc: "Grafana/K8s Deployer" }
+                        ],
+                        insight: "Best suited for developers interested in: highly concurrent microservices, distributed consensus protocols, and low-latency system profiling.",
+                        metrics: [0.40, 0.15, 0.95, 0.10, 0.90, 0.80, 0.05, 0.95]
+                    },
+                    {
+                        filename: "compiler.go",
+                        stack: "Go + WebAssembly + TypeScript",
+                        role: "Language Designer / Core Developer",
+                        skills: ["Go", "Lexing/Parsing", "AST Generation", "WebAssembly"],
+                        team: [
+                            { role: "1 Compiler Engineer", desc: "Language Designer" },
+                            { role: "1 WASM Integrator", desc: "TypeScript Interface Dev" }
+                        ],
+                        insight: "Best suited for engineers interested in: lexical analysis, formal language design, and optimizing AST parsing execution pipelines.",
+                        metrics: [0.50, 0.25, 0.80, 0.30, 0.95, 0.40, 0.10, 0.90]
+                    }
+                ];
 
-            const RADAR_METRICS_LABELS = [
-                "Creativity", "Frontend", "Backend", "UI/UX", 
-                "AI/Logic", "Teamwork", "Motion Design", "Problem Solving"
-            ];
+                const RADAR_METRICS_LABELS = [
+                    "Creativity", "Frontend", "Backend", "UI/UX",
+                    "AI/Logic", "Teamwork", "Motion Design", "Problem Solving"
+                ];
 
-            const radarCanvas = document.getElementById('radarCanvas');
-            const radarCtx = radarCanvas.getContext('2d');
-            
-            let currentMetrics = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
-            let targetMetrics = [...CHALLENGE_PROFILES[0].metrics];
-            let activeChallengeIdx = 0;
-            let hoveredAxisIndex = -1;
-            
-            let radarMouse = { x: 0, y: 0, active: false };
+                const radarCanvas = document.getElementById('radarCanvas');
+                const radarCtx = radarCanvas.getContext('2d');
 
-            function updateScannerUI(index) {
-                activeChallengeIdx = index;
-                const profile = CHALLENGE_PROFILES[index];
-                
-                targetMetrics = [...profile.metrics];
-                
-                // Update header info
-                document.getElementById('radar-filename').textContent = profile.filename;
-                
-                // Trigger terminal scanning state
-                const statusTextEl = document.getElementById('scanner-status-text');
-                statusTextEl.textContent = "SCANNING...";
-                statusTextEl.style.color = "rgb(218, 108, 32)";
-                
-                setTimeout(() => {
-                    statusTextEl.textContent = "SCAN COMPLETE";
-                    statusTextEl.style.color = "rgba(255, 255, 255, 0.4)";
-                }, 750);
-                
-                // Update tag chips
-                const tagsContainer = document.getElementById('analysis-tags');
-                tagsContainer.innerHTML = '';
-                profile.skills.forEach((tag, idx) => {
-                    const tagEl = document.createElement('span');
-                    tagEl.className = 'stack-tag';
-                    tagEl.textContent = tag;
-                    tagEl.style.opacity = '0';
-                    tagEl.style.transform = 'translateY(10px)';
-                    tagsContainer.appendChild(tagEl);
-                    
-                    // Stagger reveal
+                let currentMetrics = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+                let targetMetrics = [...CHALLENGE_PROFILES[0].metrics];
+                let activeChallengeIdx = 0;
+                let hoveredAxisIndex = -1;
+
+                let radarMouse = { x: 0, y: 0, active: false };
+
+                function updateScannerUI(index) {
+                    activeChallengeIdx = index;
+                    const profile = CHALLENGE_PROFILES[index];
+
+                    targetMetrics = [...profile.metrics];
+
+                    // Update header info
+                    document.getElementById('radar-filename').textContent = profile.filename;
+
+                    // Trigger terminal scanning state
+                    const statusTextEl = document.getElementById('scanner-status-text');
+                    statusTextEl.textContent = "SCANNING...";
+                    statusTextEl.style.color = "rgb(218, 108, 32)";
+
                     setTimeout(() => {
-                        tagEl.style.opacity = '1';
-                        tagEl.style.transform = 'translateY(0)';
-                    }, idx * 60);
-                });
-                
-                // Update specs
-                document.getElementById('spec-stack').textContent = profile.stack;
-                document.getElementById('spec-role').textContent = profile.role;
-                
-                // Update team composition mini cards
-                const teamContainer = document.getElementById('team-cards');
-                teamContainer.innerHTML = '';
-                profile.team.forEach((member, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'team-mini-card';
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(15px)';
-                    card.innerHTML = `
+                        statusTextEl.textContent = "SCAN COMPLETE";
+                        statusTextEl.style.color = "rgba(255, 255, 255, 0.4)";
+                    }, 750);
+
+                    // Update tag chips
+                    const tagsContainer = document.getElementById('analysis-tags');
+                    tagsContainer.innerHTML = '';
+                    profile.skills.forEach((tag, idx) => {
+                        const tagEl = document.createElement('span');
+                        tagEl.className = 'stack-tag';
+                        tagEl.textContent = tag;
+                        tagEl.style.opacity = '0';
+                        tagEl.style.transform = 'translateY(10px)';
+                        tagsContainer.appendChild(tagEl);
+
+                        // Stagger reveal
+                        setTimeout(() => {
+                            tagEl.style.opacity = '1';
+                            tagEl.style.transform = 'translateY(0)';
+                        }, idx * 60);
+                    });
+
+                    // Update specs
+                    document.getElementById('spec-stack').textContent = profile.stack;
+                    document.getElementById('spec-role').textContent = profile.role;
+
+                    // Update team composition mini cards
+                    const teamContainer = document.getElementById('team-cards');
+                    teamContainer.innerHTML = '';
+                    profile.team.forEach((member, idx) => {
+                        const card = document.createElement('div');
+                        card.className = 'team-mini-card';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(15px)';
+                        card.innerHTML = `
                         <span class="team-role">${member.role}</span>
                         <span class="team-desc">${member.desc}</span>
                     `;
-                    teamContainer.appendChild(card);
-                    
+                        teamContainer.appendChild(card);
+
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, idx * 100);
+                    });
+
+                    // Update insight
+                    const insightText = document.getElementById('insight-text');
+                    insightText.style.opacity = '0';
+                    insightText.style.transform = 'translateY(8px)';
                     setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, idx * 100);
-                });
-                
-                // Update insight
-                const insightText = document.getElementById('insight-text');
-                insightText.style.opacity = '0';
-                insightText.style.transform = 'translateY(8px)';
-                setTimeout(() => {
-                    insightText.textContent = profile.insight;
-                    insightText.style.opacity = '1';
-                    insightText.style.transform = 'translateY(0)';
-                }, 200);
-            }
-
-            // Draw Radar on Canvas
-            function resizeRadarCanvas() {
-                const rect = radarCanvas.parentElement.getBoundingClientRect();
-                const size = Math.min(rect.width, rect.height, 350);
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
-                
-                radarCanvas.width = size * dpr;
-                radarCanvas.height = size * dpr;
-                radarCanvas.style.width = size + 'px';
-                radarCanvas.style.height = size + 'px';
-                radarCtx.scale(dpr, dpr);
-            }
-
-            window.drawRadarChart = function(elapsed) {
-                const size = radarCanvas.width / (window.devicePixelRatio || 1);
-                if (size <= 0) return;
-                
-                const cx = size / 2;
-                const cy = size / 2;
-                const rMax = size * 0.36;
-                const numAxes = 8;
-                
-                radarCtx.clearRect(0, 0, size, size);
-                
-                // Breathing factor using standard compositor-friendly mathematical LERP
-                const breath = 1.0 + 0.015 * Math.sin(elapsed * 0.0016);
-                const rBreathMax = rMax * breath;
-                
-                // Lerp current metrics towards target metrics
-                for (let i = 0; i < numAxes; i++) {
-                    currentMetrics[i] += (targetMetrics[i] - currentMetrics[i]) * 0.07;
+                        insightText.textContent = profile.insight;
+                        insightText.style.opacity = '1';
+                        insightText.style.transform = 'translateY(0)';
+                    }, 200);
                 }
-                
-                // Hover Axis Detection
-                hoveredAxisIndex = -1;
-                if (radarMouse.active) {
-                    const dx = radarMouse.x - cx;
-                    const dy = radarMouse.y - cy;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (dist > 15 && dist < rMax + 30) {
-                        let angle = Math.atan2(dy, dx);
-                        if (angle < 0) angle += Math.PI * 2;
-                        
-                        // Align axis angles (starting at top = -PI/2)
-                        let adjustedAngle = angle + Math.PI / 2;
-                        if (adjustedAngle < 0) adjustedAngle += Math.PI * 2;
-                        if (adjustedAngle >= Math.PI * 2) adjustedAngle -= Math.PI * 2;
-                        
-                        const step = (Math.PI * 2) / numAxes;
-                        let axisIdx = Math.round(adjustedAngle / step) % numAxes;
-                        hoveredAxisIndex = axisIdx;
+
+                // Draw Radar on Canvas
+                function resizeRadarCanvas() {
+                    const rect = radarCanvas.parentElement.getBoundingClientRect();
+                    const size = Math.min(rect.width, rect.height, 350);
+                    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+                    radarCanvas.width = size * dpr;
+                    radarCanvas.height = size * dpr;
+                    radarCanvas.style.width = size + 'px';
+                    radarCanvas.style.height = size + 'px';
+                    radarCtx.scale(dpr, dpr);
+                }
+
+                window.drawRadarChart = function (elapsed) {
+                    const size = radarCanvas.width / (window.devicePixelRatio || 1);
+                    if (size <= 0) return;
+
+                    const cx = size / 2;
+                    const cy = size / 2;
+                    const rMax = size * 0.36;
+                    const numAxes = 8;
+
+                    radarCtx.clearRect(0, 0, size, size);
+
+                    // Breathing factor using standard compositor-friendly mathematical LERP
+                    const breath = 1.0 + 0.015 * Math.sin(elapsed * 0.0016);
+                    const rBreathMax = rMax * breath;
+
+                    // Lerp current metrics towards target metrics
+                    for (let i = 0; i < numAxes; i++) {
+                        currentMetrics[i] += (targetMetrics[i] - currentMetrics[i]) * 0.07;
                     }
-                }
-                
-                // 1. Draw Concentric Grid Rings (4 rings: 25%, 50%, 75%, 100%)
-                const rings = [0.25, 0.50, 0.75, 1.00];
-                rings.forEach((ringPct) => {
-                    const r = rBreathMax * ringPct;
+
+                    // Hover Axis Detection
+                    hoveredAxisIndex = -1;
+                    if (radarMouse.active) {
+                        const dx = radarMouse.x - cx;
+                        const dy = radarMouse.y - cy;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist > 15 && dist < rMax + 30) {
+                            let angle = Math.atan2(dy, dx);
+                            if (angle < 0) angle += Math.PI * 2;
+
+                            // Align axis angles (starting at top = -PI/2)
+                            let adjustedAngle = angle + Math.PI / 2;
+                            if (adjustedAngle < 0) adjustedAngle += Math.PI * 2;
+                            if (adjustedAngle >= Math.PI * 2) adjustedAngle -= Math.PI * 2;
+
+                            const step = (Math.PI * 2) / numAxes;
+                            let axisIdx = Math.round(adjustedAngle / step) % numAxes;
+                            hoveredAxisIndex = axisIdx;
+                        }
+                    }
+
+                    // 1. Draw Concentric Grid Rings (4 rings: 25%, 50%, 75%, 100%)
+                    const rings = [0.25, 0.50, 0.75, 1.00];
+                    rings.forEach((ringPct) => {
+                        const r = rBreathMax * ringPct;
+                        radarCtx.beginPath();
+                        for (let i = 0; i < numAxes; i++) {
+                            const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                            const x = cx + Math.cos(angle) * r;
+                            const y = cy + Math.sin(angle) * r;
+                            if (i === 0) radarCtx.moveTo(x, y);
+                            else radarCtx.lineTo(x, y);
+                        }
+                        radarCtx.closePath();
+                        radarCtx.strokeStyle = ringPct === 1.0
+                            ? 'rgba(255, 255, 255, 0.07)'
+                            : 'rgba(255, 255, 255, 0.035)';
+                        radarCtx.lineWidth = 0.8;
+                        radarCtx.stroke();
+                    });
+
+                    // 2. Draw Radial Axis Lines
+                    for (let i = 0; i < numAxes; i++) {
+                        const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                        const outerX = cx + Math.cos(angle) * rBreathMax;
+                        const outerY = cy + Math.sin(angle) * rBreathMax;
+
+                        radarCtx.beginPath();
+                        radarCtx.moveTo(cx, cy);
+                        radarCtx.lineTo(outerX, outerY);
+
+                        const isHovered = (i === hoveredAxisIndex);
+                        radarCtx.strokeStyle = isHovered
+                            ? 'rgba(218, 108, 32, 0.45)'
+                            : 'rgba(255, 255, 255, 0.035)';
+                        radarCtx.lineWidth = isHovered ? 1.2 : 0.8;
+                        radarCtx.stroke();
+
+                        // Draw outer axis crosshair dot
+                        radarCtx.beginPath();
+                        radarCtx.arc(outerX, outerY, isHovered ? 2.5 : 1.5, 0, Math.PI * 2);
+                        radarCtx.fillStyle = isHovered
+                            ? 'rgba(218, 108, 32, 0.85)'
+                            : 'rgba(255, 255, 255, 0.15)';
+                        radarCtx.fill();
+
+                        // Draw Labeled Metric text
+                        const labelRadius = rBreathMax + 24;
+                        const labelX = cx + Math.cos(angle) * labelRadius;
+                        const labelY = cy + Math.sin(angle) * labelRadius + 3; // Vertically centered roughly
+
+                        radarCtx.font = "500 7px 'Outfit', sans-serif";
+                        radarCtx.textAlign = "center";
+                        radarCtx.fillStyle = isHovered
+                            ? 'rgb(218, 108, 32)'
+                            : 'rgba(255, 255, 255, 0.35)';
+
+                        let labelText = RADAR_METRICS_LABELS[i].toUpperCase();
+                        // Append actual scanned metric percentage if hovered
+                        if (isHovered) {
+                            const scoreVal = Math.round(currentMetrics[i] * 100);
+                            labelText += ` [ ${scoreVal}% ]`;
+                        }
+                        radarCtx.fillText(labelText, labelX, labelY);
+                    }
+
+                    // 3. Draw Scanned Data Polygon
                     radarCtx.beginPath();
                     for (let i = 0; i < numAxes; i++) {
+                        const r = rBreathMax * currentMetrics[i];
                         const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
                         const x = cx + Math.cos(angle) * r;
                         const y = cy + Math.sin(angle) * r;
+
                         if (i === 0) radarCtx.moveTo(x, y);
                         else radarCtx.lineTo(x, y);
                     }
                     radarCtx.closePath();
-                    radarCtx.strokeStyle = ringPct === 1.0 
-                        ? 'rgba(255, 255, 255, 0.07)' 
-                        : 'rgba(255, 255, 255, 0.035)';
-                    radarCtx.lineWidth = 0.8;
+
+                    // Outer glowing path
+                    radarCtx.strokeStyle = 'rgba(218, 108, 32, 0.72)';
+                    radarCtx.shadowColor = 'rgba(218, 108, 32, 0.45)';
+                    radarCtx.shadowBlur = 12;
+                    radarCtx.lineWidth = 1.6;
                     radarCtx.stroke();
-                });
-                
-                // 2. Draw Radial Axis Lines
-                for (let i = 0; i < numAxes; i++) {
-                    const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
-                    const outerX = cx + Math.cos(angle) * rBreathMax;
-                    const outerY = cy + Math.sin(angle) * rBreathMax;
-                    
-                    radarCtx.beginPath();
-                    radarCtx.moveTo(cx, cy);
-                    radarCtx.lineTo(outerX, outerY);
-                    
-                    const isHovered = (i === hoveredAxisIndex);
-                    radarCtx.strokeStyle = isHovered 
-                        ? 'rgba(218, 108, 32, 0.45)' 
-                        : 'rgba(255, 255, 255, 0.035)';
-                    radarCtx.lineWidth = isHovered ? 1.2 : 0.8;
-                    radarCtx.stroke();
-                    
-                    // Draw outer axis crosshair dot
-                    radarCtx.beginPath();
-                    radarCtx.arc(outerX, outerY, isHovered ? 2.5 : 1.5, 0, Math.PI * 2);
-                    radarCtx.fillStyle = isHovered 
-                        ? 'rgba(218, 108, 32, 0.85)' 
-                        : 'rgba(255, 255, 255, 0.15)';
+
+                    // Reset shadows for solid fills
+                    radarCtx.shadowBlur = 0;
+
+                    // Inner semi-transparent fill
+                    radarCtx.fillStyle = 'rgba(218, 108, 32, 0.11)';
                     radarCtx.fill();
-                    
-                    // Draw Labeled Metric text
-                    const labelRadius = rBreathMax + 24;
-                    const labelX = cx + Math.cos(angle) * labelRadius;
-                    const labelY = cy + Math.sin(angle) * labelRadius + 3; // Vertically centered roughly
-                    
-                    radarCtx.font = "500 7px 'Outfit', sans-serif";
-                    radarCtx.textAlign = "center";
-                    radarCtx.fillStyle = isHovered 
-                        ? 'rgb(218, 108, 32)' 
-                        : 'rgba(255, 255, 255, 0.35)';
-                    
-                    let labelText = RADAR_METRICS_LABELS[i].toUpperCase();
-                    // Append actual scanned metric percentage if hovered
-                    if (isHovered) {
-                        const scoreVal = Math.round(currentMetrics[i] * 100);
-                        labelText += ` [ ${scoreVal}% ]`;
+
+                    // 4. Draw Interactive vertex markers
+                    for (let i = 0; i < numAxes; i++) {
+                        const r = rBreathMax * currentMetrics[i];
+                        const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                        const x = cx + Math.cos(angle) * r;
+                        const y = cy + Math.sin(angle) * r;
+
+                        const isHovered = (i === hoveredAxisIndex);
+                        radarCtx.beginPath();
+                        radarCtx.arc(x, y, isHovered ? 4.5 : 3.0, 0, Math.PI * 2);
+                        radarCtx.fillStyle = isHovered ? '#ffffff' : 'rgb(218, 108, 32)';
+                        radarCtx.strokeStyle = 'rgba(15, 16, 17, 0.85)';
+                        radarCtx.lineWidth = 1.0;
+                        radarCtx.fill();
+                        radarCtx.stroke();
                     }
-                    radarCtx.fillText(labelText, labelX, labelY);
                 }
-                
-                // 3. Draw Scanned Data Polygon
-                radarCtx.beginPath();
-                for (let i = 0; i < numAxes; i++) {
-                    const r = rBreathMax * currentMetrics[i];
-                    const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
-                    const x = cx + Math.cos(angle) * r;
-                    const y = cy + Math.sin(angle) * r;
-                    
-                    if (i === 0) radarCtx.moveTo(x, y);
-                    else radarCtx.lineTo(x, y);
-                }
-                radarCtx.closePath();
-                
-                // Outer glowing path
-                radarCtx.strokeStyle = 'rgba(218, 108, 32, 0.72)';
-                radarCtx.shadowColor = 'rgba(218, 108, 32, 0.45)';
-                radarCtx.shadowBlur = 12;
-                radarCtx.lineWidth = 1.6;
-                radarCtx.stroke();
-                
-                // Reset shadows for solid fills
-                radarCtx.shadowBlur = 0;
-                
-                // Inner semi-transparent fill
-                radarCtx.fillStyle = 'rgba(218, 108, 32, 0.11)';
-                radarCtx.fill();
-                
-                // 4. Draw Interactive vertex markers
-                for (let i = 0; i < numAxes; i++) {
-                    const r = rBreathMax * currentMetrics[i];
-                    const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
-                    const x = cx + Math.cos(angle) * r;
-                    const y = cy + Math.sin(angle) * r;
-                    
-                    const isHovered = (i === hoveredAxisIndex);
-                    radarCtx.beginPath();
-                    radarCtx.arc(x, y, isHovered ? 4.5 : 3.0, 0, Math.PI * 2);
-                    radarCtx.fillStyle = isHovered ? '#ffffff' : 'rgb(218, 108, 32)';
-                    radarCtx.strokeStyle = 'rgba(15, 16, 17, 0.85)';
-                    radarCtx.lineWidth = 1.0;
-                    radarCtx.fill();
-                    radarCtx.stroke();
-                }
-            }
 
-            // Radar Controller Initialization & Event Listeners
-            window.addEventListener('resize', () => {
-                resizeRadarCanvas();
-            }, { passive: true });
-            
-            radarCanvas.addEventListener('mousemove', (e) => {
-                const rect = radarCanvas.getBoundingClientRect();
-                radarMouse.x = e.clientX - rect.left;
-                radarMouse.y = e.clientY - rect.top;
-                radarMouse.active = true;
-            }, { passive: true });
-            
-            radarCanvas.addEventListener('mouseleave', () => {
-                radarMouse.active = false;
-                hoveredAxisIndex = -1;
-            }, { passive: true });
+                // Radar Controller Initialization & Event Listeners
+                window.addEventListener('resize', () => {
+                    resizeRadarCanvas();
+                }, { passive: true });
 
-            // Hook up card brief CTAs & Mouse clicks
-            const activeCards = document.querySelectorAll('.active-challenge-card');
-            const viewBriefBtns = document.querySelectorAll('.view-brief-btn');
-            
-            viewBriefBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const index = parseInt(btn.getAttribute('data-challenge-index'));
-                    
-                    // Update Radar scanner profile
-                    updateScannerUI(index);
-                    
-                    // Smoothly scroll down to scanner section (Phase 2 coordinate)
-                    targetScrollZ = VOL.depth * 0.95;
-                });
-            });
+                radarCanvas.addEventListener('mousemove', (e) => {
+                    const rect = radarCanvas.getBoundingClientRect();
+                    radarMouse.x = e.clientX - rect.left;
+                    radarMouse.y = e.clientY - rect.top;
+                    radarMouse.active = true;
+                }, { passive: true });
 
-            // Card hovers dynamically update the scanner as well to feel incredibly live
-            activeCards.forEach((card, idx) => {
-                card.addEventListener('mouseenter', () => {
-                    // Update preview in the scanner automatically!
-                    updateScannerUI(idx);
-                });
-            });
+                radarCanvas.addEventListener('mouseleave', () => {
+                    radarMouse.active = false;
+                    hoveredAxisIndex = -1;
+                }, { passive: true });
 
-            // Initial scanner setup
-            resizeRadarCanvas();
-            updateScannerUI(0);
+                // Hook up card brief CTAs & Mouse clicks
+                const activeCards = document.querySelectorAll('.active-challenge-card');
+                const viewBriefBtns = document.querySelectorAll('.view-brief-btn');
 
-            // ─────────────────────────────────────────────────────────────────────────────
-            // FUTURISTIC TEAM RECRUITMENT DISCOVERY ENGINE
-            // ─────────────────────────────────────────────────────────────────────────────
-            const SQUAD_TEAMS = [
-                {
-                    id: "squad-1",
-                    filename: "squad_01.json",
-                    teamName: "PixelForge",
-                    challenge: "The Modern Portfolio",
-                    category: "UI & UX",
-                    difficulty: "Advanced",
-                    matchScore: 94,
-                    status: "urgent", // urgent, recruiting, beginner
-                    statusText: "Urgent Need",
-                    members: ["LD", "UX"],
-                    neededRoles: ["Motion Designer", "Frontend Developer"],
-                    tech: ["React", "GSAP", "Three.js"],
-                    timestamp: 3
-                },
-                {
-                    id: "squad-2",
-                    filename: "squad_02.json",
-                    teamName: "NovaStack",
-                    challenge: "System Design Engine",
-                    category: "Architecture",
-                    difficulty: "Expert",
-                    matchScore: 88,
-                    status: "recruiting",
-                    statusText: "Recruiting",
-                    members: ["SA"],
-                    neededRoles: ["Backend Engineer", "DevOps Specialist"],
-                    tech: ["Rust", "Tokio", "gRPC"],
-                    timestamp: 1
-                },
-                {
-                    id: "squad-3",
-                    filename: "squad_03.json",
-                    teamName: "CodeHive",
-                    challenge: "Compiler Sandbox",
-                    category: "Compilers",
-                    difficulty: "Hard",
-                    matchScore: 76,
-                    status: "beginner",
-                    statusText: "Beginner Friendly",
-                    members: ["GD", "WE"],
-                    neededRoles: ["Frontend Developer"],
-                    tech: ["Go", "WebAssembly", "TypeScript"],
-                    timestamp: 2
-                }
-            ];
+                viewBriefBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const index = parseInt(btn.getAttribute('data-challenge-index'));
 
-            let activeFilters = {
-                role: "all",
-                difficulty: "all",
-                sort: "match"
-            };
+                        // Update Radar scanner profile
+                        updateScannerUI(index);
 
-            function renderSquadCards() {
-                const grid = document.getElementById('squad-cards-grid');
-                if (!grid) return;
-                grid.innerHTML = '';
-
-                // Filter items
-                let filtered = SQUAD_TEAMS.filter(team => {
-                    const matchRole = activeFilters.role === 'all' || 
-                        team.neededRoles.some(r => r.toLowerCase() === activeFilters.role.toLowerCase());
-                    const matchDiff = activeFilters.difficulty === 'all' || 
-                        team.difficulty.toLowerCase() === activeFilters.difficulty.toLowerCase();
-                    return matchRole && matchDiff;
-                });
-
-                // Sort items
-                if (activeFilters.sort === 'match') {
-                    filtered.sort((a, b) => b.matchScore - a.matchScore);
-                } else if (activeFilters.sort === 'newest') {
-                    filtered.sort((a, b) => a.timestamp - b.timestamp);
-                } else if (activeFilters.sort === 'urgent') {
-                    filtered.sort((a, b) => {
-                        if (a.status === 'urgent' && b.status !== 'urgent') return -1;
-                        if (a.status !== 'urgent' && b.status === 'urgent') return 1;
-                        return b.matchScore - a.matchScore;
+                        // Smoothly scroll down to scanner section (Phase 2 coordinate)
+                        targetScrollZ = VOL.depth * 0.95;
                     });
-                }
+                });
 
-                if (filtered.length === 0) {
-                    grid.innerHTML = `
+                // Card hovers dynamically update the scanner as well to feel incredibly live
+                activeCards.forEach((card, idx) => {
+                    card.addEventListener('mouseenter', () => {
+                        // Update preview in the scanner automatically!
+                        updateScannerUI(idx);
+                    });
+                });
+
+                // Initial scanner setup
+                resizeRadarCanvas();
+                updateScannerUI(0);
+
+                // ─────────────────────────────────────────────────────────────────────────────
+                // FUTURISTIC TEAM RECRUITMENT DISCOVERY ENGINE
+                // ─────────────────────────────────────────────────────────────────────────────
+                const SQUAD_TEAMS = [
+                    {
+                        id: "squad-1",
+                        filename: "squad_01.json",
+                        teamName: "PixelForge",
+                        challenge: "The Modern Portfolio",
+                        category: "UI & UX",
+                        difficulty: "Advanced",
+                        matchScore: 94,
+                        status: "urgent", // urgent, recruiting, beginner
+                        statusText: "Urgent Need",
+                        members: ["LD", "UX"],
+                        neededRoles: ["Motion Designer", "Frontend Developer"],
+                        tech: ["React", "GSAP", "Three.js"],
+                        timestamp: 3
+                    },
+                    {
+                        id: "squad-2",
+                        filename: "squad_02.json",
+                        teamName: "NovaStack",
+                        challenge: "System Design Engine",
+                        category: "Architecture",
+                        difficulty: "Expert",
+                        matchScore: 88,
+                        status: "recruiting",
+                        statusText: "Recruiting",
+                        members: ["SA"],
+                        neededRoles: ["Backend Engineer", "DevOps Specialist"],
+                        tech: ["Rust", "Tokio", "gRPC"],
+                        timestamp: 1
+                    },
+                    {
+                        id: "squad-3",
+                        filename: "squad_03.json",
+                        teamName: "CodeHive",
+                        challenge: "Compiler Sandbox",
+                        category: "Compilers",
+                        difficulty: "Hard",
+                        matchScore: 76,
+                        status: "beginner",
+                        statusText: "Beginner Friendly",
+                        members: ["GD", "WE"],
+                        neededRoles: ["Frontend Developer"],
+                        tech: ["Go", "WebAssembly", "TypeScript"],
+                        timestamp: 2
+                    }
+                ];
+
+                let activeFilters = {
+                    role: "all",
+                    difficulty: "all",
+                    sort: "match"
+                };
+
+                function renderSquadCards() {
+                    const grid = document.getElementById('squad-cards-grid');
+                    if (!grid) return;
+                    grid.innerHTML = '';
+
+                    // Filter items
+                    let filtered = SQUAD_TEAMS.filter(team => {
+                        const matchRole = activeFilters.role === 'all' ||
+                            team.neededRoles.some(r => r.toLowerCase() === activeFilters.role.toLowerCase());
+                        const matchDiff = activeFilters.difficulty === 'all' ||
+                            team.difficulty.toLowerCase() === activeFilters.difficulty.toLowerCase();
+                        return matchRole && matchDiff;
+                    });
+
+                    // Sort items
+                    if (activeFilters.sort === 'match') {
+                        filtered.sort((a, b) => b.matchScore - a.matchScore);
+                    } else if (activeFilters.sort === 'newest') {
+                        filtered.sort((a, b) => a.timestamp - b.timestamp);
+                    } else if (activeFilters.sort === 'urgent') {
+                        filtered.sort((a, b) => {
+                            if (a.status === 'urgent' && b.status !== 'urgent') return -1;
+                            if (a.status !== 'urgent' && b.status === 'urgent') return 1;
+                            return b.matchScore - a.matchScore;
+                        });
+                    }
+
+                    if (filtered.length === 0) {
+                        grid.innerHTML = `
                         <div style="grid-column: 1/-1; text-align: center; font-family: 'Outfit', sans-serif; font-size: 10px; color: rgba(255,255,255,0.25); padding: 50px 0; letter-spacing: 0.1em; text-transform: uppercase;">
                             NO ACTIVE SQUADS MATCHING CURRENT FILTERS
                         </div>
                     `;
-                    return;
-                }
+                        return;
+                    }
 
-                filtered.forEach((team, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'squad-team-card';
-                    card.id = team.id;
-                    
-                    let statusClass = team.status;
-                    const rolesHTML = team.neededRoles.map(r => `<span class="squad-role-chip">${r}</span>`).join('');
-                    const avatarsHTML = team.members.map(m => `<div class="squad-avatar-item">${m}</div>`).join('');
+                    filtered.forEach((team, idx) => {
+                        const card = document.createElement('div');
+                        card.className = 'squad-team-card';
+                        card.id = team.id;
 
-                    card.innerHTML = `
+                        let statusClass = team.status;
+                        const rolesHTML = team.neededRoles.map(r => `<span class="squad-role-chip">${r}</span>`).join('');
+                        const avatarsHTML = team.members.map(m => `<div class="squad-avatar-item">${m}</div>`).join('');
+
+                        card.innerHTML = `
                         <!-- Top Terminal Bar -->
                         <div class="terminal-bar">
                             <div class="terminal-dots">
@@ -3862,310 +3275,144 @@
                         </div>
                     `;
 
-                    grid.appendChild(card);
-                    
-                    // Entrance reveal micro-animation
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(25px)';
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, idx * 100);
-                });
+                        grid.appendChild(card);
 
-                bindSquadCardInteractions();
-            }
-
-            function bindSquadCardInteractions() {
-                const cards = document.querySelectorAll('.squad-team-card');
-                
-                cards.forEach(card => {
-                    card.addEventListener('mousemove', (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
-                        const xc = rect.width / 2;
-                        const yc = rect.height / 2;
-                        
-                        const tiltX = (yc - y) / 10; 
-                        const tiltY = (x - xc) / 10;
-                        
-                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translateY(-4px)`;
-                        card.style.boxShadow = `0 18px 45px rgba(218, 108, 32, 0.08), 
-                                               inset 0 1px 0 rgba(255, 255, 255, 0.05)`;
-                        card.style.borderColor = `rgba(218, 108, 32, 0.35)`;
-                    });
-
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-                        card.style.boxShadow = `0 12px 30px rgba(0, 0, 0, 0.35), 
-                                               inset 0 1px 0 rgba(255, 255, 255, 0.03)`;
-                        card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
-                    });
-                });
-
-                // Join Squad Action alerts
-                const joinBtns = document.querySelectorAll('.join-team-btn');
-                joinBtns.forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        
-                        // Transmitting state animation
-                        btn.innerHTML = '<span>TRANSMITTING...</span>';
-                        btn.style.borderColor = 'rgba(218,108,32,0.8)';
-                        
+                        // Entrance reveal micro-animation
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(25px)';
                         setTimeout(() => {
-                            btn.innerHTML = '<span>REQUEST SENT</span>';
-                            btn.style.background = 'rgba(120,255,120,0.06)';
-                            btn.style.borderColor = 'rgba(120,255,120,0.4)';
-                            btn.querySelector('span').style.color = '#78ff78';
-                        }, 1200);
+                            card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, idx * 100);
                     });
-                });
-            }
 
-            // Custom Dropdowns Logic
-            const dropdowns = [
-                { triggerId: 'filter-role-trigger', menuId: 'filter-role-menu', filterKey: 'role' },
-                { triggerId: 'filter-difficulty-trigger', menuId: 'filter-difficulty-menu', filterKey: 'difficulty' },
-                { triggerId: 'sort-trigger', menuId: 'sort-menu', filterKey: 'sort' }
-            ];
+                    bindSquadCardInteractions();
+                }
 
-            dropdowns.forEach(dd => {
-                const trigger = document.getElementById(dd.triggerId);
-                const menu = document.getElementById(dd.menuId);
-                
-                if (trigger && menu) {
-                    trigger.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        
-                        // Close other menus first
-                        dropdowns.forEach(other => {
-                            if (other.triggerId !== dd.triggerId) {
-                                const oTrigger = document.getElementById(other.triggerId);
-                                const oMenu = document.getElementById(other.menuId);
-                                if (oTrigger && oMenu) {
-                                    oTrigger.classList.remove('open');
-                                    oMenu.classList.remove('open');
-                                }
-                            }
+                function bindSquadCardInteractions() {
+                    const cards = document.querySelectorAll('.squad-team-card');
+
+                    cards.forEach(card => {
+                        card.addEventListener('mousemove', (e) => {
+                            const rect = card.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const y = e.clientY - rect.top;
+
+                            const xc = rect.width / 2;
+                            const yc = rect.height / 2;
+
+                            const tiltX = (yc - y) / 10;
+                            const tiltY = (x - xc) / 10;
+
+                            card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translateY(-4px)`;
+                            card.style.boxShadow = `0 18px 45px rgba(218, 108, 32, 0.08), 
+                                               inset 0 1px 0 rgba(255, 255, 255, 0.05)`;
+                            card.style.borderColor = `rgba(218, 108, 32, 0.35)`;
                         });
-                        
-                        trigger.classList.toggle('open');
-                        menu.classList.toggle('open');
+
+                        card.addEventListener('mouseleave', () => {
+                            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+                            card.style.boxShadow = `0 12px 30px rgba(0, 0, 0, 0.35), 
+                                               inset 0 1px 0 rgba(255, 255, 255, 0.03)`;
+                            card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
+                        });
                     });
 
-                    // Item clicks
-                    const items = menu.querySelectorAll('.dropdown-item');
-                    items.forEach(item => {
-                        item.addEventListener('click', (e) => {
+                    // Join Squad Action alerts
+                    const joinBtns = document.querySelectorAll('.join-team-btn');
+                    joinBtns.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
                             e.stopPropagation();
-                            
-                            items.forEach(i => i.classList.remove('active'));
-                            item.classList.add('active');
-                            
-                            const val = item.getAttribute('data-value');
-                            const labelText = item.textContent;
-                            trigger.querySelector('span').textContent = labelText;
-                            
-                            activeFilters[dd.filterKey] = val;
-                            
-                            trigger.classList.remove('open');
-                            menu.classList.remove('open');
-                            
-                            renderSquadCards();
+
+                            // Transmitting state animation
+                            btn.innerHTML = '<span>TRANSMITTING...</span>';
+                            btn.style.borderColor = 'rgba(218,108,32,0.8)';
+
+                            setTimeout(() => {
+                                btn.innerHTML = '<span>REQUEST SENT</span>';
+                                btn.style.background = 'rgba(120,255,120,0.06)';
+                                btn.style.borderColor = 'rgba(120,255,120,0.4)';
+                                btn.querySelector('span').style.color = '#78ff78';
+                            }, 1200);
                         });
                     });
                 }
-            });
 
-            // Global click to close open dropdowns
-            document.addEventListener('click', () => {
+                // Custom Dropdowns Logic
+                const dropdowns = [
+                    { triggerId: 'filter-role-trigger', menuId: 'filter-role-menu', filterKey: 'role' },
+                    { triggerId: 'filter-difficulty-trigger', menuId: 'filter-difficulty-menu', filterKey: 'difficulty' },
+                    { triggerId: 'sort-trigger', menuId: 'sort-menu', filterKey: 'sort' }
+                ];
+
                 dropdowns.forEach(dd => {
                     const trigger = document.getElementById(dd.triggerId);
                     const menu = document.getElementById(dd.menuId);
+
                     if (trigger && menu) {
-                        trigger.classList.remove('open');
-                        menu.classList.remove('open');
+                        trigger.addEventListener('click', (e) => {
+                            e.stopPropagation();
+
+                            // Close other menus first
+                            dropdowns.forEach(other => {
+                                if (other.triggerId !== dd.triggerId) {
+                                    const oTrigger = document.getElementById(other.triggerId);
+                                    const oMenu = document.getElementById(other.menuId);
+                                    if (oTrigger && oMenu) {
+                                        oTrigger.classList.remove('open');
+                                        oMenu.classList.remove('open');
+                                    }
+                                }
+                            });
+
+                            trigger.classList.toggle('open');
+                            menu.classList.toggle('open');
+                        });
+
+                        // Item clicks
+                        const items = menu.querySelectorAll('.dropdown-item');
+                        items.forEach(item => {
+                            item.addEventListener('click', (e) => {
+                                e.stopPropagation();
+
+                                items.forEach(i => i.classList.remove('active'));
+                                item.classList.add('active');
+
+                                const val = item.getAttribute('data-value');
+                                const labelText = item.textContent;
+                                trigger.querySelector('span').textContent = labelText;
+
+                                activeFilters[dd.filterKey] = val;
+
+                                trigger.classList.remove('open');
+                                menu.classList.remove('open');
+
+                                renderSquadCards();
+                            });
+                        });
                     }
                 });
-            });
 
-            // Initial render
-            renderSquadCards();
-
-            // ─────────────────────────────────────────────────────────────────────────────
-            // FUTURISTIC SKILL-BASED MATCHMAKING ENGINE
-            // ─────────────────────────────────────────────────────────────────────────────
-            const MATCHMAKER_RECOMMENDED_CHALLENGES = [
-                {
-                    title: "The Modern Portfolio",
-                    whyMatches: "Recommended because your profile exhibits frequent React & GSAP layouts.",
-                    skills: ["React", "GSAP", "WebGL", "CSS Grid"],
-                    difficulty: "Advanced",
-                    benefit: "Enhance high-performance spatial LERP interpolations & compositing.",
-                    score: 94
-                },
-                {
-                    title: "Compiler Sandbox",
-                    whyMatches: "Matches your analytical skill parameters & Go core developer affinity.",
-                    skills: ["Go", "WebAssembly", "TypeScript"],
-                    difficulty: "Hard",
-                    benefit: "Gain lower-level WASM design patterns & AST compiler compiler mechanics.",
-                    score: 76
-                }
-            ];
-
-            let hasTriggeredAILoading = false;
-            const targetGauges = [94, 88, 91, 85]; // Challenge Match, Team Comp, Creativity Align, Growth Potential
-
-            window.triggerAIProgressLoading = function() {
-                if (hasTriggeredAILoading) return;
-                hasTriggeredAILoading = true;
-                
-                // Update AI status text
-                const statusTextEl = document.getElementById('ai-matchmaking-status');
-                if (statusTextEl) {
-                    statusTextEl.textContent = "SCANNING SKILLS...";
-                    statusTextEl.style.color = "rgb(218, 108, 32)";
-                    
-                    setTimeout(() => {
-                        statusTextEl.textContent = "AI ANALYSIS READY";
-                        statusTextEl.style.color = "#78ff78";
-                    }, 2000);
-                }
-                
-                // Loop gauges
-                for (let i = 1; i <= 4; i++) {
-                    const ring = document.getElementById(`gauge-ring-${i}`);
-                    const valText = document.getElementById(`gauge-val-${i}`);
-                    if (ring && valText) {
-                        const targetPercent = targetGauges[i - 1];
-                        const maxDash = 157; // 2 * PI * r (r=25)
-                        const targetDashOffset = maxDash - (maxDash * targetPercent / 100);
-                        
-                        // Set transition style dynamically
-                        ring.style.transition = 'stroke-dashoffset 2.0s cubic-bezier(0.16, 1, 0.3, 1)';
-                        ring.style.strokeDashoffset = targetDashOffset;
-                        
-                        // Percentage number ticker
-                        let currentPercent = 0;
-                        const interval = setInterval(() => {
-                            currentPercent += 2;
-                            if (currentPercent >= targetPercent) {
-                                currentPercent = targetPercent;
-                                clearInterval(interval);
-                            }
-                            valText.textContent = `${currentPercent}%`;
-                        }, 30);
-                    }
-                }
-            };
-
-            function renderRecommendedChallenges() {
-                const container = document.getElementById('matchmaker-challenge-stack');
-                if (!container) return;
-                container.innerHTML = '<span class="comp-title">RECOMMENDED CHALLENGES</span>';
-                
-                MATCHMAKER_RECOMMENDED_CHALLENGES.forEach((ch, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'recommendation-card';
-                    
-                    const skillsTags = ch.skills.map(s => `<span class="squad-role-chip">${s}</span>`).join(' ');
-                    
-                    card.innerHTML = `
-                        <div class="rec-top-row">
-                            <div class="rec-title-wrap">
-                                <h3 class="rec-title">${ch.title}</h3>
-                                <p class="rec-why-desc">${ch.whyMatches}</p>
-                            </div>
-                            <div class="rec-score-pill">${ch.score}% FIT</div>
-                        </div>
-                        
-                        <div class="squad-role-chips" style="margin-top: 4px; margin-bottom: 4px;">
-                            ${skillsTags}
-                        </div>
-                        
-                        <div class="rec-footer">
-                            <div class="rec-spec-item">
-                                <span class="rec-spec-lbl">GROWTH FOCUS:</span>
-                                <span class="rec-spec-val">${ch.benefit}</span>
-                            </div>
-                            <div class="rec-spec-item" style="text-align: right;">
-                                <span class="rec-spec-lbl">DIFFICULTY:</span>
-                                <span class="rec-spec-val" style="color: rgb(218, 108, 32);">${ch.difficulty}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    container.appendChild(card);
-                });
-                
-                bindMatchmakingHoverEffects();
-            }
-
-            function bindMatchmakingHoverEffects() {
-                const terminals = document.querySelectorAll('.matchmaking-terminal');
-                const recCards = document.querySelectorAll('.recommendation-card');
-                
-                terminals.forEach(card => {
-                    card.addEventListener('mousemove', (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
-                        const xc = rect.width / 2;
-                        const yc = rect.height / 2;
-                        
-                        const tiltX = (yc - y) / 18; 
-                        const tiltY = (x - xc) / 18;
-                        
-                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) scale(1.002)`;
-                        card.style.borderColor = `rgba(218, 108, 32, 0.3)`;
-                        card.style.boxShadow = `0 20px 50px rgba(218, 108, 32, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)`;
-                    });
-                    
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-                        card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
-                        card.style.boxShadow = `0 12px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03)`;
+                // Global click to close open dropdowns
+                document.addEventListener('click', () => {
+                    dropdowns.forEach(dd => {
+                        const trigger = document.getElementById(dd.triggerId);
+                        const menu = document.getElementById(dd.menuId);
+                        if (trigger && menu) {
+                            trigger.classList.remove('open');
+                            menu.classList.remove('open');
+                        }
                     });
                 });
 
-                recCards.forEach(card => {
-                    card.addEventListener('mousemove', (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
-                        const xc = rect.width / 2;
-                        const yc = rect.height / 2;
-                        
-                        const tiltX = (yc - y) / 12; 
-                        const tiltY = (x - xc) / 12;
-                        
-                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translateY(-2px)`;
-                        card.style.borderColor = `rgba(218, 108, 32, 0.3)`;
-                        card.style.boxShadow = `0 12px 30px rgba(218, 108, 32, 0.06)`;
-                    });
-                    
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-                        card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
-                        card.style.boxShadow = `none`;
-                    });
-                });
-            }
+                // Initial render
+                renderSquadCards();
 
-            // Initial Matchmaker Render
-            renderRecommendedChallenges();
+            })();
 
-        })();
-
-    </script>
-    <script src="cursor.js" defer></script>
+        </script>
+        <script src="cursor.js" defer></script>
 </body>
 
 </html>
