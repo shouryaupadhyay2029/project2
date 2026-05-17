@@ -1,135 +1,1537 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Challenges | DevStage</title>
+    <title>Challenges | DevStage</title>
+
+    <!-- Premium Typography: Clash Display, Inter, Outfit, Cormorant Garamond -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&family=Outfit:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cursor.css">
-    <link rel="stylesheet" href="wave.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        .challenge-container {
-            max-width: 1100px;
-            margin: 100px auto;
-            padding: 0 40px;
+        /* devstage global overrides/additions */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
         }
-        
-        /* Active Challenge Banner */
-        .active-challenge {
-            background: linear-gradient(135deg, rgba(255, 138, 0, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
-            border: 1px solid rgba(255, 138, 0, 0.3);
-            border-radius: 32px;
-            padding: 60px;
-            text-align: center;
-            margin-bottom: 60px;
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #0f1011;
+            overflow: hidden
+        }
+
+        #stage {
+            width: 100%;
+            height: 100vh;
             position: relative;
             overflow: hidden;
+            background: #0f1011;
         }
-        .challenge-tag {
-            background: var(--brand-orange);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 800;
+
+        /* bg canvas: behind everything */
+        #bgCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 1;
+        }
+
+        /* fg canvas: in FRONT of text — draws only close particles */
+        #fgCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        #hint {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 9px;
+            color: rgba(255, 170, 80, 0.18);
+            letter-spacing: 0.55em;
             text-transform: uppercase;
-            margin-bottom: 24px;
-            display: inline-block;
+            pointer-events: none;
+            z-index: 30;
+            opacity: 1;
+            transition: opacity 2.2s ease;
         }
-        .active-challenge h1 { font-size: 3.5rem; color: #fff; margin-bottom: 16px; letter-spacing: -0.04em; }
-        .active-challenge p { color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
-        .timer-container {
+        /* ── CONTENT — sits between bg and fg canvas ── */
+        #content {
+            position: absolute;
+            inset: 0;
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            gap: 24px;
-            margin-bottom: 40px;
+            pointer-events: none;
+            z-index: 10;
+            will-change: filter, opacity;
         }
-        .timer-box {
-            text-align: center;
-        }
-        .timer-val { font-size: 2rem; font-weight: 800; color: #fff; display: block; }
-        .timer-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; }
 
-        .submission-grid {
+        /* Eyebrow */
+        .eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: clamp(8px, 0.72vw, 10px);
+            letter-spacing: 0.60em;
+            text-transform: uppercase;
+            color: rgba(255, 160, 70, 0);
+            margin-bottom: clamp(22px, 3vw, 36px);
+            position: relative;
+            will-change: transform;
+        }
+
+        .eyebrow .ch {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(3px);
+            transition: opacity 0.6s ease, transform 0.5s ease;
+        }
+
+        .eyebrow .ch.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Title */
+        .title-wrap {
+            position: relative;
+            margin-bottom: clamp(18px, 2.5vw, 30px);
+            overflow: visible;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            will-change: transform;
+        }
+
+        h1.main-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(60px, 9.5vw, 138px);
+            line-height: 0.90;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #ffffff;
+            position: relative;
+            display: flex;
+        }
+
+        .main-title .ch {
+            display: inline-block;
+            position: relative;
+            opacity: 0;
+            will-change: transform, filter;
+        }
+
+        /* Subtitle */
+        .sub-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: clamp(10px, 1.1vw, 13px);
+            letter-spacing: 0.28em;
+            color: rgba(255, 255, 255, 0);
+            margin-bottom: clamp(38px, 5.5vw, 70px);
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
+        }
+
+        .sub-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 55, 0.40), transparent);
+            transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sub-title.wipe::after {
+            width: 100%;
+        }
+
+        .sub-title .word {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            margin-right: 0.28em;
+        }
+
+        .sub-title .inner {
+            display: inline-block;
+            transform: translateY(110%);
+            color: rgba(255, 255, 255, 0.28);
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sub-title.wipe .inner {
+            transform: translateY(0);
+        }
+
+        /* Rule */
+        .rule {
+            width: 1px;
+            height: 0px;
+            background: linear-gradient(180deg, rgba(255, 140, 55, 0.0), rgba(255, 140, 55, 0.28), rgba(255, 140, 55, 0.0));
+            margin-bottom: clamp(32px, 5vw, 60px);
+            opacity: 0;
+            transition: height 1.0s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .rule.show {
+            height: clamp(40px, 5vw, 70px);
+            opacity: 1;
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            gap: clamp(6px, 0.8vw, 10px);
+            flex-wrap: wrap;
+            justify-content: center;
+            will-change: transform;
+        }
+
+        .tag {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: clamp(7px, 0.65vw, 9px);
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.0);
+            border: 1px solid rgba(255, 255, 255, 0.0);
+            padding: 5px 18px 4px;
+            border-radius: 1px;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.8s ease, border-color 0.8s ease;
+        }
+
+        .tag::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 55, 0.06), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.0s;
+        }
+
+        .tag.show {
+            color: rgba(255, 255, 255, 0.20);
+            border-color: rgba(255, 255, 255, 0.07);
+        }
+
+        .tag.show::before {
+            transition: transform 0.9s ease;
+            transform: translateX(100%);
+        }
+
+        /* ─── Uiverse Hamburger Menu ─── */
+        .uiverse-hamburger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            position: relative;
+        }
+
+        .uiverse-hamburger svg {
+            height: 38px;
+            width: 38px;
+            transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ─── Premium Futuristic Active Challenge Section Styles ─── */
+        .challenge-section {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 10;
+            overflow: visible;
+            opacity: 0;
+            transform: translateY(120px);
+        }
+
+        /* Subtle floating ambient glow background */
+        .active-card-glow-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(218, 108, 32, 0.02) 0%, transparent 70%);
+            pointer-events: none;
+            filter: blur(60px);
+            z-index: 1;
+            will-change: transform, opacity;
+            transform: translate(-50%, -50%);
+            animation: glow-float 12s ease-in-out infinite;
+        }
+
+        @keyframes glow-float {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) translate(-30px, 20px) scale(1.1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 0.5; }
+        }
+
+        /* Responsive grid of terminal cards */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, minmax(280px, 1fr));
             gap: 24px;
+            max-width: 1140px;
+            width: 90%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
-        .sub-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-default);
-            border-radius: 20px;
-            padding: 20px;
+
+        @media (max-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 760px;
+            }
         }
-        .sub-card img { width: 100%; height: 160px; border-radius: 12px; object-fit: cover; margin-bottom: 16px; }
-        .sub-meta { display: flex; align-items: center; gap: 8px; color: var(--text-tertiary); font-size: 0.8rem; }
+
+        @media (max-width: 640px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                max-width: 360px;
+            }
+        }
+
+        /* Active Challenge Terminal Card */
+        .active-challenge-card {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+                        0 0 30px rgba(218, 108, 32, 0.005);
+        }
+
+        .active-challenge-card:hover {
+            border-color: rgba(218, 108, 32, 0.15);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                        0 0 40px rgba(218, 108, 32, 0.02);
+        }
+
+        /* Top Terminal Bar */
+        .terminal-bar {
+            height: 38px;
+            background: rgba(255, 255, 255, 0.015);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dots .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .terminal-file {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.1em;
+        }
+
+        /* Status Badge inside Terminal Bar */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            background: rgba(218, 108, 32, 0.05);
+            border: 1px solid rgba(218, 108, 32, 0.2);
+            border-radius: 100px;
+        }
+
+        .status-badge span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            color: rgb(218, 108, 32);
+            text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: rgb(218, 108, 32);
+            position: relative;
+        }
+
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            border: 0.5px solid rgba(218, 108, 32, 0.6);
+            animation: pulse-ring 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+
+        /* Main Content */
+        .card-content {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .challenge-title {
+            font-family: 'Clash Display', 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 0.03em;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-align: left;
+            text-transform: none;
+        }
+
+        .challenge-desc {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: left;
+            min-height: 54px;
+        }
+
+        /* Metadata Row tags */
+        .metadata-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .meta-tag {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 1px;
+            text-transform: uppercase;
+        }
+
+        .meta-tag.xp-reward {
+            color: rgb(218, 108, 32);
+            border-color: rgba(218, 108, 32, 0.2);
+            background: rgba(218, 108, 32, 0.01);
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            justify-content: flex-start;
+        }
+
+        .time-unit {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .time-num {
+            font-family: 'Cormorant Garamond', 'Outfit', serif;
+            font-weight: 300;
+            font-size: 20px;
+            color: #ffffff;
+            display: inline-block;
+            will-change: transform, opacity;
+        }
+
+        .time-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .time-separator {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            color: rgba(218, 108, 32, 0.25);
+            animation: pulse-deadline 2s infinite ease-in-out;
+        }
+
+        /* Bottom Action Row */
+        .cta-row {
+            height: 48px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            background: rgba(255, 255, 255, 0.005);
+            align-items: stretch;
+        }
+
+        .cta-primary {
+            flex: 1;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #ffffff;
+            background: transparent;
+            border: none;
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        .cta-primary:hover {
+            background: rgba(218, 108, 32, 0.03);
+            color: rgb(218, 108, 32);
+        }
+
+        .cta-arrow {
+            width: 11px;
+            height: 11px;
+            stroke-width: 1.5;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cta-primary:hover .cta-arrow {
+            transform: translateX(3px);
+        }
+
+        /* Sweep underline line inside bottom primary */
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            background: rgb(218, 108, 32);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cta-primary:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cta-secondary {
+            width: 100px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.4s ease, background 0.4s ease;
+        }
+
+        .cta-secondary:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.02);
+        }
     </style>
 </head>
-<body class="home-page">
-    <script src="loader.js"></script>
-    <div class="wave-container">
-        <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
-            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
-            <g class="parallax">
-                <use href="#gentle-wave" x="48" y="0" /><use href="#gentle-wave" x="48" y="3" /><use href="#gentle-wave" x="48" y="5" /><use href="#gentle-wave" x="48" y="7" />
-            </g>
-        </svg>
-    </div>
 
+<body class="challenges-page">
+    <script src="loader.js"></script>
+
+    <!-- Premium Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
-              <div class="logo-chars">
-                <span class="char" style="--i:0">D</span>
-                <span class="char" style="--i:1">e</span>
-                <span class="char" style="--i:2">v</span>
-                <div class="logo-separator"></div>
-                <span class="char outline" style="--i:3">S</span>
-                <span class="char outline" style="--i:4">t</span>
-                <span class="char outline" style="--i:5">a</span>
-                <span class="char outline" style="--i:6">g</span>
-                <span class="char outline" style="--i:7">e</span>
-                <div class="logo-dot"></div>
-              </div>
-              <div class="logo-underline"></div>
-            </a>
-            <a href="index.html" class="button-secondary" style="padding: 8px 16px;">Back to Home</a>
+            <div class="breadcrumb-header">
+                <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
+                    <div class="logo-chars">
+                        <span class="char" style="--i:0">D</span>
+                        <span class="char" style="--i:1">e</span>
+                        <span class="char" style="--i:2">v</span>
+                        <div class="logo-separator"></div>
+                        <span class="char outline" style="--i:3">S</span>
+                        <span class="char outline" style="--i:4">t</span>
+                        <span class="char outline" style="--i:5">a</span>
+                        <span class="char outline" style="--i:6">g</span>
+                        <span class="char outline" style="--i:7">e</span>
+                        <div class="logo-dot"></div>
+                    </div>
+                    <div class="logo-underline"></div>
+                </a>
+                <div class="breadcrumb-trail">
+                    <span class="breadcrumb-slash">/</span>
+                    <span class="breadcrumb-current">Challenges</span>
+                </div>
+            </div>
+
+            <!-- Right side: Animated Hamburger Menu -->
+            <div class="nav-actions">
+                <label class="uiverse-hamburger" id="hamburger-menu-label">
+                    <input type="checkbox" id="hamburger-checkbox">
+                    <svg viewBox="0 0 32 32">
+                        <path class="line line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        </path>
+                        <path class="line" d="M7 16 27 16"></path>
+                    </svg>
+
+                    <!-- Premium Dropdown Menu -->
+                    <div class="premium-dropdown" id="hamburger-dropdown">
+                        <div class="dropdown-group primary-nav">
+                            <a href="index.html" class="dropdown-item nav-item-anim">Home</a>
+                            <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
+                            <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
+                            <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                            <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
+                            <a href="upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+                            <a href="challenges.html" class="dropdown-item nav-item-anim active-page">Challenges</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-group secondary-nav">
+                            <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
+                            <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
+                            <a href="#" class="dropdown-item nav-item-anim">Settings</a>
+                            <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                </label>
+            </div>
         </div>
     </nav>
 
-    <main class="challenge-container">
-        <section class="active-challenge">
-            <span class="challenge-tag">Active Challenge</span>
-            <h1>The Modern Portfolio</h1>
-            <p>Design and build a responsive portfolio site using any tech stack. Focus on clean typography and smooth transitions.</p>
-            
-            <div class="timer-container">
-                <div class="timer-box"><span class="timer-val">04</span><span class="timer-label">Days</span></div>
-                <div class="timer-box"><span class="timer-val">12</span><span class="timer-label">Hours</span></div>
-                <div class="timer-box"><span class="timer-val">45</span><span class="timer-label">Mins</span></div>
-            </div>
+    <!-- Stage containing 3D background canvases and central reveal elements -->
+    <div id="stage">
+        <canvas id="bgCanvas"></canvas>
 
-            <button class="button-primary" onclick="window.location.href='index.html?action=upload'">Submit Your Project</button>
-        </section>
-
-        <h2 style="color:#fff; margin-bottom: 32px;">Recent Submissions</h2>
-        <div class="submission-grid">
-            <div class="sub-card">
-                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=400" alt="Sub">
-                <h3 style="color:#fff; font-size: 1rem; margin-bottom: 8px;">Minimal Dark Portfolio</h3>
-                <div class="sub-meta"><i data-lucide="user" style="width:14px;"></i> Alex Chen</div>
+        <div id="content">
+            <div class="eyebrow" id="eyebrow">Skill Challenge Platform</div>
+            <div class="title-wrap" id="titleWrap">
+                <h1 class="main-title" id="mainTitle">Challenge</h1>
             </div>
-            <div class="sub-card">
-                <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=400" alt="Sub">
-                <h3 style="color:#fff; font-size: 1rem; margin-bottom: 8px;">Glassmorphism Portfolio</h3>
-                <div class="sub-meta"><i data-lucide="user" style="width:14px;"></i> Sarah J.</div>
+            <p class="sub-title" id="subTitle">Real challenges. Measurable growth. Verified expertise.</p>
+            <div class="rule" id="rule"></div>
+            <div class="tags">
+                <span class="tag" id="t0">Programming</span>
+                <span class="tag" id="t1">UI &amp; Design</span>
+                <span class="tag" id="t2">Data Structures</span>
+                <span class="tag" id="t3">System Design</span>
+                <span class="tag" id="t4">Problem Solving</span>
             </div>
         </div>
-    </main>
 
-    <script>lucide.createIcons();</script>
+        <!-- Futuristic Active Challenge Grid -->
+        <div id="challengeSection" class="challenge-section">
+            <div class="active-card-glow-overlay"></div>
+            
+            <div class="cards-grid">
+                <!-- Challenge Card 1: The Modern Portfolio -->
+                <div class="active-challenge-card" id="card-1">
+                    <!-- Top Terminal Bar -->
+                    <div class="terminal-bar">
+                        <div class="terminal-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <div class="terminal-file">portfolio.sh</div>
+                        <div class="status-badge">
+                            <span class="pulse-dot"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="card-content">
+                        <h2 class="challenge-title">The Modern Portfolio</h2>
+                        <p class="challenge-desc">
+                            Architect and implement a GPU-accelerated, cursor-responsive portfolio using cinematic layouts.
+                        </p>
+
+                        <!-- Info tags -->
+                        <div class="metadata-row">
+                            <span class="meta-tag">UI &amp; UX</span>
+                            <span class="meta-tag">Advanced</span>
+                            <span class="meta-tag">1.4K Users</span>
+                            <span class="meta-tag xp-reward">800 XP</span>
+                        </div>
+
+                        <!-- Countdown Timer -->
+                        <div class="countdown-container">
+                            <div class="time-unit">
+                                <span class="time-num" id="days-val-1">04</span>
+                                <span class="time-lbl">Days</span>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-unit">
+                                <span class="time-num" id="hours-val-1">12</span>
+                                <span class="time-lbl">Hrs</span>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-unit">
+                                <span class="time-num" id="minutes-val-1">45</span>
+                                <span class="time-lbl">Mins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Row -->
+                    <div class="cta-row">
+                        <button class="cta-primary">
+                            <span>Join</span>
+                            <i data-lucide="arrow-right" class="cta-arrow"></i>
+                        </button>
+                        <a href="#" class="cta-secondary">View Brief</a>
+                    </div>
+                </div>
+
+                <!-- Challenge Card 2: System Design Engine -->
+                <div class="active-challenge-card" id="card-2">
+                    <!-- Top Terminal Bar -->
+                    <div class="terminal-bar">
+                        <div class="terminal-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <div class="terminal-file">scale_sys.rs</div>
+                        <div class="status-badge">
+                            <span class="pulse-dot"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="card-content">
+                        <h2 class="challenge-title">System Design Engine</h2>
+                        <p class="challenge-desc">
+                            Design and benchmark a distributed real-time messaging pipeline handling up to 100k requests/sec.
+                        </p>
+
+                        <!-- Info tags -->
+                        <div class="metadata-row">
+                            <span class="meta-tag">Architecture</span>
+                            <span class="meta-tag">Expert</span>
+                            <span class="meta-tag">840 Users</span>
+                            <span class="meta-tag xp-reward">1200 XP</span>
+                        </div>
+
+                        <!-- Countdown Timer -->
+                        <div class="countdown-container">
+                            <div class="time-unit">
+                                <span class="time-num" id="days-val-2">02</span>
+                                <span class="time-lbl">Days</span>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-unit">
+                                <span class="time-num" id="hours-val-2">08</span>
+                                <span class="time-lbl">Hrs</span>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-unit">
+                                <span class="time-num" id="minutes-val-2">15</span>
+                                <span class="time-lbl">Mins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Row -->
+                    <div class="cta-row">
+                        <button class="cta-primary">
+                            <span>Join</span>
+                            <i data-lucide="arrow-right" class="cta-arrow"></i>
+                        </button>
+                        <a href="#" class="cta-secondary">View Brief</a>
+                    </div>
+                </div>
+
+                <!-- Challenge Card 3: Compiler Sandbox -->
+                <div class="active-challenge-card" id="card-3">
+                    <!-- Top Terminal Bar -->
+                    <div class="terminal-bar">
+                        <div class="terminal-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <div class="terminal-file">compiler.go</div>
+                        <div class="status-badge">
+                            <span class="pulse-dot"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="card-content">
+                        <h2 class="challenge-title">Compiler Sandbox</h2>
+                        <p class="challenge-desc">
+                            Build a minimal, performant custom parser and AST compiler evaluating lightweight scripting syntax.
+                        </p>
+
+                        <!-- Info tags -->
+                        <div class="metadata-row">
+                            <span class="meta-tag">Compilers</span>
+                            <span class="meta-tag">Hard</span>
+                            <span class="meta-tag">510 Users</span>
+                            <span class="meta-tag xp-reward">950 XP</span>
+                        </div>
+
+                        <!-- Countdown Timer -->
+                        <div class="countdown-container">
+                            <div class="time-unit">
+                                <span class="time-num" id="days-val-3">06</span>
+                                <span class="time-lbl">Days</span>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-unit">
+                                <span class="time-num" id="hours-val-3">19</span>
+                                <span class="time-lbl">Hrs</span>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-unit">
+                                <span class="time-num" id="minutes-val-3">30</span>
+                                <span class="time-lbl">Mins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Row -->
+                    <div class="cta-row">
+                        <button class="cta-primary">
+                            <span>Join</span>
+                            <i data-lucide="arrow-right" class="cta-arrow"></i>
+                        </button>
+                        <a href="#" class="cta-secondary">View Brief</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- foreground canvas: renders ON TOP of HTML text, carries close particles -->
+        <canvas id="fgCanvas"></canvas>
+        <div id="hint">scroll to descend</div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        // DevStage Logo Bloom Animation
+        const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+        if (logoWrapper) {
+            setTimeout(() => {
+                logoWrapper.classList.add('bloom');
+                setTimeout(() => {
+                    logoWrapper.classList.add('is-breathing');
+                }, 1700);
+            }, 500);
+        }
+
+        // Countdown Timer Logic
+        const targetDates = [
+            new Date(Date.now() + 4 * 24 * 60 * 60 * 1000 + 12 * 60 * 60 * 1000 + 45 * 60 * 1000), // Card 1
+            new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 15 * 60 * 1000),  // Card 2
+            new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 19 * 60 * 60 * 1000 + 30 * 60 * 1000)  // Card 3
+        ];
+        
+        function updateValueWithTick(el, newVal) {
+            if (el && el.textContent !== newVal) {
+                el.textContent = newVal;
+                el.classList.remove('tick');
+                void el.offsetWidth; // Trigger reflow
+                el.classList.add('tick');
+            }
+        }
+        
+        function updateAllCountdowns() {
+            const now = new Date();
+            for (let i = 1; i <= 3; i++) {
+                const diff = targetDates[i - 1] - now;
+                const daysEl = document.getElementById(`days-val-${i}`);
+                const hoursEl = document.getElementById(`hours-val-${i}`);
+                const minsEl = document.getElementById(`minutes-val-${i}`);
+                
+                if (diff <= 0) {
+                    updateValueWithTick(daysEl, '00');
+                    updateValueWithTick(hoursEl, '00');
+                    updateValueWithTick(minsEl, '00');
+                    continue;
+                }
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                updateValueWithTick(daysEl, String(days).padStart(2, '0'));
+                updateValueWithTick(hoursEl, String(hours).padStart(2, '0'));
+                updateValueWithTick(minsEl, String(minutes).padStart(2, '0'));
+            }
+        }
+        
+        setInterval(updateAllCountdowns, 1000);
+        updateAllCountdowns();
+
+        // 3D Depth Card Tilt Logic
+        const challengeCards = document.querySelectorAll('.active-challenge-card');
+        const challengeSection = document.getElementById('challengeSection');
+        if (challengeCards.length > 0 && challengeSection) {
+            challengeCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    if (!challengeSection.classList.contains('active')) return;
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    const tiltX = (y / rect.height) * -8; // soft cinematic tilt
+                    const tiltY = (x / rect.width) * 8;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translate3d(0, -2px, 0)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)`;
+                }, { passive: true });
+            });
+        }
+
+        // Hamburger Dropdown Logic
+        const hamburgerCheckbox = document.getElementById('hamburger-checkbox');
+        const hamburgerDropdown = document.getElementById('hamburger-dropdown');
+        const hamburgerLabel = document.getElementById('hamburger-menu-label');
+        const navItems = hamburgerDropdown.querySelectorAll('.nav-item-anim');
+
+        hamburgerCheckbox.addEventListener('change', () => {
+            if (hamburgerCheckbox.checked) {
+                hamburgerDropdown.classList.add('active');
+
+                // Staggered Entrance Animation
+                navItems.forEach((item) => {
+                    item.classList.remove('nav-item-visible');
+                    item.style.transitionDelay = '0ms';
+                });
+
+                requestAnimationFrame(() => {
+                    navItems.forEach((item, index) => {
+                        item.style.transitionDelay = `${index * 35}ms`;
+                        item.classList.add('nav-item-visible');
+                    });
+                });
+            } else {
+                hamburgerDropdown.classList.remove('active');
+                navItems.forEach(item => {
+                    item.classList.remove('nav-item-visible');
+                    item.style.transitionDelay = '0ms';
+                });
+            }
+        });
+
+        // Close on click outside
+        document.addEventListener('click', (e) => {
+            if (!hamburgerLabel.contains(e.target) && hamburgerCheckbox.checked) {
+                hamburgerCheckbox.checked = false;
+                hamburgerDropdown.classList.remove('active');
+            }
+        });
+
+        // Close on ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && hamburgerCheckbox.checked) {
+                hamburgerCheckbox.checked = false;
+                hamburgerDropdown.classList.remove('active');
+            }
+        });
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // 3D DEPTH PARTICLE ENGINE & NOISE
+        // ─────────────────────────────────────────────────────────────────────────────
+        (() => {
+            'use strict';
+
+            const stage = document.getElementById('stage');
+            const bgCv = document.getElementById('bgCanvas');
+            const bgCtx = bgCv.getContext('2d');
+            const fgCv = document.getElementById('fgCanvas');
+            const fgCtx = fgCv.getContext('2d');
+            const hint = document.getElementById('hint');
+            const content = document.getElementById('content');
+
+            let W, H, DPR;
+            let particles = [];
+            let t0 = performance.now(), last = t0;
+            let mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+            let targetScrollZ = 0;
+            let camVel = 0;
+
+            const CAM = { fov: 310, z: 0, tiltX: 0, tiltY: 0, near: 12 };
+            const VOL = { w: 2.6, h: 2.6, depth: 1700 };
+            const TEXT_Z = 440;
+
+            setTimeout(() => {
+                if (hint) hint.style.opacity = '0';
+            }, 3400);
+
+            // PERLIN / CURL NOISE
+            const _p = new Uint8Array(512);
+            (() => {
+                const a = new Uint8Array(256);
+                for (let i = 0; i < 256; i++) a[i] = i;
+                for (let i = 255; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; }
+                for (let i = 0; i < 512; i++) _p[i] = a[i & 255];
+            })();
+            const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
+            const lerp = (t, a, b) => a + (b - a) * t;
+            function grad(h, x, y, z) { h &= 15; const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); }
+            function noise3(x, y, z) {
+                const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+                x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+                const u = fade(x), v = fade(y), w = fade(z);
+                const A = _p[X] + Y, AA = _p[A] + Z, AB = _p[A + 1] + Z, B = _p[X + 1] + Y, BA = _p[B] + Z, BB = _p[B + 1] + Z;
+                return lerp(w, lerp(v, lerp(u, grad(_p[AA], x, y, z), grad(_p[BA], x - 1, y, z)), lerp(u, grad(_p[AB], x, y - 1, z), grad(_p[BB], x - 1, y - 1, z))), lerp(v, lerp(u, grad(_p[AA + 1], x, y, z - 1), grad(_p[BA + 1], x - 1, y, z - 1)), lerp(u, grad(_p[AB + 1], x, y - 1, z - 1), grad(_p[BB + 1], x - 1, y - 1, z - 1)))) * 0.5 + 0.5;
+            }
+            function fbm(x, y, z, o) { let v = 0, a = 0.5, f = 1, n = 0; for (let i = 0; i < o; i++) { v += a * noise3(x * f, y * f, z * f); n += a; a *= 0.5; f *= 2.1; } return v / n; }
+            const E = 0.009;
+            const curlX = (x, y, z) => (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3) - (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3))) / (2 * E);
+            const curlY = (x, y, z) => (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3) - (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3))) / (2 * E);
+            const curlZ = (x, y, z) => (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3) - (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3))) / (2 * E);
+
+            function orColor(temp) {
+                const t = Math.max(0, Math.min(1, temp));
+                return [
+                    Math.round(255 * Math.min(1, 0.32 + t * 0.88)),
+                    Math.round(255 * Math.min(1, Math.pow(t, 1.05) * 0.68)),
+                    Math.round(255 * Math.min(1, Math.pow(t, 6.0) * 0.18))
+                ];
+            }
+
+            // PARTICLES — sparse, intentional, slow-burning
+            function spawn(init) {
+                return {
+                    x3: (Math.random() - .5) * VOL.w * W,
+                    y3: (Math.random() - .5) * VOL.h * H,
+                    z3: CAM.z + CAM.near + (Math.random() * VOL.depth),
+                    vx: 0, vy: 0, vz: 0,
+                    life: 7000 + Math.random() * 6000,
+                    age: init ? Math.random() * (7000 + Math.random() * 6000) : 0,
+                    seed: Math.random() * 400, seedY: Math.random() * 400, seedZ: Math.random() * 400,
+                    baseSize: 0.55 + Math.random() * 1.1,
+                    tempPeak: 0.36 + Math.random() * 0.48,
+                    flickPhase: Math.random() * Math.PI * 2,
+                    flickFreq: 0.7 + Math.random() * 1.6,
+                };
+            }
+
+            function initParticles() {
+                particles = [];
+                const count = Math.min(110, Math.max(70, Math.floor(W * H / 7500)));
+                for (let i = 0; i < count; i++) particles.push(spawn(true));
+            }
+
+            function project(x3, y3, z3) {
+                const cz = z3 - CAM.z;
+                if (cz <= CAM.near) return null;
+                const scale = CAM.fov / cz;
+                return { sx: (x3 + CAM.tiltX * cz * 0.0013) * scale + W / 2, sy: (y3 + CAM.tiltY * cz * 0.0008) * scale + H / 2, scale, cz };
+            }
+
+            function paintParticle(c2d, p, elapsed, aMult) {
+                const proj = project(p.x3, p.y3, p.z3);
+                if (!proj) return;
+                const { sx, sy, scale } = proj;
+                if (sx < -130 || sx > W + 130 || sy < -130 || sy > H + 130) return;
+
+                const age01 = Math.min(p.age / p.life, 1);
+                const fadeIn = age01 < 0.09 ? age01 / 0.09 : 1;
+                const fadeOut = age01 > 0.72 ? 1 - (age01 - 0.72) / 0.28 : 1;
+                const lifeA = fadeIn * fadeOut;
+                if (lifeA < 0.003) return;
+
+                const tempRaw = age01 < 0.20 ? age01 / 0.20 : 1 - Math.pow((age01 - 0.20) / 0.80, 1.6);
+                const temp = tempRaw * p.tempPeak;
+                const flick = 1 + 0.05 * Math.sin(elapsed * p.flickFreq * 0.001 + p.flickPhase);
+                const depthA = Math.pow(Math.min(1, scale * 2.2), 0.5);
+                const alpha = lifeA * depthA * flick * aMult;
+                if (alpha < 0.004) return;
+
+                const sz = p.baseSize * scale * 17 * (0.82 + 0.18 * temp);
+                const [r, g, b] = orColor(temp);
+
+                c2d.save();
+                c2d.globalCompositeOperation = 'lighter';
+
+                const gr = Math.max(sz * 3.4, 1.5);
+                const glow = c2d.createRadialGradient(sx, sy, 0, sx, sy, gr);
+                const ga = alpha * 0.17;
+                glow.addColorStop(0, `rgba(${r},${g},${b},${ga})`);
+                glow.addColorStop(0.4, `rgba(${Math.round(r * .68)},${Math.round(g * .2)},0,${ga * .25})`);
+                glow.addColorStop(1, 'rgba(0,0,0,0)');
+                c2d.fillStyle = glow;
+                c2d.beginPath(); c2d.arc(sx, sy, gr, 0, Math.PI * 2); c2d.fill();
+
+                const cr = Math.max(sz * .5, 0.4);
+                const br2 = Math.min(1, temp + 0.22);
+                const core = c2d.createRadialGradient(sx, sy, 0, sx, sy, cr);
+                const ca = alpha * 0.95;
+                core.addColorStop(0, `rgba(255,${Math.round(200 * br2)},${Math.round(60 * br2 * br2)},${ca})`);
+                core.addColorStop(0.5, `rgba(${r},${Math.round(g * .45)},0,${ca * .58})`);
+                core.addColorStop(1, 'rgba(0,0,0,0)');
+                c2d.fillStyle = core;
+                c2d.beginPath(); c2d.arc(sx, sy, cr, 0, Math.PI * 2); c2d.fill();
+                c2d.restore();
+            }
+
+            const CS = 0.0021, CSTR = 28, FWD = 0.036;
+            function updateP(p, dt, elapsed) {
+                p.age += dt;
+                const T = elapsed * 0.000036;
+                const nx = p.x3 * CS + p.seed, ny = p.y3 * CS + p.seedY, nz = p.z3 * CS * 0.44 + p.seedZ + T;
+                const cx = curlX(nx, ny, nz), cy = curlY(nx, ny, nz), cz2 = curlZ(nx, ny, nz);
+                p.vx += (cx * CSTR) * dt * 0.001;
+                p.vy += (cy * CSTR - 0.14) * dt * 0.001;
+                p.vz += (cz2 * CSTR * 0.5 - FWD) * dt * 0.001;
+                const drag = Math.pow(0.975, dt / 16);
+                p.vx *= drag; p.vy *= drag; p.vz *= drag;
+                p.x3 += p.vx * dt * 0.06; p.y3 += p.vy * dt * 0.06; p.z3 += p.vz * dt * 0.06;
+                const hW = VOL.w * W * .5, hH = VOL.h * H * .5;
+                if (p.x3 > hW) p.x3 = -hW; if (p.x3 < -hW) p.x3 = hW;
+                if (p.y3 > hH) p.y3 = -hH; if (p.y3 < -hH) p.y3 = hH;
+                if (p.z3 - CAM.z < CAM.near) { p.z3 = CAM.z + VOL.depth; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
+                if (p.z3 > CAM.z + VOL.depth + 300) { p.z3 = CAM.z + CAM.near + 20; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
+            }
+
+            function drawBG() {
+                bgCtx.clearRect(0, 0, W, H);
+                bgCtx.fillStyle = '#0f1011';
+                bgCtx.fillRect(0, 0, W, H);
+                const atm = bgCtx.createRadialGradient(W * .5, H * .54, 0, W * .5, H * .54, W * .68);
+                atm.addColorStop(0, 'rgba(90,34,4,0.11)');
+                atm.addColorStop(0.5, 'rgba(52,18,2,0.04)');
+                atm.addColorStop(1, 'rgba(0,0,0,0)');
+                bgCtx.fillStyle = atm; bgCtx.fillRect(0, 0, W, H);
+                const vig = bgCtx.createRadialGradient(W * .5, H * .5, Math.min(W, H) * .15, W * .5, H * .5, Math.max(W, H) * .92);
+                vig.addColorStop(0, 'rgba(0,0,0,0)');
+                vig.addColorStop(0.52, 'rgba(0,0,0,0.09)');
+                vig.addColorStop(1, 'rgba(0,0,0,0.82)');
+                bgCtx.fillStyle = vig; bgCtx.fillRect(0, 0, W, H);
+            }
+
+            // TEXT PARALLAX — multi-layer organic float
+            const titleWrapEl = document.getElementById('titleWrap');
+            const eyebrowParEl = document.getElementById('eyebrow');
+            const subParEl = document.getElementById('subTitle');
+            const tagsParEl = document.querySelector('.tags');
+            const mainTitleEl = document.getElementById('mainTitle');
+
+            let pMX = 0, pMY = 0; // smoothed mouse
+
+            function applyTextParallax(elapsed) {
+                pMX += (mouse.x - pMX) * 0.038;
+                pMY += (mouse.y - pMY) * 0.038;
+                const mx = (pMX / W) - 0.5;
+                const my = (pMY / H) - 0.5;
+                const T = elapsed * 0.001;
+
+                const txA = Math.sin(T * 0.112 + 0.0) * 3.0 + Math.sin(T * 0.071) * 1.5;
+                const tyA = Math.cos(T * 0.093 + 1.2) * 2.0 + Math.cos(T * 0.134) * 1.0;
+
+                const exA = Math.sin(T * 0.131 + 2.1) * 2.4 + Math.sin(T * 0.062) * 1.1;
+                const eyA = Math.cos(T * 0.082 + 0.5) * 1.5 + Math.cos(T * 0.113) * 0.8;
+
+                const sxA = Math.sin(T * 0.098 + 1.0) * 1.8 + Math.sin(T * 0.079) * 0.9;
+                const syA = Math.cos(T * 0.118 + 3.0) * 1.3 + Math.cos(T * 0.068) * 0.6;
+
+                const gxA = Math.sin(T * 0.087 + 0.7) * 1.2;
+                const gyA = Math.cos(T * 0.141 + 2.4) * 0.8;
+
+                const tX = mx * -16 + txA, tY = my * -11 + tyA;
+                const eX = mx * -9 + exA, eY = my * -6 + eyA;
+                const sX = mx * -5 + sxA, sY = my * -4 + syA;
+                const gX = mx * -3 + gxA, gY = my * -2 + gyA;
+
+                const breathe = 1 + Math.sin(T * 0.19 + 0.3) * 0.004;
+
+                if (titleWrapEl) titleWrapEl.style.transform = `translate(${tX.toFixed(2)}px,${tY.toFixed(2)}px) scale(${breathe.toFixed(5)})`;
+                if (eyebrowParEl) eyebrowParEl.style.transform = `translate(${eX.toFixed(2)}px,${eY.toFixed(2)}px)`;
+                if (subParEl) subParEl.style.transform = `translate(${sX.toFixed(2)}px,${sY.toFixed(2)}px)`;
+                if (tagsParEl) tagsParEl.style.transform = `translate(${gX.toFixed(2)}px,${gY.toFixed(2)}px)`;
+            }
+
+            // SCROLL DEPTH DISSOLUTION
+            let scrollDepth = 0, smoothVel = 0;
+
+            function applyDepthDissolution(dt) {
+                const raw = Math.min(targetScrollZ / (VOL.depth * 0.55), 1);
+                scrollDepth += (raw - scrollDepth) * 0.05;
+                smoothVel += (Math.abs(camVel) - smoothVel) * 0.07;
+                smoothVel *= Math.pow(0.88, dt / 16);
+
+                const d = scrollDepth, d2 = d * d, d3 = d2 * d;
+                
+                // Content (Hero text) exits upward and fades
+                const heroOpacity = Math.max(0, 1 - d2 * 2.5);
+                const scaleY = 1 - d * 0.05;
+                const heroY = -d * 120;
+                const lsExpand = d2 * 0.12;
+
+                const blurRamp = Math.max(0, (d - 0.22) / 0.78);
+                const totalBlur = blurRamp * blurRamp * 22 + smoothVel * 0.018;
+                const chromaSplit = d3 * 6;
+
+                if (content) {
+                    content.style.opacity = heroOpacity.toFixed(4);
+                    content.style.transform = `scaleY(${scaleY.toFixed(5)}) translateY(${heroY.toFixed(2)}px)`;
+                    content.style.filter = totalBlur > 0.3 ? `blur(${totalBlur.toFixed(2)}px)` : 'none';
+                }
+
+                if (mainTitleEl) {
+                    mainTitleEl.style.letterSpacing = `calc(0.18em + ${lsExpand.toFixed(4)}em)`;
+                    if (chromaSplit > 0.3) {
+                        const c = chromaSplit.toFixed(2);
+                        mainTitleEl.style.textShadow = `${c}px 0 rgba(255,60,20,0.18),-${c}px 0 rgba(20,120,255,0.12),0 0 60px rgba(255,130,50,0.12)`;
+                    } else {
+                        mainTitleEl.style.textShadow = '0 0 55px rgba(255,130,50,0.08)';
+                    }
+                }
+
+                // Challenge Section (Active Grid) rises from below and fades in
+                const challengeSec = document.getElementById('challengeSection');
+                if (challengeSec) {
+                    const revealProgress = Math.max(0, Math.min(1, (d - 0.25) / 0.45));
+                    challengeSec.style.opacity = revealProgress.toFixed(4);
+                    
+                    const cardY = (1 - revealProgress) * 120;
+                    challengeSec.style.transform = `translateY(${cardY.toFixed(2)}px)`;
+                    challengeSec.style.pointerEvents = d > 0.5 ? 'auto' : 'none';
+                    
+                    if (d > 0.5) {
+                        challengeSec.classList.add('active');
+                    } else {
+                        challengeSec.classList.remove('active');
+                    }
+                }
+            }
+
+            // MAIN LOOP
+            function frame(now) {
+                requestAnimationFrame(frame);
+                const dt = Math.min(50, now - last); last = now;
+                const elapsed = now - t0;
+
+                const prevZ = CAM.z;
+                CAM.z += (targetScrollZ - CAM.z) * 0.055;
+                camVel = (CAM.z - prevZ) / Math.max(dt, 1) * 16;
+                CAM.tiltX += (mouse.tx - CAM.tiltX) * 0.040;
+                CAM.tiltY += (mouse.ty - CAM.tiltY) * 0.040;
+
+                for (let i = 0; i < particles.length; i++) updateP(particles[i], dt, elapsed);
+
+                const target = Math.min(110, Math.max(70, Math.floor(W * H / 7500)));
+                while (particles.length < target) particles.push(spawn(false));
+
+                particles.sort((a, b) => (b.z3 - CAM.z) - (a.z3 - CAM.z));
+
+                drawBG();
+                for (let i = 0; i < particles.length; i++) {
+                    if (particles[i].z3 - CAM.z > TEXT_Z) paintParticle(bgCtx, particles[i], elapsed, 1.0);
+                }
+
+                fgCtx.clearRect(0, 0, W, H);
+                for (let i = 0; i < particles.length; i++) {
+                    if (particles[i].z3 - CAM.z <= TEXT_Z) paintParticle(fgCtx, particles[i], elapsed, 0.68);
+                }
+
+                if (scrollDepth < 0.95) applyTextParallax(elapsed);
+                applyDepthDissolution(dt);
+            }
+
+            // RESIZE
+            function resize() {
+                DPR = Math.min(window.devicePixelRatio || 1, 2);
+                W = stage.clientWidth; H = stage.clientHeight;
+                [bgCv, fgCv].forEach(cv => {
+                    cv.width = Math.floor(W * DPR); cv.height = Math.floor(H * DPR);
+                    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+                });
+                bgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+                fgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+                initParticles();
+            }
+
+            // INPUT
+            document.addEventListener('mousemove', e => {
+                mouse.x = e.clientX; mouse.y = e.clientY;
+                const r = stage.getBoundingClientRect();
+                mouse.tx = (e.clientX - r.left - W / 2) * 1.4;
+                mouse.ty = (e.clientY - r.top - H / 2) * 0.9;
+            }, { passive: true });
+
+            stage.addEventListener('mouseleave', () => { mouse.tx = 0; mouse.ty = 0; }, { passive: true });
+            stage.addEventListener('wheel', e => {
+                e.preventDefault();
+                targetScrollZ += e.deltaY * 2.0;
+                targetScrollZ = Math.max(0, targetScrollZ);
+            }, { passive: false });
+
+            let _lTY = null;
+            stage.addEventListener('touchstart', e => { _lTY = e.touches[0].clientY; }, { passive: true });
+            stage.addEventListener('touchmove', e => {
+                if (_lTY !== null) { const dy = _lTY - e.touches[0].clientY; targetScrollZ += dy * 3.4; targetScrollZ = Math.max(0, targetScrollZ); _lTY = e.touches[0].clientY; }
+            }, { passive: true });
+            stage.addEventListener('touchend', () => { _lTY = null; }, { passive: true });
+
+            window.addEventListener('resize', resize, { passive: true });
+            resize();
+            requestAnimationFrame(frame);
+
+            // TEXT REVEAL — Thermal ignition
+            const eyebrowEl = document.getElementById('eyebrow');
+            const eyebrowText = eyebrowEl.textContent;
+            eyebrowEl.innerHTML = '';
+            [...eyebrowText].forEach(ch => {
+                const s = document.createElement('span');
+                s.className = 'ch';
+                s.textContent = ch === ' ' ? '\u00A0' : ch;
+                eyebrowEl.appendChild(s);
+            });
+
+            const mainTitleDom = document.getElementById('mainTitle');
+            const titleText = mainTitleDom.textContent.trim();
+            mainTitleDom.innerHTML = '';
+            const charSpans = [];
+            [...titleText].forEach(ch => {
+                const s = document.createElement('span');
+                s.className = 'ch';
+                s.textContent = ch;
+                s.style.cssText = `display:inline-block;opacity:0;filter:blur(28px) brightness(3.0);transform:scale(1.04);color:rgba(255,140,60,1);text-shadow:none;transition:none;`;
+                mainTitleDom.appendChild(s);
+                charSpans.push(s);
+            });
+
+            const subEl = document.getElementById('subTitle');
+            const subText = subEl.textContent;
+            subEl.innerHTML = '';
+            subText.split(' ').forEach((word, i, arr) => {
+                const outer = document.createElement('span');
+                outer.className = 'word';
+                const inner = document.createElement('span');
+                inner.className = 'inner';
+                inner.textContent = word;
+                inner.style.transitionDelay = `${i * 0.06}s`;
+                outer.appendChild(inner);
+                subEl.appendChild(outer);
+                if (i < arr.length - 1) subEl.appendChild(document.createTextNode(' '));
+            });
+
+            const ruleEl = document.getElementById('rule');
+            const tagEls = [0, 1, 2, 3, 4].map(i => document.getElementById('t' + i));
+
+            function thermalIgnite(span, delay) {
+                setTimeout(() => {
+                    span.style.transition = 'none';
+                    span.style.opacity = '1';
+                    span.style.filter = 'blur(26px) brightness(2.8)';
+                    span.style.color = 'rgba(255,120,40,1)';
+                    span.style.transform = 'scale(1.06)';
+                    setTimeout(() => {
+                        span.style.transition = 'filter 0.55s cubic-bezier(0.4,0,0.2,1),color 0.55s ease,transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+                        span.style.filter = 'blur(8px) brightness(2.0)';
+                        span.style.color = 'rgba(255,180,90,1)';
+                        span.style.transform = 'scale(1.02)';
+                    }, 40);
+                    setTimeout(() => {
+                        span.style.transition = 'filter 0.35s cubic-bezier(0.4,0,0.2,1),color 0.4s ease,transform 0.4s cubic-bezier(0.16,1,0.3,1)';
+                        span.style.filter = 'blur(0px) brightness(1.0)';
+                        span.style.color = '#ffffff';
+                        span.style.transform = 'scale(1.0)';
+                    }, 340);
+                }, delay);
+            }
+
+            const eyebrowChars = eyebrowEl.querySelectorAll('.ch');
+            setTimeout(() => {
+                eyebrowChars.forEach((ch, i) => { setTimeout(() => ch.classList.add('on'), i * 22); });
+            }, 400);
+
+            const N = charSpans.length, center = (N - 1) / 2;
+            setTimeout(() => {
+                charSpans.forEach((span, i) => {
+                    const dist = Math.abs(i - center);
+                    thermalIgnite(span, dist * 88 + Math.random() * 30);
+                });
+            }, 900);
+
+            setTimeout(() => subEl.classList.add('wipe'), 2200);
+            setTimeout(() => ruleEl.classList.add('show'), 2650);
+            setTimeout(() => { tagEls.forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 130)); }, 3050);
+
+            // PREMIUM LETTER SWEEP
+            (function initSweep() {
+                const FILL_DUR = 680;
+                const HOLD_DUR = 140;
+                const EMPTY_DUR = 520;
+                const STEP_DUR = FILL_DUR + HOLD_DUR;
+                const CYCLE_PAUSE = 1400;
+
+                charSpans.forEach(span => {
+                    span.style.position = 'relative';
+                    span.style.display = 'inline-block';
+
+                    const base = document.createElement('span');
+                    base.textContent = span.textContent;
+                    base.style.cssText = `
+                    position:absolute;inset:0;
+                    color:#ffffff;
+                    pointer-events:none;
+                    font-family:inherit;font-size:inherit;font-weight:inherit;
+                    font-style:inherit;letter-spacing:inherit;line-height:inherit;
+                `;
+                    span.insertBefore(base, span.firstChild);
+
+                    const fill = document.createElement('span');
+                    fill.textContent = span.textContent;
+                    fill.style.cssText = `
+                    position:absolute;inset:0;
+                    color:rgb(218, 108, 32);
+                    clip-path:inset(100% 0 0 0);
+                    pointer-events:none;
+                    will-change:clip-path,opacity;
+                    font-family:inherit;font-size:inherit;font-weight:inherit;
+                    font-style:inherit;letter-spacing:inherit;line-height:inherit;
+                    opacity:0;
+                `;
+                    span.appendChild(fill);
+                    span._fillEl = fill;
+                });
+
+                function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+                function easeInCubic(t) { return t * t * t; }
+
+                function animateFill(fillEl, fromPct, toPct, dur, easeFn, opFrom, opTo, cb) {
+                    const start = performance.now();
+                    function step(now) {
+                        const raw = Math.min((now - start) / dur, 1);
+                        const t = easeFn(raw);
+                        const pct = fromPct + (toPct - fromPct) * t;
+                        const op = opFrom + (opTo - opFrom) * t;
+                        fillEl.style.clipPath = `inset(${(100 - pct).toFixed(3)}% 0 0 0)`;
+                        fillEl.style.opacity = op.toFixed(4);
+                        if (raw < 1) requestAnimationFrame(step);
+                        else {
+                            fillEl.style.clipPath = `inset(${(100 - toPct).toFixed(3)}% 0 0 0)`;
+                            fillEl.style.opacity = opTo.toFixed(4);
+                            if (cb) cb();
+                        }
+                    }
+                    requestAnimationFrame(step);
+                }
+
+                function runCycle() {
+                    let i = 0;
+                    function nextLetter() {
+                        if (i >= charSpans.length) {
+                            setTimeout(runCycle, CYCLE_PAUSE + EMPTY_DUR);
+                            return;
+                        }
+                        const fill = charSpans[i]._fillEl;
+
+                        animateFill(fill, 0, 100, FILL_DUR, easeOutCubic, 0, 1, () => {
+                            setTimeout(() => {
+                                animateFill(fill, 100, 0, EMPTY_DUR, easeInCubic, 1, 0, null);
+                            }, HOLD_DUR);
+                        });
+
+                        i++;
+                        setTimeout(nextLetter, STEP_DUR);
+                    }
+                    nextLetter();
+                }
+
+                setTimeout(runCycle, 3000);
+            })();
+
+        })();
+
+    </script>
     <script src="cursor.js" defer></script>
 </body>
+
 </html>
