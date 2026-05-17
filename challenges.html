@@ -1547,18 +1547,490 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .squad-btn-secondary span {
+        .squad-btn-secondary:hover span {
+            color: #ffffff;
+        }
+
+        /* ─── Matchmaking Engine styles ─── */
+        .matchmaking-section {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 110px 4% 60px;
+            pointer-events: none;
+            z-index: 10;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(120px);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
+        }
+
+        .matchmaking-section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .matchmaking-section::-webkit-scrollbar-thumb {
+            background: rgba(218, 108, 32, 0.2);
+            border-radius: 10px;
+        }
+
+        .matchmaking-header {
+            text-align: center;
+            margin-bottom: 32px;
+            max-width: 600px;
+        }
+
+        .matchmaking-eyebrow {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.45);
-            letter-spacing: 0.08em;
+            letter-spacing: 0.35em;
+            color: rgb(218, 108, 32);
             text-transform: uppercase;
-            transition: color 0.4s ease;
+            display: block;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
         }
 
-        .squad-btn-secondary:hover span {
+        .matchmaking-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(28px, 4.5vw, 42px);
             color: #ffffff;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+        }
+
+        .matchmaking-subtext {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.6;
+        }
+
+        /* Split Grid Layout */
+        .matchmaking-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+            max-width: 1140px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        @media (max-width: 992px) {
+            .matchmaking-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Futuristic terminal panel styling */
+        .matchmaking-terminal {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: border-color 0.4s ease;
+        }
+
+        .matchmaking-terminal:hover {
+            border-color: rgba(218, 108, 32, 0.15);
+        }
+
+        .terminal-scanlines {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        .matchmaking-body {
+            padding: 24px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Status & Telemetry scanning */
+        .ai-status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 12px;
+        }
+
+        .ai-status-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .ai-scanning-state {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scanner-flicker-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgb(218, 108, 32);
+            box-shadow: 0 0 8px rgb(218, 108, 32);
+            animation: ticker-pulse 2s infinite;
+        }
+
+        .ai-status-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgb(218, 108, 32);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* Match profile info stack */
+        .personal-insight-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            letter-spacing: 0.02em;
+        }
+
+        .insight-highlight {
+            color: rgb(218, 108, 32);
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(218, 108, 32, 0.1);
+        }
+
+        .param-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 16px 0;
+        }
+
+        .param-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .param-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .param-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.05em;
+        }
+
+        /* Radial circular indicators */
+        .compatibility-gauges-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .gauge-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .radial-progress-container {
+            position: relative;
+            width: 58px;
+            height: 58px;
+        }
+
+        .radial-progress-container svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .radial-bg-ring {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 2.5;
+        }
+
+        .radial-progress-ring {
+            fill: none;
+            stroke: rgb(218, 108, 32);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-dasharray: 157; /* 2 * PI * r (r=25) */
+            stroke-dashoffset: 157;
+            transition: stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: drop-shadow(0 0 4px rgba(218, 108, 32, 0.25));
+        }
+
+        .radial-percentage-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .gauge-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Compact recommendation cards */
+        .recommended-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .recommendation-card {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+
+        .recommendation-card:hover {
+            border-color: rgba(218, 108, 32, 0.25);
+            transform: perspective(1000px) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(218, 108, 32, 0.05);
+        }
+
+        .rec-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .rec-title-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .rec-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 16px;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+        }
+
+        .rec-why-desc {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8.5px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.38);
+            letter-spacing: 0.03em;
+            line-height: 1.4;
+        }
+
+        .rec-score-pill {
+            background: rgba(218, 108, 32, 0.04);
+            border: 1px solid rgba(218, 108, 32, 0.15);
+            border-radius: 20px;
+            padding: 2.5px 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 7.5px;
+            font-weight: 600;
+            color: rgb(218, 108, 32);
+            letter-spacing: 0.05em;
+        }
+
+        .rec-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed rgba(255, 255, 255, 0.03);
+            padding-top: 8px;
+            margin-top: 4px;
+        }
+
+        .rec-spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .rec-spec-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-size: 6.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .rec-spec-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        /* Team Compatibility modules */
+        .team-comp-panel {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .comp-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 8px;
+        }
+
+        .comp-users-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comp-user-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.35s ease;
+        }
+
+        .comp-user-card:hover {
+            border-color: rgba(218, 108, 32, 0.15);
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .user-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-mini-avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(218, 108, 32, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .user-info-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .user-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9.5px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .user-role-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7.5px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .user-comp-percentage {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            color: rgb(218, 108, 32);
+            letter-spacing: -0.01em;
         }
     </style>
 </head>
@@ -1993,6 +2465,160 @@
             <div class="squad-cards-grid" id="squad-cards-grid">
                 <!-- Dynamically loaded terminal squad cards -->
             </div>
+        </div>
+
+        <!-- Futuristic AI Skill-Based Matchmaking Section -->
+        <div id="matchmakingSection" class="matchmaking-section">
+            <div class="matchmaking-header">
+                <span class="matchmaking-eyebrow">MATCHMAKING ENGINE</span>
+                <h2 class="matchmaking-title">MATCHMAKING ENGINE</h2>
+                <p class="matchmaking-subtext">Precision pairing for builders, designers, and innovators.</p>
+            </div>
+
+            <div class="matchmaking-grid">
+                <!-- Left Column: Personal Match Panel & Progress Gauges -->
+                <div class="matchmaking-terminal">
+                    <div class="terminal-scanlines"></div>
+                    <div class="terminal-bar">
+                        <div class="terminal-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <div class="terminal-file">ai_pair_core.py</div>
+                        <div class="ai-scanning-state">
+                            <span class="scanner-flicker-dot"></span>
+                            <span class="ai-status-value" id="ai-matchmaking-status">READY</span>
+                        </div>
+                    </div>
+                    
+                    <div class="matchmaking-body">
+                        <!-- Scanning telemetry state / Status indicators -->
+                        <div class="ai-status-row">
+                            <span class="ai-status-label">ANALYSIS TELEMETRY:</span>
+                            <span class="ai-status-value">CORE OPERATIONAL</span>
+                        </div>
+
+                        <!-- Personal insight AI analysis text -->
+                        <p class="personal-insight-text">
+                            Your <span class="insight-highlight">frontend motion-design profile</span> aligns strongly with cinematic UI challenges. The pairing heuristics recommend focusing on <span class="insight-highlight">Creative Technology</span> roles where layout kinetics, spatial physics, and matte textures dominate the interface composition.
+                        </p>
+
+                        <!-- Param cell table metadata -->
+                        <div class="param-matrix">
+                            <div class="param-cell">
+                                <span class="param-lbl">IDEAL CATEGORY:</span>
+                                <span class="param-val">Cinematic Frontend / Advanced UX</span>
+                            </div>
+                            <div class="param-cell">
+                                <span class="param-lbl">RECOMMENDED ROLE:</span>
+                                <span class="param-val">Creative Technologist / UI Architect</span>
+                            </div>
+                            <div class="param-cell">
+                                <span class="param-lbl">GROWTH FOCUS:</span>
+                                <span class="param-val">Advanced Shader kinetics & WebGL Canvas</span>
+                            </div>
+                            <div class="param-cell">
+                                <span class="param-lbl">IDEAL COLLABORATOR:</span>
+                                <span class="param-val">Systems Engineer / Rust backend developer</span>
+                            </div>
+                        </div>
+
+                        <!-- Match Score compatibility indicators -->
+                        <div class="compatibility-gauges-row">
+                            <!-- Gauge 1: Challenge Match -->
+                            <div class="gauge-cell">
+                                <div class="radial-progress-container">
+                                    <svg>
+                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
+                                        <circle class="radial-progress-ring" id="gauge-ring-1" cx="29" cy="29" r="25"></circle>
+                                    </svg>
+                                    <span class="radial-percentage-text" id="gauge-val-1">0%</span>
+                                </div>
+                                <span class="gauge-label">Challenge<br>Match</span>
+                            </div>
+
+                            <!-- Gauge 2: Team Compatibility -->
+                            <div class="gauge-cell">
+                                <div class="radial-progress-container">
+                                    <svg>
+                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
+                                        <circle class="radial-progress-ring" id="gauge-ring-2" cx="29" cy="29" r="25"></circle>
+                                    </svg>
+                                    <span class="radial-percentage-text" id="gauge-val-2">0%</span>
+                                </div>
+                                <span class="gauge-label">Team<br>Comp.</span>
+                            </div>
+
+                            <!-- Gauge 3: Creativity Alignment -->
+                            <div class="gauge-cell">
+                                <div class="radial-progress-container">
+                                    <svg>
+                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
+                                        <circle class="radial-progress-ring" id="gauge-ring-3" cx="29" cy="29" r="25"></circle>
+                                    </svg>
+                                    <span class="radial-percentage-text" id="gauge-val-3">0%</span>
+                                </div>
+                                <span class="gauge-label">Creativity<br>Align.</span>
+                            </div>
+
+                            <!-- Gauge 4: Growth Potential -->
+                            <div class="gauge-cell">
+                                <div class="radial-progress-container">
+                                    <svg>
+                                        <circle class="radial-bg-ring" cx="29" cy="29" r="25"></circle>
+                                        <circle class="radial-progress-ring" id="gauge-ring-4" cx="29" cy="29" r="25"></circle>
+                                    </svg>
+                                    <span class="radial-percentage-text" id="gauge-val-4">0%</span>
+                                </div>
+                                <span class="gauge-label">Growth<br>Potential</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Column: Recommended Challenges & Team Compatibility Modules -->
+                <div class="recommended-stack">
+                    
+                    <!-- Teammate Compatibility Module -->
+                    <div class="team-comp-panel">
+                        <span class="comp-title">COMPATIBLE COLLABORATORS</span>
+                        <div class="comp-users-list">
+                            <!-- User 1 -->
+                            <div class="comp-user-card">
+                                <div class="user-left">
+                                    <div class="user-mini-avatar">SC</div>
+                                    <div class="user-info-stack">
+                                        <span class="user-name">Sarah Chen</span>
+                                        <span class="user-role-label">Ideal: Systems Engineer / Rust lead</span>
+                                    </div>
+                                </div>
+                                <span class="user-comp-percentage">96% FIT</span>
+                            </div>
+
+                            <!-- User 2 -->
+                            <div class="comp-user-card">
+                                <div class="user-left">
+                                    <div class="user-mini-avatar">MD</div>
+                                    <div class="user-info-stack">
+                                        <span class="user-name">Marcus Dupré</span>
+                                        <span class="user-role-label">Ideal: Creative WebGL Lead</span>
+                                    </div>
+                                </div>
+                                <span class="user-comp-percentage">91% FIT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommended Challenges Stack -->
+                    <div class="recommended-stack" id="matchmaker-challenge-stack">
+                        <!-- Dynamically loaded compact challenge cards -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <canvas id="fgCanvas"></canvas>
         <div id="hint">scroll to descend</div>
     </div>
@@ -2343,8 +2969,8 @@
             let scrollDepth = 0, smoothVel = 0;
 
             function applyDepthDissolution(dt) {
-                // We map raw scroll over 2.2 times the VOL.depth for a breathtaking four-stage scroll narrative
-                const raw = Math.min(targetScrollZ / (VOL.depth * 2.2), 1);
+                // We map raw scroll over 2.95 times the VOL.depth for a breathtaking five-stage scroll narrative
+                const raw = Math.min(targetScrollZ / (VOL.depth * 2.95), 1);
                 scrollDepth += (raw - scrollDepth) * 0.05;
                 smoothVel += (Math.abs(camVel) - smoothVel) * 0.07;
                 smoothVel *= Math.pow(0.88, dt / 16);
@@ -2352,8 +2978,8 @@
                 const d = scrollDepth;
 
                 // 1. Content (Hero Text)
-                // Active: d = 0.0 -> 0.28
-                const heroProgress = Math.max(0, Math.min(1, d / 0.24));
+                // Active: enters d = 0.0 -> exits d = 0.20
+                const heroProgress = Math.max(0, Math.min(1, d / 0.16));
                 const heroOpacity = Math.max(0, 1 - heroProgress * 2.0);
                 const heroY = -heroProgress * 140;
                 const scaleY = 1 - heroProgress * 0.05;
@@ -2373,27 +2999,27 @@
                 }
 
                 // 2. Challenge Section (Active Grid)
-                // Active: enters d = 0.16 -> 0.36, exits d = 0.36 -> 0.54
+                // Active: enters d = 0.12 -> 0.28, exits d = 0.28 -> 0.44
                 const challengeSec = document.getElementById('challengeSection');
                 if (challengeSec) {
                     let gridOpacity = 0;
                     let gridY = 120;
                     
-                    if (d <= 0.36) {
-                        const progress = Math.max(0, Math.min(1, (d - 0.16) / 0.20));
+                    if (d <= 0.28) {
+                        const progress = Math.max(0, Math.min(1, (d - 0.12) / 0.16));
                         gridOpacity = progress;
                         gridY = (1 - progress) * 120;
                     } else {
-                        const progress = Math.max(0, Math.min(1, (d - 0.36) / 0.18));
+                        const progress = Math.max(0, Math.min(1, (d - 0.28) / 0.16));
                         gridOpacity = 1 - progress;
                         gridY = -progress * 120;
                     }
                     
                     challengeSec.style.opacity = gridOpacity.toFixed(4);
                     challengeSec.style.transform = `translateY(${gridY.toFixed(2)}px)`;
-                    challengeSec.style.pointerEvents = (d > 0.24 && d < 0.48) ? 'auto' : 'none';
+                    challengeSec.style.pointerEvents = (d > 0.18 && d < 0.38) ? 'auto' : 'none';
                     
-                    if (d > 0.24 && d < 0.48) {
+                    if (d > 0.18 && d < 0.38) {
                         challengeSec.classList.add('active');
                     } else {
                         challengeSec.classList.remove('active');
@@ -2401,27 +3027,27 @@
                 }
 
                 // 3. Challenge Analysis Section (Radar Scanner)
-                // Active: enters d = 0.44 -> 0.64, exits d = 0.64 -> 0.78
+                // Active: enters d = 0.36 -> 0.52, exits d = 0.52 -> 0.68
                 const analysisSec = document.getElementById('analysisSection');
                 if (analysisSec) {
                     let scanOpacity = 0;
                     let scanY = 120;
                     
-                    if (d <= 0.64) {
-                        const progress = Math.max(0, Math.min(1, (d - 0.44) / 0.20));
+                    if (d <= 0.52) {
+                        const progress = Math.max(0, Math.min(1, (d - 0.36) / 0.16));
                         scanOpacity = progress;
                         scanY = (1 - progress) * 120;
                     } else {
-                        const progress = Math.max(0, Math.min(1, (d - 0.64) / 0.14));
+                        const progress = Math.max(0, Math.min(1, (d - 0.52) / 0.16));
                         scanOpacity = 1 - progress;
                         scanY = -progress * 120;
                     }
                     
                     analysisSec.style.opacity = scanOpacity.toFixed(4);
                     analysisSec.style.transform = `translateY(${scanY.toFixed(2)}px)`;
-                    analysisSec.style.pointerEvents = (d > 0.50 && d < 0.72) ? 'auto' : 'none';
+                    analysisSec.style.pointerEvents = (d > 0.42 && d < 0.62) ? 'auto' : 'none';
                     
-                    if (d > 0.50 && d < 0.72) {
+                    if (d > 0.42 && d < 0.62) {
                         analysisSec.classList.add('active');
                     } else {
                         analysisSec.classList.remove('active');
@@ -2429,20 +3055,50 @@
                 }
 
                 // 4. Team Recruitment Network Section (Squad Discovery)
-                // Active: enters d = 0.68 -> 0.94
+                // Active: enters d = 0.60 -> 0.76, exits d = 0.76 -> 0.88
                 const recruitmentSec = document.getElementById('recruitmentSection');
                 if (recruitmentSec) {
-                    const progress = Math.max(0, Math.min(1, (d - 0.68) / 0.26));
-                    recruitmentSec.style.opacity = progress.toFixed(4);
+                    let recruitOpacity = 0;
+                    let recruitY = 120;
                     
-                    const recruitY = (1 - progress) * 120;
+                    if (d <= 0.76) {
+                        const progress = Math.max(0, Math.min(1, (d - 0.60) / 0.16));
+                        recruitOpacity = progress;
+                        recruitY = (1 - progress) * 120;
+                    } else {
+                        const progress = Math.max(0, Math.min(1, (d - 0.76) / 0.12));
+                        recruitOpacity = 1 - progress;
+                        recruitY = -progress * 120;
+                    }
+                    
+                    recruitmentSec.style.opacity = recruitOpacity.toFixed(4);
                     recruitmentSec.style.transform = `translateY(${recruitY.toFixed(2)}px)`;
-                    recruitmentSec.style.pointerEvents = d > 0.80 ? 'auto' : 'none';
+                    recruitmentSec.style.pointerEvents = (d > 0.66 && d < 0.82) ? 'auto' : 'none';
                     
-                    if (d > 0.80) {
+                    if (d > 0.66 && d < 0.82) {
                         recruitmentSec.classList.add('active');
                     } else {
                         recruitmentSec.classList.remove('active');
+                    }
+                }
+
+                // 5. Skill-Based Matchmaking Engine Section
+                // Active: enters d = 0.80 -> 0.96
+                const matchmakingSec = document.getElementById('matchmakingSection');
+                if (matchmakingSec) {
+                    const progress = Math.max(0, Math.min(1, (d - 0.80) / 0.16));
+                    matchmakingSec.style.opacity = progress.toFixed(4);
+                    
+                    const matchY = (1 - progress) * 120;
+                    matchmakingSec.style.transform = `translateY(${matchY.toFixed(2)}px)`;
+                    matchmakingSec.style.pointerEvents = d > 0.85 ? 'auto' : 'none';
+                    
+                    if (d > 0.85) {
+                        matchmakingSec.classList.add('active');
+                        // Trigger AI loading progress indicators on entrance
+                        triggerAIProgressLoading();
+                    } else {
+                        matchmakingSec.classList.remove('active');
                     }
                 }
             }
@@ -3339,6 +3995,172 @@
 
             // Initial render
             renderSquadCards();
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // FUTURISTIC SKILL-BASED MATCHMAKING ENGINE
+            // ─────────────────────────────────────────────────────────────────────────────
+            const MATCHMAKER_RECOMMENDED_CHALLENGES = [
+                {
+                    title: "The Modern Portfolio",
+                    whyMatches: "Recommended because your profile exhibits frequent React & GSAP layouts.",
+                    skills: ["React", "GSAP", "WebGL", "CSS Grid"],
+                    difficulty: "Advanced",
+                    benefit: "Enhance high-performance spatial LERP interpolations & compositing.",
+                    score: 94
+                },
+                {
+                    title: "Compiler Sandbox",
+                    whyMatches: "Matches your analytical skill parameters & Go core developer affinity.",
+                    skills: ["Go", "WebAssembly", "TypeScript"],
+                    difficulty: "Hard",
+                    benefit: "Gain lower-level WASM design patterns & AST compiler compiler mechanics.",
+                    score: 76
+                }
+            ];
+
+            let hasTriggeredAILoading = false;
+            const targetGauges = [94, 88, 91, 85]; // Challenge Match, Team Comp, Creativity Align, Growth Potential
+
+            window.triggerAIProgressLoading = function() {
+                if (hasTriggeredAILoading) return;
+                hasTriggeredAILoading = true;
+                
+                // Update AI status text
+                const statusTextEl = document.getElementById('ai-matchmaking-status');
+                if (statusTextEl) {
+                    statusTextEl.textContent = "SCANNING SKILLS...";
+                    statusTextEl.style.color = "rgb(218, 108, 32)";
+                    
+                    setTimeout(() => {
+                        statusTextEl.textContent = "AI ANALYSIS READY";
+                        statusTextEl.style.color = "#78ff78";
+                    }, 2000);
+                }
+                
+                // Loop gauges
+                for (let i = 1; i <= 4; i++) {
+                    const ring = document.getElementById(`gauge-ring-${i}`);
+                    const valText = document.getElementById(`gauge-val-${i}`);
+                    if (ring && valText) {
+                        const targetPercent = targetGauges[i - 1];
+                        const maxDash = 157; // 2 * PI * r (r=25)
+                        const targetDashOffset = maxDash - (maxDash * targetPercent / 100);
+                        
+                        // Set transition style dynamically
+                        ring.style.transition = 'stroke-dashoffset 2.0s cubic-bezier(0.16, 1, 0.3, 1)';
+                        ring.style.strokeDashoffset = targetDashOffset;
+                        
+                        // Percentage number ticker
+                        let currentPercent = 0;
+                        const interval = setInterval(() => {
+                            currentPercent += 2;
+                            if (currentPercent >= targetPercent) {
+                                currentPercent = targetPercent;
+                                clearInterval(interval);
+                            }
+                            valText.textContent = `${currentPercent}%`;
+                        }, 30);
+                    }
+                }
+            };
+
+            function renderRecommendedChallenges() {
+                const container = document.getElementById('matchmaker-challenge-stack');
+                if (!container) return;
+                container.innerHTML = '<span class="comp-title">RECOMMENDED CHALLENGES</span>';
+                
+                MATCHMAKER_RECOMMENDED_CHALLENGES.forEach((ch, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'recommendation-card';
+                    
+                    const skillsTags = ch.skills.map(s => `<span class="squad-role-chip">${s}</span>`).join(' ');
+                    
+                    card.innerHTML = `
+                        <div class="rec-top-row">
+                            <div class="rec-title-wrap">
+                                <h3 class="rec-title">${ch.title}</h3>
+                                <p class="rec-why-desc">${ch.whyMatches}</p>
+                            </div>
+                            <div class="rec-score-pill">${ch.score}% FIT</div>
+                        </div>
+                        
+                        <div class="squad-role-chips" style="margin-top: 4px; margin-bottom: 4px;">
+                            ${skillsTags}
+                        </div>
+                        
+                        <div class="rec-footer">
+                            <div class="rec-spec-item">
+                                <span class="rec-spec-lbl">GROWTH FOCUS:</span>
+                                <span class="rec-spec-val">${ch.benefit}</span>
+                            </div>
+                            <div class="rec-spec-item" style="text-align: right;">
+                                <span class="rec-spec-lbl">DIFFICULTY:</span>
+                                <span class="rec-spec-val" style="color: rgb(218, 108, 32);">${ch.difficulty}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+                
+                bindMatchmakingHoverEffects();
+            }
+
+            function bindMatchmakingHoverEffects() {
+                const terminals = document.querySelectorAll('.matchmaking-terminal');
+                const recCards = document.querySelectorAll('.recommendation-card');
+                
+                terminals.forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        const xc = rect.width / 2;
+                        const yc = rect.height / 2;
+                        
+                        const tiltX = (yc - y) / 18; 
+                        const tiltY = (x - xc) / 18;
+                        
+                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) scale(1.002)`;
+                        card.style.borderColor = `rgba(218, 108, 32, 0.3)`;
+                        card.style.boxShadow = `0 20px 50px rgba(218, 108, 32, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)`;
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                        card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
+                        card.style.boxShadow = `0 12px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03)`;
+                    });
+                });
+
+                recCards.forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        const xc = rect.width / 2;
+                        const yc = rect.height / 2;
+                        
+                        const tiltX = (yc - y) / 12; 
+                        const tiltY = (x - xc) / 12;
+                        
+                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translateY(-2px)`;
+                        card.style.borderColor = `rgba(218, 108, 32, 0.3)`;
+                        card.style.boxShadow = `0 12px 30px rgba(218, 108, 32, 0.06)`;
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+                        card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
+                        card.style.boxShadow = `none`;
+                    });
+                });
+            }
+
+            // Initial Matchmaker Render
+            renderRecommendedChallenges();
 
         })();
 
