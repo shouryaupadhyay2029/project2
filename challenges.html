@@ -615,6 +615,951 @@
             color: #ffffff;
             background: rgba(255, 255, 255, 0.02);
         }
+
+        /* ─── Premium Futuristic Challenge Analysis Section Styles ─── */
+        .analysis-section {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 110px 4% 60px;
+            pointer-events: none;
+            z-index: 10;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(120px);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
+        }
+
+        .analysis-section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .analysis-section::-webkit-scrollbar-thumb {
+            background: rgba(218, 108, 32, 0.2);
+            border-radius: 10px;
+        }
+
+        .analysis-header {
+            text-align: center;
+            margin-bottom: 32px;
+            max-width: 600px;
+        }
+
+        .analysis-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            color: rgb(218, 108, 32);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
+        }
+
+        .analysis-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(28px, 4.5vw, 42px);
+            color: #ffffff;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+        }
+
+        .analysis-subtext {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.6;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1.35fr;
+            gap: 32px;
+            max-width: 1140px;
+            width: 100%;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .analysis-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .analysis-section {
+                padding-top: 130px;
+            }
+        }
+
+        /* Left Column: Radar Console */
+        .radar-console-box {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            position: relative;
+        }
+
+        .radar-terminal-bar {
+            height: 38px;
+            background: rgba(255, 255, 255, 0.015);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .scanner-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scanner-status-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .scanner-pulse {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgb(218, 108, 32);
+            position: relative;
+        }
+
+        .scanner-pulse::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            border: 0.5px solid rgba(218, 108, 32, 0.6);
+            animation: pulse-ring 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+
+        .radar-canvas-container {
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle, rgba(218, 108, 32, 0.008) 0%, transparent 80%);
+            padding: 16px;
+        }
+
+        #radarCanvas {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+
+        /* Right Column: Console Panels */
+        .analysis-panels-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .console-panel {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            transition: border-color 0.4s ease;
+        }
+
+        .console-panel:hover {
+            border-color: rgba(218, 108, 32, 0.12);
+        }
+
+        .console-panel.highlight-panel {
+            border-left: 2px solid rgb(218, 108, 32);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .panel-icon {
+            width: 13px;
+            height: 13px;
+            stroke: rgba(218, 108, 32, 0.85);
+            stroke-width: 1.5;
+        }
+
+        .panel-header span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: rgba(255, 255, 255, 0.35);
+            text-transform: uppercase;
+        }
+
+        .stack-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .stack-tag {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 5px 12px;
+            border-radius: 4px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stack-tag:hover {
+            border-color: rgba(218, 108, 32, 0.28);
+            background: rgba(218, 108, 32, 0.02);
+            color: rgb(218, 108, 32);
+        }
+
+        .stack-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+            padding-bottom: 8px;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .spec-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.12em;
+        }
+
+        .spec-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        /* Team mini-cards */
+        .team-cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            width: 100%;
+        }
+
+        .team-mini-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 14px 16px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .team-mini-card:hover {
+            background: rgba(218, 108, 32, 0.015);
+            border-color: rgba(218, 108, 32, 0.15);
+        }
+
+        .team-role {
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .team-desc {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .insight-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.6;
+            margin: 0;
+            position: relative;
+            animation: text-glow-pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes text-glow-pulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0); }
+            50% { text-shadow: 0 0 25px rgba(255,255,255,0.06); }
+        }
+
+        /* ─── Premium Futuristic Team Discovery Section Styles ─── */
+        .recruitment-section {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 110px 4% 60px;
+            pointer-events: none;
+            z-index: 10;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(120px);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
+        }
+
+        .recruitment-section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .recruitment-section::-webkit-scrollbar-thumb {
+            background: rgba(218, 108, 32, 0.2);
+            border-radius: 10px;
+        }
+
+        .recruitment-header {
+            text-align: center;
+            margin-bottom: 28px;
+            max-width: 600px;
+        }
+
+        .recruitment-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            color: rgb(218, 108, 32);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
+        }
+
+        .recruitment-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(28px, 4.5vw, 42px);
+            color: #ffffff;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+        }
+
+        .recruitment-subtext {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.6;
+        }
+
+        /* Ticker horizontal live recruitment feed */
+        .recruitment-ticker-bar {
+            width: 100%;
+            max-width: 1140px;
+            overflow: hidden;
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 10px 0;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .recruitment-ticker-bar::before,
+        .recruitment-ticker-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .recruitment-ticker-bar::before {
+            left: 0;
+            background: linear-gradient(to right, #0f1011 0%, transparent 100%);
+        }
+
+        .recruitment-ticker-bar::after {
+            right: 0;
+            background: linear-gradient(to left, #0f1011 0%, transparent 100%);
+        }
+
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: ticker-scrolling 35s linear infinite;
+            gap: 50px;
+            padding-left: 20px;
+        }
+
+        @keyframes ticker-scrolling {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+        }
+
+        .ticker-pulse-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgb(218, 108, 32);
+            box-shadow: 0 0 8px rgb(218, 108, 32);
+            display: inline-block;
+            animation: ticker-pulse 2s infinite;
+        }
+
+        @keyframes ticker-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Filter Controls */
+        .filter-controls-row {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            max-width: 1140px;
+            width: 100%;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+
+        .glass-dropdown-wrapper {
+            position: relative;
+            min-width: 140px;
+        }
+
+        .dropdown-trigger {
+            width: 100%;
+            height: 36px;
+            background: rgba(15, 16, 17, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .dropdown-trigger:hover {
+            border-color: rgba(218, 108, 32, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .dropdown-trigger span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+        }
+
+        .dropdown-arrow {
+            width: 10px;
+            height: 10px;
+            stroke: rgba(255, 255, 255, 0.4);
+            stroke-width: 2px;
+            transition: transform 0.4s ease;
+        }
+
+        .dropdown-trigger.open .dropdown-arrow {
+            transform: rotate(180deg);
+            stroke: rgb(218, 108, 32);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 42px;
+            left: 0;
+            right: 0;
+            background: rgba(15, 16, 17, 0.95);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            overflow: hidden;
+            padding: 4px 0;
+        }
+
+        .dropdown-menu.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.45);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .dropdown-item:hover {
+            color: rgb(218, 108, 32);
+            background: rgba(218, 108, 32, 0.03);
+        }
+
+        .dropdown-item.active {
+            color: rgb(218, 108, 32);
+            background: rgba(218, 108, 32, 0.05);
+        }
+
+        /* Squad Team Grid */
+        .squad-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            max-width: 1140px;
+            width: 100%;
+            margin-top: 10px;
+            z-index: 10;
+        }
+
+        @media (max-width: 1024px) {
+            .squad-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .squad-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .recruitment-section {
+                padding-top: 130px;
+            }
+        }
+
+        /* Custom Terminal Team Cards styling */
+        .squad-team-card {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: border-color 0.4s ease;
+        }
+
+        .squad-team-card:hover {
+            border-color: rgba(218, 108, 32, 0.15);
+        }
+
+        .squad-card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .squad-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .team-title-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .squad-team-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 20px;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            margin-bottom: 4px;
+        }
+
+        .squad-focus-challenge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Dynamic Skill Match progress pill */
+        .match-score-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(218, 108, 32, 0.04);
+            border: 1px solid rgba(218, 108, 32, 0.15);
+            padding: 4px 8px;
+            border-radius: 40px;
+            position: relative;
+        }
+
+        .match-score-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            color: rgb(218, 108, 32);
+            letter-spacing: 0.05em;
+        }
+
+        .match-score-ring {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(218, 108, 32, 0.2);
+            border-top-color: rgb(218, 108, 32);
+            animation: match-pulse-spin 1.8s linear infinite;
+        }
+
+        @keyframes match-pulse-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status Badge modularity */
+        .squad-status-badge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 0.5px solid rgba(255, 255, 255, 0.06);
+            align-self: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .squad-status-badge.recruiting {
+            background: rgba(255, 255, 255, 0.02);
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .squad-status-badge.urgent {
+            background: rgba(218, 108, 32, 0.03);
+            border-color: rgba(218, 108, 32, 0.15);
+            color: rgb(218, 108, 32);
+        }
+
+        .squad-status-badge.beginner {
+            background: rgba(120, 255, 120, 0.02);
+            border-color: rgba(120, 255, 120, 0.12);
+            color: rgba(120, 255, 120, 0.65);
+        }
+
+        .badge-pulse {
+            width: 3.5px;
+            height: 3.5px;
+            border-radius: 50%;
+            background: currentColor;
+            display: inline-block;
+        }
+
+        .squad-status-badge.urgent .badge-pulse {
+            animation: urgent-pulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes urgent-pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* Current Members avatars row */
+        .squad-members-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .squad-members-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-right: 12px;
+        }
+
+        .squad-avatars {
+            display: flex;
+            align-items: center;
+        }
+
+        .squad-avatar-item {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(218, 108, 32, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            margin-left: -6px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, z-index 0.3s ease;
+        }
+
+        .squad-avatar-item:first-child {
+            margin-left: 0;
+            z-index: 2;
+        }
+
+        .squad-avatar-item:hover {
+            transform: scale(1.15) translateY(-2px);
+            z-index: 10 !important;
+            border-color: rgba(218, 108, 32, 0.3);
+        }
+
+        /* Roles Panel */
+        .squad-roles-needed {
+            margin-bottom: 16px;
+        }
+
+        .squad-roles-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .squad-role-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .squad-role-chip {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(218, 108, 32, 0.1);
+            background: rgba(218, 108, 32, 0.015);
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Tech parameters metadata */
+        .squad-specs-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed rgba(255, 255, 255, 0.03);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.03);
+            padding: 10px 0;
+            margin-bottom: 16px;
+        }
+
+        .squad-spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .squad-spec-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .squad-spec-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Squad Card CTAs */
+        .squad-cta-row {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            margin-top: auto;
+        }
+
+        .squad-btn-primary {
+            flex-grow: 1;
+            height: 32px;
+            background: rgba(218, 108, 32, 0.08);
+            border: 1px solid rgba(218, 108, 32, 0.25);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .squad-btn-primary:hover {
+            background: rgb(218, 108, 32);
+            border-color: rgb(218, 108, 32);
+        }
+
+        .squad-btn-primary span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .squad-btn-primary svg {
+            width: 10px;
+            height: 10px;
+            stroke: #ffffff;
+            stroke-width: 2.5px;
+            transition: transform 0.3s ease;
+        }
+
+        .squad-btn-primary:hover svg {
+            transform: translateX(2px);
+        }
+
+        .squad-btn-secondary {
+            width: 80px;
+            height: 32px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .squad-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .squad-btn-secondary span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.4s ease;
+        }
+
+        .squad-btn-secondary:hover span {
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -762,7 +1707,7 @@
                             <span>Join</span>
                             <i data-lucide="arrow-right" class="cta-arrow"></i>
                         </button>
-                        <a href="#" class="cta-secondary">View Brief</a>
+                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="0">View Brief</a>
                     </div>
                 </div>
 
@@ -822,7 +1767,7 @@
                             <span>Join</span>
                             <i data-lucide="arrow-right" class="cta-arrow"></i>
                         </button>
-                        <a href="#" class="cta-secondary">View Brief</a>
+                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="1">View Brief</a>
                     </div>
                 </div>
 
@@ -882,13 +1827,172 @@
                             <span>Join</span>
                             <i data-lucide="arrow-right" class="cta-arrow"></i>
                         </button>
-                        <a href="#" class="cta-secondary">View Brief</a>
+                        <a href="javascript:void(0)" class="cta-secondary view-brief-btn" data-challenge-index="2">View Brief</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- foreground canvas: renders ON TOP of HTML text, carries close particles -->
+        <!-- Futuristic Challenge Analysis Section (Radar & Scanner) -->
+        <div id="analysisSection" class="analysis-section">
+            <!-- Glass header -->
+            <div class="analysis-header">
+                <span class="analysis-eyebrow">CHALLENGE SCANNER</span>
+                <h2 class="analysis-title">CHALLENGE ANALYSIS</h2>
+                <p class="analysis-subtext">Understand the complexity, required skills, and team dynamics before entering the arena.</p>
+            </div>
+
+            <div class="analysis-grid">
+                <!-- Left Column: Radar Visualization Console -->
+                <div class="radar-console-box">
+                    <div class="radar-terminal-bar">
+                        <div class="terminal-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <div class="terminal-file" id="radar-filename">scanner_v2.0.sh</div>
+                        <div class="scanner-status">
+                            <span class="scanner-pulse"></span>
+                            <span class="scanner-status-text" id="scanner-status-text">ONLINE</span>
+                        </div>
+                    </div>
+                    
+                    <div class="radar-canvas-container">
+                        <canvas id="radarCanvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Analysis Panels -->
+                <div class="analysis-panels-container">
+                    
+                    <!-- Panel 1: Skill & Stack breakdown -->
+                    <div class="console-panel" id="skills-panel">
+                        <div class="panel-header">
+                            <i data-lucide="cpu" class="panel-icon"></i>
+                            <span>SYSTEM BRIEF & SUGGESTED STACK</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="stack-tags" id="analysis-tags">
+                                <!-- Tags dynamically loaded -->
+                            </div>
+                            <div class="stack-specs">
+                                <div class="spec-row">
+                                    <span class="spec-label">SUGGESTED STACK:</span>
+                                    <span class="spec-value" id="spec-stack">Next.js + Three.js + Tailwind</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">BEST ROLE FIT:</span>
+                                    <span class="spec-value" id="spec-role">Creative Technologist / Frontend Lead</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 2: Recommended Team Composition -->
+                    <div class="console-panel" id="team-panel">
+                        <div class="panel-header">
+                            <i data-lucide="users" class="panel-icon"></i>
+                            <span>RECOMMENDED TEAM COMPOSITION</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="team-cards-row" id="team-cards">
+                                <!-- Team cards dynamically loaded -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 3: Smart User Match Insight (AI) -->
+                    <div class="console-panel highlight-panel" id="insight-panel">
+                        <div class="panel-header">
+                            <i data-lucide="sparkles" class="panel-icon"></i>
+                            <span>AI SCANNER MATCH INSIGHT</span>
+                        </div>
+                        <div class="panel-body">
+                            <p class="insight-text" id="insight-text">
+                                Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Futuristic Team Recruitment Network Section -->
+        <div id="recruitmentSection" class="recruitment-section">
+            <div class="recruitment-header">
+                <span class="recruitment-eyebrow">TEAM RECRUITMENT NETWORK</span>
+                <h2 class="recruitment-title">SQUAD DISCOVERY</h2>
+                <p class="recruitment-subtext">Find collaborators. Build faster. Compete smarter.</p>
+            </div>
+
+            <!-- Horizontal flowing live activity recruitment feed ticker -->
+            <div class="recruitment-ticker-bar">
+                <div class="ticker-track">
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI Designer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL Specialist</div>
+                    <!-- Duplicate for infinite marquee loop -->
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI Designer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL Specialist</div>
+                </div>
+            </div>
+
+            <!-- Premium glass filters and search layout -->
+            <div class="filter-controls-row">
+                <!-- Dropdown 1: Role Needed -->
+                <div class="glass-dropdown-wrapper">
+                    <button class="dropdown-trigger" id="filter-role-trigger">
+                        <span>ROLE: ALL</span>
+                        <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu" id="filter-role-menu">
+                        <div class="dropdown-item active" data-value="all">ALL ROLES</div>
+                        <div class="dropdown-item" data-value="Motion Designer">MOTION DESIGNER</div>
+                        <div class="dropdown-item" data-value="Frontend Developer">FRONTEND DEVELOPER</div>
+                        <div class="dropdown-item" data-value="Backend Engineer">BACKEND ENGINEER</div>
+                        <div class="dropdown-item" data-value="DevOps Specialist">DEVOPS SPECIALIST</div>
+                    </div>
+                </div>
+
+                <!-- Dropdown 2: Difficulty -->
+                <div class="glass-dropdown-wrapper">
+                    <button class="dropdown-trigger" id="filter-difficulty-trigger">
+                        <span>DIFFICULTY: ALL</span>
+                        <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu" id="filter-difficulty-menu">
+                        <div class="dropdown-item active" data-value="all">ALL</div>
+                        <div class="dropdown-item" data-value="Advanced">ADVANCED</div>
+                        <div class="dropdown-item" data-value="Expert">EXPERT</div>
+                        <div class="dropdown-item" data-value="Hard">HARD</div>
+                    </div>
+                </div>
+
+                <!-- Dropdown 3: Sort By -->
+                <div class="glass-dropdown-wrapper">
+                    <button class="dropdown-trigger" id="sort-trigger">
+                        <span>SORT BY: MATCH</span>
+                        <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu" id="sort-menu">
+                        <div class="dropdown-item active" data-value="match">HIGHEST MATCH</div>
+                        <div class="dropdown-item" data-value="newest">NEWEST</div>
+                        <div class="dropdown-item" data-value="urgent">URGENT RECRUITING</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Team Grid -->
+            <div class="squad-cards-grid" id="squad-cards-grid">
+                <!-- Dynamically loaded terminal squad cards -->
+            </div>
         <canvas id="fgCanvas"></canvas>
         <div id="hint">scroll to descend</div>
     </div>
@@ -1239,53 +2343,106 @@
             let scrollDepth = 0, smoothVel = 0;
 
             function applyDepthDissolution(dt) {
-                const raw = Math.min(targetScrollZ / (VOL.depth * 0.55), 1);
+                // We map raw scroll over 2.2 times the VOL.depth for a breathtaking four-stage scroll narrative
+                const raw = Math.min(targetScrollZ / (VOL.depth * 2.2), 1);
                 scrollDepth += (raw - scrollDepth) * 0.05;
                 smoothVel += (Math.abs(camVel) - smoothVel) * 0.07;
                 smoothVel *= Math.pow(0.88, dt / 16);
 
-                const d = scrollDepth, d2 = d * d, d3 = d2 * d;
-                
-                // Content (Hero text) exits upward and fades
-                const heroOpacity = Math.max(0, 1 - d2 * 2.5);
-                const scaleY = 1 - d * 0.05;
-                const heroY = -d * 120;
-                const lsExpand = d2 * 0.12;
+                const d = scrollDepth;
 
-                const blurRamp = Math.max(0, (d - 0.22) / 0.78);
-                const totalBlur = blurRamp * blurRamp * 22 + smoothVel * 0.018;
-                const chromaSplit = d3 * 6;
+                // 1. Content (Hero Text)
+                // Active: d = 0.0 -> 0.28
+                const heroProgress = Math.max(0, Math.min(1, d / 0.24));
+                const heroOpacity = Math.max(0, 1 - heroProgress * 2.0);
+                const heroY = -heroProgress * 140;
+                const scaleY = 1 - heroProgress * 0.05;
+                const lsExpand = heroProgress * heroProgress * 0.12;
 
                 if (content) {
                     content.style.opacity = heroOpacity.toFixed(4);
                     content.style.transform = `scaleY(${scaleY.toFixed(5)}) translateY(${heroY.toFixed(2)}px)`;
+                    
+                    const blurRamp = Math.max(0, (heroProgress - 0.22) / 0.78);
+                    const totalBlur = blurRamp * blurRamp * 22 + smoothVel * 0.018;
                     content.style.filter = totalBlur > 0.3 ? `blur(${totalBlur.toFixed(2)}px)` : 'none';
                 }
 
                 if (mainTitleEl) {
                     mainTitleEl.style.letterSpacing = `calc(0.18em + ${lsExpand.toFixed(4)}em)`;
-                    if (chromaSplit > 0.3) {
-                        const c = chromaSplit.toFixed(2);
-                        mainTitleEl.style.textShadow = `${c}px 0 rgba(255,60,20,0.18),-${c}px 0 rgba(20,120,255,0.12),0 0 60px rgba(255,130,50,0.12)`;
-                    } else {
-                        mainTitleEl.style.textShadow = '0 0 55px rgba(255,130,50,0.08)';
-                    }
                 }
 
-                // Challenge Section (Active Grid) rises from below and fades in
+                // 2. Challenge Section (Active Grid)
+                // Active: enters d = 0.16 -> 0.36, exits d = 0.36 -> 0.54
                 const challengeSec = document.getElementById('challengeSection');
                 if (challengeSec) {
-                    const revealProgress = Math.max(0, Math.min(1, (d - 0.25) / 0.45));
-                    challengeSec.style.opacity = revealProgress.toFixed(4);
+                    let gridOpacity = 0;
+                    let gridY = 120;
                     
-                    const cardY = (1 - revealProgress) * 120;
-                    challengeSec.style.transform = `translateY(${cardY.toFixed(2)}px)`;
-                    challengeSec.style.pointerEvents = d > 0.5 ? 'auto' : 'none';
+                    if (d <= 0.36) {
+                        const progress = Math.max(0, Math.min(1, (d - 0.16) / 0.20));
+                        gridOpacity = progress;
+                        gridY = (1 - progress) * 120;
+                    } else {
+                        const progress = Math.max(0, Math.min(1, (d - 0.36) / 0.18));
+                        gridOpacity = 1 - progress;
+                        gridY = -progress * 120;
+                    }
                     
-                    if (d > 0.5) {
+                    challengeSec.style.opacity = gridOpacity.toFixed(4);
+                    challengeSec.style.transform = `translateY(${gridY.toFixed(2)}px)`;
+                    challengeSec.style.pointerEvents = (d > 0.24 && d < 0.48) ? 'auto' : 'none';
+                    
+                    if (d > 0.24 && d < 0.48) {
                         challengeSec.classList.add('active');
                     } else {
                         challengeSec.classList.remove('active');
+                    }
+                }
+
+                // 3. Challenge Analysis Section (Radar Scanner)
+                // Active: enters d = 0.44 -> 0.64, exits d = 0.64 -> 0.78
+                const analysisSec = document.getElementById('analysisSection');
+                if (analysisSec) {
+                    let scanOpacity = 0;
+                    let scanY = 120;
+                    
+                    if (d <= 0.64) {
+                        const progress = Math.max(0, Math.min(1, (d - 0.44) / 0.20));
+                        scanOpacity = progress;
+                        scanY = (1 - progress) * 120;
+                    } else {
+                        const progress = Math.max(0, Math.min(1, (d - 0.64) / 0.14));
+                        scanOpacity = 1 - progress;
+                        scanY = -progress * 120;
+                    }
+                    
+                    analysisSec.style.opacity = scanOpacity.toFixed(4);
+                    analysisSec.style.transform = `translateY(${scanY.toFixed(2)}px)`;
+                    analysisSec.style.pointerEvents = (d > 0.50 && d < 0.72) ? 'auto' : 'none';
+                    
+                    if (d > 0.50 && d < 0.72) {
+                        analysisSec.classList.add('active');
+                    } else {
+                        analysisSec.classList.remove('active');
+                    }
+                }
+
+                // 4. Team Recruitment Network Section (Squad Discovery)
+                // Active: enters d = 0.68 -> 0.94
+                const recruitmentSec = document.getElementById('recruitmentSection');
+                if (recruitmentSec) {
+                    const progress = Math.max(0, Math.min(1, (d - 0.68) / 0.26));
+                    recruitmentSec.style.opacity = progress.toFixed(4);
+                    
+                    const recruitY = (1 - progress) * 120;
+                    recruitmentSec.style.transform = `translateY(${recruitY.toFixed(2)}px)`;
+                    recruitmentSec.style.pointerEvents = d > 0.80 ? 'auto' : 'none';
+                    
+                    if (d > 0.80) {
+                        recruitmentSec.classList.add('active');
+                    } else {
+                        recruitmentSec.classList.remove('active');
                     }
                 }
             }
@@ -1321,6 +2478,11 @@
 
                 if (scrollDepth < 0.95) applyTextParallax(elapsed);
                 applyDepthDissolution(dt);
+                
+                // Draw Radar Visualization Console in standard high-performance compositor loop
+                if (typeof drawRadarChart === 'function' && scrollDepth > 0.55) {
+                    drawRadarChart(elapsed);
+                }
             }
 
             // RESIZE
@@ -1527,6 +2689,656 @@
 
                 setTimeout(runCycle, 3000);
             })();
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // FUTURISTIC CHALLENGE SCANNER (RADAR CHART) ENGINE
+            // ─────────────────────────────────────────────────────────────────────────────
+            const CHALLENGE_PROFILES = [
+                {
+                    filename: "portfolio.sh",
+                    stack: "Next.js + Three.js + Tailwind",
+                    role: "Creative Technologist / Frontend Lead",
+                    skills: ["React", "GSAP", "WebGL", "CSS Grid"],
+                    team: [
+                        { role: "1 Frontend Dev", desc: "Interactive Expert" },
+                        { role: "1 UI Designer", desc: "Matte/Layout Specialist" },
+                        { role: "1 Motion Designer", desc: "Cinematic Director" }
+                    ],
+                    insight: "Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.",
+                    metrics: [0.90, 0.95, 0.20, 0.95, 0.40, 0.30, 0.95, 0.60] // Creativity, Frontend, Backend, UI/UX, AI/Logic, Teamwork, Motion, Problem Solving
+                },
+                {
+                    filename: "scale_sys.rs",
+                    stack: "Rust + Tokio + Prometheus",
+                    role: "Systems Engineer / Infrastructure Lead",
+                    skills: ["Rust", "gRPC", "Redis", "Kubernetes"],
+                    team: [
+                        { role: "1 Systems Architect", desc: "Concurrency Architect" },
+                        { role: "1 Backend Engineer", desc: "Tokio/gRPC Developer" },
+                        { role: "1 DevOps Specialist", desc: "Grafana/K8s Deployer" }
+                    ],
+                    insight: "Best suited for developers interested in: highly concurrent microservices, distributed consensus protocols, and low-latency system profiling.",
+                    metrics: [0.40, 0.15, 0.95, 0.10, 0.90, 0.80, 0.05, 0.95]
+                },
+                {
+                    filename: "compiler.go",
+                    stack: "Go + WebAssembly + TypeScript",
+                    role: "Language Designer / Core Developer",
+                    skills: ["Go", "Lexing/Parsing", "AST Generation", "WebAssembly"],
+                    team: [
+                        { role: "1 Compiler Engineer", desc: "Language Designer" },
+                        { role: "1 WASM Integrator", desc: "TypeScript Interface Dev" }
+                    ],
+                    insight: "Best suited for engineers interested in: lexical analysis, formal language design, and optimizing AST parsing execution pipelines.",
+                    metrics: [0.50, 0.25, 0.80, 0.30, 0.95, 0.40, 0.10, 0.90]
+                }
+            ];
+
+            const RADAR_METRICS_LABELS = [
+                "Creativity", "Frontend", "Backend", "UI/UX", 
+                "AI/Logic", "Teamwork", "Motion Design", "Problem Solving"
+            ];
+
+            const radarCanvas = document.getElementById('radarCanvas');
+            const radarCtx = radarCanvas.getContext('2d');
+            
+            let currentMetrics = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+            let targetMetrics = [...CHALLENGE_PROFILES[0].metrics];
+            let activeChallengeIdx = 0;
+            let hoveredAxisIndex = -1;
+            
+            let radarMouse = { x: 0, y: 0, active: false };
+
+            function updateScannerUI(index) {
+                activeChallengeIdx = index;
+                const profile = CHALLENGE_PROFILES[index];
+                
+                targetMetrics = [...profile.metrics];
+                
+                // Update header info
+                document.getElementById('radar-filename').textContent = profile.filename;
+                
+                // Trigger terminal scanning state
+                const statusTextEl = document.getElementById('scanner-status-text');
+                statusTextEl.textContent = "SCANNING...";
+                statusTextEl.style.color = "rgb(218, 108, 32)";
+                
+                setTimeout(() => {
+                    statusTextEl.textContent = "SCAN COMPLETE";
+                    statusTextEl.style.color = "rgba(255, 255, 255, 0.4)";
+                }, 750);
+                
+                // Update tag chips
+                const tagsContainer = document.getElementById('analysis-tags');
+                tagsContainer.innerHTML = '';
+                profile.skills.forEach((tag, idx) => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'stack-tag';
+                    tagEl.textContent = tag;
+                    tagEl.style.opacity = '0';
+                    tagEl.style.transform = 'translateY(10px)';
+                    tagsContainer.appendChild(tagEl);
+                    
+                    // Stagger reveal
+                    setTimeout(() => {
+                        tagEl.style.opacity = '1';
+                        tagEl.style.transform = 'translateY(0)';
+                    }, idx * 60);
+                });
+                
+                // Update specs
+                document.getElementById('spec-stack').textContent = profile.stack;
+                document.getElementById('spec-role').textContent = profile.role;
+                
+                // Update team composition mini cards
+                const teamContainer = document.getElementById('team-cards');
+                teamContainer.innerHTML = '';
+                profile.team.forEach((member, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'team-mini-card';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(15px)';
+                    card.innerHTML = `
+                        <span class="team-role">${member.role}</span>
+                        <span class="team-desc">${member.desc}</span>
+                    `;
+                    teamContainer.appendChild(card);
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, idx * 100);
+                });
+                
+                // Update insight
+                const insightText = document.getElementById('insight-text');
+                insightText.style.opacity = '0';
+                insightText.style.transform = 'translateY(8px)';
+                setTimeout(() => {
+                    insightText.textContent = profile.insight;
+                    insightText.style.opacity = '1';
+                    insightText.style.transform = 'translateY(0)';
+                }, 200);
+            }
+
+            // Draw Radar on Canvas
+            function resizeRadarCanvas() {
+                const rect = radarCanvas.parentElement.getBoundingClientRect();
+                const size = Math.min(rect.width, rect.height, 350);
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                
+                radarCanvas.width = size * dpr;
+                radarCanvas.height = size * dpr;
+                radarCanvas.style.width = size + 'px';
+                radarCanvas.style.height = size + 'px';
+                radarCtx.scale(dpr, dpr);
+            }
+
+            window.drawRadarChart = function(elapsed) {
+                const size = radarCanvas.width / (window.devicePixelRatio || 1);
+                if (size <= 0) return;
+                
+                const cx = size / 2;
+                const cy = size / 2;
+                const rMax = size * 0.36;
+                const numAxes = 8;
+                
+                radarCtx.clearRect(0, 0, size, size);
+                
+                // Breathing factor using standard compositor-friendly mathematical LERP
+                const breath = 1.0 + 0.015 * Math.sin(elapsed * 0.0016);
+                const rBreathMax = rMax * breath;
+                
+                // Lerp current metrics towards target metrics
+                for (let i = 0; i < numAxes; i++) {
+                    currentMetrics[i] += (targetMetrics[i] - currentMetrics[i]) * 0.07;
+                }
+                
+                // Hover Axis Detection
+                hoveredAxisIndex = -1;
+                if (radarMouse.active) {
+                    const dx = radarMouse.x - cx;
+                    const dy = radarMouse.y - cy;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist > 15 && dist < rMax + 30) {
+                        let angle = Math.atan2(dy, dx);
+                        if (angle < 0) angle += Math.PI * 2;
+                        
+                        // Align axis angles (starting at top = -PI/2)
+                        let adjustedAngle = angle + Math.PI / 2;
+                        if (adjustedAngle < 0) adjustedAngle += Math.PI * 2;
+                        if (adjustedAngle >= Math.PI * 2) adjustedAngle -= Math.PI * 2;
+                        
+                        const step = (Math.PI * 2) / numAxes;
+                        let axisIdx = Math.round(adjustedAngle / step) % numAxes;
+                        hoveredAxisIndex = axisIdx;
+                    }
+                }
+                
+                // 1. Draw Concentric Grid Rings (4 rings: 25%, 50%, 75%, 100%)
+                const rings = [0.25, 0.50, 0.75, 1.00];
+                rings.forEach((ringPct) => {
+                    const r = rBreathMax * ringPct;
+                    radarCtx.beginPath();
+                    for (let i = 0; i < numAxes; i++) {
+                        const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                        const x = cx + Math.cos(angle) * r;
+                        const y = cy + Math.sin(angle) * r;
+                        if (i === 0) radarCtx.moveTo(x, y);
+                        else radarCtx.lineTo(x, y);
+                    }
+                    radarCtx.closePath();
+                    radarCtx.strokeStyle = ringPct === 1.0 
+                        ? 'rgba(255, 255, 255, 0.07)' 
+                        : 'rgba(255, 255, 255, 0.035)';
+                    radarCtx.lineWidth = 0.8;
+                    radarCtx.stroke();
+                });
+                
+                // 2. Draw Radial Axis Lines
+                for (let i = 0; i < numAxes; i++) {
+                    const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                    const outerX = cx + Math.cos(angle) * rBreathMax;
+                    const outerY = cy + Math.sin(angle) * rBreathMax;
+                    
+                    radarCtx.beginPath();
+                    radarCtx.moveTo(cx, cy);
+                    radarCtx.lineTo(outerX, outerY);
+                    
+                    const isHovered = (i === hoveredAxisIndex);
+                    radarCtx.strokeStyle = isHovered 
+                        ? 'rgba(218, 108, 32, 0.45)' 
+                        : 'rgba(255, 255, 255, 0.035)';
+                    radarCtx.lineWidth = isHovered ? 1.2 : 0.8;
+                    radarCtx.stroke();
+                    
+                    // Draw outer axis crosshair dot
+                    radarCtx.beginPath();
+                    radarCtx.arc(outerX, outerY, isHovered ? 2.5 : 1.5, 0, Math.PI * 2);
+                    radarCtx.fillStyle = isHovered 
+                        ? 'rgba(218, 108, 32, 0.85)' 
+                        : 'rgba(255, 255, 255, 0.15)';
+                    radarCtx.fill();
+                    
+                    // Draw Labeled Metric text
+                    const labelRadius = rBreathMax + 24;
+                    const labelX = cx + Math.cos(angle) * labelRadius;
+                    const labelY = cy + Math.sin(angle) * labelRadius + 3; // Vertically centered roughly
+                    
+                    radarCtx.font = "500 7px 'Outfit', sans-serif";
+                    radarCtx.textAlign = "center";
+                    radarCtx.fillStyle = isHovered 
+                        ? 'rgb(218, 108, 32)' 
+                        : 'rgba(255, 255, 255, 0.35)';
+                    
+                    let labelText = RADAR_METRICS_LABELS[i].toUpperCase();
+                    // Append actual scanned metric percentage if hovered
+                    if (isHovered) {
+                        const scoreVal = Math.round(currentMetrics[i] * 100);
+                        labelText += ` [ ${scoreVal}% ]`;
+                    }
+                    radarCtx.fillText(labelText, labelX, labelY);
+                }
+                
+                // 3. Draw Scanned Data Polygon
+                radarCtx.beginPath();
+                for (let i = 0; i < numAxes; i++) {
+                    const r = rBreathMax * currentMetrics[i];
+                    const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                    const x = cx + Math.cos(angle) * r;
+                    const y = cy + Math.sin(angle) * r;
+                    
+                    if (i === 0) radarCtx.moveTo(x, y);
+                    else radarCtx.lineTo(x, y);
+                }
+                radarCtx.closePath();
+                
+                // Outer glowing path
+                radarCtx.strokeStyle = 'rgba(218, 108, 32, 0.72)';
+                radarCtx.shadowColor = 'rgba(218, 108, 32, 0.45)';
+                radarCtx.shadowBlur = 12;
+                radarCtx.lineWidth = 1.6;
+                radarCtx.stroke();
+                
+                // Reset shadows for solid fills
+                radarCtx.shadowBlur = 0;
+                
+                // Inner semi-transparent fill
+                radarCtx.fillStyle = 'rgba(218, 108, 32, 0.11)';
+                radarCtx.fill();
+                
+                // 4. Draw Interactive vertex markers
+                for (let i = 0; i < numAxes; i++) {
+                    const r = rBreathMax * currentMetrics[i];
+                    const angle = i * (Math.PI * 2 / numAxes) - Math.PI / 2;
+                    const x = cx + Math.cos(angle) * r;
+                    const y = cy + Math.sin(angle) * r;
+                    
+                    const isHovered = (i === hoveredAxisIndex);
+                    radarCtx.beginPath();
+                    radarCtx.arc(x, y, isHovered ? 4.5 : 3.0, 0, Math.PI * 2);
+                    radarCtx.fillStyle = isHovered ? '#ffffff' : 'rgb(218, 108, 32)';
+                    radarCtx.strokeStyle = 'rgba(15, 16, 17, 0.85)';
+                    radarCtx.lineWidth = 1.0;
+                    radarCtx.fill();
+                    radarCtx.stroke();
+                }
+            }
+
+            // Radar Controller Initialization & Event Listeners
+            window.addEventListener('resize', () => {
+                resizeRadarCanvas();
+            }, { passive: true });
+            
+            radarCanvas.addEventListener('mousemove', (e) => {
+                const rect = radarCanvas.getBoundingClientRect();
+                radarMouse.x = e.clientX - rect.left;
+                radarMouse.y = e.clientY - rect.top;
+                radarMouse.active = true;
+            }, { passive: true });
+            
+            radarCanvas.addEventListener('mouseleave', () => {
+                radarMouse.active = false;
+                hoveredAxisIndex = -1;
+            }, { passive: true });
+
+            // Hook up card brief CTAs & Mouse clicks
+            const activeCards = document.querySelectorAll('.active-challenge-card');
+            const viewBriefBtns = document.querySelectorAll('.view-brief-btn');
+            
+            viewBriefBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(btn.getAttribute('data-challenge-index'));
+                    
+                    // Update Radar scanner profile
+                    updateScannerUI(index);
+                    
+                    // Smoothly scroll down to scanner section (Phase 2 coordinate)
+                    targetScrollZ = VOL.depth * 0.95;
+                });
+            });
+
+            // Card hovers dynamically update the scanner as well to feel incredibly live
+            activeCards.forEach((card, idx) => {
+                card.addEventListener('mouseenter', () => {
+                    // Update preview in the scanner automatically!
+                    updateScannerUI(idx);
+                });
+            });
+
+            // Initial scanner setup
+            resizeRadarCanvas();
+            updateScannerUI(0);
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // FUTURISTIC TEAM RECRUITMENT DISCOVERY ENGINE
+            // ─────────────────────────────────────────────────────────────────────────────
+            const SQUAD_TEAMS = [
+                {
+                    id: "squad-1",
+                    filename: "squad_01.json",
+                    teamName: "PixelForge",
+                    challenge: "The Modern Portfolio",
+                    category: "UI & UX",
+                    difficulty: "Advanced",
+                    matchScore: 94,
+                    status: "urgent", // urgent, recruiting, beginner
+                    statusText: "Urgent Need",
+                    members: ["LD", "UX"],
+                    neededRoles: ["Motion Designer", "Frontend Developer"],
+                    tech: ["React", "GSAP", "Three.js"],
+                    timestamp: 3
+                },
+                {
+                    id: "squad-2",
+                    filename: "squad_02.json",
+                    teamName: "NovaStack",
+                    challenge: "System Design Engine",
+                    category: "Architecture",
+                    difficulty: "Expert",
+                    matchScore: 88,
+                    status: "recruiting",
+                    statusText: "Recruiting",
+                    members: ["SA"],
+                    neededRoles: ["Backend Engineer", "DevOps Specialist"],
+                    tech: ["Rust", "Tokio", "gRPC"],
+                    timestamp: 1
+                },
+                {
+                    id: "squad-3",
+                    filename: "squad_03.json",
+                    teamName: "CodeHive",
+                    challenge: "Compiler Sandbox",
+                    category: "Compilers",
+                    difficulty: "Hard",
+                    matchScore: 76,
+                    status: "beginner",
+                    statusText: "Beginner Friendly",
+                    members: ["GD", "WE"],
+                    neededRoles: ["Frontend Developer"],
+                    tech: ["Go", "WebAssembly", "TypeScript"],
+                    timestamp: 2
+                }
+            ];
+
+            let activeFilters = {
+                role: "all",
+                difficulty: "all",
+                sort: "match"
+            };
+
+            function renderSquadCards() {
+                const grid = document.getElementById('squad-cards-grid');
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                // Filter items
+                let filtered = SQUAD_TEAMS.filter(team => {
+                    const matchRole = activeFilters.role === 'all' || 
+                        team.neededRoles.some(r => r.toLowerCase() === activeFilters.role.toLowerCase());
+                    const matchDiff = activeFilters.difficulty === 'all' || 
+                        team.difficulty.toLowerCase() === activeFilters.difficulty.toLowerCase();
+                    return matchRole && matchDiff;
+                });
+
+                // Sort items
+                if (activeFilters.sort === 'match') {
+                    filtered.sort((a, b) => b.matchScore - a.matchScore);
+                } else if (activeFilters.sort === 'newest') {
+                    filtered.sort((a, b) => a.timestamp - b.timestamp);
+                } else if (activeFilters.sort === 'urgent') {
+                    filtered.sort((a, b) => {
+                        if (a.status === 'urgent' && b.status !== 'urgent') return -1;
+                        if (a.status !== 'urgent' && b.status === 'urgent') return 1;
+                        return b.matchScore - a.matchScore;
+                    });
+                }
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; font-family: 'Outfit', sans-serif; font-size: 10px; color: rgba(255,255,255,0.25); padding: 50px 0; letter-spacing: 0.1em; text-transform: uppercase;">
+                            NO ACTIVE SQUADS MATCHING CURRENT FILTERS
+                        </div>
+                    `;
+                    return;
+                }
+
+                filtered.forEach((team, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'squad-team-card';
+                    card.id = team.id;
+                    
+                    let statusClass = team.status;
+                    const rolesHTML = team.neededRoles.map(r => `<span class="squad-role-chip">${r}</span>`).join('');
+                    const avatarsHTML = team.members.map(m => `<div class="squad-avatar-item">${m}</div>`).join('');
+
+                    card.innerHTML = `
+                        <!-- Top Terminal Bar -->
+                        <div class="terminal-bar">
+                            <div class="terminal-dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <div class="terminal-file">${team.filename}</div>
+                            <div class="match-score-pill">
+                                <div class="match-score-ring"></div>
+                                <span class="match-score-text">${team.matchScore}% MATCH</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="squad-card-content">
+                            <div class="squad-card-header">
+                                <div class="team-title-wrap">
+                                    <h3 class="squad-team-name">${team.teamName}</h3>
+                                    <span class="squad-focus-challenge">${team.challenge}</span>
+                                </div>
+                            </div>
+
+                            <div class="squad-status-badge ${statusClass}">
+                                <span class="badge-pulse"></span>
+                                <span>${team.statusText}</span>
+                            </div>
+
+                            <!-- Current squad members -->
+                            <div class="squad-members-row">
+                                <span class="squad-members-title">SQUAD:</span>
+                                <div class="squad-avatars">
+                                    ${avatarsHTML}
+                                </div>
+                            </div>
+
+                            <!-- Roles needed -->
+                            <div class="squad-roles-needed">
+                                <span class="squad-roles-title">ROLES OPEN:</span>
+                                <div class="squad-role-chips">
+                                    ${rolesHTML}
+                                </div>
+                            </div>
+
+                            <!-- Tech Specs parameters -->
+                            <div class="squad-specs-row">
+                                <div class="squad-spec-item">
+                                    <span class="squad-spec-lbl">TECH STACK:</span>
+                                    <span class="squad-spec-val">${team.tech.join(', ')}</span>
+                                </div>
+                                <div class="squad-spec-item">
+                                    <span class="squad-spec-lbl">DIFFICULTY:</span>
+                                    <span class="squad-spec-val">${team.difficulty}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Action CTA Row -->
+                        <div class="squad-cta-row">
+                            <button class="squad-btn-primary join-team-btn" data-team="${team.teamName}">
+                                <span>JOIN SQUAD</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="squad-btn-secondary view-squad-btn">
+                                <span>DETAILS</span>
+                            </button>
+                        </div>
+                    `;
+
+                    grid.appendChild(card);
+                    
+                    // Entrance reveal micro-animation
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(25px)';
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, idx * 100);
+                });
+
+                bindSquadCardInteractions();
+            }
+
+            function bindSquadCardInteractions() {
+                const cards = document.querySelectorAll('.squad-team-card');
+                
+                cards.forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        const xc = rect.width / 2;
+                        const yc = rect.height / 2;
+                        
+                        const tiltX = (yc - y) / 10; 
+                        const tiltY = (x - xc) / 10;
+                        
+                        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) translateY(-4px)`;
+                        card.style.boxShadow = `0 18px 45px rgba(218, 108, 32, 0.08), 
+                                               inset 0 1px 0 rgba(255, 255, 255, 0.05)`;
+                        card.style.borderColor = `rgba(218, 108, 32, 0.35)`;
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+                        card.style.boxShadow = `0 12px 30px rgba(0, 0, 0, 0.35), 
+                                               inset 0 1px 0 rgba(255, 255, 255, 0.03)`;
+                        card.style.borderColor = `rgba(255, 255, 255, 0.05)`;
+                    });
+                });
+
+                // Join Squad Action alerts
+                const joinBtns = document.querySelectorAll('.join-team-btn');
+                joinBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        // Transmitting state animation
+                        btn.innerHTML = '<span>TRANSMITTING...</span>';
+                        btn.style.borderColor = 'rgba(218,108,32,0.8)';
+                        
+                        setTimeout(() => {
+                            btn.innerHTML = '<span>REQUEST SENT</span>';
+                            btn.style.background = 'rgba(120,255,120,0.06)';
+                            btn.style.borderColor = 'rgba(120,255,120,0.4)';
+                            btn.querySelector('span').style.color = '#78ff78';
+                        }, 1200);
+                    });
+                });
+            }
+
+            // Custom Dropdowns Logic
+            const dropdowns = [
+                { triggerId: 'filter-role-trigger', menuId: 'filter-role-menu', filterKey: 'role' },
+                { triggerId: 'filter-difficulty-trigger', menuId: 'filter-difficulty-menu', filterKey: 'difficulty' },
+                { triggerId: 'sort-trigger', menuId: 'sort-menu', filterKey: 'sort' }
+            ];
+
+            dropdowns.forEach(dd => {
+                const trigger = document.getElementById(dd.triggerId);
+                const menu = document.getElementById(dd.menuId);
+                
+                if (trigger && menu) {
+                    trigger.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        // Close other menus first
+                        dropdowns.forEach(other => {
+                            if (other.triggerId !== dd.triggerId) {
+                                const oTrigger = document.getElementById(other.triggerId);
+                                const oMenu = document.getElementById(other.menuId);
+                                if (oTrigger && oMenu) {
+                                    oTrigger.classList.remove('open');
+                                    oMenu.classList.remove('open');
+                                }
+                            }
+                        });
+                        
+                        trigger.classList.toggle('open');
+                        menu.classList.toggle('open');
+                    });
+
+                    // Item clicks
+                    const items = menu.querySelectorAll('.dropdown-item');
+                    items.forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            
+                            items.forEach(i => i.classList.remove('active'));
+                            item.classList.add('active');
+                            
+                            const val = item.getAttribute('data-value');
+                            const labelText = item.textContent;
+                            trigger.querySelector('span').textContent = labelText;
+                            
+                            activeFilters[dd.filterKey] = val;
+                            
+                            trigger.classList.remove('open');
+                            menu.classList.remove('open');
+                            
+                            renderSquadCards();
+                        });
+                    });
+                }
+            });
+
+            // Global click to close open dropdowns
+            document.addEventListener('click', () => {
+                dropdowns.forEach(dd => {
+                    const trigger = document.getElementById(dd.triggerId);
+                    const menu = document.getElementById(dd.menuId);
+                    if (trigger && menu) {
+                        trigger.classList.remove('open');
+                        menu.classList.remove('open');
+                    }
+                });
+            });
+
+            // Initial render
+            renderSquadCards();
 
         })();
 
