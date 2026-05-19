@@ -275,13 +275,20 @@
             position: absolute;
             inset: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding: 110px 4% 60px;
             pointer-events: none;
             z-index: 10;
-            overflow: visible;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
             opacity: 0;
             transform: translateY(120px);
+        }
+        .challenge-section::-webkit-scrollbar {
+            display: none;
         }
 
         /* Subtle floating ambient glow background */
@@ -1608,438 +1615,6 @@
             transition: color 0.4s ease;
         }
 
-        .squad-btn-secondary:hover span {
-            color: #ffffff;
-        }
-
-        /* ─── Premium AI Matchmaking Section Styles ─── */
-        .matchmaking-section {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 110px 4% 60px;
-            pointer-events: none;
-            z-index: 10;
-            overflow-y: auto;
-            opacity: 0;
-            transform: translateY(120px);
-            scrollbar-width: thin;
-            scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
-        }
-
-        .matchmaking-section::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .matchmaking-section::-webkit-scrollbar-thumb {
-            background: rgba(218, 108, 32, 0.2);
-            border-radius: 10px;
-        }
-
-        .matchmaking-header {
-            text-align: center;
-            margin-bottom: 32px;
-            max-width: 600px;
-        }
-
-        .matchmaking-eyebrow {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 500;
-            letter-spacing: 0.35em;
-            color: rgb(218, 108, 32);
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
-        }
-
-        .matchmaking-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-weight: 300;
-            font-size: clamp(28px, 4.5vw, 42px);
-            color: #ffffff;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-            text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
-        }
-
-        .matchmaking-subtext {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 300;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            line-height: 1.6;
-        }
-
-        .matchmaking-grid {
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 28px;
-            max-width: 1140px;
-            width: 100%;
-            z-index: 10;
-        }
-
-        @media (max-width: 1024px) {
-            .matchmaking-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        /* Profile & Score Panel */
-        .matchmaker-main-panel {
-            background: rgba(15, 16, 17, 0.45);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            display: flex;
-            flex-direction: column;
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
-            transition: border-color 0.4s ease;
-        }
-
-        .matchmaker-main-panel:hover {
-            border-color: rgba(218, 108, 32, 0.15);
-        }
-
-        .panel-subheader {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            color: rgba(255, 255, 255, 0.3);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            padding-bottom: 10px;
-        }
-
-        .pulse-beacon {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgb(218, 108, 32);
-        }
-
-        .pulse-dot-amber {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgb(218, 108, 32);
-            box-shadow: 0 0 8px rgb(218, 108, 32);
-            animation: ticker-pulse 2s infinite;
-        }
-
-        .matchmaker-radial-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        @media (max-width: 480px) {
-            .matchmaker-radial-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .radial-metric-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 16px 10px;
-            border-radius: 8px;
-            position: relative;
-        }
-
-        .radial-svg-wrap {
-            position: relative;
-            width: 60px;
-            height: 60px;
-            margin-bottom: 12px;
-        }
-
-        .radial-svg-wrap svg {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .radial-bg-circle {
-            fill: none;
-            stroke: rgba(255, 255, 255, 0.03);
-            stroke-width: 3.5;
-        }
-
-        .radial-val-circle {
-            fill: none;
-            stroke: rgb(218, 108, 32);
-            stroke-width: 3.5;
-            stroke-linecap: round;
-            stroke-dasharray: 176;
-            stroke-dashoffset: 176;
-            transition: stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .radial-text {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Outfit', sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .radial-label {
-            font-family: 'Outfit', sans-serif;
-            font-size: 7.5px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.35);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        /* Profile details */
-        .profile-telemetry {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            background: rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 16px;
-            border-radius: 8px;
-        }
-
-        .telemetry-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.03);
-            padding-bottom: 10px;
-        }
-
-        .telemetry-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .telemetry-lbl {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.25);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            min-width: 110px;
-        }
-
-        .telemetry-val {
-            font-family: 'Outfit', sans-serif;
-            font-size: 10px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.4;
-            text-align: right;
-        }
-
-        .telemetry-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            justify-content: flex-end;
-        }
-
-        .telemetry-chip {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            background: rgba(218, 108, 32, 0.05);
-            border: 0.5px solid rgba(218, 108, 32, 0.2);
-            color: rgb(218, 108, 32);
-            padding: 2px 6px;
-            border-radius: 3px;
-        }
-
-        /* Matchmaker Side Column */
-        .matchmaker-side-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .match-group-box {
-            background: rgba(15, 16, 17, 0.45);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .match-group-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            color: rgba(255, 255, 255, 0.35);
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .match-group-title svg {
-            width: 12px;
-            height: 12px;
-            stroke: rgb(218, 108, 32);
-        }
-
-        .compat-teammates-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .teammate-compat-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 10px 14px;
-            transition: all 0.4s ease;
-        }
-
-        .teammate-compat-card:hover {
-            background: rgba(218, 108, 32, 0.01);
-            border-color: rgba(218, 108, 32, 0.15);
-        }
-
-        .tm-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .tm-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(218, 108, 32, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .tm-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .tm-name {
-            font-family: 'Outfit', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            color: #ffffff;
-        }
-
-        .tm-role {
-            font-family: 'Outfit', sans-serif;
-            font-size: 7.5px;
-            color: rgba(255, 255, 255, 0.35);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .tm-score {
-            font-family: 'Outfit', sans-serif;
-            font-size: 10px;
-            font-weight: 600;
-            color: rgb(218, 108, 32);
-            background: rgba(218, 108, 32, 0.05);
-            padding: 3px 8px;
-            border-radius: 20px;
-            border: 0.5px solid rgba(218, 108, 32, 0.15);
-        }
-
-        .recommend-challenges-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .challenge-recommend-card {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            transition: all 0.4s ease;
-        }
-
-        .challenge-recommend-card:hover {
-            background: rgba(218, 108, 32, 0.015);
-            border-color: rgba(218, 108, 32, 0.15);
-        }
-
-        .cr-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cr-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            color: #ffffff;
-        }
-
-        .cr-fit {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8px;
-            font-weight: 600;
-            color: rgb(218, 108, 32);
-            letter-spacing: 0.02em;
-        }
-
-        .cr-takeaway {
-            font-family: 'Outfit', sans-serif;
-            font-size: 8.5px;
-            color: rgba(255, 255, 255, 0.45);
-            line-height: 1.4;
-        }
 
         /* ─── Premium Challenge Evolution Timeline Section Styles ─── */
         .evolution-section {
@@ -3205,11 +2780,691 @@
                 padding-top: 120px;
             }
         }
+
+        /* ─────────────────────────────────────────────────────────────────────────────
+           SECTION NAVIGATION & FOCUS MODE ARCHITECTURE STYLE DEFS
+           ───────────────────────────────────────────────────────────────────────────── */
+
+        /* Fixed Navigation Rail (Desktop) — compact cinematic dock */
+        .system-nav-rail {
+            position: fixed;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-30px);
+            z-index: 1000;
+            background: rgba(10, 11, 12, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-left: 1.5px solid rgba(218, 108, 32, 0.3);
+            border-radius: 6px;
+            padding: 14px 12px;
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            pointer-events: auto;
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        .system-nav-rail.nav-visible {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .nav-rail-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 8px;
+            margin-bottom: 2px;
+        }
+
+        .nav-rail-pulse {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgb(218, 108, 32);
+            box-shadow: 0 0 6px rgb(218, 108, 32);
+            animation: ticker-pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        .nav-rail-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .nav-rail-items {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-rail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            border: 0.5px solid transparent;
+        }
+
+        .nav-rail-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .nav-rail-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            transition: all 0.35s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-rail-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.02em;
+            transition: all 0.35s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Active Navigation Item State */
+        .nav-rail-item.active {
+            background: rgba(218, 108, 32, 0.04);
+            border-color: rgba(218, 108, 32, 0.15);
+        }
+
+        .nav-rail-item.active .nav-rail-dot {
+            background: rgb(218, 108, 32);
+            box-shadow: 0 0 6px rgb(218, 108, 32);
+            transform: scale(1.2);
+        }
+
+        .nav-rail-item.active .nav-rail-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        /* Focused Navigation State on Rail */
+        .system-nav-rail.focused {
+            border-left-color: rgba(120, 255, 120, 0.3);
+        }
+
+        .system-nav-rail.focused .nav-rail-pulse {
+            background: #78ff78;
+            box-shadow: 0 0 6px #78ff78;
+        }
+
+        .system-nav-rail.focused .nav-rail-item.active {
+            background: rgba(120, 255, 120, 0.04);
+            border-color: rgba(120, 255, 120, 0.15);
+        }
+
+        .system-nav-rail.focused .nav-rail-item.active .nav-rail-dot {
+            background: #78ff78;
+            box-shadow: 0 0 6px #78ff78;
+        }
+
+        .system-nav-rail.focused .nav-rail-item.active .nav-rail-label {
+            color: #ffffff;
+        }
+
+        /* Premium Return Overview Button */
+        .return-overview-btn {
+            position: fixed;
+            top: 90px;
+            right: 28px;
+            z-index: 1001;
+            background: rgba(10, 11, 12, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(-16px) scale(0.97);
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+
+        .return-overview-btn.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .return-overview-btn:hover {
+            border-color: rgba(218, 108, 32, 0.35);
+            background: rgba(218, 108, 32, 0.04);
+        }
+
+        .return-btn-content {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .return-icon {
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 11px;
+            color: rgb(218, 108, 32);
+            letter-spacing: -0.05em;
+        }
+
+        .return-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 7.5px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.14em;
+        }
+
+        /* Responsive Layout for Nav Rail */
+        @media (max-width: 1024px) {
+            .system-nav-rail {
+                width: 42px;
+                padding: 12px 6px;
+                left: 10px;
+            }
+            .system-nav-rail.nav-visible {
+                transform: translateY(-50%) translateX(0);
+            }
+            .nav-rail-header { justify-content: center; }
+            .nav-rail-title, .nav-rail-label { display: none; }
+            .nav-rail-item { justify-content: center; padding: 8px 0; }
+            .nav-rail-dot { width: 5px; height: 5px; }
+        }
+
+        @media (max-width: 768px) {
+            .system-nav-rail {
+                position: fixed;
+                left: 50%;
+                top: auto;
+                bottom: 20px;
+                transform: translateX(-50%) translateY(20px);
+                flex-direction: row;
+                width: auto;
+                max-width: 90vw;
+                height: auto;
+                padding: 8px 14px;
+                gap: 8px;
+                border-left: none;
+                border-bottom: 1.5px solid rgba(218, 108, 32, 0.3);
+            }
+            .system-nav-rail.nav-visible {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            .nav-rail-header { display: none; }
+            .nav-rail-items { flex-direction: row; gap: 4px; }
+            .nav-rail-item { padding: 5px 6px; }
+            .return-overview-btn {
+                top: auto; bottom: 76px; right: 50%;
+                transform: translateX(50%) translateY(16px) scale(0.97);
+            }
+            .return-overview-btn.visible {
+                transform: translateX(50%) translateY(0) scale(1);
+            }
+        }
+
+        /* Content left-offset to prevent sidebar overlap (desktop only) */
+        .challenge-section,
+        .domains-section,
+        .analysis-section,
+        .recruitment-section {
+            padding-left: 175px;
+        }
+
+        @media (max-width: 1024px) {
+            .challenge-section,
+            .domains-section,
+            .analysis-section,
+            .recruitment-section {
+                padding-left: 65px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .challenge-section,
+            .domains-section,
+            .analysis-section,
+            .recruitment-section {
+                padding-left: 0;
+            }
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────────────
+           GLOBAL FOCUS MODE ARCHITECTURE TRANSITIONS
+           ───────────────────────────────────────────────────────────────────────────── */
+        
+        .in-focus-mode #stage {
+            overflow: hidden !important;
+        }
+
+        .in-focus-mode #content,
+        .in-focus-mode #hint {
+            opacity: 0 !important;
+            transform: translateY(-80px) !important;
+            pointer-events: none !important;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        /* Make the focused section fill viewport with cinematic feel */
+        .focus-active {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 100 !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            pointer-events: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            padding: 120px 8% 80px !important;
+            padding-left: max(180px, 8%) !important;
+            overflow-y: auto !important;
+            background: rgba(10, 11, 12, 0.55) !important;
+            backdrop-filter: blur(30px) !important;
+            -webkit-backdrop-filter: blur(30px) !important;
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        backdrop-filter 0.5s ease !important;
+            will-change: transform, opacity;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(218, 108, 32, 0.15) transparent;
+        }
+
+        @media (max-width: 1024px) {
+            .focus-active { padding-left: 70px !important; }
+        }
+        @media (max-width: 768px) {
+            .focus-active { padding-left: 5% !important; padding-bottom: 100px !important; }
+        }
+
+        .focus-active::-webkit-scrollbar {
+            width: 3px;
+        }
+        .focus-active::-webkit-scrollbar-thumb {
+            background: rgba(218, 108, 32, 0.15);
+            border-radius: 10px;
+        }
+
+        /* ─── Immersive Interactive Details (Shown ONLY in Focus Mode) ─── */
+        
+        /* Workspace panels shown in active Focus Mode */
+        .focus-only-panel {
+            display: none;
+            width: 100%;
+            max-width: 820px;
+            margin-top: 32px;
+            animation: paneFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            z-index: 10;
+        }
+
+        .focus-active .focus-only-panel {
+            display: block;
+        }
+
+        @keyframes paneFadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Premium Diagnostic Console Grid */
+        .diagnostic-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .diagnostic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Focus mode CTA button — section workspace launcher */
+        .section-focus-trigger {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 1.5px solid rgba(218, 108, 32, 0.25);
+            padding: 8px 18px 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+            user-select: none;
+        }
+
+        .section-focus-trigger:hover {
+            border-color: rgba(218, 108, 32, 0.3);
+            border-left-color: rgba(218, 108, 32, 0.5);
+            background: rgba(218, 108, 32, 0.04);
+            color: rgba(218, 108, 32, 0.9);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-focus-trigger svg {
+            width: 10px;
+            height: 10px;
+            stroke: currentColor;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .section-focus-trigger:hover svg {
+            transform: scale(1.2);
+        }
+
+        /* CTA Dock — centered launcher wrapper below section content */
+        .section-cta-dock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-top: 28px;
+            margin-bottom: 4px;
+            width: 100%;
+            pointer-events: auto;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                        margin 0.4s ease,
+                        max-height 0.4s ease;
+            max-height: 80px;
+            overflow: visible;
+        }
+
+        .section-cta-dock .section-focus-trigger {
+            align-self: center;
+            margin: 12px 0 0 0;
+        }
+
+        .cta-dock-divider {
+            width: 48px;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(218, 108, 32, 0.18),
+                transparent
+            );
+        }
+
+        /* ─── HIDE CTA dock when section is in focus/workspace mode ─── */
+        .focus-active .section-cta-dock {
+            opacity: 0 !important;
+            transform: translateY(12px) !important;
+            pointer-events: none !important;
+            max-height: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            overflow: hidden !important;
+        }
+
+        /* Focused Section Overrides & Custom Enforcements */
+        .focus-active.challenge-section .cards-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 24px !important;
+            max-width: 1080px !important;
+            margin-bottom: 30px !important;
+        }
+
+        @media (max-width: 1024px) {
+            .focus-active.challenge-section .cards-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Large chart center focus overlay */
+        .focus-active #radarCanvas {
+            width: 380px !important;
+            height: 380px !important;
+            filter: drop-shadow(0 0 30px rgba(218, 108, 32, 0.15));
+            transition: all 0.5s ease;
+        }
+
+        .focus-active .radar-canvas-container {
+            padding: 30px 0 !important;
+        }
+
+        .focus-active.domains-section .domains-grid-wrapper {
+            margin-top: 28px;
+        }
+        
+        .focus-active.domains-section .domains-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 20px !important;
+            max-width: 1200px !important;
+            width: 100% !important;
+        }
+
+        .focus-active.domains-section .category-rail-wrapper {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .focus-active.domains-section .domains-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .focus-active.domains-section .domains-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Typewriter text console styling */
+        .terminal-diag-output {
+            font-family: monospace;
+            font-size: 9.5px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            padding: 16px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .terminal-diag-output .diag-line {
+            display: block;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            padding-left: 8px;
+        }
+
+        .terminal-diag-output .diag-line.green {
+            color: #78ff78;
+            border-left-color: #78ff78;
+        }
+
+        .terminal-diag-output .diag-line.amber {
+            color: rgb(218, 108, 32);
+            border-left-color: rgb(218, 108, 32);
+        }
+
+        /* Typewriter simulation terminal */
+        .interactive-compiler-box {
+            background: rgba(15, 16, 17, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: left;
+        }
+
+        .compiler-title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .compiler-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .compiler-input-wrap {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .compiler-input-wrap:focus-within {
+            border-color: rgba(218, 108, 32, 0.4);
+            box-shadow: 0 0 10px rgba(218, 108, 32, 0.08);
+        }
+
+        .compiler-prompt {
+            font-family: monospace;
+            font-size: 11px;
+            color: rgb(218, 108, 32);
+            margin-right: 8px;
+            font-weight: 700;
+            user-select: none;
+        }
+
+        .compiler-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        .compiler-btn {
+            background: rgb(218, 108, 32);
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            padding: 8px 16px;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .compiler-btn:hover {
+            background: rgb(240, 125, 45);
+            box-shadow: 0 0 15px rgba(218, 108, 32, 0.35);
+        }
+        
+        .compiler-btn:disabled {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
     </style>
 </head>
 
 <body class="challenges-page">
     <script src="loader.js"></script>
+
+    <!-- Fixed Vertical Navigation Rail -->
+    <div class="system-nav-rail" id="systemNavRail">
+        <div class="nav-rail-header">
+            <span class="nav-rail-pulse"></span>
+            <span class="nav-rail-title">SYS_NAV // v2.0</span>
+        </div>
+        <div class="nav-rail-items">
+            <div class="nav-rail-item active" data-section="challengeSection" data-scroll-ratio="0.15">
+                <span class="nav-rail-dot"></span>
+                <span class="nav-rail-label">Challenges</span>
+            </div>
+            <div class="nav-rail-item" data-section="domainsSection" data-scroll-ratio="0.28">
+                <span class="nav-rail-dot"></span>
+                <span class="nav-rail-label">Domains</span>
+            </div>
+            <div class="nav-rail-item" data-section="analysisSection" data-scroll-ratio="0.42">
+                <span class="nav-rail-dot"></span>
+                <span class="nav-rail-label">Analysis</span>
+            </div>
+            <div class="nav-rail-item" data-section="recruitmentSection" data-scroll-ratio="0.56">
+                <span class="nav-rail-dot"></span>
+                <span class="nav-rail-label">Squad Discovery</span>
+            </div>
+            <div class="nav-rail-item" data-section="evolutionSection" data-scroll-ratio="0.71">
+                <span class="nav-rail-dot"></span>
+                <span class="nav-rail-label">Evolution</span>
+            </div>
+            <div class="nav-rail-item" data-section="buildInPublicSection" data-scroll-ratio="0.88">
+                <span class="nav-rail-dot"></span>
+                <span class="nav-rail-label">Build In Public</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return to Overview Button (Focus Mode exit) -->
+    <div class="return-overview-btn" id="returnOverviewBtn">
+        <div class="return-btn-content">
+            <span class="return-icon">//</span>
+            <span class="return-text">RETURN TO OVERVIEW</span>
+        </div>
+    </div>
 
     <!-- Premium Navigation -->
     <nav class="navbar">
@@ -3482,6 +3737,34 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Section Workspace Control -->
+            <div class="section-cta-dock" id="challengeSectionCta">
+                <div class="cta-dock-divider"></div>
+                <button class="section-focus-trigger" onclick="enterFocusMode('challengeSection', 0.15)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    <span>Enter Challenge Workspace</span>
+                </button>
+            </div>
+
+            <!-- Rich Focus Console panel -->
+            <div class="focus-only-panel">
+                <div class="diagnostic-grid">
+                    <div class="interactive-compiler-box" style="grid-column: 1 / -1;">
+                        <div class="compiler-title-bar">
+                            <span class="compiler-lbl">// SANDBOX CORE INTERCEPTOR</span>
+                            <span style="font-size: 7px; color: rgba(255, 255, 255, 0.35);">STATUS: SECURE</span>
+                        </div>
+                        <div class="terminal-diag-output">
+                            <span class="diag-line green">[OK] CONNECTING TO DEVSTAGE SANDBOX INSTANCE...</span>
+                            <span class="diag-line">[INFO] DOCKER COMPILER ALLOCATION: 512MB RAM LOCKED</span>
+                            <span class="diag-line">[INFO] VIRTUAL MACHINE SECURELY VIRTUALIZED</span>
+                            <span class="diag-line amber">[WARN] LATENCY SPEEDBENCH: STABLE RENDER Compositor AT 12ms</span>
+                            <span class="diag-line green">[READY] SESSIONS SYNCHRONIZED. CHOOSE YOUR CHALLENGE TO DEPLOY CODES</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Futuristic Challenge Categories & specializations System -->
@@ -3516,6 +3799,15 @@
                 <div class="domains-grid" id="domains-grid">
                     <!-- Loaded dynamically via optimized JS for smooth staggering reflows -->
                 </div>
+            </div>
+
+            <!-- Section Workspace Control -->
+            <div class="section-cta-dock">
+                <div class="cta-dock-divider"></div>
+                <button class="section-focus-trigger" onclick="enterFocusMode('domainsSection', 0.28)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    <span>Enter Domain Explorer</span>
+                </button>
             </div>
         </div>
 
@@ -3605,6 +3897,74 @@
 
                 </div>
             </div>
+
+            <!-- Section Workspace Control -->
+            <div class="section-cta-dock">
+                <div class="cta-dock-divider"></div>
+                <button class="section-focus-trigger" onclick="enterFocusMode('analysisSection', 0.42)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    <span>Open Intelligence Scanner</span>
+                </button>
+            </div>
+
+            <!-- Expanded AI Vector Stream Diagnostic -->
+            <div class="focus-only-panel">
+                <div class="diagnostic-grid">
+                    <!-- Column 1: Live Diagnostic Vector Output -->
+                    <div class="console-panel" style="margin-bottom: 0;">
+                        <div class="panel-header">
+                            <i data-lucide="terminal" class="panel-icon"></i>
+                            <span>REALTIME AI VECTOR STREAM</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="terminal-diag-output" id="analysisTerminalStream">
+                                <span class="diag-line green">[SCANNING] DEPLOYING MULTI-DIMENSIONAL RUST VECTORS...</span>
+                                <span class="diag-line">[VEC_01] FRONTEND COMPOSITOR: 92% DENSITY MATRIX</span>
+                                <span class="diag-line">[VEC_02] MOTION COMPACTIBILITY: 98% REVERSIBLE PHYSICS</span>
+                                <span class="diag-line">[VEC_03] TEAM COLLABORATION LEVEL: 94% SYNERGY</span>
+                                <span class="diag-line green">[READY] RADAR SCANS CONVERGED // SYSTEM SECURE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Advanced Vector breakdown progress bars -->
+                    <div class="console-panel" style="margin-bottom: 0;">
+                        <div class="panel-header">
+                            <i data-lucide="sliders" class="panel-icon"></i>
+                            <span>VECTOR INTENSITY WEIGHTS</span>
+                        </div>
+                        <div class="panel-body" style="display:flex; flex-direction:column; gap:12px;">
+                            <div>
+                                <div style="display:flex; justify-content:space-between; font-size:8px; color:rgba(255,255,255,0.4); margin-bottom:4px; font-family:'Outfit',sans-serif;">
+                                    <span>CREATIVE INTENSITY</span>
+                                    <span>98%</span>
+                                </div>
+                                <div style="height:3px; background:rgba(255,255,255,0.03); border-radius:2px;">
+                                    <div style="height:100%; width:98%; background:rgb(218, 108, 32); border-radius:2px;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="display:flex; justify-content:space-between; font-size:8px; color:rgba(255,255,255,0.4); margin-bottom:4px; font-family:'Outfit',sans-serif;">
+                                    <span>TEAMWORK INTENSITY</span>
+                                    <span>88%</span>
+                                </div>
+                                <div style="height:3px; background:rgba(255,255,255,0.03); border-radius:2px;">
+                                    <div style="height:100%; width:88%; background:rgb(218, 108, 32); border-radius:2px;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="display:flex; justify-content:space-between; font-size:8px; color:rgba(255,255,255,0.4); margin-bottom:4px; font-family:'Outfit',sans-serif;">
+                                    <span>AI LEVEL</span>
+                                    <span>95%</span>
+                                </div>
+                                <div style="height:3px; background:rgba(255,255,255,0.03); border-radius:2px;">
+                                    <div style="height:100%; width:95%; background:rgb(218, 108, 32); border-radius:2px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Futuristic Team Recruitment Network Section -->
@@ -3691,159 +4051,32 @@
             <div class="squad-cards-grid" id="squad-cards-grid">
                 <!-- Dynamically loaded terminal squad cards -->
             </div>
-            <canvas id="fgCanvas"></canvas>
-            <div id="hint">scroll to descend</div>
-        </div>
 
-        <!-- Futuristic AI Skill-Based Matchmaking Section -->
-        <div id="matchmakingSection" class="matchmaking-section">
-            <div class="matchmaking-header">
-                <span class="matchmaking-eyebrow">MATCHMAKING ENGINE</span>
-                <h2 class="matchmaking-title">AI MATCHMAKER</h2>
-                <p class="matchmaking-subtext">Discover perfectly aligned squads, compatible teammates, and custom technical challenges tailored directly to your technical profile.</p>
+            <!-- Section Workspace Control -->
+            <div class="section-cta-dock">
+                <div class="cta-dock-divider"></div>
+                <button class="section-focus-trigger" onclick="enterFocusMode('recruitmentSection', 0.56)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    <span>Enter Squad Network</span>
+                </button>
             </div>
 
-            <div class="matchmaking-grid">
-                <!-- Left column: Personal AI Profile Scan -->
-                <div class="matchmaker-main-panel" id="personal-match-panel">
-                    <div class="panel-subheader">
-                        <span>CORE ENGINE LOGS: ACTIVE PROFILE</span>
-                        <div class="pulse-beacon">
-                            <span class="pulse-dot-amber"></span>
-                            <span>AI TELEMETRY LIVE</span>
+            <!-- Expanded Live Squad Signals panel -->
+            <div class="focus-only-panel">
+                <div style="background: rgba(15, 16, 17, 0.45); backdrop-filter: blur(28px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left;">
+                    <div style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.1em;">LIVE SQUAD SIGNALS NETWORK</div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.03);">
+                            <span style="font-family: monospace; font-size: 9px; color: #78ff78;">[PING] PIXELFORGE -> REQUESTING MOTION DESIGNER</span>
+                            <span style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.3);">94% MATCH RATE</span>
                         </div>
-                    </div>
-
-                    <!-- SVG Radials Grid -->
-                    <div class="matchmaker-radial-grid">
-                        <div class="radial-metric-box">
-                            <div class="radial-svg-wrap">
-                                <svg viewBox="0 0 60 60">
-                                    <circle class="radial-bg-circle" cx="30" cy="30" r="28"></circle>
-                                    <circle class="radial-val-circle" id="radial-circle-1" cx="30" cy="30" r="28" data-value="94"></circle>
-                                </svg>
-                                <span class="radial-text" id="radial-val-1">0%</span>
-                            </div>
-                            <span class="radial-label">Match Score</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.03);">
+                            <span style="font-family: monospace; font-size: 9px; color: rgb(218, 108, 32);">[PING] NOVASTACK -> DEPLOYING DevOps NODE</span>
+                            <span style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.3);">88% MATCH RATE</span>
                         </div>
-
-                        <div class="radial-metric-box">
-                            <div class="radial-svg-wrap">
-                                <svg viewBox="0 0 60 60">
-                                    <circle class="radial-bg-circle" cx="30" cy="30" r="28"></circle>
-                                    <circle class="radial-val-circle" id="radial-circle-2" cx="30" cy="30" r="28" data-value="88"></circle>
-                                </svg>
-                                <span class="radial-text" id="radial-val-2">0%</span>
-                            </div>
-                            <span class="radial-label">Team Comp</span>
-                        </div>
-
-                        <div class="radial-metric-box">
-                            <div class="radial-svg-wrap">
-                                <svg viewBox="0 0 60 60">
-                                    <circle class="radial-bg-circle" cx="30" cy="30" r="28"></circle>
-                                    <circle class="radial-val-circle" id="radial-circle-3" cx="30" cy="30" r="28" data-value="91"></circle>
-                                </svg>
-                                <span class="radial-text" id="radial-val-3">0%</span>
-                            </div>
-                            <span class="radial-label">Creativity</span>
-                        </div>
-
-                        <div class="radial-metric-box">
-                            <div class="radial-svg-wrap">
-                                <svg viewBox="0 0 60 60">
-                                    <circle class="radial-bg-circle" cx="30" cy="30" r="28"></circle>
-                                    <circle class="radial-val-circle" id="radial-circle-4" cx="30" cy="30" r="28" data-value="85"></circle>
-                                </svg>
-                                <span class="radial-text" id="radial-val-4">0%</span>
-                            </div>
-                            <span class="radial-label">Growth Pot</span>
-                        </div>
-                    </div>
-
-                    <!-- Telemetry Data table -->
-                    <div class="profile-telemetry">
-                        <div class="telemetry-row">
-                            <span class="telemetry-lbl">Primary Expertise:</span>
-                            <span class="telemetry-val">Creative Frontend & Motion</span>
-                        </div>
-                        <div class="telemetry-row">
-                            <span class="telemetry-lbl">Technical Stack:</span>
-                            <div class="telemetry-chips">
-                                <span class="telemetry-chip">React</span>
-                                <span class="telemetry-chip">Three.js</span>
-                                <span class="telemetry-chip">GSAP</span>
-                                <span class="telemetry-chip">Rust</span>
-                            </div>
-                        </div>
-                        <div class="telemetry-row">
-                            <span class="telemetry-lbl">Synergistic Focus:</span>
-                            <span class="telemetry-val">Interactive 3D Environments, Low-latency Systems</span>
-                        </div>
-                        <div class="telemetry-row">
-                            <span class="telemetry-lbl">Recommended Role:</span>
-                            <span class="telemetry-val">Creative Technologist / UI Architect</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Column: Teammates & Challenges suggestions -->
-                <div class="matchmaker-side-column">
-                    <!-- Teammate recommendations -->
-                    <div class="match-group-box">
-                        <div class="match-group-title">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            <span>COMPATIBLE COLLABORATORS</span>
-                        </div>
-                        <div class="compat-teammates-list">
-                            <div class="teammate-compat-card">
-                                <div class="tm-meta">
-                                    <div class="tm-avatar">SC</div>
-                                    <div class="tm-info">
-                                        <span class="tm-name">Sarah Chen</span>
-                                        <span class="tm-role">UI Designer / Matte Art</span>
-                                    </div>
-                                </div>
-                                <span class="tm-score">96% Fit</span>
-                            </div>
-
-                            <div class="teammate-compat-card">
-                                <div class="tm-meta">
-                                    <div class="tm-avatar">MD</div>
-                                    <div class="tm-info">
-                                        <span class="tm-name">Marcus Dupré</span>
-                                        <span class="tm-role">Motion Designer / WebGL</span>
-                                    </div>
-                                </div>
-                                <span class="tm-score">91% Fit</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recommended challenges -->
-                    <div class="match-group-box">
-                        <div class="match-group-title">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                                <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                                <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                            </svg>
-                            <span>TARGET RECOMMENDATIONS</span>
-                        </div>
-                        <div class="recommend-challenges-list">
-                            <div class="challenge-recommend-card">
-                                <div class="cr-top">
-                                    <span class="cr-title">The Modern Portfolio</span>
-                                    <span class="cr-fit">94% MATCH</span>
-                                </div>
-                                <span class="cr-takeaway">Perfect for your stack. Highlights WebGL/3D capabilities and visual pacing skills.</span>
-                            </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.03);">
+                            <span style="font-family: monospace; font-size: 9px; color: #ffffff;">[PING] CODEHIVE -> FRONTEND COMPILING STABLE</span>
+                            <span style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.3);">76% MATCH RATE</span>
                         </div>
                     </div>
                 </div>
@@ -4010,6 +4243,35 @@
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
+                        </div>
+                </div>
+            </div>
+
+            <!-- Section Workspace Control -->
+            <div class="section-cta-dock">
+                <div class="cta-dock-divider"></div>
+                <button class="section-focus-trigger" onclick="enterFocusMode('evolutionSection', 0.71)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    <span>Open Evolution Track</span>
+                </button>
+            </div>
+
+            <!-- Expanded rewards panel -->
+            <div class="focus-only-panel">
+                <div style="background: rgba(15, 16, 17, 0.45); backdrop-filter: blur(28px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left;">
+                    <div style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.1em;">UNLOCKED TELEMETRY REWARDS</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
+                            <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">GENESIS KIT</div>
+                            <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Repository assets blueprint unlocked successfully.</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
+                            <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">COMPOSITOR NODES</div>
+                            <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Advanced WebGL fragment layers loaded dynamically.</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
+                            <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">RUST ORCHESTRATOR</div>
+                            <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Docker sandbox VM configuration template.</div>
                         </div>
                     </div>
                 </div>
@@ -4210,7 +4472,37 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Section Workspace Control -->
+            <div class="section-cta-dock">
+                <div class="cta-dock-divider"></div>
+                <button class="section-focus-trigger" onclick="enterFocusMode('buildInPublicSection', 0.88)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    <span>Open Live Build Feed</span>
+                </button>
+            </div>
+
+            <!-- Expanded Transmit Build Log compiler box -->
+            <div class="focus-only-panel">
+                <div class="diagnostic-grid">
+                    <div class="interactive-compiler-box" style="grid-column: 1 / -1;">
+                        <div class="compiler-title-bar">
+                            <span class="compiler-lbl">// TRANSMIT NEW BUILD SPRINT SIGNAL</span>
+                            <span style="font-size: 7px; color: rgba(255, 255, 255, 0.35);">STATUS: ONLINE</span>
+                        </div>
+                        <div class="compiler-input-wrap">
+                            <span class="compiler-prompt">$ devstage commit -m "</span>
+                            <input type="text" class="compiler-input" id="sprintCommitInput" placeholder="cinematic scroll compositor v2.0" value="cinematic scroll compositor v2.0">
+                            <span class="compiler-prompt">"</span>
+                        </div>
+                        <button class="compiler-btn" id="sprintCommitBtn" onclick="transmitSprintCommit()">TRANSMIT SPRINT</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <canvas id="fgCanvas"></canvas>
+        <div id="hint">scroll to descend</div>
     </div>
 
         <!-- Scripts -->
@@ -4361,6 +4653,7 @@
                 let mouse = { x: 0, y: 0, tx: 0, ty: 0 };
                 let targetScrollZ = 0;
                 let camVel = 0;
+                let isScrollLocked = false;
 
                 const CAM = { fov: 310, z: 0, tiltX: 0, tiltY: 0, near: 12 };
                 const VOL = { w: 2.6, h: 2.6, depth: 1700 };
@@ -4559,8 +4852,9 @@
                 let scrollDepth = 0, smoothVel = 0;
 
                 function applyDepthDissolution(dt) {
-                    // Map raw scroll over 5.2 times the VOL.depth for a majestic eight-stage narrative
-                    const raw = Math.min(targetScrollZ / (VOL.depth * 5.2), 1);
+                    if (window.isFocusMode) return;
+                    // Map raw scroll over 4.5 times the VOL.depth for a majestic seven-stage narrative
+                    const raw = Math.min(targetScrollZ / (VOL.depth * 4.5), 1);
                     scrollDepth += (raw - scrollDepth) * 0.05;
                     smoothVel += (Math.abs(camVel) - smoothVel) * 0.07;
                     smoothVel *= Math.pow(0.88, dt / 16);
@@ -4588,37 +4882,47 @@
                         mainTitleEl.style.letterSpacing = `calc(0.18em + ${lsExpand.toFixed(4)}em)`;
                     }
 
-                    // Helper function to animate section visibility
+                    // Helper function to animate section visibility — cinematic smooth transitions
                     function transitionSection(elId, enterStart, enterEnd, exitStart, exitEnd) {
                         const el = document.getElementById(elId);
                         if (!el) return;
                         let opacity = 0;
-                        let translateY = 120;
+                        let translateY = 60;
+                        let scale = 0.98;
                         let isActive = false;
 
                         if (d >= enterStart && d <= exitEnd) {
                             if (d <= enterEnd) {
-                                const progress = (d - enterStart) / (enterEnd - enterStart);
+                                // Smooth cubic ease-in during entrance
+                                const t = (d - enterStart) / (enterEnd - enterStart);
+                                const progress = t * t * (3 - 2 * t); // smoothstep
                                 opacity = progress;
-                                translateY = (1 - progress) * 120;
+                                translateY = (1 - progress) * 60;
+                                scale = 0.98 + progress * 0.02;
                             } else if (d >= exitStart) {
-                                const progress = (d - exitStart) / (exitEnd - exitStart);
+                                // Smooth cubic ease-out during exit
+                                const t = (d - exitStart) / (exitEnd - exitStart);
+                                const progress = t * t * (3 - 2 * t);
                                 opacity = 1 - progress;
-                                translateY = -progress * 120;
+                                translateY = -progress * 60;
+                                scale = 1 - progress * 0.02;
                             } else {
                                 opacity = 1;
                                 translateY = 0;
+                                scale = 1;
                             }
-                            isActive = (d > enterEnd - 0.05 && d < exitStart + 0.05);
+                            isActive = (d > enterEnd - 0.03 && d < exitStart + 0.03);
                         } else {
                             opacity = 0;
-                            translateY = d < enterStart ? 120 : -120;
+                            translateY = d < enterStart ? 60 : -60;
+                            scale = 0.98;
                             isActive = false;
                         }
 
                         el.style.opacity = opacity.toFixed(4);
-                        el.style.transform = `translateY(${translateY.toFixed(2)}px)`;
+                        el.style.transform = `translateY(${translateY.toFixed(2)}px) scale(${scale.toFixed(5)})`;
                         el.style.pointerEvents = isActive ? 'auto' : 'none';
+                        el.style.willChange = opacity > 0.01 && opacity < 0.99 ? 'transform, opacity' : 'auto';
 
                         if (isActive) {
                             el.classList.add('active');
@@ -4628,32 +4932,32 @@
                     }
 
                     // 2. Challenge Section (Active Grid)
-                    // Range: 0.08 -> 0.23
-                    transitionSection('challengeSection', 0.08, 0.12, 0.18, 0.23);
+                    transitionSection('challengeSection', 0.08, 0.13, 0.18, 0.24);
 
                     // 3. Challenge Domains Section (Categories System)
-                    // Range: 0.21 -> 0.38
-                    transitionSection('domainsSection', 0.21, 0.25, 0.33, 0.38);
+                    transitionSection('domainsSection', 0.20, 0.25, 0.32, 0.38);
 
                     // 4. Challenge Analysis Section (Radar Scanner)
-                    // Range: 0.36 -> 0.53
-                    transitionSection('analysisSection', 0.36, 0.40, 0.48, 0.53);
+                    transitionSection('analysisSection', 0.34, 0.39, 0.46, 0.52);
 
                     // 5. Team Recruitment Network Section (Squad Discovery)
-                    // Range: 0.51 -> 0.68
-                    transitionSection('recruitmentSection', 0.51, 0.55, 0.63, 0.68);
+                    transitionSection('recruitmentSection', 0.48, 0.53, 0.60, 0.66);
 
-                    // 6. AI Skill-Based Matchmaking Section
-                    // Range: 0.66 -> 0.81
-                    transitionSection('matchmakingSection', 0.66, 0.70, 0.77, 0.81);
+                    // 6. Challenge Evolution & Progression Section
+                    transitionSection('evolutionSection', 0.62, 0.67, 0.75, 0.81);
 
-                    // 7. Challenge Evolution & Progression Section
-                    // Range: 0.79 -> 0.92
-                    transitionSection('evolutionSection', 0.79, 0.83, 0.88, 0.92);
+                    // 7. Build In Public Timeline Section
+                    transitionSection('buildInPublicSection', 0.77, 0.82, 0.97, 1.0);
 
-                    // 8. Build In Public Timeline Section
-                    // Range: 0.90 -> 1.0
-                    transitionSection('buildInPublicSection', 0.90, 0.95, 0.98, 1.0);
+                    // Scroll-reactive sidebar visibility
+                    const navRail = document.getElementById('systemNavRail');
+                    if (navRail) {
+                        if (d > 0.06) {
+                            navRail.classList.add('nav-visible');
+                        } else {
+                            navRail.classList.remove('nav-visible');
+                        }
+                    }
                 }
 
                 // MAIN LOOP
@@ -4689,7 +4993,7 @@
                     applyDepthDissolution(dt);
 
                     // Draw Radar Visualization Console in standard high-performance compositor loop
-                    if (typeof drawRadarChart === 'function' && scrollDepth > 0.33 && scrollDepth < 0.56) {
+                    if (typeof drawRadarChart === 'function' && scrollDepth > 0.31 && scrollDepth < 0.53) {
                         drawRadarChart(elapsed);
                     }
                 }
@@ -4716,16 +5020,21 @@
                 }, { passive: true });
 
                 stage.addEventListener('mouseleave', () => { mouse.tx = 0; mouse.ty = 0; }, { passive: true });
-                const maxScrollZ = VOL.depth * 5.2;
+                const maxScrollZ = VOL.depth * 4.5;
                 stage.addEventListener('wheel', e => {
+                    if (isScrollLocked) return;
                     e.preventDefault();
                     targetScrollZ += e.deltaY * 2.0;
                     targetScrollZ = Math.max(0, Math.min(maxScrollZ, targetScrollZ));
                 }, { passive: false });
 
                 let _lTY = null;
-                stage.addEventListener('touchstart', e => { _lTY = e.touches[0].clientY; }, { passive: true });
+                stage.addEventListener('touchstart', e => { 
+                    if (isScrollLocked) return;
+                    _lTY = e.touches[0].clientY; 
+                }, { passive: true });
                 stage.addEventListener('touchmove', e => {
+                    if (isScrollLocked) return;
                     if (_lTY !== null) {
                         const dy = _lTY - e.touches[0].clientY;
                         targetScrollZ += dy * 3.4;
@@ -4737,6 +5046,18 @@
 
                 window.addEventListener('resize', resize, { passive: true });
                 resize();
+
+                // Expose hooks for the global Focus Transition Engine
+                window.setScrollDepthRatio = (ratio) => {
+                    targetScrollZ = ratio * maxScrollZ;
+                };
+                window.getScrollDepthRatio = () => {
+                    return scrollDepth;
+                };
+                window.setScrollLockState = (locked) => {
+                    isScrollLocked = locked;
+                };
+
                 requestAnimationFrame(frame);
 
                 // TEXT REVEAL — Thermal ignition
@@ -5295,6 +5616,51 @@
                         neededRoles: ["Frontend Developer"],
                         tech: ["Go", "WebAssembly", "TypeScript"],
                         timestamp: 2
+                    },
+                    {
+                        id: "squad-4",
+                        filename: "squad_04.json",
+                        teamName: "Aetherium",
+                        challenge: "cinematic particles",
+                        category: "Creative Tech",
+                        difficulty: "Expert",
+                        matchScore: 92,
+                        status: "urgent",
+                        statusText: "Urgent Need",
+                        members: ["WA", "GL"],
+                        neededRoles: ["WebGL Specialist"],
+                        tech: ["Three.js", "GLSL", "React"],
+                        timestamp: 4
+                    },
+                    {
+                        id: "squad-5",
+                        filename: "squad_05.json",
+                        teamName: "MotionLab",
+                        challenge: "liquid sharing",
+                        category: "Motion Engine",
+                        difficulty: "Hard",
+                        matchScore: 85,
+                        status: "recruiting",
+                        statusText: "Recruiting",
+                        members: ["GS", "AP"],
+                        neededRoles: ["Motion Designer"],
+                        tech: ["GSAP", "CSS", "SVG"],
+                        timestamp: 5
+                    },
+                    {
+                        id: "squad-6",
+                        filename: "squad_06.json",
+                        teamName: "CyberShell",
+                        challenge: "Modern Portfolio",
+                        category: "UI & UX",
+                        difficulty: "Advanced",
+                        matchScore: 79,
+                        status: "beginner",
+                        statusText: "Beginner Friendly",
+                        members: ["CS", "SH"],
+                        neededRoles: ["Frontend Developer"],
+                        tech: ["React", "Tailwind", "Vite"],
+                        timestamp: 6
                     }
                 ];
 
@@ -5340,7 +5706,8 @@
                         return;
                     }
 
-                    filtered.forEach((team, idx) => {
+                    const listToRender = window.isFocusMode ? filtered : filtered.slice(0, 3);
+                    listToRender.forEach((team, idx) => {
                         const card = document.createElement('div');
                         card.className = 'squad-team-card';
                         card.id = team.id;
@@ -5555,49 +5922,7 @@
                 // Initial render
                 renderSquadCards();
 
-                // ─────────────────────────────────────────────────────────────────────────────
-                // FUTURISTIC AI SKILL MATCHMAKER RADIAL METRIC ANIMATION
-                // ─────────────────────────────────────────────────────────────────────────────
-                let matchmakerAnimated = false;
-                function animateMatchmakerMetrics() {
-                    if (matchmakerAnimated) return;
-                    matchmakerAnimated = true;
 
-                    // Animate SVG Radials
-                    const circles = document.querySelectorAll('.radial-val-circle');
-                    circles.forEach(circle => {
-                        const targetVal = parseInt(circle.getAttribute('data-value'));
-                        const r = parseFloat(circle.getAttribute('r'));
-                        const circ = 2 * Math.PI * r;
-                        
-                        // Set base strokeDasharray
-                        circle.style.strokeDasharray = circ;
-                        circle.style.strokeDashoffset = circ;
-                        
-                        // Trigger CSS Transition
-                        circle.style.transition = 'stroke-dashoffset 2.0s cubic-bezier(0.16, 1, 0.3, 1)';
-                        
-                        const textEl = circle.parentElement.nextElementSibling || circle.parentElement.parentElement.querySelector('.radial-text');
-                        
-                        // Counter animation
-                        let current = 0;
-                        const duration = 2000;
-                        const start = performance.now();
-                        
-                        function counterStep(now) {
-                            const raw = Math.min((now - start) / duration, 1);
-                            const val = Math.round(targetVal * (1 - Math.pow(1 - raw, 3))); // EaseOutCubic
-                            if (textEl) textEl.textContent = `${val}%`;
-                            
-                            // Offset animation
-                            const offset = circ - (val / 100) * circ;
-                            circle.style.strokeDashoffset = offset;
-                            
-                            if (raw < 1) requestAnimationFrame(counterStep);
-                        }
-                        requestAnimationFrame(counterStep);
-                    });
-                }
 
                 // ─────────────────────────────────────────────────────────────────────────────
                 // CHALLENGE PROGRESSION TIMELINE INTERACTION
@@ -5884,7 +6209,8 @@
                             ? DOMAIN_CHALLENGES 
                             : DOMAIN_CHALLENGES.filter(c => c.category === category);
 
-                        filtered.forEach((card, idx) => {
+                        const listToRender = window.isFocusMode ? filtered : filtered.slice(0, 3);
+                        listToRender.forEach((card, idx) => {
                             const cardEl = document.createElement('div');
                             cardEl.className = 'domain-card';
                             cardEl.id = `domain-card-${idx}`;
@@ -6009,14 +6335,256 @@
                 // Watch scrollDepth to trigger telemetry animations precisely when sections rise into view
                 setInterval(() => {
                     if (typeof scrollDepth !== 'undefined') {
-                        if (scrollDepth > 0.64 && scrollDepth < 0.83) {
-                            animateMatchmakerMetrics();
-                        }
-                        if (scrollDepth > 0.76 && scrollDepth < 0.94) {
+                        if (scrollDepth > 0.60 && scrollDepth < 0.83) {
                             animateEvolutionHUD();
                         }
                     }
                 }, 200);
+
+                // ─────────────────────────────────────────────────────────────────────────────
+                // FOCUS MODE & NAVIGATION ORCHESTRATOR
+                // ─────────────────────────────────────────────────────────────────────────────
+                window.isFocusMode = false;
+                window.focusedSectionId = null;
+
+                window.enterFocusMode = function(sectionId, ratio) {
+                    if (window.isFocusMode && window.focusedSectionId === sectionId) return;
+                    
+                    window.isFocusMode = true;
+                    window.focusedSectionId = sectionId;
+                    
+                    // Add global layout flags
+                    document.body.classList.add('in-focus-mode');
+                    const rail = document.getElementById('systemNavRail');
+                    if (rail) {
+                        rail.classList.add('focused');
+                        rail.classList.add('nav-visible');
+                    }
+                    
+                    const retBtn = document.getElementById('returnOverviewBtn');
+                    if (retBtn) retBtn.classList.add('visible');
+                    
+                    // Set scroll location to section & lock background scrolling
+                    if (ratio !== undefined) {
+                        window.setScrollDepthRatio(ratio);
+                    }
+                    window.setScrollLockState(true);
+                    
+                    // Staggered section isolation — hide all, then reveal active with delay
+                    const allSections = document.querySelectorAll('.challenge-section, .domains-section, .analysis-section, .recruitment-section, .evolution-section, .build-public-section');
+                    allSections.forEach(sec => {
+                        if (sec.id === sectionId) {
+                            // Slight delay for cinematic reveal
+                            setTimeout(() => {
+                                sec.classList.add('focus-active');
+                                sec.classList.add('active');
+                                sec.style.opacity = '1';
+                                sec.style.transform = 'translateY(0) scale(1)';
+                                sec.style.pointerEvents = 'auto';
+                            }, 80);
+                        } else {
+                            sec.classList.remove('focus-active');
+                            sec.classList.remove('active');
+                            sec.style.opacity = '0';
+                            sec.style.transform = 'translateY(40px) scale(0.98)';
+                            sec.style.pointerEvents = 'none';
+                        }
+                    });
+                    
+                    // Highlight selected navigator rail item
+                    document.querySelectorAll('.nav-rail-item').forEach(item => {
+                        if (item.getAttribute('data-section') === sectionId) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
+
+                    // Trigger section-specific expanded visual features
+                    setTimeout(() => {
+                        if (sectionId === 'analysisSection') {
+                            if (typeof resizeRadarCanvas === 'function') resizeRadarCanvas();
+                        } else if (sectionId === 'domainsSection') {
+                            renderDomainCards('all');
+                        } else if (sectionId === 'recruitmentSection') {
+                            renderSquadCards();
+                        }
+                    }, 120);
+                };
+
+                window.exitFocusMode = function() {
+                    if (!window.isFocusMode) return;
+                    
+                    const prevSectionId = window.focusedSectionId;
+                    window.isFocusMode = false;
+                    window.focusedSectionId = null;
+                    
+                    // Reset global layouts
+                    document.body.classList.remove('in-focus-mode');
+                    const rail = document.getElementById('systemNavRail');
+                    if (rail) rail.classList.remove('focused');
+                    
+                    const retBtn = document.getElementById('returnOverviewBtn');
+                    if (retBtn) retBtn.classList.remove('visible');
+                    
+                    // Unlock wheel/touch controls
+                    window.setScrollLockState(false);
+                    
+                    // Clear focus-active class and inline styles — let applyDepthDissolution recalculate
+                    document.querySelectorAll('.challenge-section, .domains-section, .analysis-section, .recruitment-section, .evolution-section, .build-public-section').forEach(sec => {
+                        sec.classList.remove('focus-active');
+                        sec.style.opacity = '';
+                        sec.style.transform = '';
+                        sec.style.pointerEvents = '';
+                        sec.style.willChange = '';
+                    });
+
+                    // Refresh preview states
+                    setTimeout(() => {
+                        if (prevSectionId === 'analysisSection') {
+                            if (typeof resizeRadarCanvas === 'function') resizeRadarCanvas();
+                        } else if (prevSectionId === 'domainsSection') {
+                            renderDomainCards('all');
+                        } else if (prevSectionId === 'recruitmentSection') {
+                            renderSquadCards();
+                        }
+                    }, 100);
+                };
+
+                // Wire up click event listeners to navigator vertical rail dots
+                document.querySelectorAll('.nav-rail-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const secId = item.getAttribute('data-section');
+                        const ratio = parseFloat(item.getAttribute('data-scroll-ratio'));
+                        window.enterFocusMode(secId, ratio);
+                    });
+                });
+
+                // Escape Key listener to reset focus modes
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && window.isFocusMode) {
+                        window.exitFocusMode();
+                    }
+                });
+
+                // Return to Overview button click
+                const returnBtn = document.getElementById('returnOverviewBtn');
+                if (returnBtn) {
+                    returnBtn.addEventListener('click', () => {
+                        window.exitFocusMode();
+                    });
+                }
+
+                // Auto Scroll Indicator Tracker — uses requestAnimationFrame-throttled polling
+                let _lastTrackerRun = 0;
+                function updateNavTracker() {
+                    requestAnimationFrame(function navTrackerLoop(now) {
+                        if (now - _lastTrackerRun > 120) {
+                            _lastTrackerRun = now;
+                            if (!window.isFocusMode && window.getScrollDepthRatio) {
+                                const ratio = window.getScrollDepthRatio();
+                                let activeSection = 'challengeSection';
+                                
+                                if (ratio < 0.19) activeSection = 'challengeSection';
+                                else if (ratio < 0.33) activeSection = 'domainsSection';
+                                else if (ratio < 0.47) activeSection = 'analysisSection';
+                                else if (ratio < 0.61) activeSection = 'recruitmentSection';
+                                else if (ratio < 0.77) activeSection = 'evolutionSection';
+                                else activeSection = 'buildInPublicSection';
+                                
+                                document.querySelectorAll('.nav-rail-item').forEach(item => {
+                                    if (item.getAttribute('data-section') === activeSection) {
+                                        item.classList.add('active');
+                                    } else {
+                                        item.classList.remove('active');
+                                    }
+                                });
+                            }
+                        }
+                        requestAnimationFrame(navTrackerLoop);
+                    });
+                }
+                updateNavTracker();
+
+                // Build Log Custom Log Transmit handler
+                window.transmitSprintCommit = function() {
+                    const input = document.getElementById('sprintCommitInput');
+                    if (!input || !input.value.trim()) return;
+                    
+                    const commitMsg = input.value.trim();
+                    const stream = document.querySelector('.public-feed-stream');
+                    if (!stream) return;
+                    
+                    const node = document.createElement('div');
+                    node.className = 'feed-node';
+                    node.style.opacity = '0';
+                    node.style.transform = 'translateY(-20px)';
+                    
+                    node.innerHTML = `
+                        <div class="feed-interceptor"></div>
+                        <div class="feed-card" style="border-color: rgba(120, 255, 120, 0.2);">
+                            <div class="terminal-bar">
+                                <div class="terminal-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                                <div class="terminal-file">sprint_commit.sh</div>
+                                <div class="status-badge" style="background: rgba(120, 255, 120, 0.04); border-color: rgba(120, 255, 120, 0.2); color: #78ff78;">
+                                    <span class="pulse-dot" style="background: #78ff78;"></span>
+                                    <span>TRANSMITTED LIVE</span>
+                                </div>
+                            </div>
+                            <div class="feed-card-content">
+                                <div class="feed-creator-row">
+                                    <div class="creator-info">
+                                        <div class="tm-avatar" style="width:20px; height:20px; font-size:7px; background: rgba(120, 255, 120, 0.1); color: #78ff78;">ME</div>
+                                        <span class="creator-name">You (Operator)</span>
+                                        <span class="creator-handle">@devstage_builder</span>
+                                    </div>
+                                    <span class="feed-project-name">Battlefield Sprint</span>
+                                </div>
+                                <p class="feed-text" style="color: #ffffff;">${commitMsg}</p>
+                                <div class="feed-metadata-row">
+                                    <span class="feed-chip ui-iteration" style="background: rgba(120, 255, 120, 0.05); color: #78ff78; border-color: rgba(120, 255, 120, 0.1);">Sprint Deployed</span>
+                                    <div class="feed-progress-box">
+                                        <div class="feed-progress-bar">
+                                            <div class="feed-progress-fill" style="width: 100%; background: #78ff78;"></div>
+                                        </div>
+                                        <span class="feed-progress-text" style="color: #78ff78;">100% Compiled</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const pipeline = stream.querySelector('.public-feed-pipeline');
+                    if (pipeline) {
+                        pipeline.after(node);
+                    } else {
+                        stream.prepend(node);
+                    }
+                    
+                    setTimeout(() => {
+                        node.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+                        node.style.opacity = '1';
+                        node.style.transform = 'translateY(0)';
+                    }, 50);
+                    
+                    input.value = '';
+                    
+                    const btn = document.getElementById('sprintCommitBtn');
+                    if (btn) {
+                        btn.textContent = 'TRANSMITTED!';
+                        btn.style.color = '#78ff78';
+                        btn.style.borderColor = 'rgba(120, 255, 120, 0.4)';
+                        setTimeout(() => {
+                            btn.textContent = 'TRANSMIT SPRINT';
+                            btn.style.color = '';
+                            btn.style.borderColor = '';
+                        }, 1500);
+                    }
+                };
 
             })();
 
