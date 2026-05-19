@@ -500,7 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Click Card to View
     card.addEventListener('click', (e) => {
       if (!e.target.closest('.stat-btn')) {
-        window.location.href = `explore.html?id=${id}`;
+        const isRoot = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/project2') || window.location.pathname.endsWith('/project2/');
+        window.location.href = (isRoot ? 'pages/' : '') + `explore.html?id=${id}`;
       }
     });
 
@@ -515,7 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentBtn = card.querySelector('.comment-btn');
     commentBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      window.location.href = `explore.html?id=${id}#comments`;
+      const isRoot = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/project2') || window.location.pathname.endsWith('/project2/');
+      window.location.href = (isRoot ? 'pages/' : '') + `explore.html?id=${id}#comments`;
     });
 
     discoveryGrid.appendChild(card);

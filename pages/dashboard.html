@@ -14,14 +14,14 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cursor.css">
+    <link rel="stylesheet" href="../styles/global.css">
+    
 </head>
 <body class="dashboard-page">
-    <script src="loader.js"></script>
+    <script src="../scripts/motion-engine.js"></script>
     <nav class="navbar" id="main-navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
+            <a href="../index.html" class="logo-bloom-wrapper" id="devstage-logo">
               <div class="logo-chars">
                 <span class="char" style="--i:0">D</span>
                 <span class="char" style="--i:1">e</span>
@@ -39,7 +39,7 @@
             <div class="nav-menu">
                 <ul class="nav-links">
                     <li><a href="explore.html" class="nav-link">Explore</a></li>
-                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="../index.html" class="nav-link">Home</a></li>
                 </ul>
                 <button id="dashboard-logout-btn" class="button-secondary" style="padding: 8px 20px;">Logout</button>
             </div>
@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="dashboard-actions" style="margin-top: 32px;">
-                        <a href="index.html?action=upload" class="premium-btn"><span>Share New Project</span></a>
+                        <a href="../index.html?action=upload" class="premium-btn"><span>Share New Project</span></a>
                         <button id="logout-btn" class="text-link-btn" style="margin-top: 12px; color: var(--error); opacity: 0.7;">Logout</button>
                     </div>
                 </div>
@@ -119,9 +119,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="dashboard.js"></script>
-    <script src="cursor.js" defer></script>
+    <script src="../scripts/firebase-config.js"></script>
+    <script src="../scripts/dashboard.js"></script>
+    
     <script>
         lucide.createIcons();
     </script>

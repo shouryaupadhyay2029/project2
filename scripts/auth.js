@@ -91,7 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((result) => {
                 saveUserToFirestore(result.user);
                 if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-                    window.location.href = "dashboard.html";
+                    const isRoot = window.location.pathname.includes("index.html") || window.location.pathname.endsWith("/") || window.location.pathname.endsWith("/project2") || window.location.pathname.endsWith("/project2/");
+                    window.location.href = isRoot ? "pages/dashboard.html" : "dashboard.html";
                 }
             })
             .catch((error) => {
@@ -164,7 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 localStorage.removeItem("devstageUser");
                 await signOut(auth);
-                window.location.href = 'index.html';
+                const isRoot = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/project2') || window.location.pathname.endsWith('/project2/');
+                window.location.href = isRoot ? 'index.html' : '../index.html';
             } catch (error) {
                 console.error("Logout failed:", error);
             }

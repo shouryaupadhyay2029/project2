@@ -1,3 +1,4 @@
+/* === MERGED FROM: style.css === */
 /* =============================================
    DevStage — Premium Matte White Design System
    ============================================= */
@@ -6501,3 +6502,610 @@ body::before {
     padding: 0 15px;
   }
 }
+
+/* === MERGED FROM: cursor.css === */
+/* ─── Premium 3D Hollow Cursor Design ─── */
+html, body, a, button, input, textarea, label, [role="button"] {
+    cursor: none !important; /* Hide default cursor globally */
+}
+
+body {
+    cursor: none !important;
+}
+
+#hollow-3d-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+/* Outer Halo Glow */
+.halo-glow {
+    position: absolute;
+    inset: -15px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 122, 24, 0.15) 0%, transparent 70%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    will-change: transform;
+    opacity: 0;
+}
+
+/* Border Ring (The physical object) */
+.border-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #ff7a18;
+    box-shadow:
+        0 0 10px rgba(255, 122, 24, 0.4),
+        0 0 5px rgba(255, 122, 24, 0.2) inset;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                height 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                border-radius 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.3s ease;
+    will-change: transform;
+}
+
+/* Inner Depth Highlight */
+.highlight-layer {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+/* Click Cross */
+.click-cross {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+.cross-h, .cross-v {
+    position: absolute;
+    background: #ff7a18;
+    border-radius: 1px;
+}
+
+.cross-h { width: 60%; height: 2px; }
+.cross-v { width: 2px; height: 60%; }
+
+/* Interaction States */
+#hollow-3d-cursor.is-hovering .border-ring {
+    border-color: #ff9d52;
+    box-shadow:
+        0 0 20px rgba(255, 122, 24, 0.6),
+        0 0 10px rgba(255, 122, 24, 0.3) inset;
+}
+
+#hollow-3d-cursor.is-hovering .halo-glow {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+#hollow-3d-cursor.is-clicking .border-ring {
+    transform: scale(0.85);
+    opacity: 0;
+}
+
+#hollow-3d-cursor.is-clicking .click-cross {
+    opacity: 1;
+}
+
+.energy-field-active {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 5px 15px rgba(255, 122, 24, 0.15) !important;
+    filter: brightness(1.1);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.3s ease !important;
+}
+
+/* Hide on Mobile */
+@media (max-width: 768px) {
+    #hollow-3d-cursor { display: none !important; }
+    html, body, a, button, input { cursor: auto !important; }
+}
+
+
+/* === MERGED FROM: motion.css === */
+/* =============================================
+   DevStage — Cinematic Motion System
+   Unified Interaction & Transition Engine
+   ============================================= */
+
+:root {
+    /* Premium Easing Curves */
+    --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out-soft: cubic-bezier(0.42, 0, 0.58, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-elastic-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Timing Constants */
+    --duration-slow: 700ms;
+    --duration-medium: 450ms;
+    --duration-fast: 300ms;
+}
+
+/* ─── 1. PAGE TRANSITIONS ───────────────────────── */
+
+.page-transition-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    transition: 
+        opacity var(--duration-medium) var(--ease-cinematic),
+        transform var(--duration-medium) var(--ease-cinematic),
+        filter var(--duration-medium) var(--ease-cinematic);
+    will-change: opacity, transform, filter;
+}
+
+.page-exit {
+    opacity: 0;
+    transform: translateY(-12px);
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+.page-enter {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(8px);
+}
+
+/* ─── 2. DROPDOWN MOTION ─────────────────────────── */
+
+.premium-dropdown, 
+.filter-menu, 
+.profile-dropdown,
+.dropdown-content,
+.modal-card {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(12px) scale(0.98) !important;
+    filter: blur(4px);
+    transition: 
+        opacity var(--duration-medium) var(--ease-cinematic),
+        transform var(--duration-medium) var(--ease-cinematic),
+        filter var(--duration-medium) var(--ease-cinematic),
+        visibility var(--duration-medium) !important;
+    transform-origin: top center;
+    pointer-events: none;
+}
+
+.premium-dropdown.active, 
+.filter-menu.active, 
+.profile-dropdown.active,
+.dropdown-content.active,
+.modal-overlay.active .modal-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+    filter: blur(0);
+    pointer-events: all;
+}
+
+/* Dropdown Item Hover */
+.dropdown-item, .filter-menu a {
+    transition: 
+        background var(--duration-fast) var(--ease-cinematic),
+        transform var(--duration-fast) var(--ease-cinematic),
+        color var(--duration-fast) var(--ease-cinematic),
+        text-shadow var(--duration-fast) var(--ease-cinematic) !important;
+}
+
+.dropdown-item:hover, .filter-menu a:hover {
+    transform: translateX(4px);
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* ─── 3. CARD INTERACTION FLUIDITY ────────────────── */
+
+.clickable-module, 
+.feature-terminal-card, 
+.project-card, 
+.team-card,
+.skeleton-card,
+.discovery-card {
+    transition: 
+        transform var(--duration-medium) var(--ease-cinematic),
+        box-shadow var(--duration-medium) var(--ease-cinematic),
+        filter var(--duration-medium) var(--ease-cinematic) !important;
+    will-change: transform, box-shadow;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Card Depth Movement */
+.clickable-module:hover, 
+.feature-terminal-card:hover, 
+.project-card:hover,
+.discovery-card:hover {
+    transform: translateY(-6px) translateZ(0);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(215, 138, 47, 0.1) !important;
+}
+
+/* Internal Card Content Motion */
+.card-inner-content {
+    transition: transform var(--duration-medium) var(--ease-cinematic);
+}
+
+.clickable-module:hover .card-inner-content,
+.feature-terminal-card:hover .card-inner-content {
+    transform: translateZ(10px);
+}
+
+.card-icon i, .card-icon [data-lucide] {
+    transition: transform var(--duration-medium) var(--ease-elastic-soft);
+}
+
+.clickable-module:hover .card-icon i,
+.feature-terminal-card:hover .card-icon i {
+    transform: scale(1.15) translateY(-2px);
+}
+
+/* Card Cursor Light */
+.card-glow-follow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-cinematic);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.clickable-module:hover .card-glow-follow,
+.feature-terminal-card:hover .card-glow-follow {
+    opacity: 1;
+}
+
+/* ─── 4. BUTTON MICRO-INTERACTIONS ───────────────── */
+
+button, 
+.premium-btn, 
+.nav-link-btn, 
+.social-btn, 
+.button-primary-sm,
+.fancy {
+    transition: 
+        transform var(--duration-fast) var(--ease-cinematic),
+        background var(--duration-fast) var(--ease-cinematic),
+        box-shadow var(--duration-fast) var(--ease-cinematic),
+        filter var(--duration-fast) var(--ease-cinematic) !important;
+    will-change: transform;
+}
+
+button:hover, .premium-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 20px rgba(215, 138, 47, 0.2) !important;
+}
+
+button:active, .premium-btn:active {
+    transform: translateY(1px) scale(0.97);
+    filter: brightness(0.9);
+}
+
+/* ─── 5. SCROLL EXPERIENCE ───────────────────────── */
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 
+        opacity var(--duration-slow) var(--ease-cinematic),
+        transform var(--duration-slow) var(--ease-cinematic);
+    will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── 6. NAVBAR + HEADER ─────────────────────────── */
+
+.navbar {
+    transition: 
+        background var(--duration-medium) var(--ease-cinematic),
+        backdrop-filter var(--duration-medium) var(--ease-cinematic),
+        transform var(--duration-medium) var(--ease-cinematic),
+        border var(--duration-medium) var(--ease-cinematic) !important;
+}
+
+.navbar.is-scrolled {
+    background: rgba(15, 15, 20, 0.8) !important;
+    backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.navbar.is-hidden {
+    transform: translateY(-100%);
+}
+
+.nav-links li a {
+    position: relative;
+    transition: color var(--duration-fast) var(--ease-cinematic) !important;
+}
+
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--brand-orange);
+    transition: width var(--duration-medium) var(--ease-cinematic);
+}
+
+.nav-links li a:hover::after {
+    width: 100%;
+}
+
+/* ─── 7. TERMINAL SYSTEM MOTION ──────────────────── */
+
+@keyframes terminalScan {
+    0% { transform: translateY(-100%); opacity: 0; }
+    50% { opacity: 0.1; }
+    100% { transform: translateY(100%); opacity: 0; }
+}
+
+.card-terminal-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-terminal-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.03), transparent);
+    animation: terminalScan 4s infinite linear;
+    pointer-events: none;
+}
+
+.status-chip {
+    animation: pulseSoft 3s infinite var(--ease-in-out-soft);
+}
+
+@keyframes pulseSoft {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.95); }
+}
+
+/* ─── 8. PERFORMANCE ─────────────────────────────── */
+
+.gpu-accelerated {
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0);
+}
+
+
+/* === MERGED FROM: grid-background.css === */
+/* ─── High-Performance 3D Grid Space (Lag-Free) ─── */
+
+.grid-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background-color: #232326;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 55%),
+    radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.03), transparent 60%),
+    linear-gradient(180deg, #232326, #1f1f22);
+  pointer-events: none;
+}
+
+/* Base style for all moving layers - Optimized Size */
+.grid-layer {
+  position: absolute;
+  /* Reduced inset for performance while maintaining coverage */
+  top: -128px;
+  left: -128px;
+  right: -128px;
+  bottom: -128px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ──── LAYER 1: FINE DETAIL (High-Speed) ──── */
+.layer-1 {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: moveFine 4s linear infinite;
+  opacity: 0.8;
+  z-index: 4;
+}
+
+/* ──── LAYER 2: STRUCTURAL (Mid-Depth) ──── */
+.layer-2 {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
+  background-size: 64px 64px;
+  animation: moveStructural 8s linear infinite;
+  opacity: 0.6;
+  z-index: 3;
+}
+
+/* ──── LAYER 3: DEPTH MESH (Distant) ──── */
+.layer-3 {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px);
+  background-size: 128px 128px;
+  animation: moveDepth 15s linear infinite;
+  opacity: 0.5;
+  z-index: 2;
+}
+
+/* ──── LAYER 4: MASSIVE (Horizon) ──── */
+.layer-4 {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 2px, transparent 2px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 2px, transparent 2px);
+  background-size: 256px 256px;
+  animation: moveAtmosphere 30s linear infinite;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+/* Polish: Vignette to ground the content */
+.grid-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, rgba(35, 35, 38, 0.6) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ──── CANVAS DISTORTION OVERLAY ──── */
+.grid-distortion {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ─── SEAMLESS MULTI-DIRECTIONAL ANIMATIONS (GPU Optimized) ─── */
+
+@keyframes moveFine {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-24px);
+  }
+}
+
+@keyframes moveStructural {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(64px);
+  }
+}
+
+@keyframes moveDepth {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(128px, 128px);
+  }
+}
+
+@keyframes moveAtmosphere {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-256px, 128px);
+  }
+}
+
+/* ─── Content Glassmorphism Support ─── */
+.explore-page .sidebar-card,
+.explore-page .project-card,
+.explore-page .search-box {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(35, 35, 38, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* === MERGED FROM: wave.css === */
+/* ─── Premium Motion Wave System ─── */
+
+.wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    overflow: hidden;
+    line-height: 0;
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    
+    mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+}
+
+.waves {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Layered Wave Motion */
+.parallax > use {
+    animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+    will-change: transform;
+}
+
+/* ─── PAGE MAPPING SYSTEM ─── */
+
+/* Home: Structured & Balanced (Filled) */
+.home-page .wave-container { height: 18vh; opacity: 0.8; }
+.home-page .parallax > use:nth-child(1) { animation-duration: 12s; fill: rgba(255, 138, 0, 0.06); filter: blur(2px); }
+.home-page .parallax > use:nth-child(2) { animation-duration: 15s; fill: rgba(255, 255, 255, 0.02); filter: blur(1px); }
+.home-page .parallax > use:nth-child(3) { animation-duration: 19s; fill: rgba(255, 138, 0, 0.03); }
+.home-page .parallax > use:nth-child(4) { animation-duration: 25s; fill: rgba(255, 255, 255, 0.01); }
+
+
+
+/* Upload/Dashboard: Structured & Active */
+.upload-page .wave-container { height: 22vh; opacity: 0.9; }
+.upload-page .parallax > use:nth-child(1) { animation-duration: 8s; fill: rgba(255, 138, 0, 0.06); }
+.upload-page .parallax > use:nth-child(2) { animation-duration: 11s; fill: rgba(255, 255, 255, 0.03); }
+.upload-page .parallax > use:nth-child(3) { animation-duration: 14s; fill: rgba(255, 138, 0, 0.03); }
+.upload-page .parallax > use:nth-child(4) { animation-duration: 18s; fill: rgba(255, 255, 255, 0.02); }
+
+@keyframes move-forever {
+    0% { transform: translate3d(-90px, 0, 0); }
+    100% { transform: translate3d(85px, 0, 0); }
+}
+
+@keyframes breathe {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@media (max-width: 768px) {
+    .wave-container { height: 60px !important; }
+}
+
+

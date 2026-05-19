@@ -18,13 +18,13 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="cursor.css">
+  <link rel="stylesheet" href="styles/global.css">
+  
 </head>
 
 <body class="home-page">
   <!-- Core Loader Logic -->
-  <script src="loader.js"></script>
+  <script src="scripts/motion-engine.js"></script>
 
   <canvas id="c" aria-hidden="true"></canvas>
 
@@ -72,7 +72,7 @@
           <div class="nav-menu">
             <ul class="nav-links" id="nav-links">
               <li>
-                <a href="explore.html" class="fancy">
+                <a href="pages/explore.html" class="fancy">
                   <span class="top-key"></span>
                   <span class="text">Explore</span>
                   <span class="bottom-key-1"></span>
@@ -80,7 +80,7 @@
                 </a>
               </li>
               <li>
-                <a href="upload.html" class="fancy" id="nav-upload-btn">
+                <a href="pages/upload.html" class="fancy" id="nav-upload-btn">
                   <span class="top-key"></span>
                   <span class="text">Upload</span>
                   <span class="bottom-key-1"></span>
@@ -88,7 +88,7 @@
                 </a>
               </li>
               <li>
-                <a href="teams.html" class="fancy" id="nav-teams-btn">
+                <a href="pages/teams.html" class="fancy" id="nav-teams-btn">
                   <span class="top-key"></span>
                   <span class="text">Teams</span>
                   <span class="bottom-key-1"></span>
@@ -119,13 +119,13 @@
                 </div>
                 <div class="dropdown-divider"></div>
                 <div class="dropdown-content">
-                  <a href="dashboard.html" class="dropdown-item">
+                  <a href="pages/dashboard.html" class="dropdown-item">
                     <div class="item-left">
                       <i data-lucide="layout-dashboard"></i>
                       <span>Dashboard</span>
                     </div>
                   </a>
-                  <a href="profile.html" class="dropdown-item">
+                  <a href="pages/profile.html" class="dropdown-item">
                     <div class="item-left">
                       <i data-lucide="user"></i>
                       <span>Profile</span>
@@ -212,7 +212,7 @@
 
         <div class="card-preview">
           <!-- Card 1: Discovery Feed -->
-          <a href="feed.html" class="clickable-module feature-terminal-card">
+          <a href="pages/feed.html" class="clickable-module feature-terminal-card">
             <div class="card-terminal-bar">
               <div class="window-dots">
                 <div class="dot"></div>
@@ -235,7 +235,7 @@
           </a>
 
           <!-- Card 2: Beginner Zone -->
-          <a href="beginner.html" class="clickable-module feature-terminal-card">
+          <a href="pages/beginner.html" class="clickable-module feature-terminal-card">
             <div class="card-terminal-bar">
               <div class="window-dots">
                 <div class="dot"></div>
@@ -258,7 +258,7 @@
           </a>
 
           <!-- Card 3: Weekly Challenges -->
-          <a href="challenges.html" class="clickable-module feature-terminal-card">
+          <a href="pages/challenges.html" class="clickable-module feature-terminal-card">
             <div class="card-terminal-bar">
               <div class="window-dots">
                 <div class="dot"></div>
@@ -469,10 +469,10 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
 
   <!-- App Logic -->
-  <script src="auth.js" type="module" defer></script>
-  <script src="script.js" defer></script>
-  <script src="grid-terrain.js" defer></script>
-  <script src="cursor.js" defer></script>
+  <script src="scripts/auth.js" type="module" defer></script>
+  <script src="scripts/script.js" defer></script>
+  
+  
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();

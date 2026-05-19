@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchUserActivity(user.uid);
         } else if (!cachedUser) {
             // Only redirect if we don't even have a cached session
-            window.location.href = 'index.html?action=login';
+            window.location.href = '../index.html?action=login';
         }
     });
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtns = [document.getElementById('logout-btn'), document.getElementById('dashboard-logout-btn')];
     logoutBtns.forEach(btn => {
         btn?.addEventListener('click', () => {
-            auth.signOut().then(() => window.location.href = 'index.html');
+            auth.signOut().then(() => window.location.href = '../index.html');
         });
     });
 });

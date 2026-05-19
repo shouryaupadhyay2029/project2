@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cursor.css">
+    <link rel="stylesheet" href="../styles/global.css">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -1012,7 +1012,7 @@
 </head>
 
 <body class="home-page">
-    <script src="loader.js"></script>
+    <script src="../scripts/motion-engine.js"></script>
 
     <canvas id="c"></canvas>
 
@@ -1020,7 +1020,7 @@
     <nav class="navbar" id="main-navbar">
         <div class="nav-container">
             <div class="breadcrumb-header">
-                <a href="index.html" class="logo-bloom-wrapper" id="devstage-logo">
+                <a href="../index.html" class="logo-bloom-wrapper" id="devstage-logo">
                     <div class="logo-chars">
                         <span class="char" style="--i:0">D</span>
                         <span class="char" style="--i:1">e</span>
@@ -1054,7 +1054,7 @@
                     <!-- Premium Dropdown Menu -->
                     <div class="premium-dropdown" id="hamburger-dropdown">
                         <div class="dropdown-group primary-nav">
-                            <a href="index.html" class="dropdown-item nav-item-anim">Home</a>
+                            <a href="../index.html" class="dropdown-item nav-item-anim">Home</a>
                             <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
                             <a href="feed.html" class="dropdown-item nav-item-anim active-page">Feed</a>
                             <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
@@ -1222,7 +1222,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <script src="../scripts/firebase-config.js"></script>
 
     <script>
         'use strict';
@@ -1771,7 +1771,7 @@
             logoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 firebase.auth().signOut().then(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = '../index.html';
                 });
             });
         }
@@ -1842,7 +1842,7 @@
 
         lucide.createIcons();
     </script>
-    <script src="cursor.js" defer></script>
+    
 </body>
 
 </html>

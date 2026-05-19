@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             fetchPreviousUploads(user.uid);
         } else {
-            window.location.href = 'index.html?action=login';
+            window.location.href = '../index.html?action=login';
         }
     });
 

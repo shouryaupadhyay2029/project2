@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             checkGitHubConnection(user.uid);
         } else {
             // Public view logic could go here, but for now we redirect
-            window.location.href = 'index.html?action=login';
+            window.location.href = '../index.html?action=login';
         }
     });
 
