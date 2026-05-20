@@ -3,6 +3,19 @@
  * Combined, optimized, and verified by Antigravity
  */
 
+// Lightweight helpers used by multiple canvas systems
+const debounce = (fn, ms) => {
+    let id;
+    return (...args) => { clearTimeout(id);
+        id = setTimeout(() => fn(...args), ms); };
+};
+
+const onVisibilityChange = (pauseFn, resumeFn) => {
+    document.addEventListener('visibilitychange', () => {
+        document.hidden ? pauseFn() : resumeFn();
+    });
+};
+
 /* === SECTION 1: GLOBAL LOADER === */
 (function() {
     // 1. Create and Inject Loader HTML
@@ -76,8 +89,9 @@
         }, remaining);
     });
 
-    // Safety fallback
-    setTimeout(pageLoader.hide, 5000);
+    // Safety fallback — only fires if load never resolved
+    let safetyTimer = setTimeout(pageLoader.hide, 8000);
+    window.addEventListener('load', () => clearTimeout(safetyTimer));
 
     // 4. Page Transition Logic (Link Interception)
     document.addEventListener('click', (e) => {
@@ -149,6 +163,8 @@ const init3DCursor = () => {
 
     let isHovering = false;
     let hoverTarget = null;
+    let hoverRect = null;
+    let rafHandle = null;
     const LERP = 0.12;
 
     // 4. Input Tracking
@@ -156,23 +172,21 @@ const init3DCursor = () => {
         mouseX = e.clientX;
         mouseY = e.clientY;
 
-        if (isHovering && hoverTarget) {
-            const rect = hoverTarget.getBoundingClientRect();
+        if (isHovering && hoverTarget && hoverRect) {
+            const rect = hoverRect;
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            // Magnetic attraction effect
-            const pullX = (e.clientX - centerX) * 0.2;
-            const pullY = (e.clientY - centerY) * 0.2;
+            const pullX = (mouseX - centerX) * 0.2;
+            const pullY = (mouseY - centerY) * 0.2;
             hoverTarget.style.transform = `translate3d(${pullX}px, ${pullY - 2}px, 0) scale(1.02)`;
 
-            // Sticky cursor positioning
             const padding = 8;
             targetX = rect.left - padding + (pullX * 0.5);
             targetY = rect.top - padding + (pullY * 0.5);
-            targetW = rect.width + (padding * 2);
-            targetH = rect.height + (padding * 2);
-            targetR = 12; // Square-ish rounded corners on hover
+            targetW = rect.width + padding * 2;
+            targetH = rect.height + padding * 2;
+            targetR = 12;
         } else {
             targetX = mouseX - (targetW / 2);
             targetY = mouseY - (targetH / 2);
@@ -180,7 +194,7 @@ const init3DCursor = () => {
             targetH = 24;
             targetR = 50;
         }
-    });
+    }, { passive: true });
 
     // 5. Interaction Listeners
     document.addEventListener('mouseover', (e) => {
@@ -188,10 +202,11 @@ const init3DCursor = () => {
         if (target) {
             isHovering = true;
             hoverTarget = target;
+            hoverRect = target.getBoundingClientRect();
             cursor.classList.add('is-hovering');
             target.classList.add('energy-field-active');
         }
-    });
+    }, { passive: true });
 
     document.addEventListener('mouseout', (e) => {
         const target = e.target.closest('a, button, input, .clickable, .dropdown-item');
@@ -199,13 +214,18 @@ const init3DCursor = () => {
             isHovering = false;
             if (hoverTarget) hoverTarget.style.transform = '';
             hoverTarget = null;
+            hoverRect = null;
             cursor.classList.remove('is-hovering');
             target.classList.remove('energy-field-active');
         }
-    });
+    }, { passive: true });
 
-    document.addEventListener('mousedown', () => cursor.classList.add('is-clicking'));
-    document.addEventListener('mouseup', () => cursor.classList.remove('is-clicking'));
+    window.addEventListener('scroll', () => {
+        if (hoverTarget) hoverRect = hoverTarget.getBoundingClientRect();
+    }, { passive: true });
+
+    document.addEventListener('mousedown', () => cursor.classList.add('is-clicking'), { passive: true });
+    document.addEventListener('mouseup', () => cursor.classList.remove('is-clicking'), { passive: true });
 
     // 6. Animation Loop (60fps)
     const animate = () => {
@@ -221,10 +241,15 @@ const init3DCursor = () => {
         borderRing.style.height = `${currentH}px`;
         borderRing.style.borderRadius = `${currentR}%`;
 
-        requestAnimationFrame(animate);
+        rafHandle = requestAnimationFrame(animate);
     };
 
-    animate();
+    const pauseCursor = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
+            rafHandle = null; } };
+    const resumeCursor = () => { if (!rafHandle) rafHandle = requestAnimationFrame(animate); };
+    onVisibilityChange(pauseCursor, resumeCursor);
+
+    rafHandle = requestAnimationFrame(animate);
     console.log("3D Hollow Cursor Restored Everywhere");
 };
 
@@ -251,9 +276,11 @@ const initParticleWaveSystem = (canvas) => {
     let mouse = { x: -9999, y: -9999 };
     let cursorVisible = false;
     let gradient;
+    let rafHandle = null;
 
     function resize() {
-        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        const isMobile = window.innerWidth < 768;
+        DPR = Math.min(isMobile ? 1.5 : 2, window.devicePixelRatio || 1);
         W = window.innerWidth;
         H = window.innerHeight;
         canvas.width = W * DPR;
@@ -325,6 +352,7 @@ const initParticleWaveSystem = (canvas) => {
         const mx = mouse.x * DPR;
         const my = mouse.y * DPR;
         const repelR = CFG.repelRadius * DPR;
+        const repelR2 = repelR * repelR;
 
         for (let i = 0; i < particles.length; i++) {
             const p = particles[i];
@@ -338,7 +366,7 @@ const initParticleWaveSystem = (canvas) => {
             let repX = 0,
                 repY = 0;
 
-            if (d2 < repelR * repelR && d2 > 0.25) {
+            if (d2 < repelR2 && d2 > 0.25) {
                 const dist = sqrt(d2);
                 const strength = (1 - dist / repelR) ** 2;
                 repX = -(dx / dist) * strength * CFG.repelForce * DPR;
@@ -397,9 +425,15 @@ const initParticleWaveSystem = (canvas) => {
         mouse.y = e.touches[0].clientY;
     }, { passive: true });
 
-    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('resize', debounce(resize, 100), { passive: true });
     resize();
-    draw();
+
+    const pauseWave = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
+            rafHandle = null; } };
+    const resumeWave = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
+    onVisibilityChange(pauseWave, resumeWave);
+
+    rafHandle = requestAnimationFrame(draw);
     console.log("[DevStage] Particle Wave System Restored");
 };
 
@@ -409,19 +443,21 @@ const initGridDistortionSystem = (canvas) => {
 
     let width = window.innerWidth;
     let height = window.innerHeight;
+    let rafHandle = null;
 
     // ── Resize with DPI support ─────────────────────────────────
     function resize() {
         width = window.innerWidth;
         height = window.innerHeight;
-        const dpr = window.devicePixelRatio || 1;
+        const isMobile = width < 768;
+        const dpr = Math.min(isMobile ? 1.5 : 2, window.devicePixelRatio || 1);
         canvas.width = width * dpr;
         canvas.height = height * dpr;
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', debounce(resize, 100), { passive: true });
     resize();
 
     // ── Cursor State ─────────────────────────────────────────────
@@ -436,12 +472,12 @@ const initGridDistortionSystem = (canvas) => {
         targetX = e.clientX;
         targetY = e.clientY;
         isOnPage = true;
-    });
+    }, { passive: true });
 
     // Smoothly exit when cursor leaves the window
     window.addEventListener('mouseleave', () => {
         isOnPage = false;
-    });
+    }, { passive: true });
 
     // Input field tension boost
     document.addEventListener('focusin', (e) => {
@@ -565,7 +601,12 @@ const initGridDistortionSystem = (canvas) => {
         requestAnimationFrame(draw);
     }
 
-    draw();
+    const pauseDistortion = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
+            rafHandle = null; } };
+    const resumeDistortion = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
+    onVisibilityChange(pauseDistortion, resumeDistortion);
+
+    rafHandle = requestAnimationFrame(draw);
     console.log("[DevStage] Grid Distortion System Restored");
 };
 
@@ -585,11 +626,13 @@ const initTerrainSystem = (cv) => {
     const FAR_Z = 1000;
 
     let DPR = Math.max(1, window.devicePixelRatio || 1);
+    let rafHandle = null;
 
     function resize() {
         W = window.innerWidth;
         H = window.innerHeight;
-        DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+        const isMobile = W < 768;
+        DPR = Math.min(isMobile ? 1.5 : 2, Math.max(1, window.devicePixelRatio || 1));
         cv.width = Math.floor(W * DPR);
         cv.height = Math.floor(H * DPR);
         cv.style.width = W + 'px';
@@ -736,11 +779,16 @@ const initTerrainSystem = (cv) => {
         M.y = e.touches[0].clientY;
         M.on = true;
     }, { passive: false });
-    cv.addEventListener('touchend', () => { M.on = false; });
-    window.addEventListener('resize', resize);
+    cv.addEventListener('touchend', () => { M.on = false; }, { passive: true });
+    window.addEventListener('resize', debounce(resize, 100), { passive: true });
+
+    const pauseTerrain = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
+            rafHandle = null; } };
+    const resumeTerrain = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
+    onVisibilityChange(pauseTerrain, resumeTerrain);
 
     resize();
-    draw();
+    rafHandle = requestAnimationFrame(draw);
     console.log("[DevStage] Terrain System Restored");
 };
 
@@ -756,6 +804,7 @@ const initUploadMeshSystem = (canvas) => {
             this.mouse = { x: -1000, y: -1000, onCanvas: false };
             this.ripples = [];
             this.lastRippleTime = 0;
+            this.rafHandle = null;
 
             this.layers = [{
                     cols: 12,
@@ -794,30 +843,40 @@ const initUploadMeshSystem = (canvas) => {
 
         init() {
             this.resize();
-            window.addEventListener('resize', () => this.resize());
+            window.addEventListener('resize', debounce(() => this.resize(), 100), { passive: true });
 
             window.addEventListener('mousemove', (e) => {
                 this.mouse.x = e.clientX;
                 this.mouse.y = e.clientY;
                 this.mouse.onCanvas = true;
-            });
+            }, { passive: true });
 
             window.addEventListener('mouseout', () => {
                 this.mouse.onCanvas = false;
-            });
+            }, { passive: true });
 
             window.addEventListener('mousedown', (e) => {
                 this.spawnRipple(e.clientX, e.clientY);
-            });
+            }, { passive: true });
 
-            requestAnimationFrame((t) => this.animate(t));
+            const pause = () => { if (this.rafHandle) { cancelAnimationFrame(this.rafHandle);
+                    this.rafHandle = null; } };
+            const resume = () => { if (!this.rafHandle) this.rafHandle = requestAnimationFrame((t) => this.animate(t)); };
+            onVisibilityChange(pause, resume);
+
+            this.rafHandle = requestAnimationFrame((t) => this.animate(t));
         }
 
         resize() {
             this.width = window.innerWidth;
             this.height = window.innerHeight;
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
+            const isMobile = this.width < 768;
+            const dpr = Math.min(isMobile ? 1.5 : 2, Math.max(1, window.devicePixelRatio || 1));
+            this.canvas.width = Math.floor(this.width * dpr);
+            this.canvas.height = Math.floor(this.height * dpr);
+            this.canvas.style.width = `${this.width}px`;
+            this.canvas.style.height = `${this.height}px`;
+            this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
         spawnRipple(x, y) {
@@ -831,7 +890,7 @@ const initUploadMeshSystem = (canvas) => {
 
         animate(timestamp) {
             if (document.hidden) {
-                requestAnimationFrame((t) => this.animate(t));
+                this.rafHandle = requestAnimationFrame((t) => this.animate(t));
                 return;
             }
 
@@ -852,7 +911,7 @@ const initUploadMeshSystem = (canvas) => {
                 this.drawLayerDots(layer);
             });
 
-            requestAnimationFrame((t) => this.animate(t));
+            this.rafHandle = requestAnimationFrame((t) => this.animate(t));
         }
 
         computeLayer(layer, timestamp) {
