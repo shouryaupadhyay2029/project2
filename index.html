@@ -2,58 +2,56 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevStage | Student Project Platform</title>
-  <meta name="description"
-    content="DevStage is a modern platform for students to showcase their projects, find teams, and level up their skills.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevStage | Student Project Platform</title>
+    <meta name="description" content="DevStage is a modern platform for students to showcase their projects, find teams, and level up their skills.">
 
-  <!-- Premium Typography: Clash Display & Inter -->
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
-    rel="stylesheet">
+    <!-- Premium Typography: Clash Display & Inter -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-  <link rel="stylesheet" href="styles/global.css">
-  
+    <link rel="stylesheet" href="styles/global.css">
+
 </head>
 
 <body class="home-page">
-  <!-- Core Loader Logic -->
-  <script src="scripts/motion-engine.js"></script>
+    <!-- Core Loader Logic -->
+    <script src="scripts/motion-engine.js" defer></script>
 
-  <canvas id="c" aria-hidden="true"></canvas>
+    <canvas id="c" aria-hidden="true"></canvas>
 
-  <div class="main-wrapper">
-    <div class="hero-section">
-      <nav class="navbar" id="main-navbar">
-        <div class="nav-container">
+    <div class="main-wrapper">
+        <div class="hero-section">
+            <nav class="navbar" id="main-navbar">
+                <div class="nav-container">
 
-          <!-- Left: Logo -->
-          <a href="#" class="logo-bloom-wrapper" id="devstage-logo">
-            <div class="logo-chars">
-              <span class="char" style="--i:0">D</span>
-              <span class="char" style="--i:1">e</span>
-              <span class="char" style="--i:2">v</span>
-              <div class="logo-separator"></div>
-              <span class="char outline" style="--i:3">S</span>
-              <span class="char outline" style="--i:4">t</span>
-              <span class="char outline" style="--i:5">a</span>
-              <span class="char outline" style="--i:6">g</span>
-              <span class="char outline" style="--i:7">e</span>
-              <div class="logo-dot"></div>
-            </div>
-            <div class="logo-underline"></div>
-          </a>
+                    <!-- Left: Logo -->
+                    <a href="#" class="logo-bloom-wrapper" id="devstage-logo">
+                        <div class="logo-chars">
+                            <span class="char" style="--i:0">D</span>
+                            <span class="char" style="--i:1">e</span>
+                            <span class="char" style="--i:2">v</span>
+                            <div class="logo-separator"></div>
+                            <span class="char outline" style="--i:3">S</span>
+                            <span class="char outline" style="--i:4">t</span>
+                            <span class="char outline" style="--i:5">a</span>
+                            <span class="char outline" style="--i:6">g</span>
+                            <span class="char outline" style="--i:7">e</span>
+                            <div class="logo-dot"></div>
+                        </div>
+                        <div class="logo-underline"></div>
+                    </a>
 
-          <!-- Center: Search Bar (Uiverse Animated) -->
-          <div class="input-container">
-            <input type="text" name="text" class="input" placeholder="Search..." id="nav-search" autocomplete="off">
-            <span class="icon">
+                    <!-- Center: Search Bar (Uiverse Animated) -->
+                    <div class="input-container">
+                        <input type="text" name="text" class="input" placeholder="Search..." id="nav-search" autocomplete="off">
+                        <span class="icon">
               <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path opacity="0.6" d="M14 5H20" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round"></path>
@@ -66,108 +64,105 @@
                   stroke-linejoin="round"></path>
               </svg>
             </span>
-          </div>
-
-          <!-- Right: Navigation & Profile -->
-          <div class="nav-menu">
-            <ul class="nav-links" id="nav-links">
-              <li>
-                <a href="pages/explore.html" class="fancy">
-                  <span class="top-key"></span>
-                  <span class="text">Explore</span>
-                  <span class="bottom-key-1"></span>
-                  <span class="bottom-key-2"></span>
-                </a>
-              </li>
-              <li>
-                <a href="pages/upload.html" class="fancy" id="nav-upload-btn">
-                  <span class="top-key"></span>
-                  <span class="text">Upload</span>
-                  <span class="bottom-key-1"></span>
-                  <span class="bottom-key-2"></span>
-                </a>
-              </li>
-              <li>
-                <a href="pages/teams.html" class="fancy" id="nav-teams-btn">
-                  <span class="top-key"></span>
-                  <span class="text">Teams</span>
-                  <span class="bottom-key-1"></span>
-                  <span class="bottom-key-2"></span>
-                </a>
-              </li>
-            </ul>
-
-            <!-- GUEST SECTION -->
-            <div class="auth-controls" id="guestSection">
-              <button id="loginBtn" class="nav-link-btn">Login</button>
-              <button id="signupBtn" class="button-primary-sm">Sign Up</button>
-            </div>
-
-            <!-- USER SECTION -->
-            <div class="profile-container" id="userSection" style="display:none;">
-              <div class="profile-avatar" id="user-profile">
-                <img id="navAvatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff"
-                  alt="User Profile">
-              </div>
-              <span id="navName" style="display: none;"></span>
-
-              <!-- Profile Dropdown -->
-              <div class="profile-dropdown" id="profile-dropdown">
-                <div class="dropdown-header">
-                  <p class="user-name" id="dropdown-user-name">Guest User</p>
-                  <p class="user-email" id="dropdown-user-email">guest@example.com</p>
-                </div>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-content">
-                  <a href="pages/dashboard.html" class="dropdown-item">
-                    <div class="item-left">
-                      <i data-lucide="layout-dashboard"></i>
-                      <span>Dashboard</span>
                     </div>
-                  </a>
-                  <a href="pages/profile.html" class="dropdown-item">
-                    <div class="item-left">
-                      <i data-lucide="user"></i>
-                      <span>Profile</span>
-                    </div>
-                  </a>
-                  <a href="#" class="dropdown-item">
-                    <div class="item-left">
-                      <i data-lucide="settings"></i>
-                      <span>Settings</span>
-                    </div>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
+
+                    <!-- Right: Navigation & Profile -->
+                    <div class="nav-menu">
+                        <ul class="nav-links" id="nav-links">
+                            <li>
+                                <a href="pages/explore.html" class="fancy">
+                                    <span class="top-key"></span>
+                                    <span class="text">Explore</span>
+                                    <span class="bottom-key-1"></span>
+                                    <span class="bottom-key-2"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="pages/upload.html" class="fancy" id="nav-upload-btn">
+                                    <span class="top-key"></span>
+                                    <span class="text">Upload</span>
+                                    <span class="bottom-key-1"></span>
+                                    <span class="bottom-key-2"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="pages/teams.html" class="fancy" id="nav-teams-btn">
+                                    <span class="top-key"></span>
+                                    <span class="text">Teams</span>
+                                    <span class="bottom-key-1"></span>
+                                    <span class="bottom-key-2"></span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- GUEST SECTION -->
+                        <div class="auth-controls" id="guestSection">
+                            <button id="loginBtn" class="nav-link-btn">Login</button>
+                            <button id="signupBtn" class="button-primary-sm">Sign Up</button>
+                        </div>
+
+                        <!-- USER SECTION -->
+                        <div class="profile-container" id="userSection" style="display:none;">
+                            <div class="profile-avatar" id="user-profile">
+                                <img id="navAvatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
+                            </div>
+                            <span id="navName" style="display: none;"></span>
+
+                            <!-- Profile Dropdown -->
+                            <div class="profile-dropdown" id="profile-dropdown">
+                                <div class="dropdown-header">
+                                    <p class="user-name" id="dropdown-user-name">Guest User</p>
+                                    <p class="user-email" id="dropdown-user-email">guest@example.com</p>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-content">
+                                    <a href="pages/dashboard.html" class="dropdown-item">
+                                        <div class="item-left">
+                                            <i data-lucide="layout-dashboard"></i>
+                                            <span>Dashboard</span>
+                                        </div>
+                                    </a>
+                                    <a href="pages/profile.html" class="dropdown-item">
+                                        <div class="item-left">
+                                            <i data-lucide="user"></i>
+                                            <span>Profile</span>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="item-left">
+                                            <i data-lucide="settings"></i>
+                                            <span>Settings</span>
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
                     <div class="item-left">
                       <i data-lucide="log-out"></i>
                       <span>Logout</span>
                     </div>
                   </button>
-                </div>
-              </div>
-            </div>
+                                </div>
+                            </div>
+                        </div>
 
-            <!-- Mobile Hamburger -->
-            <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
+                        <!-- Mobile Hamburger -->
+                        <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
               <span></span>
               <span></span>
               <span></span>
             </button>
-          </div>
+                    </div>
 
-        </div>
-      </nav>
+                </div>
+            </nav>
 
-      <main class="hero">
-        <div class="hero-glow"></div>
-        <div class="hero-content">
-          <span class="hero-tag">Student Project Platform</span>
-          <h1 class="hero-title">
-            <span>Build.</span>
-            <svg
-              style="display:inline; overflow:visible; width:auto; height:1.15em; vertical-align: -0.18em; margin: 0 -0.05em;"
-              viewBox="0 0 380 130" xmlns="http://www.w3.org/2000/svg">
+            <main class="hero">
+                <div class="hero-glow"></div>
+                <div class="hero-content">
+                    <span class="hero-tag">Student Project Platform</span>
+                    <h1 class="hero-title">
+                        <span>Build.</span>
+                        <svg style="display:inline; overflow:visible; width:auto; height:1.15em; vertical-align: -0.18em; margin: 0 -0.05em;" viewBox="0 0 380 130" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <clipPath id="shareClip">
                   <text x="190" y="108" text-anchor="middle" font-family="inherit" font-size="115" font-weight="800"
@@ -205,277 +200,276 @@
                 Share.
               </text>
             </svg>
-            <span>Improve.</span>
-          </h1>
-          <p>A platform where students showcase projects, get real feedback, and find teammates.</p>
-        </div>
+                        <span>Improve.</span>
+                    </h1>
+                    <p>A platform where students showcase projects, get real feedback, and find teammates.</p>
+                </div>
 
-        <div class="card-preview">
-          <!-- Card 1: Discovery Feed -->
-          <a href="pages/feed.html" class="clickable-module feature-terminal-card">
-            <div class="card-terminal-bar">
-              <div class="window-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-              </div>
-              <div class="system-label">discover_feed.sys</div>
-              <div class="status-chip recruiting"
-                style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
-                LIVE</div>
+                <div class="card-preview">
+                    <!-- Card 1: Discovery Feed -->
+                    <a href="pages/feed.html" class="clickable-module feature-terminal-card">
+                        <div class="card-terminal-bar">
+                            <div class="window-dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                            <div class="system-label">discover_feed.sys</div>
+                            <div class="status-chip recruiting" style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
+                                LIVE</div>
+                        </div>
+                        <div class="card-inner-content">
+                            <div class="card-icon"><i data-lucide="layout-list"></i></div>
+                            <h3 class="card-title">Live Discovery Feed</h3>
+                            <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.
+                            </p>
+                            <span class="card-action-text">→ OPEN FEED</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </a>
+
+                    <!-- Card 2: Beginner Zone -->
+                    <a href="pages/beginner.html" class="clickable-module feature-terminal-card">
+                        <div class="card-terminal-bar">
+                            <div class="window-dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                            <div class="system-label">beginner_zone.init</div>
+                            <div class="status-chip active" style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
+                                READY</div>
+                        </div>
+                        <div class="card-inner-content">
+                            <div class="card-icon"><i data-lucide="seedling"></i></div>
+                            <h3 class="card-title">Beginner Zone</h3>
+                            <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided inspiration.
+                            </p>
+                            <span class="card-action-text">→ START EXPLORING</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </a>
+
+                    <!-- Card 3: Weekly Challenges -->
+                    <a href="pages/challenges.html" class="clickable-module feature-terminal-card">
+                        <div class="card-terminal-bar">
+                            <div class="window-dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                            <div class="system-label">weekly_challenges.exe</div>
+                            <div class="status-chip recruiting" style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
+                                ACTIVE</div>
+                        </div>
+                        <div class="card-inner-content">
+                            <div class="card-icon"><i data-lucide="trophy"></i></div>
+                            <h3 class="card-title">Weekly Challenges</h3>
+                            <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
+                            <span class="card-action-text">→ VIEW CHALLENGES</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </a>
+                </div>
+            </main>
+
+        </div>
+        <!-- End Hero Section -->
+
+        <!-- Awwwards-Inspired Explore Section -->
+        <section class="lower-section">
+            <div class="vertical-waves"></div>
+            <div class="explore-discovery-container">
+                <div class="discovery-header">
+                    <span class="badge-premium">Discovery Engine</span>
+                    <h2 class="discovery-title">Explore Global Projects</h2>
+                    <p class="discovery-subtitle">Curated by the community, built by students.</p>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-dropdown" id="domain-dropdown">
+                        <div class="filter-trigger">All Domains <span class="tilt-line"></span></div>
+                        <div class="filter-menu">
+                            <div class="menu-col">
+                                <p class="menu-title">Primary Domains</p>
+                                <a data-value="all" class="active">All Domains</a>
+                                <a data-value="web">Web Development</a>
+                                <a data-value="app">Mobile Apps</a>
+                                <a data-value="ai">AI / ML</a>
+                                <a data-value="design">UI/UX Design</a>
+                            </div>
+                            <div class="menu-col">
+                                <p class="menu-title">Specialized</p>
+                                <a data-value="blockchain">Blockchain</a>
+                                <a data-value="cyber">Cybersecurity</a>
+                                <a data-value="data">Data Science</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-dropdown" id="tech-dropdown">
+                        <div class="filter-trigger">All Tech <span class="tilt-line"></span></div>
+                        <div class="filter-menu">
+                            <div class="menu-col">
+                                <p class="menu-title">Languages</p>
+                                <a data-value="all" class="active">All Tech</a>
+                                <a data-value="python">Python</a>
+                                <a data-value="javascript">JavaScript</a>
+                                <a data-value="java">Java</a>
+                                <a data-value="cpp">C++</a>
+                            </div>
+                            <div class="menu-col">
+                                <p class="menu-title">Frameworks</p>
+                                <a data-value="react">React</a>
+                                <a data-value="node">Node.js</a>
+                                <a data-value="figma">Figma</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-dropdown" id="difficulty-dropdown">
+                        <div class="filter-trigger">Difficulty <span class="tilt-line"></span></div>
+                        <div class="filter-menu">
+                            <div class="menu-col">
+                                <p class="menu-title">Level</p>
+                                <a data-value="all" class="active">All Levels</a>
+                                <a data-value="beginner">Beginner</a>
+                                <a data-value="intermediate">Intermediate</a>
+                                <a data-value="advanced">Advanced</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-dropdown" id="sort-dropdown">
+                        <div class="filter-trigger">Newest First <span class="tilt-line"></span></div>
+                        <div class="filter-menu">
+                            <div class="menu-col">
+                                <p class="menu-title">Sort By</p>
+                                <a data-value="newest" class="active">Newest First</a>
+                                <a data-value="likes">Most Liked</a>
+                                <a data-value="views">Most Viewed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discovery Layout: Grid + Sidebar -->
+                <div class="discovery-layout">
+                    <!-- Project Grid -->
+                    <div id="explore-grid" class="discovery-grid">
+                        <!-- Cards injected by Firestore -->
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                    </div>
+
+                    <!-- Activity Sidebar -->
+                    <aside class="activity-pulse-sidebar">
+                        <div class="sidebar-header">
+                            <i data-lucide="zap" class="pulse-icon"></i>
+                            <h3>Activity Pulse</h3>
+                        </div>
+                        <div id="activity-list" class="activity-list">
+                            <!-- Activity items injected by JS -->
+                            <p class="loading-text">Monitoring community...</p>
+                        </div>
+                    </aside>
+                </div>
+
+                <!-- Feed Footer -->
+                <div class="feed-footer">
+                    <div class="feed-footer-line"></div>
+                    <span class="feed-footer-label">More projects loading&hellip;</span>
+                    <div class="feed-footer-line"></div>
+                </div>
+
             </div>
-            <div class="card-inner-content">
-              <div class="card-icon"><i data-lucide="layout-list"></i></div>
-              <h3 class="card-title">Live Discovery Feed</h3>
-              <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.
-              </p>
-              <span class="card-action-text">→ OPEN FEED</span>
-            </div>
+        </section>
+    </div>
+    <!-- End Main Wrapper -->
+
+    <!-- Custom Scrollbar -->
+    <div id="custom-scrollbar" class="scrollbar-container">
+        <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
+    </div>
+
+
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-card" id="auth-card">
             <div class="card-glow"></div>
-          </a>
-
-          <!-- Card 2: Beginner Zone -->
-          <a href="pages/beginner.html" class="clickable-module feature-terminal-card">
-            <div class="card-terminal-bar">
-              <div class="window-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-              </div>
-              <div class="system-label">beginner_zone.init</div>
-              <div class="status-chip active"
-                style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
-                READY</div>
-            </div>
-            <div class="card-inner-content">
-              <div class="card-icon"><i data-lucide="seedling"></i></div>
-              <h3 class="card-title">Beginner Zone</h3>
-              <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided
-                inspiration.</p>
-              <span class="card-action-text">→ START EXPLORING</span>
-            </div>
-            <div class="card-glow"></div>
-          </a>
-
-          <!-- Card 3: Weekly Challenges -->
-          <a href="pages/challenges.html" class="clickable-module feature-terminal-card">
-            <div class="card-terminal-bar">
-              <div class="window-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-              </div>
-              <div class="system-label">weekly_challenges.exe</div>
-              <div class="status-chip recruiting"
-                style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
-                ACTIVE</div>
-            </div>
-            <div class="card-inner-content">
-              <div class="card-icon"><i data-lucide="trophy"></i></div>
-              <h3 class="card-title">Weekly Challenges</h3>
-              <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
-              <span class="card-action-text">→ VIEW CHALLENGES</span>
-            </div>
-            <div class="card-glow"></div>
-          </a>
-        </div>
-      </main>
-
-    </div> <!-- End Hero Section -->
-
-    <!-- Awwwards-Inspired Explore Section -->
-    <section class="lower-section">
-      <div class="vertical-waves"></div>
-      <div class="explore-discovery-container">
-        <div class="discovery-header">
-          <span class="badge-premium">Discovery Engine</span>
-          <h2 class="discovery-title">Explore Global Projects</h2>
-          <p class="discovery-subtitle">Curated by the community, built by students.</p>
-        </div>
-
-        <!-- Filter Bar -->
-        <div class="filter-bar">
-          <div class="filter-dropdown" id="domain-dropdown">
-            <div class="filter-trigger">All Domains <span class="tilt-line"></span></div>
-            <div class="filter-menu">
-              <div class="menu-col">
-                <p class="menu-title">Primary Domains</p>
-                <a data-value="all" class="active">All Domains</a>
-                <a data-value="web">Web Development</a>
-                <a data-value="app">Mobile Apps</a>
-                <a data-value="ai">AI / ML</a>
-                <a data-value="design">UI/UX Design</a>
-              </div>
-              <div class="menu-col">
-                <p class="menu-title">Specialized</p>
-                <a data-value="blockchain">Blockchain</a>
-                <a data-value="cyber">Cybersecurity</a>
-                <a data-value="data">Data Science</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="filter-dropdown" id="tech-dropdown">
-            <div class="filter-trigger">All Tech <span class="tilt-line"></span></div>
-            <div class="filter-menu">
-              <div class="menu-col">
-                <p class="menu-title">Languages</p>
-                <a data-value="all" class="active">All Tech</a>
-                <a data-value="python">Python</a>
-                <a data-value="javascript">JavaScript</a>
-                <a data-value="java">Java</a>
-                <a data-value="cpp">C++</a>
-              </div>
-              <div class="menu-col">
-                <p class="menu-title">Frameworks</p>
-                <a data-value="react">React</a>
-                <a data-value="node">Node.js</a>
-                <a data-value="figma">Figma</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="filter-dropdown" id="difficulty-dropdown">
-            <div class="filter-trigger">Difficulty <span class="tilt-line"></span></div>
-            <div class="filter-menu">
-              <div class="menu-col">
-                <p class="menu-title">Level</p>
-                <a data-value="all" class="active">All Levels</a>
-                <a data-value="beginner">Beginner</a>
-                <a data-value="intermediate">Intermediate</a>
-                <a data-value="advanced">Advanced</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="filter-dropdown" id="sort-dropdown">
-            <div class="filter-trigger">Newest First <span class="tilt-line"></span></div>
-            <div class="filter-menu">
-              <div class="menu-col">
-                <p class="menu-title">Sort By</p>
-                <a data-value="newest" class="active">Newest First</a>
-                <a data-value="likes">Most Liked</a>
-                <a data-value="views">Most Viewed</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Discovery Layout: Grid + Sidebar -->
-        <div class="discovery-layout">
-          <!-- Project Grid -->
-          <div id="explore-grid" class="discovery-grid">
-            <!-- Cards injected by Firestore -->
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-          </div>
-
-          <!-- Activity Sidebar -->
-          <aside class="activity-pulse-sidebar">
-            <div class="sidebar-header">
-              <i data-lucide="zap" class="pulse-icon"></i>
-              <h3>Activity Pulse</h3>
-            </div>
-            <div id="activity-list" class="activity-list">
-              <!-- Activity items injected by JS -->
-              <p class="loading-text">Monitoring community...</p>
-            </div>
-          </aside>
-        </div>
-
-        <!-- Feed Footer -->
-        <div class="feed-footer">
-          <div class="feed-footer-line"></div>
-          <span class="feed-footer-label">More projects loading&hellip;</span>
-          <div class="feed-footer-line"></div>
-        </div>
-
-      </div>
-    </section>
-  </div> <!-- End Main Wrapper -->
-
-  <!-- Custom Scrollbar -->
-  <div id="custom-scrollbar" class="scrollbar-container">
-    <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
-  </div>
-
-
-
-  <!-- Auth Modal -->
-  <div id="auth-modal" class="modal-overlay">
-    <div class="modal-card" id="auth-card">
-      <div class="card-glow"></div>
-      <button id="close-auth-modal" class="modal-close" aria-label="Close">
+            <button id="close-auth-modal" class="modal-close" aria-label="Close">
         <i data-lucide="x"></i>
       </button>
 
-      <div class="auth-header">
-        <h2 id="auth-title">Welcome Back</h2>
-        <p class="auth-subtitle">Elevate your development stage</p>
-      </div>
+            <div class="auth-header">
+                <h2 id="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Elevate your development stage</p>
+            </div>
 
-      <div id="auth-message" class="auth-message"></div>
+            <div id="auth-message" class="auth-message"></div>
 
-      <form id="auth-form" class="auth-form">
-        <div class="floating-group">
-          <input type="email" id="auth-email" placeholder=" " required autocomplete="email">
-          <label for="auth-email">Email Address</label>
-          <div class="input-accent"></div>
-        </div>
+            <form id="auth-form" class="auth-form">
+                <div class="floating-group">
+                    <input type="email" id="auth-email" placeholder=" " required autocomplete="email">
+                    <label for="auth-email">Email Address</label>
+                    <div class="input-accent"></div>
+                </div>
 
-        <div class="floating-group">
-          <input type="password" id="auth-password" placeholder=" " required autocomplete="current-password">
-          <label for="auth-password">Password</label>
-          <div class="input-accent"></div>
-        </div>
+                <div class="floating-group">
+                    <input type="password" id="auth-password" placeholder=" " required autocomplete="current-password">
+                    <label for="auth-password">Password</label>
+                    <div class="input-accent"></div>
+                </div>
 
-        <button type="submit" id="auth-submit-btn" class="premium-btn">
+                <button type="submit" id="auth-submit-btn" class="premium-btn">
           <span>Sign In</span>
           <div class="btn-shine"></div>
         </button>
-      </form>
+            </form>
 
-      <div class="auth-divider">
-        <span>OR</span>
-      </div>
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
 
-      <div class="social-auth-group">
-        <button id="google-login-btn" class="social-btn google-btn">
+            <div class="social-auth-group">
+                <button id="google-login-btn" class="social-btn google-btn">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
           <span>Google</span>
         </button>
-        <button id="github-login-btn" class="social-btn github-btn">
+                <button id="github-login-btn" class="social-btn github-btn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
           </svg>
           <span>GitHub</span>
         </button>
-      </div>
+            </div>
 
-      <div class="auth-footer">
-        <p id="auth-toggle-text">
-          Don't have an account? <a href="#" id="toggle-auth">Sign Up</a>
-        </p>
-      </div>
+            <div class="auth-footer">
+                <p id="auth-toggle-text">
+                    Don't have an account? <a href="#" id="toggle-auth">Sign Up</a>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Firebase SDKs (Modular & Compat for gradual migration) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
+    <!-- Firebase SDKs (Modular & Compat for gradual migration) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
 
-  <!-- App Logic -->
-  <script src="scripts/auth.js" type="module" defer></script>
-  <script src="scripts/script.js" defer></script>
-  
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-    });
-  </script>
+    <!-- App Logic -->
+    <script src="scripts/auth.js" type="module" defer></script>
+    <script src="scripts/script.js" defer></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
 </body>

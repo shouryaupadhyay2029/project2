@@ -2,706 +2,732 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beginner Zone | DevStage</title>
-  <link rel="stylesheet" href="../styles/global.css">
-  
-  
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    /* Mesh Background Layering */
-    #upload-mesh-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: auto;
-    }
-
-    .navbar {
-      position: absolute !important;
-      z-index: 1000;
-    }
-
-    .zone-container,
-    #loader-wrapper {
-      position: relative;
-      z-index: 1;
-    }
-
-    .zone-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 40px;
-    }
-
-    /* Cinematic Hero Section */
-    .hero-beginner {
-      min-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      padding: 120px 20px 80px;
-      overflow: hidden;
-    }
-
-    .hero-labels {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 32px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .system-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .label-dot {
-      width: 4px;
-      height: 4px;
-      background: #ff8c42;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #ff8c42;
-      animation: pulse-amber 2s infinite;
-    }
-
-    .hero-beginner h1 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      color: #fff;
-      line-height: 1;
-      margin-bottom: 24px;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-    }
-
-    .hero-beginner h1 span {
-      color: #ff8c42;
-      position: relative;
-      display: inline-block;
-    }
-
-    .hero-subtitle {
-      max-width: 600px;
-      font-size: 1.15rem;
-      color: rgba(255, 255, 255, 0.5);
-      line-height: 1.7;
-      margin-bottom: 48px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
-    }
-
-    .hero-btn {
-      padding: 16px 32px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .hero-btn.primary {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #fff;
-      backdrop-filter: blur(10px);
-    }
-
-    .hero-btn.primary:hover {
-      background: #fff;
-      color: #000;
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-    }
-
-    .hero-btn.secondary {
-      background: rgba(255, 140, 66, 0.05);
-      border: 1px solid rgba(255, 140, 66, 0.15);
-      color: #ff8c42;
-      backdrop-filter: blur(10px);
-    }
-
-    .hero-btn.secondary:hover {
-      background: rgba(255, 140, 66, 0.1);
-      border-color: #ff8c42;
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(255, 140, 66, 0.15);
-    }
-
-    @keyframes hero-fade-up {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse-amber {
-      0%, 100% { opacity: 0.4; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
-
-    /* Ambient Hero Background Elements */
-    .hero-grid-depth {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      background-position: center center;
-      mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
-      pointer-events: none;
-      z-index: -1;
-      transform: perspective(1000px) rotateX(60deg) translateY(0);
-      animation: grid-drift 20s linear infinite;
-    }
-
-    @keyframes grid-drift {
-      from { background-position: 0 0; }
-      to { background-position: 0 60px; }
-    }
-
-    .section {
-      margin-top: 100px;
-      margin-bottom: 120px;
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-      color: #fff;
-      margin-bottom: 48px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      opacity: 0.8;
-      font-family: 'Syne', sans-serif;
-    }
-
-    /* Learning Path Cards */
-    .paths-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 32px;
-    }
-
-    .path-card {
-      background: rgba(20, 20, 24, 0.45);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .path-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      border-color: rgba(255, 140, 66, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 140, 66, 0.05);
-    }
-
-    /* Top Sweep Animation */
-    .path-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #ff8c42, transparent);
-      transition: all 0.6s ease;
-    }
-
-    .path-card:hover::before {
-      left: 100%;
-    }
-
-    .path-terminal-header {
-      background: rgba(255, 255, 255, 0.02);
-      padding: 10px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .path-filename {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      color: rgba(255, 255, 255, 0.3);
-      letter-spacing: 0.05em;
-    }
-
-    .path-body {
-      padding: 24px;
-      flex-grow: 1;
-    }
-
-    .path-body h3 {
-      font-size: 1.25rem;
-      color: #fff;
-      margin-bottom: 12px;
-      font-family: 'Syne', sans-serif;
-    }
-
-    .path-desc {
-      font-size: 0.88rem;
-      color: rgba(255, 255, 255, 0.5);
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-
-    .path-meta {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .path-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .path-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: #ff8c42;
-      background: rgba(255, 140, 66, 0.05);
-      padding: 4px 8px;
-      border: 1px solid rgba(255, 140, 66, 0.1);
-      border-radius: 4px;
-    }
-
-    .progress-preview {
-      margin-bottom: 24px;
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.25);
-      margin-bottom: 8px;
-    }
-
-    .progress-line {
-      height: 2px;
-      background: rgba(255, 255, 255, 0.05);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      background: #ff8c42;
-      opacity: 0.6;
-    }
-
-    .path-btn {
-      width: 100%;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .path-btn:hover {
-      background: #ff8c42;
-      border-color: #ff8c42;
-      color: #000;
-      transform: translateY(-2px);
-    }
-
-    /* Beginner Mission Cards */
-    .mission-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 32px;
-    }
-
-    .mission-card {
-      background: rgba(18, 18, 22, 0.45);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-
-    .mission-card:hover {
-      transform: translateY(-10px) rotateX(2deg) rotateY(2deg);
-      border-color: rgba(255, 140, 66, 0.35);
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.5),
-        0 0 40px rgba(255, 140, 66, 0.06);
-    }
-
-    /* Edge Lighting Follow */
-    .mission-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 140, 66, 0.12) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-
-    .mission-card:hover::after {
-      opacity: 1;
-    }
-
-    .mission-terminal-strip {
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.025);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .mission-codename {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.1em;
-      font-weight: 700;
-      transition: color 0.3s ease;
-    }
-
-    .mission-card:hover .mission-codename {
-      color: #ff8c42;
-    }
-
-    .mission-xp {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.55rem;
-      color: rgba(255, 255, 255, 0.35);
-      background: rgba(255, 255, 255, 0.04);
-      padding: 3px 10px;
-      border-radius: 20px;
-      transition: all 0.4s ease;
-    }
-
-    .mission-card:hover .mission-xp {
-      background: rgba(255, 140, 66, 0.12);
-      color: #ff8c42;
-      box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
-    }
-
-    .mission-content {
-      padding: 24px;
-      position: relative;
-      z-index: 2;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .mission-card:hover .mission-content {
-      transform: translateZ(20px);
-    }
-
-    .mission-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-
-    .mission-title {
-      font-size: 1.3rem;
-      color: #fff;
-      font-family: 'Syne', sans-serif;
-      line-height: 1.2;
-    }
-
-    .status-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.55rem;
-      color: rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 6px;
-      letter-spacing: 0.05em;
-      backdrop-filter: blur(4px);
-    }
-
-    .mission-desc {
-      font-size: 0.88rem;
-      color: rgba(255, 255, 255, 0.45);
-      margin-bottom: 24px;
-      line-height: 1.6;
-    }
-
-    .mission-stats {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 24px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .stat-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .stat-label {
-      font-size: 0.6rem;
-      color: rgba(255, 255, 255, 0.25);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .stat-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    /* Animated Progress Line */
-    .mission-progress-container {
-      margin-bottom: 24px;
-      opacity: 0.3;
-      transition: opacity 0.4s ease;
-    }
-
-    .mission-card:hover .mission-progress-container {
-      opacity: 1;
-    }
-
-    .mission-progress-line {
-      height: 2px;
-      background: rgba(255, 255, 255, 0.05);
-      position: relative;
-      overflow: hidden;
-      border-radius: 2px;
-    }
-
-    .progress-energy {
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, #ff8c42, transparent);
-      animation: energy-sweep 3s infinite linear;
-    }
-
-    @keyframes energy-sweep {
-      from { left: -100%; }
-      to { left: 100%; }
-    }
-
-    /* Interactive Checklist */
-    .mission-checklist {
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-top: -12px;
-    }
-
-    .mission-card:hover .mission-checklist {
-      max-height: 200px;
-      opacity: 1;
-      margin-top: 0;
-      margin-bottom: 24px;
-    }
-
-    .checklist-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      color: rgba(255, 255, 255, 0.3);
-      margin-bottom: 10px;
-      transform: translateX(-10px);
-      transition: all 0.4s ease;
-    }
-
-    .mission-card:hover .checklist-item {
-      transform: translateX(0);
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* Staggered Checklist Entry */
-    .mission-card:hover .checklist-item:nth-child(1) { transition-delay: 0.1s; }
-    .mission-card:hover .checklist-item:nth-child(2) { transition-delay: 0.2s; }
-    .mission-card:hover .checklist-item:nth-child(3) { transition-delay: 0.3s; }
-    .mission-card:hover .checklist-item:nth-child(4) { transition-delay: 0.4s; }
-
-    .checklist-box {
-      width: 14px;
-      height: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 3px;
-      position: relative;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .mission-card:hover .checklist-box {
-      border-color: rgba(255, 140, 66, 0.2);
-    }
-
-    .mission-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .skill-unlock {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.4s ease 0.5s;
-    }
-
-    .mission-card:hover .skill-unlock {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .unlock-label {
-      font-size: 0.6rem;
-      color: rgba(255, 140, 66, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .unlock-value {
-      font-size: 0.75rem;
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .mission-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      color: rgba(255, 140, 66, 0.8);
-      text-decoration: none;
-      font-weight: 700;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 10px 18px;
-      background: rgba(255, 140, 66, 0.03);
-      border: 1px solid rgba(255, 140, 66, 0.15);
-      border-radius: 8px;
-    }
-
-    .mission-btn:hover {
-      background: rgba(255, 140, 66, 0.12);
-      color: #ff8c42;
-      border-color: #ff8c42;
-      box-shadow: 0 0 20px rgba(255, 140, 66, 0.15);
-      transform: scale(1.05);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginner Zone | DevStage</title>
+    <link rel="stylesheet" href="../styles/global.css">
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Mesh Background Layering */
+        
+        #upload-mesh-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: auto;
+        }
+        
+        .navbar {
+            position: absolute !important;
+            z-index: 1000;
+        }
+        
+        .zone-container,
+        #loader-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .zone-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        /* Cinematic Hero Section */
+        
+        .hero-beginner {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 120px 20px 80px;
+            overflow: hidden;
+        }
+        
+        .hero-labels {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .system-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .label-dot {
+            width: 4px;
+            height: 4px;
+            background: #ff8c42;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff8c42;
+            animation: pulse-amber 2s infinite;
+        }
+        
+        .hero-beginner h1 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+        
+        .hero-beginner h1 span {
+            color: #ff8c42;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-subtitle {
+            max-width: 600px;
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.7;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+        }
+        
+        .hero-btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .hero-btn.primary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-btn.primary:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-btn.secondary {
+            background: rgba(255, 140, 66, 0.05);
+            border: 1px solid rgba(255, 140, 66, 0.15);
+            color: #ff8c42;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-btn.secondary:hover {
+            background: rgba(255, 140, 66, 0.1);
+            border-color: #ff8c42;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255, 140, 66, 0.15);
+        }
+        
+        @keyframes hero-fade-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse-amber {
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+        /* Ambient Hero Background Elements */
+        
+        .hero-grid-depth {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center center;
+            mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+            pointer-events: none;
+            z-index: -1;
+            transform: perspective(1000px) rotateX(60deg) translateY(0);
+            animation: grid-drift 20s linear infinite;
+        }
+        
+        @keyframes grid-drift {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 0 60px;
+            }
+        }
+        
+        .section {
+            margin-top: 100px;
+            margin-bottom: 120px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 48px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.8;
+            font-family: 'Syne', sans-serif;
+        }
+        /* Learning Path Cards */
+        
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 32px;
+        }
+        
+        .path-card {
+            background: rgba(20, 20, 24, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .path-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(255, 140, 66, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 140, 66, 0.05);
+        }
+        /* Top Sweep Animation */
+        
+        .path-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff8c42, transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .path-card:hover::before {
+            left: 100%;
+        }
+        
+        .path-terminal-header {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .path-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.05em;
+        }
+        
+        .path-body {
+            padding: 24px;
+            flex-grow: 1;
+        }
+        
+        .path-body h3 {
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 12px;
+            font-family: 'Syne', sans-serif;
+        }
+        
+        .path-desc {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        
+        .path-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .path-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .path-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: #ff8c42;
+            background: rgba(255, 140, 66, 0.05);
+            padding: 4px 8px;
+            border: 1px solid rgba(255, 140, 66, 0.1);
+            border-radius: 4px;
+        }
+        
+        .progress-preview {
+            margin-bottom: 24px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.25);
+            margin-bottom: 8px;
+        }
+        
+        .progress-line {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #ff8c42;
+            opacity: 0.6;
+        }
+        
+        .path-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .path-btn:hover {
+            background: #ff8c42;
+            border-color: #ff8c42;
+            color: #000;
+            transform: translateY(-2px);
+        }
+        /* Beginner Mission Cards */
+        
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 32px;
+        }
+        
+        .mission-card {
+            background: rgba(18, 18, 22, 0.45);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .mission-card:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(2deg);
+            border-color: rgba(255, 140, 66, 0.35);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 140, 66, 0.06);
+        }
+        /* Edge Lighting Follow */
+        
+        .mission-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 140, 66, 0.12) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        
+        .mission-card:hover::after {
+            opacity: 1;
+        }
+        
+        .mission-terminal-strip {
+            padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.025);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .mission-codename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+        
+        .mission-card:hover .mission-codename {
+            color: #ff8c42;
+        }
+        
+        .mission-xp {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            color: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 3px 10px;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+        }
+        
+        .mission-card:hover .mission-xp {
+            background: rgba(255, 140, 66, 0.12);
+            color: #ff8c42;
+            box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
+        }
+        
+        .mission-content {
+            padding: 24px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .mission-card:hover .mission-content {
+            transform: translateZ(20px);
+        }
+        
+        .mission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .mission-title {
+            font-size: 1.3rem;
+            color: #fff;
+            font-family: 'Syne', sans-serif;
+            line-height: 1.2;
+        }
+        
+        .status-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(4px);
+        }
+        
+        .mission-desc {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .mission-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .stat-label {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        /* Animated Progress Line */
+        
+        .mission-progress-container {
+            margin-bottom: 24px;
+            opacity: 0.3;
+            transition: opacity 0.4s ease;
+        }
+        
+        .mission-card:hover .mission-progress-container {
+            opacity: 1;
+        }
+        
+        .mission-progress-line {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+        
+        .progress-energy {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #ff8c42, transparent);
+            animation: energy-sweep 3s infinite linear;
+        }
+        
+        @keyframes energy-sweep {
+            from {
+                left: -100%;
+            }
+            to {
+                left: 100%;
+            }
+        }
+        /* Interactive Checklist */
+        
+        .mission-checklist {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: -12px;
+        }
+        
+        .mission-card:hover .mission-checklist {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 10px;
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+        }
+        
+        .mission-card:hover .checklist-item {
+            transform: translateX(0);
+            color: rgba(255, 255, 255, 0.5);
+        }
+        /* Staggered Checklist Entry */
+        
+        .mission-card:hover .checklist-item:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+        
+        .mission-card:hover .checklist-item:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+        
+        .mission-card:hover .checklist-item:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+        
+        .mission-card:hover .checklist-item:nth-child(4) {
+            transition-delay: 0.4s;
+        }
+        
+        .checklist-box {
+            width: 14px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 3px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .mission-card:hover .checklist-box {
+            border-color: rgba(255, 140, 66, 0.2);
+        }
+        
+        .mission-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .skill-unlock {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease 0.5s;
+        }
+        
+        .mission-card:hover .skill-unlock {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .unlock-label {
+            font-size: 0.6rem;
+            color: rgba(255, 140, 66, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .unlock-value {
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .mission-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: rgba(255, 140, 66, 0.8);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 10px 18px;
+            background: rgba(255, 140, 66, 0.03);
+            border: 1px solid rgba(255, 140, 66, 0.15);
+            border-radius: 8px;
+        }
+        
+        .mission-btn:hover {
+            background: rgba(255, 140, 66, 0.12);
+            color: #ff8c42;
+            border-color: #ff8c42;
+            box-shadow: 0 0 20px rgba(255, 140, 66, 0.15);
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
-  <body class="home-page">
-  <canvas id="upload-mesh-canvas"></canvas>
-  <script src="../scripts/motion-engine.js"></script>
+<body class="home-page">
+    <canvas id="upload-mesh-canvas"></canvas>
+    <script src="../scripts/motion-engine.js" defer></script>
 
-  <nav class="navbar" id="main-navbar">
-    <div class="nav-container">
-      <div class="breadcrumb-header">
-        <a href="../index.html" class="logo-bloom-wrapper" id="devstage-logo">
-          <div class="logo-chars">
-            <span class="char" style="--i:0">D</span>
-            <span class="char" style="--i:1">e</span>
-            <span class="char" style="--i:2">v</span>
-            <div class="logo-separator"></div>
-            <span class="char outline" style="--i:3">S</span>
-            <span class="char outline" style="--i:4">t</span>
-            <span class="char outline" style="--i:5">a</span>
-            <span class="char outline" style="--i:6">g</span>
-            <span class="char outline" style="--i:7">e</span>
-            <div class="logo-dot"></div>
-          </div>
-          <div class="logo-underline"></div>
-        </a>
-        <div class="breadcrumb-trail">
-          <span class="breadcrumb-slash">/</span>
-          <span class="breadcrumb-current">Beginner Zone</span>
-        </div>
-      </div>
+    <nav class="navbar" id="main-navbar">
+        <div class="nav-container">
+            <div class="breadcrumb-header">
+                <a href="../index.html" class="logo-bloom-wrapper" id="devstage-logo">
+                    <div class="logo-chars">
+                        <span class="char" style="--i:0">D</span>
+                        <span class="char" style="--i:1">e</span>
+                        <span class="char" style="--i:2">v</span>
+                        <div class="logo-separator"></div>
+                        <span class="char outline" style="--i:3">S</span>
+                        <span class="char outline" style="--i:4">t</span>
+                        <span class="char outline" style="--i:5">a</span>
+                        <span class="char outline" style="--i:6">g</span>
+                        <span class="char outline" style="--i:7">e</span>
+                        <div class="logo-dot"></div>
+                    </div>
+                    <div class="logo-underline"></div>
+                </a>
+                <div class="breadcrumb-trail">
+                    <span class="breadcrumb-slash">/</span>
+                    <span class="breadcrumb-current">Beginner Zone</span>
+                </div>
+            </div>
 
-      <div class="nav-actions">
-        <label class="uiverse-hamburger" id="hamburger-menu-label">
+            <div class="nav-actions">
+                <label class="uiverse-hamburger" id="hamburger-menu-label">
           <input type="checkbox" id="hamburger-checkbox">
           <svg viewBox="0 0 32 32">
             <path class="line line-top-bottom"
@@ -718,7 +744,7 @@
               <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
               <a href="beginner.html" class="dropdown-item nav-item-anim active-page">Beginner Zone</a>
               <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
-              <a href="upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+              <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
             </div>
             <div class="dropdown-divider"></div>
             <div class="dropdown-group secondary-nav">
@@ -729,603 +755,647 @@
             </div>
           </div>
         </label>
-      </div>
-    </div>
-  </nav>
-
-  <main class="zone-container">
-    <section class="hero-beginner">
-      <div class="hero-grid-depth"></div>
-      
-      <div class="hero-labels">
-        <div class="system-label">
-          <div class="label-dot"></div>
-          BEGINNER_PROTOCOL.ACTIVE
+            </div>
         </div>
-        <div class="system-label">
-          <div class="label-dot"></div>
-          LEARNING_PATHS.READY
-        </div>
-        <div class="system-label">
-          <div class="label-dot"></div>
-          FIRST_BUILD_SEQUENCE.ONLINE
-        </div>
-      </div>
+    </nav>
 
-      <h1>INITIALIZE YOUR<br><span>DEV JOURNEY</span></h1>
-      
-      <p class="hero-subtitle">
-        Start building real projects, learn modern tools, and grow step by step inside the DevStage ecosystem.
-      </p>
+    <main class="zone-container">
+        <section class="hero-beginner">
+            <div class="hero-grid-depth"></div>
 
-      <div class="hero-actions">
-        <a href="#paths" class="hero-btn primary">
+            <div class="hero-labels">
+                <div class="system-label">
+                    <div class="label-dot"></div>
+                    BEGINNER_PROTOCOL.ACTIVE
+                </div>
+                <div class="system-label">
+                    <div class="label-dot"></div>
+                    LEARNING_PATHS.READY
+                </div>
+                <div class="system-label">
+                    <div class="label-dot"></div>
+                    FIRST_BUILD_SEQUENCE.ONLINE
+                </div>
+            </div>
+
+            <h1>INITIALIZE YOUR<br><span>DEV JOURNEY</span></h1>
+
+            <p class="hero-subtitle">
+                Start building real projects, learn modern tools, and grow step by step inside the DevStage ecosystem.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#paths" class="hero-btn primary">
           START YOUR FIRST PATH <i data-lucide="arrow-right"></i>
         </a>
-        <a href="#missions" class="hero-btn secondary">
+                <a href="#missions" class="hero-btn secondary">
           EXPLORE MISSIONS <i data-lucide="compass"></i>
         </a>
-      </div>
-    </section>
+            </div>
+        </section>
 
-    <section class="section" id="paths">
-      <h2 class="section-title"><i data-lucide="map"></i> Developer Learning Paths</h2>
-      <div class="paths-grid">
-        <!-- 1. Frontend Systems -->
-        <div class="path-card">
-          <div class="path-terminal-header">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-            </div>
-            <span class="path-filename">FRONTEND_PATH.SYS</span>
-            <div class="terminal-status"><div class="label-dot"></div></div>
-          </div>
-          <div class="path-body">
-            <h3>Frontend Systems</h3>
-            <p class="path-desc">Master the art of building immersive, high-performance web interfaces with modern frameworks.</p>
-            <div class="path-meta">
-              <span class="meta-item"><i data-lucide="clock"></i> 12 Weeks</span>
-              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
-            </div>
-            <div class="path-tags">
-              <span class="path-tag">HTML5</span>
-              <span class="path-tag">CSS3</span>
-              <span class="path-tag">React</span>
-              <span class="path-tag">Vite</span>
-            </div>
-            <div class="progress-preview">
-              <div class="progress-label"><span>SEQUENCE_INIT</span><span>0%</span></div>
-              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
-            </div>
-            <a href="#" class="path-btn">Start Path <i data-lucide="terminal"></i></a>
-          </div>
-        </div>
+        <section class="section" id="paths">
+            <h2 class="section-title"><i data-lucide="map"></i> Developer Learning Paths</h2>
+            <div class="paths-grid">
+                <!-- 1. Frontend Systems -->
+                <div class="path-card">
+                    <div class="path-terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span class="path-filename">FRONTEND_PATH.SYS</span>
+                        <div class="terminal-status">
+                            <div class="label-dot"></div>
+                        </div>
+                    </div>
+                    <div class="path-body">
+                        <h3>Frontend Systems</h3>
+                        <p class="path-desc">Master the art of building immersive, high-performance web interfaces with modern frameworks.</p>
+                        <div class="path-meta">
+                            <span class="meta-item"><i data-lucide="clock"></i> 12 Weeks</span>
+                            <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+                        </div>
+                        <div class="path-tags">
+                            <span class="path-tag">HTML5</span>
+                            <span class="path-tag">CSS3</span>
+                            <span class="path-tag">React</span>
+                            <span class="path-tag">Vite</span>
+                        </div>
+                        <div class="progress-preview">
+                            <div class="progress-label"><span>SEQUENCE_INIT</span><span>0%</span></div>
+                            <div class="progress-line">
+                                <div class="progress-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="path-btn">Start Path <i data-lucide="terminal"></i></a>
+                    </div>
+                </div>
 
-        <!-- 2. UI/UX Design -->
-        <div class="path-card">
-          <div class="path-terminal-header">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-            </div>
-            <span class="path-filename">UX_STREAM.LOG</span>
-            <div class="terminal-status"><div class="label-dot"></div></div>
-          </div>
-          <div class="path-body">
-            <h3>UI/UX Design</h3>
-            <p class="path-desc">Learn the principles of high-end product design, micro-interactions, and visual storytelling.</p>
-            <div class="path-meta">
-              <span class="meta-item"><i data-lucide="clock"></i> 8 Weeks</span>
-              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
-            </div>
-            <div class="path-tags">
-              <span class="path-tag">Figma</span>
-              <span class="path-tag">Spline</span>
-              <span class="path-tag">Typography</span>
-            </div>
-            <div class="progress-preview">
-              <div class="progress-label"><span>DESIGN_SYNC</span><span>0%</span></div>
-              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
-            </div>
-            <a href="#" class="path-btn">Start Path <i data-lucide="layout"></i></a>
-          </div>
-        </div>
+                <!-- 2. UI/UX Design -->
+                <div class="path-card">
+                    <div class="path-terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span class="path-filename">UX_STREAM.LOG</span>
+                        <div class="terminal-status">
+                            <div class="label-dot"></div>
+                        </div>
+                    </div>
+                    <div class="path-body">
+                        <h3>UI/UX Design</h3>
+                        <p class="path-desc">Learn the principles of high-end product design, micro-interactions, and visual storytelling.</p>
+                        <div class="path-meta">
+                            <span class="meta-item"><i data-lucide="clock"></i> 8 Weeks</span>
+                            <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+                        </div>
+                        <div class="path-tags">
+                            <span class="path-tag">Figma</span>
+                            <span class="path-tag">Spline</span>
+                            <span class="path-tag">Typography</span>
+                        </div>
+                        <div class="progress-preview">
+                            <div class="progress-label"><span>DESIGN_SYNC</span><span>0%</span></div>
+                            <div class="progress-line">
+                                <div class="progress-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="path-btn">Start Path <i data-lucide="layout"></i></a>
+                    </div>
+                </div>
 
-        <!-- 3. Backend Foundations -->
-        <div class="path-card">
-          <div class="path-terminal-header">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-            </div>
-            <span class="path-filename">BACKEND_CORE.INIT</span>
-            <div class="terminal-status"><div class="label-dot"></div></div>
-          </div>
-          <div class="path-body">
-            <h3>Backend Foundations</h3>
-            <p class="path-desc">Build the architecture behind modern apps. Focus on scalability, security, and data flow.</p>
-            <div class="path-meta">
-              <span class="meta-item"><i data-lucide="clock"></i> 14 Weeks</span>
-              <span class="meta-item"><i data-lucide="bar-chart"></i> Intermediate</span>
-            </div>
-            <div class="path-tags">
-              <span class="path-tag">Node.js</span>
-              <span class="path-tag">PostgreSQL</span>
-              <span class="path-tag">Redis</span>
-            </div>
-            <div class="progress-preview">
-              <div class="progress-label"><span>SERVER_BOOT</span><span>0%</span></div>
-              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
-            </div>
-            <a href="#" class="path-btn">Start Path <i data-lucide="server"></i></a>
-          </div>
-        </div>
+                <!-- 3. Backend Foundations -->
+                <div class="path-card">
+                    <div class="path-terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span class="path-filename">BACKEND_CORE.INIT</span>
+                        <div class="terminal-status">
+                            <div class="label-dot"></div>
+                        </div>
+                    </div>
+                    <div class="path-body">
+                        <h3>Backend Foundations</h3>
+                        <p class="path-desc">Build the architecture behind modern apps. Focus on scalability, security, and data flow.</p>
+                        <div class="path-meta">
+                            <span class="meta-item"><i data-lucide="clock"></i> 14 Weeks</span>
+                            <span class="meta-item"><i data-lucide="bar-chart"></i> Intermediate</span>
+                        </div>
+                        <div class="path-tags">
+                            <span class="path-tag">Node.js</span>
+                            <span class="path-tag">PostgreSQL</span>
+                            <span class="path-tag">Redis</span>
+                        </div>
+                        <div class="progress-preview">
+                            <div class="progress-label"><span>SERVER_BOOT</span><span>0%</span></div>
+                            <div class="progress-line">
+                                <div class="progress-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="path-btn">Start Path <i data-lucide="server"></i></a>
+                    </div>
+                </div>
 
-        <!-- 4. AI + ML Starter -->
-        <div class="path-card">
-          <div class="path-terminal-header">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-            </div>
-            <span class="path-filename">AI_MODEL.EXEC</span>
-            <div class="terminal-status"><div class="label-dot"></div></div>
-          </div>
-          <div class="path-body">
-            <h3>AI + ML Starter</h3>
-            <p class="path-desc">Enter the world of intelligent systems. Learn to integrate neural networks into your builds.</p>
-            <div class="path-meta">
-              <span class="meta-item"><i data-lucide="clock"></i> 16 Weeks</span>
-              <span class="meta-item"><i data-lucide="bar-chart"></i> Intermediate</span>
-            </div>
-            <div class="path-tags">
-              <span class="path-tag">Python</span>
-              <span class="path-tag">PyTorch</span>
-              <span class="path-tag">OpenAI</span>
-            </div>
-            <div class="progress-preview">
-              <div class="progress-label"><span>NEURAL_LOAD</span><span>0%</span></div>
-              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
-            </div>
-            <a href="#" class="path-btn">Start Path <i data-lucide="cpu"></i></a>
-          </div>
-        </div>
+                <!-- 4. AI + ML Starter -->
+                <div class="path-card">
+                    <div class="path-terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span class="path-filename">AI_MODEL.EXEC</span>
+                        <div class="terminal-status">
+                            <div class="label-dot"></div>
+                        </div>
+                    </div>
+                    <div class="path-body">
+                        <h3>AI + ML Starter</h3>
+                        <p class="path-desc">Enter the world of intelligent systems. Learn to integrate neural networks into your builds.</p>
+                        <div class="path-meta">
+                            <span class="meta-item"><i data-lucide="clock"></i> 16 Weeks</span>
+                            <span class="meta-item"><i data-lucide="bar-chart"></i> Intermediate</span>
+                        </div>
+                        <div class="path-tags">
+                            <span class="path-tag">Python</span>
+                            <span class="path-tag">PyTorch</span>
+                            <span class="path-tag">OpenAI</span>
+                        </div>
+                        <div class="progress-preview">
+                            <div class="progress-label"><span>NEURAL_LOAD</span><span>0%</span></div>
+                            <div class="progress-line">
+                                <div class="progress-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="path-btn">Start Path <i data-lucide="cpu"></i></a>
+                    </div>
+                </div>
 
-        <!-- 5. App Development -->
-        <div class="path-card">
-          <div class="path-terminal-header">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-            </div>
-            <span class="path-filename">MOBILE_OS.SYS</span>
-            <div class="terminal-status"><div class="label-dot"></div></div>
-          </div>
-          <div class="path-body">
-            <h3>App Development</h3>
-            <p class="path-desc">Create high-performance native applications for iOS and Android with cross-platform tools.</p>
-            <div class="path-meta">
-              <span class="meta-item"><i data-lucide="clock"></i> 10 Weeks</span>
-              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
-            </div>
-            <div class="path-tags">
-              <span class="path-tag">Flutter</span>
-              <span class="path-tag">Dart</span>
-              <span class="path-tag">Firebase</span>
-            </div>
-            <div class="progress-preview">
-              <div class="progress-label"><span>MOBILE_INIT</span><span>0%</span></div>
-              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
-            </div>
-            <a href="#" class="path-btn">Start Path <i data-lucide="smartphone"></i></a>
-          </div>
-        </div>
+                <!-- 5. App Development -->
+                <div class="path-card">
+                    <div class="path-terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span class="path-filename">MOBILE_OS.SYS</span>
+                        <div class="terminal-status">
+                            <div class="label-dot"></div>
+                        </div>
+                    </div>
+                    <div class="path-body">
+                        <h3>App Development</h3>
+                        <p class="path-desc">Create high-performance native applications for iOS and Android with cross-platform tools.</p>
+                        <div class="path-meta">
+                            <span class="meta-item"><i data-lucide="clock"></i> 10 Weeks</span>
+                            <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+                        </div>
+                        <div class="path-tags">
+                            <span class="path-tag">Flutter</span>
+                            <span class="path-tag">Dart</span>
+                            <span class="path-tag">Firebase</span>
+                        </div>
+                        <div class="progress-preview">
+                            <div class="progress-label"><span>MOBILE_INIT</span><span>0%</span></div>
+                            <div class="progress-line">
+                                <div class="progress-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="path-btn">Start Path <i data-lucide="smartphone"></i></a>
+                    </div>
+                </div>
 
-        <!-- 6. Creative Coding -->
-        <div class="path-card">
-          <div class="path-terminal-header">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
+                <!-- 6. Creative Coding -->
+                <div class="path-card">
+                    <div class="path-terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span class="path-filename">GEN_ART.LOG</span>
+                        <div class="terminal-status">
+                            <div class="label-dot"></div>
+                        </div>
+                    </div>
+                    <div class="path-body">
+                        <h3>Creative Coding</h3>
+                        <p class="path-desc">Where code meets art. Learn to build generative visuals, shaders, and interactive motion.</p>
+                        <div class="path-meta">
+                            <span class="meta-item"><i data-lucide="clock"></i> 6 Weeks</span>
+                            <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
+                        </div>
+                        <div class="path-tags">
+                            <span class="path-tag">Three.js</span>
+                            <span class="path-tag">GSAP</span>
+                            <span class="path-tag">Canvas</span>
+                        </div>
+                        <div class="progress-preview">
+                            <div class="progress-label"><span>RENDER_READY</span><span>0%</span></div>
+                            <div class="progress-line">
+                                <div class="progress-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="path-btn">Start Path <i data-lucide="palette"></i></a>
+                    </div>
+                </div>
             </div>
-            <span class="path-filename">GEN_ART.LOG</span>
-            <div class="terminal-status"><div class="label-dot"></div></div>
-          </div>
-          <div class="path-body">
-            <h3>Creative Coding</h3>
-            <p class="path-desc">Where code meets art. Learn to build generative visuals, shaders, and interactive motion.</p>
-            <div class="path-meta">
-              <span class="meta-item"><i data-lucide="clock"></i> 6 Weeks</span>
-              <span class="meta-item"><i data-lucide="bar-chart"></i> Beginner</span>
-            </div>
-            <div class="path-tags">
-              <span class="path-tag">Three.js</span>
-              <span class="path-tag">GSAP</span>
-              <span class="path-tag">Canvas</span>
-            </div>
-            <div class="progress-preview">
-              <div class="progress-label"><span>RENDER_READY</span><span>0%</span></div>
-              <div class="progress-line"><div class="progress-fill" style="width: 5%"></div></div>
-            </div>
-            <a href="#" class="path-btn">Start Path <i data-lucide="palette"></i></a>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <section class="section" id="missions">
-      <h2 class="section-title"><i data-lucide="target"></i> Guided Beginner Missions</h2>
-      <div class="mission-grid">
-        <!-- Mission 01 -->
-        <div class="mission-card">
-          <div class="mission-terminal-strip">
-            <span class="mission-codename">MISSION_01.PORTFOLIO</span>
-            <span class="mission-xp">+500 XP</span>
-          </div>
-          <div class="mission-content">
-            <div class="mission-header">
-              <h3 class="mission-title">The Digital<br>Identity</h3>
-              <span class="status-label">BEGINNER_SAFE</span>
-            </div>
-            <p class="mission-desc">Build your professional presence. Construct a minimal, one-page terminal portfolio.</p>
-            
-            <div class="mission-stats">
-              <div class="stat-box">
-                <span class="stat-label">Time</span>
-                <span class="stat-value">3.0 HR</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Stack</span>
-                <span class="stat-value">HTML/CSS</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Reward</span>
-                <span class="stat-value">BADGE_V01</span>
-              </div>
-            </div>
+        <section class="section" id="missions">
+            <h2 class="section-title"><i data-lucide="target"></i> Guided Beginner Missions</h2>
+            <div class="mission-grid">
+                <!-- Mission 01 -->
+                <div class="mission-card">
+                    <div class="mission-terminal-strip">
+                        <span class="mission-codename">MISSION_01.PORTFOLIO</span>
+                        <span class="mission-xp">+500 XP</span>
+                    </div>
+                    <div class="mission-content">
+                        <div class="mission-header">
+                            <h3 class="mission-title">The Digital<br>Identity</h3>
+                            <span class="status-label">BEGINNER_SAFE</span>
+                        </div>
+                        <p class="mission-desc">Build your professional presence. Construct a minimal, one-page terminal portfolio.</p>
 
-            <div class="mission-progress-container">
-              <div class="mission-progress-line">
-                <div class="progress-energy"></div>
-              </div>
-            </div>
+                        <div class="mission-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Time</span>
+                                <span class="stat-value">3.0 HR</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Stack</span>
+                                <span class="stat-value">HTML/CSS</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Reward</span>
+                                <span class="stat-value">BADGE_V01</span>
+                            </div>
+                        </div>
 
-            <div class="mission-checklist">
-              <div class="checklist-item"><div class="checklist-box"></div> Setup Project</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Build UI Layout</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Add Content</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Deploy Site</div>
-            </div>
+                        <div class="mission-progress-container">
+                            <div class="mission-progress-line">
+                                <div class="progress-energy"></div>
+                            </div>
+                        </div>
 
-            <div class="mission-footer">
-              <div class="skill-unlock">
-                <span class="unlock-label">SKILL UNLOCK</span>
-                <span class="unlock-value">CORE_STRUCTURE</span>
-              </div>
-              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
+                        <div class="mission-checklist">
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Setup Project</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Build UI Layout</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Add Content</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Deploy Site</div>
+                        </div>
 
-        <!-- Mission 02 -->
-        <div class="mission-card">
-          <div class="mission-terminal-strip">
-            <span class="mission-codename">MISSION_02.TASKFLOW</span>
-            <span class="mission-xp">+750 XP</span>
-          </div>
-          <div class="mission-content">
-            <div class="mission-header">
-              <h3 class="mission-title">TaskFlow<br>Engine</h3>
-              <span class="status-label">FAST_TRACK</span>
-            </div>
-            <p class="mission-desc">Master the DOM. Create a high-performance task manager with persistent storage.</p>
-            
-            <div class="mission-stats">
-              <div class="stat-box">
-                <span class="stat-label">Time</span>
-                <span class="stat-value">4.5 HR</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Stack</span>
-                <span class="stat-value">JS/STORAGE</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Reward</span>
-                <span class="stat-value">LOGIC_KEY</span>
-              </div>
-            </div>
+                        <div class="mission-footer">
+                            <div class="skill-unlock">
+                                <span class="unlock-label">SKILL UNLOCK</span>
+                                <span class="unlock-value">CORE_STRUCTURE</span>
+                            </div>
+                            <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="mission-progress-container">
-              <div class="mission-progress-line">
-                <div class="progress-energy"></div>
-              </div>
+                <!-- Mission 02 -->
+                <div class="mission-card">
+                    <div class="mission-terminal-strip">
+                        <span class="mission-codename">MISSION_02.TASKFLOW</span>
+                        <span class="mission-xp">+750 XP</span>
+                    </div>
+                    <div class="mission-content">
+                        <div class="mission-header">
+                            <h3 class="mission-title">TaskFlow<br>Engine</h3>
+                            <span class="status-label">FAST_TRACK</span>
+                        </div>
+                        <p class="mission-desc">Master the DOM. Create a high-performance task manager with persistent storage.</p>
+
+                        <div class="mission-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Time</span>
+                                <span class="stat-value">4.5 HR</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Stack</span>
+                                <span class="stat-value">JS/STORAGE</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Reward</span>
+                                <span class="stat-value">LOGIC_KEY</span>
+                            </div>
+                        </div>
+
+                        <div class="mission-progress-container">
+                            <div class="mission-progress-line">
+                                <div class="progress-energy"></div>
+                            </div>
+                        </div>
+
+                        <div class="mission-checklist">
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Create State</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Render Lists</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> LocalStorage</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Filter Logic</div>
+                        </div>
+
+                        <div class="mission-footer">
+                            <div class="skill-unlock">
+                                <span class="unlock-label">SKILL UNLOCK</span>
+                                <span class="unlock-value">STATE_CONTROL</span>
+                            </div>
+                            <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission 03 -->
+                <div class="mission-card">
+                    <div class="mission-terminal-strip">
+                        <span class="mission-codename">MISSION_03.UI_CLONE</span>
+                        <span class="mission-xp">+900 XP</span>
+                    </div>
+                    <div class="mission-content">
+                        <div class="mission-header">
+                            <h3 class="mission-title">Architectural<br>Clone</h3>
+                            <span class="status-label">POPULAR_STARTER</span>
+                        </div>
+                        <p class="mission-desc">Deconstruct excellence. Replicate the landing page of a top-tier tech product.</p>
+
+                        <div class="mission-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Time</span>
+                                <span class="stat-value">6.0 HR</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Stack</span>
+                                <span class="stat-value">SCSS/FLEX</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Reward</span>
+                                <span class="stat-value">STYLE_CORE</span>
+                            </div>
+                        </div>
+
+                        <div class="mission-progress-container">
+                            <div class="mission-progress-line">
+                                <div class="progress-energy"></div>
+                            </div>
+                        </div>
+
+                        <div class="mission-checklist">
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Analyze Layout</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Build Grid</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Add Typography</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Micro-Anims</div>
+                        </div>
+
+                        <div class="mission-footer">
+                            <div class="skill-unlock">
+                                <span class="unlock-label">SKILL UNLOCK</span>
+                                <span class="unlock-value">GRID_ARCHITECT</span>
+                            </div>
+                            <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission 04 -->
+                <div class="mission-card">
+                    <div class="mission-terminal-strip">
+                        <span class="mission-codename">MISSION_04.WEATHER_CORE</span>
+                        <span class="mission-xp">+1200 XP</span>
+                    </div>
+                    <div class="mission-content">
+                        <div class="mission-header">
+                            <h3 class="mission-title">Atmospheric<br>Observer</h3>
+                            <span class="status-label">HIGH_VALUE</span>
+                        </div>
+                        <p class="mission-desc">Connect to the world. Integrate real-time weather APIs into a futuristic dashboard.</p>
+
+                        <div class="mission-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Time</span>
+                                <span class="stat-value">5.0 HR</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Stack</span>
+                                <span class="stat-value">API/FETCH</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Reward</span>
+                                <span class="stat-value">DATA_NODE</span>
+                            </div>
+                        </div>
+
+                        <div class="mission-progress-container">
+                            <div class="mission-progress-line">
+                                <div class="progress-energy"></div>
+                            </div>
+                        </div>
+
+                        <div class="mission-checklist">
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Fetch API</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Parse JSON</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Dynamic Icons</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Error States</div>
+                        </div>
+
+                        <div class="mission-footer">
+                            <div class="skill-unlock">
+                                <span class="unlock-label">SKILL UNLOCK</span>
+                                <span class="unlock-value">API_PROTOCOL</span>
+                            </div>
+                            <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission 05 -->
+                <div class="mission-card">
+                    <div class="mission-terminal-strip">
+                        <span class="mission-codename">MISSION_05.ANIMATED_NAV</span>
+                        <span class="mission-xp">+800 XP</span>
+                    </div>
+                    <div class="mission-content">
+                        <div class="mission-header">
+                            <h3 class="mission-title">Kinetic<br>Navigation</h3>
+                            <span class="status-label">TRENDING_STARTER</span>
+                        </div>
+                        <p class="mission-desc">Master motion. Build a high-fidelity navigation system with liquid animations.</p>
+
+                        <div class="mission-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Time</span>
+                                <span class="stat-value">2.5 HR</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Stack</span>
+                                <span class="stat-value">GSAP/SVG</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Reward</span>
+                                <span class="stat-value">MOTION_MOD</span>
+                            </div>
+                        </div>
+
+                        <div class="mission-progress-container">
+                            <div class="mission-progress-line">
+                                <div class="progress-energy"></div>
+                            </div>
+                        </div>
+
+                        <div class="mission-checklist">
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> SVG Assets</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Timeline Setup</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Hover States</div>
+                            <div class="checklist-item">
+                                <div class="checklist-box"></div> Responsive Fix</div>
+                        </div>
+
+                        <div class="mission-footer">
+                            <div class="skill-unlock">
+                                <span class="unlock-label">SKILL UNLOCK</span>
+                                <span class="unlock-value">MOTION_DYNAMICS</span>
+                            </div>
+                            <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
+    </main>
 
-            <div class="mission-checklist">
-              <div class="checklist-item"><div class="checklist-box"></div> Create State</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Render Lists</div>
-              <div class="checklist-item"><div class="checklist-box"></div> LocalStorage</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Filter Logic</div>
-            </div>
+    <!-- Firebase System (Standard for DevStage) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../scripts/firebase-config.js" defer></script>
 
-            <div class="mission-footer">
-              <div class="skill-unlock">
-                <span class="unlock-label">SKILL UNLOCK</span>
-                <span class="unlock-value">STATE_CONTROL</span>
-              </div>
-              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
 
-        <!-- Mission 03 -->
-        <div class="mission-card">
-          <div class="mission-terminal-strip">
-            <span class="mission-codename">MISSION_03.UI_CLONE</span>
-            <span class="mission-xp">+900 XP</span>
-          </div>
-          <div class="mission-content">
-            <div class="mission-header">
-              <h3 class="mission-title">Architectural<br>Clone</h3>
-              <span class="status-label">POPULAR_STARTER</span>
-            </div>
-            <p class="mission-desc">Deconstruct excellence. Replicate the landing page of a top-tier tech product.</p>
-            
-            <div class="mission-stats">
-              <div class="stat-box">
-                <span class="stat-label">Time</span>
-                <span class="stat-value">6.0 HR</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Stack</span>
-                <span class="stat-value">SCSS/FLEX</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Reward</span>
-                <span class="stat-value">STYLE_CORE</span>
-              </div>
-            </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ─── Weight Bloom Logo Animation ───
+            const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+            if (logoWrapper) {
+                setTimeout(() => {
+                    logoWrapper.classList.add('bloom');
+                    setTimeout(() => {
+                        logoWrapper.classList.add('is-breathing');
+                    }, 1700);
+                }, 500);
+            }
 
-            <div class="mission-progress-container">
-              <div class="mission-progress-line">
-                <div class="progress-energy"></div>
-              </div>
-            </div>
+            // ─── NAVBAR & DROPDOWN ───
+            const navToggle = document.getElementById('hamburger-checkbox');
+            const navDropdown = document.getElementById('hamburger-dropdown');
 
-            <div class="mission-checklist">
-              <div class="checklist-item"><div class="checklist-box"></div> Analyze Layout</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Build Grid</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Add Typography</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Micro-Anims</div>
-            </div>
+            if (navToggle && navDropdown) {
+                const navItems = navDropdown.querySelectorAll('.nav-item-anim');
 
-            <div class="mission-footer">
-              <div class="skill-unlock">
-                <span class="unlock-label">SKILL UNLOCK</span>
-                <span class="unlock-value">GRID_ARCHITECT</span>
-              </div>
-              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
+                navToggle.addEventListener('change', () => {
+                    if (navToggle.checked) {
+                        navDropdown.classList.add('active');
+                        navItems.forEach((item) => {
+                            item.classList.remove('nav-item-visible');
+                            item.style.transitionDelay = '0ms';
+                        });
+                        requestAnimationFrame(() => {
+                            navItems.forEach((item, index) => {
+                                item.style.transitionDelay = `${index * 35}ms`;
+                                item.classList.add('nav-item-visible');
+                            });
+                        });
+                    } else {
+                        navDropdown.classList.remove('active');
+                        navItems.forEach(item => {
+                            item.classList.remove('nav-item-visible');
+                        });
+                    }
+                });
 
-        <!-- Mission 04 -->
-        <div class="mission-card">
-          <div class="mission-terminal-strip">
-            <span class="mission-codename">MISSION_04.WEATHER_CORE</span>
-            <span class="mission-xp">+1200 XP</span>
-          </div>
-          <div class="mission-content">
-            <div class="mission-header">
-              <h3 class="mission-title">Atmospheric<br>Observer</h3>
-              <span class="status-label">HIGH_VALUE</span>
-            </div>
-            <p class="mission-desc">Connect to the world. Integrate real-time weather APIs into a futuristic dashboard.</p>
-            
-            <div class="mission-stats">
-              <div class="stat-box">
-                <span class="stat-label">Time</span>
-                <span class="stat-value">5.0 HR</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Stack</span>
-                <span class="stat-value">API/FETCH</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Reward</span>
-                <span class="stat-value">DATA_NODE</span>
-              </div>
-            </div>
+                navDropdown.addEventListener('mousemove', (e) => {
+                    const rect = navDropdown.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    navDropdown.style.setProperty('--mouse-x', `${x}%`);
+                    navDropdown.style.setProperty('--mouse-y', `${y}%`);
+                });
 
-            <div class="mission-progress-container">
-              <div class="mission-progress-line">
-                <div class="progress-energy"></div>
-              </div>
-            </div>
+                document.addEventListener('click', (e) => {
+                    const hamburgerLabel = document.getElementById('hamburger-menu-label');
+                    if (navToggle.checked && !hamburgerLabel.contains(e.target)) {
+                        navToggle.checked = false;
+                        navDropdown.classList.remove('active');
+                        navItems.forEach(item => {
+                            item.classList.remove('nav-item-visible');
+                        });
+                    }
+                });
+            }
 
-            <div class="mission-checklist">
-              <div class="checklist-item"><div class="checklist-box"></div> Fetch API</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Parse JSON</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Dynamic Icons</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Error States</div>
-            </div>
-
-            <div class="mission-footer">
-              <div class="skill-unlock">
-                <span class="unlock-label">SKILL UNLOCK</span>
-                <span class="unlock-value">API_PROTOCOL</span>
-              </div>
-              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mission 05 -->
-        <div class="mission-card">
-          <div class="mission-terminal-strip">
-            <span class="mission-codename">MISSION_05.ANIMATED_NAV</span>
-            <span class="mission-xp">+800 XP</span>
-          </div>
-          <div class="mission-content">
-            <div class="mission-header">
-              <h3 class="mission-title">Kinetic<br>Navigation</h3>
-              <span class="status-label">TRENDING_STARTER</span>
-            </div>
-            <p class="mission-desc">Master motion. Build a high-fidelity navigation system with liquid animations.</p>
-            
-            <div class="mission-stats">
-              <div class="stat-box">
-                <span class="stat-label">Time</span>
-                <span class="stat-value">2.5 HR</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Stack</span>
-                <span class="stat-value">GSAP/SVG</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Reward</span>
-                <span class="stat-value">MOTION_MOD</span>
-              </div>
-            </div>
-
-            <div class="mission-progress-container">
-              <div class="mission-progress-line">
-                <div class="progress-energy"></div>
-              </div>
-            </div>
-
-            <div class="mission-checklist">
-              <div class="checklist-item"><div class="checklist-box"></div> SVG Assets</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Timeline Setup</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Hover States</div>
-              <div class="checklist-item"><div class="checklist-box"></div> Responsive Fix</div>
-            </div>
-
-            <div class="mission-footer">
-              <div class="skill-unlock">
-                <span class="unlock-label">SKILL UNLOCK</span>
-                <span class="unlock-value">MOTION_DYNAMICS</span>
-              </div>
-              <a href="#" class="mission-btn">BEGIN MISSION <i data-lucide="arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Firebase System (Standard for DevStage) -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="../scripts/firebase-config.js"></script>
-  
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // ─── Weight Bloom Logo Animation ───
-      const logoWrapper = document.querySelector('.logo-bloom-wrapper');
-      if (logoWrapper) {
-        setTimeout(() => {
-          logoWrapper.classList.add('bloom');
-          setTimeout(() => {
-            logoWrapper.classList.add('is-breathing');
-          }, 1700);
-        }, 500);
-      }
-
-      // ─── NAVBAR & DROPDOWN ───
-      const navToggle = document.getElementById('hamburger-checkbox');
-      const navDropdown = document.getElementById('hamburger-dropdown');
-
-      if (navToggle && navDropdown) {
-        const navItems = navDropdown.querySelectorAll('.nav-item-anim');
-
-        navToggle.addEventListener('change', () => {
-          if (navToggle.checked) {
-            navDropdown.classList.add('active');
-            navItems.forEach((item) => {
-              item.classList.remove('nav-item-visible');
-              item.style.transitionDelay = '0ms';
-            });
-            requestAnimationFrame(() => {
-              navItems.forEach((item, index) => {
-                item.style.transitionDelay = `${index * 35}ms`;
-                item.classList.add('nav-item-visible');
-              });
-            });
-          } else {
-            navDropdown.classList.remove('active');
-            navItems.forEach(item => {
-              item.classList.remove('nav-item-visible');
-            });
-          }
+            // Logout
+            const logoutBtn = document.getElementById('nav-logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = '../index.html';
+                    });
+                });
+            }
         });
 
-        navDropdown.addEventListener('mousemove', (e) => {
-          const rect = navDropdown.getBoundingClientRect();
-          const x = ((e.clientX - rect.left) / rect.width) * 100;
-          const y = ((e.clientY - rect.top) / rect.height) * 100;
-          navDropdown.style.setProperty('--mouse-x', `${x}%`);
-          navDropdown.style.setProperty('--mouse-y', `${y}%`);
-        });
+        // --- Mission Card Tilt & Glow Effects ---
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.mission-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--mouse-x', `${x}%`);
+                card.style.setProperty('--mouse-y', `${y}%`);
 
-        document.addEventListener('click', (e) => {
-          const hamburgerLabel = document.getElementById('hamburger-menu-label');
-          if (navToggle.checked && !hamburgerLabel.contains(e.target)) {
-            navToggle.checked = false;
-            navDropdown.classList.remove('active');
-            navItems.forEach(item => {
-              item.classList.remove('nav-item-visible');
+                if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const rotateX = (e.clientY - centerY) / 25;
+                    const rotateY = (centerX - e.clientX) / 25;
+                    card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                } else {
+                    card.style.transform = '';
+                }
             });
-          }
         });
-      }
 
-      // Logout
-      const logoutBtn = document.getElementById('nav-logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          firebase.auth().signOut().then(() => {
-            window.location.href = '../index.html';
-          });
-        });
-      }
-    });
+        lucide.createIcons();
+    </script>
 
-    // --- Mission Card Tilt & Glow Effects ---
-    document.addEventListener('mousemove', (e) => {
-      const cards = document.querySelectorAll('.mission-card');
-      cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty('--mouse-x', `${x}%`);
-        card.style.setProperty('--mouse-y', `${y}%`);
-
-        if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const rotateX = (e.clientY - centerY) / 25;
-          const rotateY = (centerX - e.clientX) / 25;
-          card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        } else {
-          card.style.transform = '';
-        }
-      });
-    });
-
-    lucide.createIcons();
-  </script>
-  
 </body>
 
 </html>

@@ -10,11 +10,10 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../styles/global.css">
-    
+
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -27,7 +26,7 @@
             cursor: none;
             /* Using global background from style.css */
         }
-
+        
         canvas {
             position: fixed;
             inset: 0;
@@ -38,7 +37,7 @@
             /* On top of body bg, but behind container */
             pointer-events: none;
         }
-
+        
         .feed-container {
             position: relative;
             z-index: 10;
@@ -46,12 +45,12 @@
             margin: 120px auto 100px;
             padding: 0 40px;
         }
-
+        
         .feed-header {
             margin-bottom: 40px;
             text-align: center;
         }
-
+        
         .feed-header h1 {
             font-family: var(--font-heading);
             font-size: 2.8rem;
@@ -59,20 +58,20 @@
             margin-bottom: 10px;
             letter-spacing: -0.02em;
         }
-
+        
         .feed-header p {
             color: var(--text-tertiary);
             font-size: 1rem;
         }
-
         /* --- Premium Project Grid --- */
+        
         #feed-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             gap: 32px;
             width: 100%;
         }
-
+        
         .project-feed-card {
             width: 100%;
             min-height: auto;
@@ -86,35 +85,30 @@
             transform-style: preserve-3d;
             perspective: 1200px;
         }
-
+        
         .project-feed-card:hover {
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(215, 138, 47, 0.3);
-            box-shadow:
-                0 25px 60px rgba(0, 0, 0, 0.6),
-                0 0 30px rgba(215, 138, 47, 0.05),
-                inset 0 0 1px 1px rgba(215, 138, 47, 0.1);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(215, 138, 47, 0.05), inset 0 0 1px 1px rgba(215, 138, 47, 0.1);
             /* Amber edge */
             z-index: 20;
         }
-
+        
         .card-glow {
             position: absolute;
             inset: 0;
             border-radius: 18px;
-            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
-                    rgba(255, 255, 255, 0.06),
-                    transparent 40%);
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
             z-index: 1;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.5s ease;
         }
-
+        
         .project-feed-card:hover .card-glow {
             opacity: 1;
         }
-
+        
         .card-terminal-bar {
             height: 32px;
             background: rgba(255, 255, 255, 0.03);
@@ -125,13 +119,13 @@
             padding: 0 16px;
             border-radius: 18px 18px 0 0;
         }
-
+        
         .bar-left {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
+        
         .bar-dot {
             width: 8px;
             height: 8px;
@@ -139,7 +133,7 @@
             background: rgba(215, 138, 47, 0.5);
             box-shadow: 0 0 8px rgba(215, 138, 47, 0.3);
         }
-
+        
         .bar-filename {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.65rem;
@@ -147,7 +141,7 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
-
+        
         .status-badge {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.58rem;
@@ -163,91 +157,89 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
-
+        
         .status-concept {
             background: rgba(168, 85, 247, 0.08);
             color: #a855f7;
             border: 1px solid rgba(168, 85, 247, 0.15);
         }
-
+        
         .status-in-progress {
             background: rgba(14, 165, 233, 0.08);
             color: #0ea5e9;
             border: 1px solid rgba(14, 165, 233, 0.15);
         }
-
+        
         .status-beta {
             background: rgba(245, 158, 11, 0.08);
             color: #f59e0b;
             border: 1px solid rgba(245, 158, 11, 0.15);
         }
-
+        
         .status-shipping {
             background: rgba(16, 185, 129, 0.08);
             color: #10b981;
             border: 1px solid rgba(16, 185, 129, 0.15);
         }
-
+        
         .status-completed {
             background: rgba(251, 191, 36, 0.08);
             color: #fbbf24;
             border: 1px solid rgba(251, 191, 36, 0.15);
         }
-
+        
         .project-feed-card:hover .status-concept {
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
             border-color: rgba(168, 85, 247, 0.4);
         }
-
+        
         .project-feed-card:hover .status-in-progress {
             box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
             border-color: rgba(14, 165, 233, 0.4);
         }
-
+        
         .project-feed-card:hover .status-beta {
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
             border-color: rgba(245, 158, 11, 0.4);
         }
-
+        
         .project-feed-card:hover .status-shipping {
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
             border-color: rgba(16, 185, 129, 0.4);
         }
-
+        
         .project-feed-card:hover .status-completed {
             box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
             border-color: rgba(251, 191, 36, 0.4);
         }
-
+        
         .status-dot {
             width: 4px;
             height: 4px;
             border-radius: 50%;
             background: currentColor;
         }
-
+        
         .status-in-progress .status-dot,
         .status-shipping .status-dot {
             animation: statusPulse 2s infinite;
         }
-
+        
         @keyframes statusPulse {
             0% {
                 opacity: 1;
                 transform: scale(1);
             }
-
             50% {
                 opacity: 0.4;
                 transform: scale(0.8);
             }
-
             100% {
                 opacity: 1;
                 transform: scale(1);
             }
         }
-
+        
         .live-dot {
             width: 4px;
             height: 4px;
@@ -255,24 +247,22 @@
             background: currentColor;
             animation: pulse 1.5s infinite;
         }
-
+        
         @keyframes pulse {
             0% {
                 opacity: 0.4;
                 transform: scale(1);
             }
-
             50% {
                 opacity: 1;
                 transform: scale(1.2);
             }
-
             100% {
                 opacity: 0.4;
                 transform: scale(1);
             }
         }
-
+        
         .project-thumbnail {
             width: 100%;
             height: 210px;
@@ -281,7 +271,7 @@
             background: #000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
+        
         .project-thumbnail img {
             width: 110%;
             /* Extra width for parallax */
@@ -295,13 +285,13 @@
             filter: brightness(0.85) grayscale(0.2);
             pointer-events: none;
         }
-
+        
         .project-feed-card:hover .project-thumbnail img {
             opacity: 1;
             filter: brightness(1.05) grayscale(0);
             transform: scale(1.05) translate(var(--parallax-x), var(--parallax-y));
         }
-
+        
         .thumbnail-overlay {
             position: absolute;
             inset: 0;
@@ -312,11 +302,11 @@
             opacity: 0;
             transition: opacity 0.4s ease;
         }
-
+        
         .project-feed-card:hover .thumbnail-overlay {
             opacity: 1;
         }
-
+        
         .view-btn {
             width: 48px;
             height: 48px;
@@ -332,18 +322,18 @@
             transition: all 0.3s ease;
             transform: translateY(10px);
         }
-
+        
         .project-feed-card:hover .view-btn {
             transform: translateY(0);
         }
-
+        
         .view-btn:hover {
             background: #d78a2f;
             border-color: #d78a2f;
             transform: scale(1.1);
         }
-
         /* --- Premium Bookmark/Save System --- */
+        
         .bookmark-btn {
             position: absolute;
             top: 15px;
@@ -364,7 +354,7 @@
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-
+        
         .bookmark-btn:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.15);
@@ -372,7 +362,7 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-
+        
         .bookmark-btn.is-saved {
             background: rgba(215, 138, 47, 0.1);
             border-color: rgba(215, 138, 47, 0.3);
@@ -380,12 +370,12 @@
             box-shadow: 0 0 20px rgba(215, 138, 47, 0.15);
             animation: pulseSave 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
+        
         .bookmark-btn.is-saved i {
             fill: #d78a2f;
         }
-
         /* --- Developer Feedback System --- */
+        
         .feedback-overlay {
             position: absolute;
             inset: 0;
@@ -401,25 +391,25 @@
             padding: 30px;
             border-radius: 18px;
         }
-
+        
         .feedback-overlay.active {
             opacity: 1;
             pointer-events: all;
         }
-
+        
         .feedback-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
         }
-
+        
         .feedback-header h4 {
             font-family: 'Clash Display', sans-serif;
             font-size: 1.1rem;
             color: #fff;
         }
-
+        
         .close-feedback {
             background: none;
             border: none;
@@ -427,18 +417,18 @@
             cursor: pointer;
             transition: color 0.2s;
         }
-
+        
         .close-feedback:hover {
             color: #fff;
         }
-
+        
         .feedback-types {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
         }
-
+        
         .feedback-type-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -450,7 +440,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
+        
         .feedback-type-btn:hover,
         .feedback-type-btn.active {
             background: rgba(215, 138, 47, 0.1);
@@ -458,7 +448,7 @@
             color: #d78a2f;
             box-shadow: 0 0 15px rgba(215, 138, 47, 0.1);
         }
-
+        
         .feedback-input {
             width: 100%;
             height: 120px;
@@ -473,12 +463,12 @@
             margin-bottom: 20px;
             transition: border-color 0.3s;
         }
-
+        
         .feedback-input:focus {
             outline: none;
             border-color: rgba(215, 138, 47, 0.4);
         }
-
+        
         .submit-feedback-btn {
             background: #d78a2f;
             color: #000;
@@ -495,13 +485,13 @@
             justify-content: center;
             gap: 8px;
         }
-
+        
         .submit-feedback-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(215, 138, 47, 0.3);
         }
-
         /* --- Command Palette Search --- */
+        
         .command-palette-overlay {
             position: fixed;
             inset: 0;
@@ -516,12 +506,12 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
-
+        
         .command-palette-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-
+        
         .command-palette {
             width: 90%;
             max-width: 650px;
@@ -533,11 +523,11 @@
             transform: scale(0.95);
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
+        
         .command-palette-overlay.active .command-palette {
             transform: scale(1);
         }
-
+        
         .command-input-wrapper {
             display: flex;
             align-items: center;
@@ -545,12 +535,12 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             gap: 15px;
         }
-
+        
         .command-input-wrapper i {
             color: #d78a2f;
             width: 20px;
         }
-
+        
         #command-search-input {
             background: none;
             border: none;
@@ -559,17 +549,17 @@
             font-size: 1.1rem;
             font-family: 'Inter', sans-serif;
         }
-
+        
         #command-search-input:focus {
             outline: none;
         }
-
+        
         .command-results {
             max-height: 400px;
             overflow-y: auto;
             padding: 10px;
         }
-
+        
         .command-group-title {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.65rem;
@@ -578,7 +568,7 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
-
+        
         .command-item {
             display: flex;
             align-items: center;
@@ -588,12 +578,12 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
+        
         .command-item:hover,
         .command-item.selected {
             background: rgba(255, 255, 255, 0.04);
         }
-
+        
         .command-item-icon {
             width: 32px;
             height: 32px;
@@ -604,30 +594,30 @@
             justify-content: center;
             color: rgba(255, 255, 255, 0.5);
         }
-
+        
         .command-item:hover .command-item-icon,
         .command-item.selected .command-item-icon {
             color: #d78a2f;
             background: rgba(215, 138, 47, 0.1);
         }
-
+        
         .command-item-details {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
-
+        
         .command-item-name {
             color: rgba(255, 255, 255, 0.9);
             font-size: 0.95rem;
             font-weight: 500;
         }
-
+        
         .command-item-meta {
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.75rem;
         }
-
+        
         .command-footer {
             padding: 15px 25px;
             background: rgba(0, 0, 0, 0.2);
@@ -635,7 +625,7 @@
             display: flex;
             gap: 20px;
         }
-
+        
         .kbd-hint {
             display: flex;
             align-items: center;
@@ -644,7 +634,7 @@
             font-size: 0.7rem;
             font-family: 'JetBrains Mono', monospace;
         }
-
+        
         kbd {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -653,7 +643,7 @@
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.65rem;
         }
-
+        
         .floating-search-trigger {
             position: fixed;
             bottom: 40px;
@@ -671,94 +661,89 @@
             z-index: 1000;
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
+        
         .floating-search-trigger:hover {
             transform: scale(1.1) rotate(5deg);
             box-shadow: 0 15px 40px rgba(215, 138, 47, 0.6);
         }
-
+        
         .floating-search-trigger i {
             width: 24px;
             height: 24px;
         }
-
+        
         @keyframes pulseSave {
             0% {
                 transform: scale(1);
             }
-
             50% {
                 transform: scale(1.2);
             }
-
             100% {
                 transform: scale(1);
             }
         }
-
+        
         .stat-item i.is-saved {
             color: #d78a2f;
             fill: #d78a2f;
         }
-
         /* --- Filter System Styles --- */
+        
         .feed-filter-system {
             margin-bottom: 40px;
             position: relative;
             z-index: 50;
         }
-
+        
         .filter-bar {
             display: flex;
             gap: 12px;
             align-items: center;
         }
-
+        
         @media (max-width: 1100px) {
             #feed-list {
                 grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
                 gap: 24px;
             }
-
             .feed-container {
                 padding: 0 24px;
             }
         }
-
+        
         @media (max-width: 800px) {
             #feed-list {
                 grid-template-columns: 1fr 1fr;
             }
         }
-
+        
         @media (max-width: 600px) {
             #feed-list {
                 grid-template-columns: 1fr;
             }
-
             .filter-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             #sort-dropdown {
                 margin-left: 0 !important;
                 margin-top: 10px;
             }
         }
-
+        
         .project-info {
             padding: 24px;
             position: relative;
         }
-
+        
         .creator-row {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 16px;
         }
-
+        
         .creator-avatar {
             width: 32px;
             height: 32px;
@@ -766,29 +751,29 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
-
+        
         .creator-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
+        
         .creator-details {
             display: flex;
             flex-direction: column;
         }
-
+        
         .creator-name {
             color: #fff;
             font-size: 0.85rem;
             font-weight: 600;
         }
-
+        
         .creation-time {
             color: rgba(255, 255, 255, 0.3);
             font-size: 0.7rem;
         }
-
+        
         .recruitment-badge {
             margin-left: auto;
             font-size: 0.65rem;
@@ -802,14 +787,14 @@
             align-items: center;
             gap: 6px;
         }
-
+        
         .tech-stack {
             display: flex;
             gap: 8px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
+        
         .tech-tag {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.65rem;
@@ -820,14 +805,14 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s ease;
         }
-
+        
         .project-feed-card:hover .tech-tag {
             color: rgba(255, 255, 255, 0.9);
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(215, 138, 47, 0.3);
             box-shadow: 0 0 10px rgba(215, 138, 47, 0.1);
         }
-
+        
         .card-footer {
             display: flex;
             align-items: center;
@@ -835,12 +820,12 @@
             padding-top: 18px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
-
+        
         .stats {
             display: flex;
             gap: 16px;
         }
-
+        
         .stat-item {
             display: flex;
             align-items: center;
@@ -851,39 +836,39 @@
             transform: translateY(6px);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .project-feed-card:hover .stat-item {
             opacity: 1;
             transform: translateY(0);
         }
-
+        
         .project-feed-card:hover .stat-item:nth-child(1) {
             transition-delay: 0.05s;
         }
-
+        
         .project-feed-card:hover .stat-item:nth-child(2) {
             transition-delay: 0.1s;
         }
-
+        
         .project-feed-card:hover .stat-item:nth-child(3) {
             transition-delay: 0.15s;
         }
-
+        
         .stat-item:hover {
             color: #d78a2f !important;
         }
-
+        
         .stat-item i {
             width: 14px;
             height: 14px;
         }
-
+        
         .navbar {
             position: absolute;
             z-index: 100;
         }
-
         /* ─── Real-Time Activity Strip ─────────────────────────── */
+        
         .activity-strip {
             position: absolute;
             top: 72px;
@@ -900,8 +885,8 @@
             display: flex;
             align-items: center;
         }
-
         /* Edge fade masks */
+        
         .activity-strip::before,
         .activity-strip::after {
             content: '';
@@ -912,17 +897,17 @@
             z-index: 2;
             pointer-events: none;
         }
-
+        
         .activity-strip::before {
             left: 0;
             background: linear-gradient(to right, rgba(10, 10, 12, 0.9), transparent);
         }
-
+        
         .activity-strip::after {
             right: 0;
             background: linear-gradient(to left, rgba(10, 10, 12, 0.9), transparent);
         }
-
+        
         .ticker-track {
             display: flex;
             align-items: center;
@@ -931,17 +916,16 @@
             animation: ticker-scroll 70s linear infinite;
             will-change: transform;
         }
-
+        
         @keyframes ticker-scroll {
             0% {
                 transform: translate3d(0, 0, 0);
             }
-
             100% {
                 transform: translate3d(-50%, 0, 0);
             }
         }
-
+        
         .ticker-item {
             display: inline-flex;
             align-items: center;
@@ -952,22 +936,22 @@
             letter-spacing: 0.04em;
             color: rgba(255, 255, 255, 0.38);
         }
-
+        
         .ticker-item strong {
             color: rgba(255, 255, 255, 0.82);
             font-weight: 500;
         }
-
+        
         .ticker-item .t-amber {
             color: #d78a2f;
         }
-
+        
         .ticker-item .t-stamp {
             color: rgba(255, 255, 255, 0.18);
             font-size: 0.58rem;
             margin-left: 2px;
         }
-
+        
         .ticker-pulse {
             width: 5px;
             height: 5px;
@@ -977,42 +961,40 @@
             animation: t-pulse 2.2s ease-in-out infinite;
             flex-shrink: 0;
         }
-
+        
         @keyframes t-pulse {
-
             0%,
             100% {
                 opacity: 0.35;
                 transform: scale(0.85);
             }
-
             50% {
                 opacity: 1;
                 transform: scale(1.35);
             }
         }
-
+        
         .ticker-divider {
             width: 1px;
             height: 14px;
             background: rgba(255, 255, 255, 0.08);
             flex-shrink: 0;
         }
-
         /* ─── Feed container clears both navbar + strip ─────────── */
+        
         .feed-container {
             margin-top: 160px !important;
         }
-
         /* Hide default scrollbar */
-        ::-webkit-scrollbar {
+        
+         ::-webkit-scrollbar {
             display: none;
         }
     </style>
 </head>
 
 <body class="home-page">
-    <script src="../scripts/motion-engine.js"></script>
+    <script src="../scripts/motion-engine.js" defer></script>
 
     <canvas id="c"></canvas>
 
@@ -1059,7 +1041,7 @@
                             <a href="feed.html" class="dropdown-item nav-item-anim active-page">Feed</a>
                             <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
                             <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
-                            <a href="upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+                            <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
                         </div>
                         <div class="dropdown-divider"></div>
                         <div class="dropdown-group secondary-nav">
@@ -1179,8 +1161,7 @@
         <div class="command-palette">
             <div class="command-input-wrapper">
                 <i data-lucide="terminal"></i>
-                <input type="text" id="command-search-input"
-                    placeholder="Search projects, builders, stacks, or teams..." autocomplete="off">
+                <input type="text" id="command-search-input" placeholder="Search projects, builders, stacks, or teams..." autocomplete="off">
             </div>
             <div class="command-results" id="command-results">
                 <div class="command-group-title">Suggestions</div>
@@ -1222,7 +1203,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="../scripts/firebase-config.js"></script>
+    <script src="../scripts/firebase-config.js" defer></script>
 
     <script>
         'use strict';
@@ -1230,156 +1211,234 @@
         // --- Scientific Mesh Engine ---
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d');
-        let W = 0, H = 0, DPR = 1;
-        let mouseX = 0, mouseY = 0, curX = 0, curY = 0, warpX = 0, warpY = 0;
+        let W = 0,
+            H = 0,
+            DPR = 1;
+        let mouseX = 0,
+            mouseY = 0,
+            curX = 0,
+            curY = 0,
+            warpX = 0,
+            warpY = 0;
 
-        const LAYERS = [
-            { cell: 26, alpha: 0.038 },
-            { cell: 24, alpha: 0.115 }
-        ];
+        const LAYERS = [{
+            cell: 26,
+            alpha: 0.038
+        }, {
+            cell: 24,
+            alpha: 0.115
+        }];
 
-        const springs = LAYERS.map(() => ({ x: 0, y: 0, vx: 0, vy: 0 }));
-        const PARALLAX = 110, STIFFNESS = 0.026, DAMPING = 0.105;
-        const WARP_RADIUS = 210, WARP_STRENGTH = 30, WARP_STEP = 4;
+        const springs = LAYERS.map(() => ({
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0
+        }));
+        const PARALLAX = 110,
+            STIFFNESS = 0.026,
+            DAMPING = 0.105;
+        const WARP_RADIUS = 210,
+            WARP_STRENGTH = 30,
+            WARP_STEP = 4;
         const ORANGE_RADIUS = 34;
-        const ORANGE = { r: 215, g: 138, b: 47 };
-        const CURSOR_LERP = 0.18, WARP_LERP = 0.09;
+        const ORANGE = {
+            r: 215,
+            g: 138,
+            b: 47
+        };
+        const CURSOR_LERP = 0.18,
+            WARP_LERP = 0.09;
 
         function resize() {
             DPR = window.devicePixelRatio || 1;
-            W = window.innerWidth; H = window.innerHeight;
-            canvas.width = W * DPR; canvas.height = H * DPR;
-            canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+            W = window.innerWidth;
+            H = window.innerHeight;
+            canvas.width = W * DPR;
+            canvas.height = H * DPR;
+            canvas.style.width = W + 'px';
+            canvas.style.height = H + 'px';
             ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         }
-        window.addEventListener('resize', resize, { passive: true });
+        window.addEventListener('resize', resize, {
+            passive: true
+        });
         resize();
 
-        mouseX = W * 0.5; mouseY = H * 0.5; curX = mouseX; curY = mouseY; warpX = mouseX; warpY = mouseY;
-        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+        mouseX = W * 0.5;
+        mouseY = H * 0.5;
+        curX = mouseX;
+        curY = mouseY;
+        warpX = mouseX;
+        warpY = mouseY;
+        window.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        }, {
+            passive: true
+        });
 
         function warpPoint(px, py) {
-            const dx = warpX - px, dy = warpY - py, distSq = dx * dx + dy * dy, r2 = WARP_RADIUS * WARP_RADIUS;
-            if (distSq > r2 * 9) { return [px, py]; }
-            const falloff = Math.exp(-distSq / (2 * r2)), dist = Math.sqrt(distSq), pull = WARP_STRENGTH * falloff / Math.max(dist, 1);
+            const dx = warpX - px,
+                dy = warpY - py,
+                distSq = dx * dx + dy * dy,
+                r2 = WARP_RADIUS * WARP_RADIUS;
+            if (distSq > r2 * 9) {
+                return [px, py];
+            }
+            const falloff = Math.exp(-distSq / (2 * r2)),
+                dist = Math.sqrt(distSq),
+                pull = WARP_STRENGTH * falloff / Math.max(dist, 1);
             return [px + dx * pull, py + dy * pull];
         }
 
         function gridColorAt(x, y, baseAlpha) {
-            const dx = x - warpX, dy = y - warpY, dist = Math.sqrt(dx * dx + dy * dy);
+            const dx = x - warpX,
+                dy = y - warpY,
+                dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < ORANGE_RADIUS) {
-                const t = 1 - (dist / ORANGE_RADIUS), alpha = 0.20 + (t * 0.85);
+                const t = 1 - (dist / ORANGE_RADIUS),
+                    alpha = 0.20 + (t * 0.85);
                 return `rgba(${ORANGE.r}, ${ORANGE.g}, ${ORANGE.b}, ${alpha})`;
             }
             return `rgba(255, 255, 255, ${baseAlpha})`;
         }
 
         function drawLayer(layer, sp) {
-            const cell = layer.cell, ox = sp.x, oy = sp.y;
-            const sx = (((ox % cell) + cell) % cell) - cell * 2, sy = (((oy % cell) + cell) % cell) - cell * 2;
-            ctx.lineWidth = 0.55; ctx.lineCap = 'round';
+            const cell = layer.cell,
+                ox = sp.x,
+                oy = sp.y;
+            const sx = (((ox % cell) + cell) % cell) - cell * 2,
+                sy = (((oy % cell) + cell) % cell) - cell * 2;
+            ctx.lineWidth = 0.55;
+            ctx.lineCap = 'round';
             for (let gy = sy; gy < H + cell * 2; gy += cell) {
-                ctx.beginPath(); let first = true;
+                ctx.beginPath();
+                let first = true;
                 for (let px = -WARP_STEP; px <= W + WARP_STEP; px += WARP_STEP) {
                     const [wx, wy] = warpPoint(px, gy);
-                    if (first) { ctx.moveTo(wx, wy); first = false; } else { ctx.lineTo(wx, wy); }
+                    if (first) {
+                        ctx.moveTo(wx, wy);
+                        first = false;
+                    } else {
+                        ctx.lineTo(wx, wy);
+                    }
                 }
-                ctx.strokeStyle = gridColorAt(W * 0.5, gy, layer.alpha); ctx.stroke();
+                ctx.strokeStyle = gridColorAt(W * 0.5, gy, layer.alpha);
+                ctx.stroke();
             }
             for (let gx = sx; gx < W + cell * 2; gx += cell) {
-                ctx.beginPath(); let first = true;
+                ctx.beginPath();
+                let first = true;
                 for (let py = -WARP_STEP; py <= H + WARP_STEP; py += WARP_STEP) {
                     const [wx, wy] = warpPoint(gx, py);
-                    if (first) { ctx.moveTo(wx, wy); first = false; } else { ctx.lineTo(wx, wy); }
+                    if (first) {
+                        ctx.moveTo(wx, wy);
+                        first = false;
+                    } else {
+                        ctx.lineTo(wx, wy);
+                    }
                 }
-                ctx.strokeStyle = gridColorAt(gx, H * 0.5, layer.alpha); ctx.stroke();
+                ctx.strokeStyle = gridColorAt(gx, H * 0.5, layer.alpha);
+                ctx.stroke();
             }
         }
 
         function animate() {
             requestAnimationFrame(animate);
-            curX += (mouseX - curX) * CURSOR_LERP; curY += (mouseY - curY) * CURSOR_LERP;
-            warpX += (mouseX - warpX) * WARP_LERP; warpY += (mouseY - warpY) * WARP_LERP;
-            const cx = W * 0.5, cy = H * 0.5;
+            curX += (mouseX - curX) * CURSOR_LERP;
+            curY += (mouseY - curY) * CURSOR_LERP;
+            warpX += (mouseX - warpX) * WARP_LERP;
+            warpY += (mouseY - warpY) * WARP_LERP;
+            const cx = W * 0.5,
+                cy = H * 0.5;
             springs.forEach(sp => {
-                const tx = ((mouseX - cx) / cx) * PARALLAX, ty = ((mouseY - cy) / cy) * PARALLAX;
-                const fx = (tx - sp.x) * STIFFNESS, fy = (ty - sp.y) * STIFFNESS;
-                sp.vx = sp.vx * (1 - DAMPING) + fx; sp.vy = sp.vy * (1 - DAMPING) + fy;
-                sp.x += sp.vx; sp.y += sp.vy;
+                const tx = ((mouseX - cx) / cx) * PARALLAX,
+                    ty = ((mouseY - cy) / cy) * PARALLAX;
+                const fx = (tx - sp.x) * STIFFNESS,
+                    fy = (ty - sp.y) * STIFFNESS;
+                sp.vx = sp.vx * (1 - DAMPING) + fx;
+                sp.vy = sp.vy * (1 - DAMPING) + fy;
+                sp.x += sp.vx;
+                sp.y += sp.vy;
             });
             ctx.clearRect(0, 0, W, H);
-            drawLayer(LAYERS[0], springs[0]); drawLayer(LAYERS[1], springs[1]);
+            drawLayer(LAYERS[0], springs[0]);
+            drawLayer(LAYERS[1], springs[1]);
         }
         animate();
 
         // --- Realistic Placeholder Projects ---
-        const PLACEHOLDER_PROJECTS = [
-            {
-                title: "AstroEngine v2",
-                desc: "Next-gen orbital physics engine for web-based space simulators. Real-time N-body integration.",
-                userName: "Alex Thorne",
-                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-                tags: ["WebGL", "Rust", "Wasm"],
-                status: "shipping",
-                sys: "astro_engine.sys",
-                recruiting: true,
-                likes: 245, comments: 12, saves: 56,
-                img: "orbital_engine_demo_1778407862622.png",
-                time: "2h ago"
-            },
-            {
-                title: "Lumina Editor",
-                desc: "Minimalist cloud-native code editor with zero-latency collaborative features and AI assistance.",
-                userName: "Sarah Chen",
-                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-                tags: ["TypeScript", "Next.js", "Socket.io"],
-                status: "beta",
-                sys: "lumina_core.sys",
-                recruiting: false,
-                likes: 890, comments: 45, saves: 120,
-                img: "code_editor_ui_1778407878084.png",
-                time: "4h ago"
-            },
-            {
-                title: "Nexus Dashboard",
-                desc: "High-performance data visualization system for monitoring distributed microservices in real-time.",
-                userName: "Marcus Vane",
-                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
-                tags: ["D3.js", "React", "Go"],
-                status: "in progress",
-                sys: "nexus_visual.sys",
-                recruiting: true,
-                likes: 156, comments: 8, saves: 32,
-                img: "data_viz_dashboard_1778407912100.png",
-                time: "6h ago"
-            },
-            {
-                title: "DreamWeaver AI",
-                desc: "Generative AI interface focused on rapid architectural concept visualization and 3D modeling.",
-                userName: "Elena Rossi",
-                userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
-                tags: ["PyTorch", "Python", "Tailwind"],
-                status: "completed",
-                sys: "dream_weaver.sys",
-                recruiting: false,
-                likes: 3.2, comments: 112, saves: 450,
-                img: "ai_image_gen_ui_1778408100299.png",
-                time: "8h ago"
-            }
-        ];
+        const PLACEHOLDER_PROJECTS = [{
+            title: "AstroEngine v2",
+            desc: "Next-gen orbital physics engine for web-based space simulators. Real-time N-body integration.",
+            userName: "Alex Thorne",
+            userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+            tags: ["WebGL", "Rust", "Wasm"],
+            status: "shipping",
+            sys: "astro_engine.sys",
+            recruiting: true,
+            likes: 245,
+            comments: 12,
+            saves: 56,
+            img: "orbital_engine_demo_1778407862622.png",
+            time: "2h ago"
+        }, {
+            title: "Lumina Editor",
+            desc: "Minimalist cloud-native code editor with zero-latency collaborative features and AI assistance.",
+            userName: "Sarah Chen",
+            userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+            tags: ["TypeScript", "Next.js", "Socket.io"],
+            status: "beta",
+            sys: "lumina_core.sys",
+            recruiting: false,
+            likes: 890,
+            comments: 45,
+            saves: 120,
+            img: "code_editor_ui_1778407878084.png",
+            time: "4h ago"
+        }, {
+            title: "Nexus Dashboard",
+            desc: "High-performance data visualization system for monitoring distributed microservices in real-time.",
+            userName: "Marcus Vane",
+            userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+            tags: ["D3.js", "React", "Go"],
+            status: "in progress",
+            sys: "nexus_visual.sys",
+            recruiting: true,
+            likes: 156,
+            comments: 8,
+            saves: 32,
+            img: "data_viz_dashboard_1778407912100.png",
+            time: "6h ago"
+        }, {
+            title: "DreamWeaver AI",
+            desc: "Generative AI interface focused on rapid architectural concept visualization and 3D modeling.",
+            userName: "Elena Rossi",
+            userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+            tags: ["PyTorch", "Python", "Tailwind"],
+            status: "completed",
+            sys: "dream_weaver.sys",
+            recruiting: false,
+            likes: 3.2,
+            comments: 112,
+            saves: 450,
+            img: "ai_image_gen_ui_1778408100299.png",
+            time: "8h ago"
+        }];
 
         const loadFeed = () => {
-            const list = document.getElementById('feed-list');
-            list.innerHTML = '';
+                const list = document.getElementById('feed-list');
+                list.innerHTML = '';
 
-            PLACEHOLDER_PROJECTS.forEach(p => {
-                const statusHtml = p.status === 'live'
-                    ? `<span class="status-badge status-live"><span class="live-dot"></span>LIVE</span>`
-                    : p.status === 'trending'
-                        ? `<span class="status-badge status-trending">TRENDING</span>`
-                        : `<span class="status-badge status-shipping">SHIPPING</span>`;
+                PLACEHOLDER_PROJECTS.forEach(p => {
+                            const statusHtml = p.status === 'live' ?
+                                `<span class="status-badge status-live"><span class="live-dot"></span>LIVE</span>` :
+                                p.status === 'trending' ?
+                                `<span class="status-badge status-trending">TRENDING</span>` :
+                                `<span class="status-badge status-shipping">SHIPPING</span>`;
 
-                list.innerHTML += `
+                            list.innerHTML += `
                     <div class="project-feed-card feature-terminal-card">
                         <div class="card-terminal-bar">
                             <div class="bar-left">
@@ -1842,7 +1901,7 @@
 
         lucide.createIcons();
     </script>
-    
+
 </body>
 
 </html>

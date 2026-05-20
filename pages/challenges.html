@@ -10,22 +10,21 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&family=Outfit:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&family=Outfit:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../styles/global.css">
-    
+
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         /* devstage global overrides/additions */
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box
         }
-
+        
         html,
         body {
             width: 100%;
@@ -33,7 +32,7 @@
             background: #0f1011;
             overflow: hidden
         }
-
+        
         #stage {
             width: 100%;
             height: 100vh;
@@ -41,8 +40,8 @@
             overflow: hidden;
             background: #0f1011;
         }
-
         /* bg canvas: behind everything */
+        
         #bgCanvas {
             position: absolute;
             inset: 0;
@@ -51,8 +50,8 @@
             display: block;
             z-index: 1;
         }
-
         /* fg canvas: in FRONT of text — draws only close particles */
+        
         #fgCanvas {
             position: absolute;
             inset: 0;
@@ -62,7 +61,7 @@
             z-index: 20;
             pointer-events: none;
         }
-
+        
         #hint {
             position: absolute;
             bottom: 28px;
@@ -79,8 +78,8 @@
             opacity: 1;
             transition: opacity 2.2s ease;
         }
-
         /* ── CONTENT — sits between bg and fg canvas ── */
+        
         #content {
             position: absolute;
             inset: 0;
@@ -92,8 +91,8 @@
             z-index: 10;
             will-change: filter, opacity;
         }
-
         /* Eyebrow */
+        
         .eyebrow {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -105,20 +104,20 @@
             position: relative;
             will-change: transform;
         }
-
+        
         .eyebrow .ch {
             display: inline-block;
             opacity: 0;
             transform: translateY(3px);
             transition: opacity 0.6s ease, transform 0.5s ease;
         }
-
+        
         .eyebrow .ch.on {
             opacity: 1;
             transform: translateY(0);
         }
-
         /* Title */
+        
         .title-wrap {
             position: relative;
             margin-bottom: clamp(18px, 2.5vw, 30px);
@@ -128,7 +127,7 @@
             justify-content: center;
             will-change: transform;
         }
-
+        
         h1.main-title {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 300;
@@ -141,15 +140,15 @@
             position: relative;
             display: flex;
         }
-
+        
         .main-title .ch {
             display: inline-block;
             position: relative;
             opacity: 0;
             will-change: transform, filter;
         }
-
         /* Subtitle */
+        
         .sub-title {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -161,7 +160,7 @@
             overflow: hidden;
             will-change: transform;
         }
-
+        
         .sub-title::after {
             content: '';
             position: absolute;
@@ -172,30 +171,30 @@
             background: linear-gradient(90deg, transparent, rgba(255, 140, 55, 0.40), transparent);
             transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .sub-title.wipe::after {
             width: 100%;
         }
-
+        
         .sub-title .word {
             display: inline-block;
             overflow: hidden;
             vertical-align: bottom;
             margin-right: 0.28em;
         }
-
+        
         .sub-title .inner {
             display: inline-block;
             transform: translateY(110%);
             color: rgba(255, 255, 255, 0.28);
             transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .sub-title.wipe .inner {
             transform: translateY(0);
         }
-
         /* Rule */
+        
         .rule {
             width: 1px;
             height: 0px;
@@ -204,13 +203,13 @@
             opacity: 0;
             transition: height 1.0s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
-
+        
         .rule.show {
             height: clamp(40px, 5vw, 70px);
             opacity: 1;
         }
-
         /* Tags */
+        
         .tags {
             display: flex;
             gap: clamp(6px, 0.8vw, 10px);
@@ -218,7 +217,7 @@
             justify-content: center;
             will-change: transform;
         }
-
+        
         .tag {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -233,7 +232,7 @@
             overflow: hidden;
             transition: color 0.8s ease, border-color 0.8s ease;
         }
-
+        
         .tag::before {
             content: '';
             position: absolute;
@@ -242,18 +241,18 @@
             transform: translateX(-100%);
             transition: transform 0.0s;
         }
-
+        
         .tag.show {
             color: rgba(255, 255, 255, 0.20);
             border-color: rgba(255, 255, 255, 0.07);
         }
-
+        
         .tag.show::before {
             transition: transform 0.9s ease;
             transform: translateX(100%);
         }
-
         /* ─── Uiverse Hamburger Menu ─── */
+        
         .uiverse-hamburger {
             cursor: pointer;
             display: flex;
@@ -263,14 +262,14 @@
             height: 40px;
             position: relative;
         }
-
+        
         .uiverse-hamburger svg {
             height: 38px;
             width: 38px;
             transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         /* ─── Premium Futuristic Active Challenge Section Styles ─── */
+        
         .challenge-section {
             position: absolute;
             inset: 0;
@@ -287,11 +286,12 @@
             opacity: 0;
             transform: translateY(120px);
         }
+        
         .challenge-section::-webkit-scrollbar {
             display: none;
         }
-
         /* Subtle floating ambient glow background */
+        
         .active-card-glow-overlay {
             position: absolute;
             top: 50%;
@@ -306,25 +306,23 @@
             transform: translate(-50%, -50%);
             animation: glow-float 12s ease-in-out infinite;
         }
-
+        
         @keyframes glow-float {
             0% {
                 transform: translate(-50%, -50%) translate(0, 0) scale(1);
                 opacity: 0.5;
             }
-
             50% {
                 transform: translate(-50%, -50%) translate(-30px, 20px) scale(1.1);
                 opacity: 0.8;
             }
-
             100% {
                 transform: translate(-50%, -50%) translate(0, 0) scale(1);
                 opacity: 0.5;
             }
         }
-
         /* Responsive grid of terminal cards */
+        
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(280px, 1fr));
@@ -335,22 +333,22 @@
             position: relative;
             z-index: 2;
         }
-
+        
         @media (max-width: 1024px) {
             .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
                 max-width: 760px;
             }
         }
-
+        
         @media (max-width: 640px) {
             .cards-grid {
                 grid-template-columns: 1fr;
                 max-width: 360px;
             }
         }
-
         /* Active Challenge Terminal Card */
+        
         .active-challenge-card {
             background: rgba(15, 16, 17, 0.45);
             backdrop-filter: blur(28px);
@@ -364,19 +362,15 @@
             transform-style: preserve-3d;
             will-change: transform;
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03),
-                0 0 30px rgba(218, 108, 32, 0.005);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 0 30px rgba(218, 108, 32, 0.005);
         }
-
+        
         .active-challenge-card:hover {
             border-color: rgba(218, 108, 32, 0.15);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                0 0 40px rgba(218, 108, 32, 0.02);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 40px rgba(218, 108, 32, 0.02);
         }
-
         /* Top Terminal Bar */
+        
         .terminal-bar {
             height: 38px;
             background: rgba(255, 255, 255, 0.015);
@@ -386,27 +380,27 @@
             justify-content: space-between;
             padding: 0 16px;
         }
-
+        
         .terminal-dots {
             display: flex;
             gap: 6px;
         }
-
+        
         .terminal-dots .dot {
             width: 5px;
             height: 5px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
         }
-
+        
         .terminal-file {
             font-family: 'Outfit', sans-serif;
             font-size: 10px;
             color: rgba(255, 255, 255, 0.35);
             letter-spacing: 0.1em;
         }
-
         /* Status Badge inside Terminal Bar */
+        
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -416,7 +410,7 @@
             border: 1px solid rgba(218, 108, 32, 0.2);
             border-radius: 100px;
         }
-
+        
         .status-badge span {
             font-family: 'Outfit', sans-serif;
             font-size: 7px;
@@ -425,7 +419,7 @@
             color: rgb(218, 108, 32);
             text-transform: uppercase;
         }
-
+        
         .pulse-dot {
             width: 3px;
             height: 3px;
@@ -433,7 +427,7 @@
             background: rgb(218, 108, 32);
             position: relative;
         }
-
+        
         .pulse-dot::after {
             content: '';
             position: absolute;
@@ -442,27 +436,26 @@
             border: 0.5px solid rgba(218, 108, 32, 0.6);
             animation: pulse-ring 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
         }
-
+        
         @keyframes pulse-ring {
             0% {
                 transform: scale(0.6);
                 opacity: 1;
             }
-
             100% {
                 transform: scale(1.8);
                 opacity: 0;
             }
         }
-
         /* Main Content */
+        
         .card-content {
             padding: 24px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-
+        
         .challenge-title {
             font-family: 'Clash Display', 'Outfit', sans-serif;
             font-weight: 600;
@@ -473,7 +466,7 @@
             text-align: left;
             text-transform: none;
         }
-
+        
         .challenge-desc {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -484,8 +477,8 @@
             text-align: left;
             min-height: 54px;
         }
-
         /* Metadata Row tags */
+        
         .metadata-row {
             display: flex;
             align-items: center;
@@ -494,7 +487,7 @@
             flex-wrap: wrap;
             justify-content: flex-start;
         }
-
+        
         .meta-tag {
             font-family: 'Outfit', sans-serif;
             font-weight: 400;
@@ -507,14 +500,14 @@
             border-radius: 1px;
             text-transform: uppercase;
         }
-
+        
         .meta-tag.xp-reward {
             color: rgb(218, 108, 32);
             border-color: rgba(218, 108, 32, 0.2);
             background: rgba(218, 108, 32, 0.01);
         }
-
         /* Countdown Timer */
+        
         .countdown-container {
             display: flex;
             align-items: center;
@@ -524,13 +517,13 @@
             border-top: 1px solid rgba(255, 255, 255, 0.03);
             justify-content: flex-start;
         }
-
+        
         .time-unit {
             display: flex;
             align-items: baseline;
             gap: 4px;
         }
-
+        
         .time-num {
             font-family: 'Cormorant Garamond', 'Outfit', serif;
             font-weight: 300;
@@ -539,7 +532,7 @@
             display: inline-block;
             will-change: transform, opacity;
         }
-
+        
         .time-lbl {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -548,7 +541,7 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
-
+        
         .time-separator {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -556,8 +549,8 @@
             color: rgba(218, 108, 32, 0.25);
             animation: pulse-deadline 2s infinite ease-in-out;
         }
-
         /* Bottom Action Row */
+        
         .cta-row {
             height: 48px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
@@ -565,7 +558,7 @@
             background: rgba(255, 255, 255, 0.005);
             align-items: stretch;
         }
-
+        
         .cta-primary {
             flex: 1;
             font-family: 'Outfit', sans-serif;
@@ -586,24 +579,24 @@
             gap: 8px;
             transition: background 0.4s ease, color 0.4s ease;
         }
-
+        
         .cta-primary:hover {
             background: rgba(218, 108, 32, 0.03);
             color: rgb(218, 108, 32);
         }
-
+        
         .cta-arrow {
             width: 11px;
             height: 11px;
             stroke-width: 1.5;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .cta-primary:hover .cta-arrow {
             transform: translateX(3px);
         }
-
         /* Sweep underline line inside bottom primary */
+        
         .cta-primary::before {
             content: '';
             position: absolute;
@@ -616,11 +609,11 @@
             transform-origin: left;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .cta-primary:hover::before {
             transform: scaleX(1);
         }
-
+        
         .cta-secondary {
             width: 100px;
             font-family: 'Outfit', sans-serif;
@@ -635,13 +628,13 @@
             justify-content: center;
             transition: color 0.4s ease, background 0.4s ease;
         }
-
+        
         .cta-secondary:hover {
             color: #ffffff;
             background: rgba(255, 255, 255, 0.02);
         }
-
         /* ─── Premium Futuristic Challenge Analysis Section Styles ─── */
+        
         .analysis-section {
             position: absolute;
             inset: 0;
@@ -658,22 +651,22 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
         }
-
+        
         .analysis-section::-webkit-scrollbar {
             width: 4px;
         }
-
+        
         .analysis-section::-webkit-scrollbar-thumb {
             background: rgba(218, 108, 32, 0.2);
             border-radius: 10px;
         }
-
+        
         .analysis-header {
             text-align: center;
             margin-bottom: 32px;
             max-width: 600px;
         }
-
+        
         .analysis-eyebrow {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -685,7 +678,7 @@
             margin-bottom: 8px;
             text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
         }
-
+        
         .analysis-title {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -696,7 +689,7 @@
             margin-bottom: 12px;
             text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
         }
-
+        
         .analysis-subtext {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -704,7 +697,7 @@
             color: rgba(255, 255, 255, 0.4);
             line-height: 1.6;
         }
-
+        
         .analysis-grid {
             display: grid;
             grid-template-columns: 1.15fr 1.35fr;
@@ -713,19 +706,18 @@
             width: 100%;
             align-items: start;
         }
-
+        
         @media (max-width: 1024px) {
             .analysis-grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
-
             .analysis-section {
                 padding-top: 130px;
             }
         }
-
         /* Left Column: Radar Console */
+        
         .radar-console-box {
             background: rgba(15, 16, 17, 0.45);
             backdrop-filter: blur(28px);
@@ -735,11 +727,10 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
             position: relative;
         }
-
+        
         .radar-terminal-bar {
             height: 38px;
             background: rgba(255, 255, 255, 0.015);
@@ -749,13 +740,13 @@
             justify-content: space-between;
             padding: 0 16px;
         }
-
+        
         .scanner-status {
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
+        
         .scanner-status-text {
             font-family: 'Outfit', sans-serif;
             font-size: 7px;
@@ -764,7 +755,7 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
         }
-
+        
         .scanner-pulse {
             width: 4px;
             height: 4px;
@@ -772,7 +763,7 @@
             background: rgb(218, 108, 32);
             position: relative;
         }
-
+        
         .scanner-pulse::after {
             content: '';
             position: absolute;
@@ -781,7 +772,7 @@
             border: 0.5px solid rgba(218, 108, 32, 0.6);
             animation: pulse-ring 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
         }
-
+        
         .radar-canvas-container {
             height: 380px;
             display: flex;
@@ -791,20 +782,20 @@
             background: radial-gradient(circle, rgba(218, 108, 32, 0.008) 0%, transparent 80%);
             padding: 16px;
         }
-
+        
         #radarCanvas {
             max-width: 100%;
             max-height: 100%;
             display: block;
         }
-
         /* Right Column: Console Panels */
+        
         .analysis-panels-container {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-
+        
         .console-panel {
             background: rgba(15, 16, 17, 0.45);
             backdrop-filter: blur(28px);
@@ -812,33 +803,32 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
             transition: border-color 0.4s ease;
         }
-
+        
         .console-panel:hover {
             border-color: rgba(218, 108, 32, 0.12);
         }
-
+        
         .console-panel.highlight-panel {
             border-left: 2px solid rgb(218, 108, 32);
         }
-
+        
         .panel-header {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 16px;
         }
-
+        
         .panel-icon {
             width: 13px;
             height: 13px;
             stroke: rgba(218, 108, 32, 0.85);
             stroke-width: 1.5;
         }
-
+        
         .panel-header span {
             font-family: 'Outfit', sans-serif;
             font-size: 9px;
@@ -847,14 +837,14 @@
             color: rgba(255, 255, 255, 0.35);
             text-transform: uppercase;
         }
-
+        
         .stack-tags {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
             margin-bottom: 20px;
         }
-
+        
         .stack-tag {
             font-family: 'Outfit', sans-serif;
             font-size: 9px;
@@ -867,19 +857,19 @@
             border-radius: 4px;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .stack-tag:hover {
             border-color: rgba(218, 108, 32, 0.28);
             background: rgba(218, 108, 32, 0.02);
             color: rgb(218, 108, 32);
         }
-
+        
         .stack-specs {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
+        
         .spec-row {
             display: flex;
             justify-content: space-between;
@@ -887,12 +877,12 @@
             border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
             padding-bottom: 8px;
         }
-
+        
         .spec-row:last-child {
             border-bottom: none;
             padding-bottom: 0;
         }
-
+        
         .spec-label {
             font-family: 'Outfit', sans-serif;
             font-size: 9px;
@@ -900,22 +890,22 @@
             color: rgba(255, 255, 255, 0.35);
             letter-spacing: 0.12em;
         }
-
+        
         .spec-value {
             font-family: 'Outfit', sans-serif;
             font-size: 11px;
             font-weight: 500;
             color: #ffffff;
         }
-
         /* Team mini-cards */
+        
         .team-cards-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
             width: 100%;
         }
-
+        
         .team-mini-card {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid rgba(255, 255, 255, 0.04);
@@ -927,19 +917,19 @@
             overflow: hidden;
             transition: all 0.4s ease;
         }
-
+        
         .team-mini-card:hover {
             background: rgba(218, 108, 32, 0.015);
             border-color: rgba(218, 108, 32, 0.15);
         }
-
+        
         .team-role {
             font-family: 'Outfit', sans-serif;
             font-size: 12px;
             font-weight: 500;
             color: #ffffff;
         }
-
+        
         .team-desc {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -949,7 +939,7 @@
             text-transform: uppercase;
             margin-top: 4px;
         }
-
+        
         .insight-text {
             font-family: 'Outfit', sans-serif;
             font-size: 12px;
@@ -960,20 +950,18 @@
             position: relative;
             animation: text-glow-pulse 4s infinite ease-in-out;
         }
-
+        
         @keyframes text-glow-pulse {
-
             0%,
             100% {
                 text-shadow: 0 0 10px rgba(255, 255, 255, 0);
             }
-
             50% {
                 text-shadow: 0 0 25px rgba(255, 255, 255, 0.06);
             }
         }
-
         /* ─── Premium Futuristic Team Discovery Section Styles ─── */
+        
         .recruitment-section {
             position: absolute;
             inset: 0;
@@ -990,22 +978,22 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
         }
-
+        
         .recruitment-section::-webkit-scrollbar {
             width: 4px;
         }
-
+        
         .recruitment-section::-webkit-scrollbar-thumb {
             background: rgba(218, 108, 32, 0.2);
             border-radius: 10px;
         }
-
+        
         .recruitment-header {
             text-align: center;
             margin-bottom: 28px;
             max-width: 600px;
         }
-
+        
         .recruitment-eyebrow {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1017,7 +1005,7 @@
             margin-bottom: 8px;
             text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
         }
-
+        
         .recruitment-title {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -1028,7 +1016,7 @@
             margin-bottom: 12px;
             text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
         }
-
+        
         .recruitment-subtext {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -1036,8 +1024,8 @@
             color: rgba(255, 255, 255, 0.4);
             line-height: 1.6;
         }
-
         /* Ticker horizontal live recruitment feed */
+        
         .recruitment-ticker-bar {
             width: 100%;
             max-width: 1140px;
@@ -1051,7 +1039,7 @@
             margin-bottom: 28px;
             position: relative;
         }
-
+        
         .recruitment-ticker-bar::before,
         .recruitment-ticker-bar::after {
             content: '';
@@ -1062,17 +1050,17 @@
             z-index: 2;
             pointer-events: none;
         }
-
+        
         .recruitment-ticker-bar::before {
             left: 0;
             background: linear-gradient(to right, #0f1011 0%, transparent 100%);
         }
-
+        
         .recruitment-ticker-bar::after {
             right: 0;
             background: linear-gradient(to left, #0f1011 0%, transparent 100%);
         }
-
+        
         .ticker-track {
             display: flex;
             width: max-content;
@@ -1080,17 +1068,16 @@
             gap: 50px;
             padding-left: 20px;
         }
-
+        
         @keyframes ticker-scrolling {
             0% {
                 transform: translateX(0);
             }
-
             100% {
                 transform: translateX(-50%);
             }
         }
-
+        
         .ticker-item {
             display: flex;
             align-items: center;
@@ -1102,7 +1089,7 @@
             color: rgba(255, 255, 255, 0.65);
             text-transform: uppercase;
         }
-
+        
         .ticker-pulse-dot {
             width: 4px;
             height: 4px;
@@ -1112,20 +1099,18 @@
             display: inline-block;
             animation: ticker-pulse 2s infinite;
         }
-
+        
         @keyframes ticker-pulse {
-
             0%,
             100% {
                 opacity: 0.3;
             }
-
             50% {
                 opacity: 1;
             }
         }
-
         /* Filter Controls */
+        
         .filter-controls-row {
             display: flex;
             justify-content: flex-start;
@@ -1136,12 +1121,12 @@
             margin-bottom: 24px;
             z-index: 100;
         }
-
+        
         .glass-dropdown-wrapper {
             position: relative;
             min-width: 140px;
         }
-
+        
         .dropdown-trigger {
             width: 100%;
             height: 36px;
@@ -1155,12 +1140,12 @@
             cursor: pointer;
             transition: all 0.4s ease;
         }
-
+        
         .dropdown-trigger:hover {
             border-color: rgba(218, 108, 32, 0.2);
             background: rgba(255, 255, 255, 0.02);
         }
-
+        
         .dropdown-trigger span {
             font-family: 'Outfit', sans-serif;
             font-size: 9px;
@@ -1169,7 +1154,7 @@
             color: rgba(255, 255, 255, 0.6);
             text-transform: uppercase;
         }
-
+        
         .dropdown-arrow {
             width: 10px;
             height: 10px;
@@ -1177,12 +1162,12 @@
             stroke-width: 2px;
             transition: transform 0.4s ease;
         }
-
+        
         .dropdown-trigger.open .dropdown-arrow {
             transform: rotate(180deg);
             stroke: rgb(218, 108, 32);
         }
-
+        
         .dropdown-menu {
             position: absolute;
             top: 42px;
@@ -1202,13 +1187,13 @@
             overflow: hidden;
             padding: 4px 0;
         }
-
+        
         .dropdown-menu.open {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
-
+        
         .dropdown-item {
             padding: 10px 16px;
             font-family: 'Outfit', sans-serif;
@@ -1220,18 +1205,18 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
         }
-
+        
         .dropdown-item:hover {
             color: rgb(218, 108, 32);
             background: rgba(218, 108, 32, 0.03);
         }
-
+        
         .dropdown-item.active {
             color: rgb(218, 108, 32);
             background: rgba(218, 108, 32, 0.05);
         }
-
         /* Squad Team Grid */
+        
         .squad-cards-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1241,26 +1226,25 @@
             margin-top: 10px;
             z-index: 10;
         }
-
+        
         @media (max-width: 1024px) {
             .squad-cards-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 20px;
             }
         }
-
+        
         @media (max-width: 768px) {
             .squad-cards-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-
             .recruitment-section {
                 padding-top: 130px;
             }
         }
-
         /* Custom Terminal Team Cards styling */
+        
         .squad-team-card {
             background: rgba(15, 16, 17, 0.45);
             backdrop-filter: blur(28px);
@@ -1270,37 +1254,36 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03);
             position: relative;
             transform-style: preserve-3d;
             transform: perspective(1000px);
             transition: border-color 0.4s ease;
         }
-
+        
         .squad-team-card:hover {
             border-color: rgba(218, 108, 32, 0.15);
         }
-
+        
         .squad-card-content {
             padding: 20px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-
+        
         .squad-card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 16px;
         }
-
+        
         .team-title-wrap {
             display: flex;
             flex-direction: column;
         }
-
+        
         .squad-team-name {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -1310,7 +1293,7 @@
             letter-spacing: 0.02em;
             margin-bottom: 4px;
         }
-
+        
         .squad-focus-challenge {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1319,8 +1302,8 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
-
         /* Dynamic Skill Match progress pill */
+        
         .match-score-pill {
             display: flex;
             align-items: center;
@@ -1331,7 +1314,7 @@
             border-radius: 40px;
             position: relative;
         }
-
+        
         .match-score-text {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1339,7 +1322,7 @@
             color: rgb(218, 108, 32);
             letter-spacing: 0.05em;
         }
-
+        
         .match-score-ring {
             width: 8px;
             height: 8px;
@@ -1348,18 +1331,17 @@
             border-top-color: rgb(218, 108, 32);
             animation: match-pulse-spin 1.8s linear infinite;
         }
-
+        
         @keyframes match-pulse-spin {
             0% {
                 transform: rotate(0deg);
             }
-
             100% {
                 transform: rotate(360deg);
             }
         }
-
         /* Status Badge modularity */
+        
         .squad-status-badge {
             font-family: 'Outfit', sans-serif;
             font-size: 7px;
@@ -1375,24 +1357,24 @@
             align-self: flex-start;
             margin-bottom: 14px;
         }
-
+        
         .squad-status-badge.recruiting {
             background: rgba(255, 255, 255, 0.02);
             color: rgba(255, 255, 255, 0.55);
         }
-
+        
         .squad-status-badge.urgent {
             background: rgba(218, 108, 32, 0.03);
             border-color: rgba(218, 108, 32, 0.15);
             color: rgb(218, 108, 32);
         }
-
+        
         .squad-status-badge.beginner {
             background: rgba(120, 255, 120, 0.02);
             border-color: rgba(120, 255, 120, 0.12);
             color: rgba(120, 255, 120, 0.65);
         }
-
+        
         .badge-pulse {
             width: 3.5px;
             height: 3.5px;
@@ -1400,30 +1382,28 @@
             background: currentColor;
             display: inline-block;
         }
-
+        
         .squad-status-badge.urgent .badge-pulse {
             animation: urgent-pulse 1.6s ease-in-out infinite;
         }
-
+        
         @keyframes urgent-pulse {
-
             0%,
             100% {
                 opacity: 0.4;
             }
-
             50% {
                 opacity: 1;
             }
         }
-
         /* Current Members avatars row */
+        
         .squad-members-row {
             display: flex;
             align-items: center;
             margin-bottom: 16px;
         }
-
+        
         .squad-members-title {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1433,12 +1413,12 @@
             text-transform: uppercase;
             margin-right: 12px;
         }
-
+        
         .squad-avatars {
             display: flex;
             align-items: center;
         }
-
+        
         .squad-avatar-item {
             width: 20px;
             height: 20px;
@@ -1457,23 +1437,23 @@
             z-index: 1;
             transition: transform 0.3s ease, z-index 0.3s ease;
         }
-
+        
         .squad-avatar-item:first-child {
             margin-left: 0;
             z-index: 2;
         }
-
+        
         .squad-avatar-item:hover {
             transform: scale(1.15) translateY(-2px);
             z-index: 10 !important;
             border-color: rgba(218, 108, 32, 0.3);
         }
-
         /* Roles Panel */
+        
         .squad-roles-needed {
             margin-bottom: 16px;
         }
-
+        
         .squad-roles-title {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1484,13 +1464,13 @@
             margin-bottom: 8px;
             display: block;
         }
-
+        
         .squad-role-chips {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
         }
-
+        
         .squad-role-chip {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1503,8 +1483,8 @@
             border-radius: 4px;
             text-transform: uppercase;
         }
-
         /* Tech parameters metadata */
+        
         .squad-specs-row {
             display: flex;
             justify-content: space-between;
@@ -1514,13 +1494,13 @@
             padding: 10px 0;
             margin-bottom: 16px;
         }
-
+        
         .squad-spec-item {
             display: flex;
             flex-direction: column;
             gap: 3px;
         }
-
+        
         .squad-spec-lbl {
             font-family: 'Outfit', sans-serif;
             font-size: 7px;
@@ -1529,15 +1509,15 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
-
+        
         .squad-spec-val {
             font-family: 'Outfit', sans-serif;
             font-size: 9px;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.7);
         }
-
         /* Squad Card CTAs */
+        
         .squad-cta-row {
             display: flex;
             gap: 12px;
@@ -1546,7 +1526,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.03);
             margin-top: auto;
         }
-
+        
         .squad-btn-primary {
             flex-grow: 1;
             height: 32px;
@@ -1560,12 +1540,12 @@
             cursor: pointer;
             transition: all 0.4s ease;
         }
-
+        
         .squad-btn-primary:hover {
             background: rgb(218, 108, 32);
             border-color: rgb(218, 108, 32);
         }
-
+        
         .squad-btn-primary span {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1574,7 +1554,7 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
-
+        
         .squad-btn-primary svg {
             width: 10px;
             height: 10px;
@@ -1582,11 +1562,11 @@
             stroke-width: 2.5px;
             transition: transform 0.3s ease;
         }
-
+        
         .squad-btn-primary:hover svg {
             transform: translateX(2px);
         }
-
+        
         .squad-btn-secondary {
             width: 80px;
             height: 32px;
@@ -1599,12 +1579,12 @@
             cursor: pointer;
             transition: all 0.4s ease;
         }
-
+        
         .squad-btn-secondary:hover {
             background: rgba(255, 255, 255, 0.03);
             border-color: rgba(255, 255, 255, 0.15);
         }
-
+        
         .squad-btn-secondary span {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1614,9 +1594,8 @@
             text-transform: uppercase;
             transition: color 0.4s ease;
         }
-
-
         /* ─── Premium Challenge Evolution Timeline Section Styles ─── */
+        
         .evolution-section {
             position: absolute;
             inset: 0;
@@ -1633,22 +1612,22 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
         }
-
+        
         .evolution-section::-webkit-scrollbar {
             width: 4px;
         }
-
+        
         .evolution-section::-webkit-scrollbar-thumb {
             background: rgba(218, 108, 32, 0.2);
             border-radius: 10px;
         }
-
+        
         .evolution-header {
             text-align: center;
             margin-bottom: 24px;
             max-width: 600px;
         }
-
+        
         .evolution-eyebrow {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1660,7 +1639,7 @@
             margin-bottom: 8px;
             text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
         }
-
+        
         .evolution-title {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -1671,7 +1650,7 @@
             margin-bottom: 12px;
             text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
         }
-
+        
         .evolution-subtext {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -1679,8 +1658,8 @@
             color: rgba(255, 255, 255, 0.4);
             line-height: 1.6;
         }
-
         /* Timeline Top HUD Dashboard Panel */
+        
         .evolution-hud {
             width: 100%;
             max-width: 820px;
@@ -1697,20 +1676,20 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             z-index: 10;
         }
-
+        
         @media (max-width: 600px) {
             .evolution-hud {
                 grid-template-columns: 1fr;
                 gap: 12px;
             }
         }
-
+        
         .hud-metric-card {
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-
+        
         .hud-lbl {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
@@ -1720,7 +1699,7 @@
             text-transform: uppercase;
             margin-bottom: 4px;
         }
-
+        
         .hud-val {
             font-family: 'Outfit', sans-serif;
             font-size: 16px;
@@ -1730,20 +1709,20 @@
             align-items: baseline;
             gap: 4px;
         }
-
+        
         .hud-val-sub {
             font-size: 8px;
             font-weight: 400;
             color: rgb(218, 108, 32);
             letter-spacing: 0.05em;
         }
-
+        
         .hud-progress-container {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
-
+        
         .hud-progress-bar-bg {
             height: 4px;
             width: 100%;
@@ -1752,7 +1731,7 @@
             position: relative;
             overflow: hidden;
         }
-
+        
         .hud-progress-bar-fill {
             position: absolute;
             top: 0;
@@ -1763,8 +1742,8 @@
             border-radius: 20px;
             transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         /* Pipeline central stream */
+        
         .timeline-stream-container {
             position: relative;
             width: 100%;
@@ -1774,7 +1753,7 @@
             align-items: center;
             z-index: 10;
         }
-
+        
         .evolution-pipeline {
             position: absolute;
             top: 0;
@@ -1785,20 +1764,17 @@
             transform: translateX(-50%);
             z-index: 1;
         }
-
+        
         .pipeline-glow {
             position: absolute;
             top: 0;
             left: -0.5px;
             width: 2px;
             height: 100%;
-            background: linear-gradient(180deg, 
-                transparent 0%, 
-                rgba(218, 108, 32, 0.8) 50%, 
-                transparent 100%);
+            background: linear-gradient(180deg, transparent 0%, rgba(218, 108, 32, 0.8) 50%, transparent 100%);
             animation: flowDown 4s linear infinite;
         }
-
+        
         @keyframes flowDown {
             0% {
                 transform: translateY(-100%);
@@ -1807,8 +1783,8 @@
                 transform: translateY(100%);
             }
         }
-
         /* Timeline Card Elements */
+        
         .timeline-node {
             display: flex;
             width: 100%;
@@ -1817,12 +1793,12 @@
             position: relative;
             z-index: 2;
         }
-
+        
         .timeline-node:nth-child(even) {
             justify-content: flex-end;
         }
-
         /* Pipeline Interceptor Center Node */
+        
         .pipeline-interceptor {
             position: absolute;
             left: 50%;
@@ -1836,26 +1812,26 @@
             z-index: 5;
             transition: all 0.4s ease;
         }
-
+        
         .timeline-node.unlocked .pipeline-interceptor {
             border-color: rgba(218, 108, 32, 0.65);
             background: rgb(218, 108, 32);
             box-shadow: 0 0 10px rgba(218, 108, 32, 0.45);
         }
-
+        
         .timeline-node.active .pipeline-interceptor {
             border-color: #ffffff;
             background: #ffffff;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             transform: translate(-50%, -50%) scale(1.3);
         }
-
+        
         .timeline-node.locked .pipeline-interceptor {
             background: rgba(15, 16, 17, 1);
             border-color: rgba(255, 255, 255, 0.05);
         }
-
         /* Timeline Interactive Card */
+        
         .timeline-card {
             width: 44%;
             background: rgba(15, 16, 17, 0.45);
@@ -1870,7 +1846,7 @@
             transition: all 0.4s ease;
             position: relative;
         }
-
+        
         @media (max-width: 768px) {
             .timeline-card {
                 width: 88%;
@@ -1889,26 +1865,26 @@
                 margin-left: 12%;
             }
         }
-
+        
         .timeline-node.active .timeline-card {
             border-color: rgba(218, 108, 32, 0.35);
             box-shadow: 0 12px 35px rgba(218, 108, 32, 0.05);
         }
-
+        
         .timeline-node.locked .timeline-card {
             background: rgba(15, 16, 17, 0.2);
             border-color: rgba(255, 255, 255, 0.02);
             filter: grayscale(1);
             opacity: 0.5;
         }
-
+        
         .timeline-card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 12px;
         }
-
+        
         .tl-stage-num {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
@@ -1917,15 +1893,15 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
-
+        
         .timeline-node.unlocked .tl-stage-num {
             color: rgb(218, 108, 32);
         }
-
+        
         .timeline-node.active .tl-stage-num {
             color: rgb(218, 108, 32);
         }
-
+        
         .tl-reward-chip {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
@@ -1937,20 +1913,20 @@
             border-radius: 4px;
             letter-spacing: 0.02em;
         }
-
+        
         .timeline-node.unlocked .tl-reward-chip {
             background: rgba(218, 108, 32, 0.03);
             border-color: rgba(218, 108, 32, 0.15);
             color: rgb(218, 108, 32);
         }
-
+        
         .timeline-node.active .tl-reward-chip {
             background: rgba(218, 108, 32, 0.06);
             border-color: rgba(218, 108, 32, 0.25);
             color: rgb(218, 108, 32);
             box-shadow: 0 0 10px rgba(218, 108, 32, 0.1);
         }
-
+        
         .tl-title {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -1959,7 +1935,7 @@
             color: #ffffff;
             margin-bottom: 8px;
         }
-
+        
         .tl-desc {
             font-family: 'Outfit', sans-serif;
             font-size: 9.5px;
@@ -1968,12 +1944,12 @@
             line-height: 1.5;
             margin-bottom: 12px;
         }
-
+        
         .timeline-node.locked .tl-desc {
             filter: blur(2px);
             user-select: none;
         }
-
+        
         .tl-status-row {
             display: flex;
             align-items: center;
@@ -1981,7 +1957,7 @@
             border-top: 1px dashed rgba(255, 255, 255, 0.03);
             padding-top: 10px;
         }
-
+        
         .tl-status-val {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -1992,19 +1968,19 @@
             align-items: center;
             gap: 4px;
         }
-
+        
         .timeline-node.unlocked .tl-status-val {
             color: rgba(255, 255, 255, 0.45);
         }
-
+        
         .timeline-node.active .tl-status-val {
             color: #78ff78;
         }
-
+        
         .timeline-node.locked .tl-status-val {
             color: rgba(255, 255, 255, 0.2);
         }
-
+        
         .tl-active-beacon {
             width: 4px;
             height: 4px;
@@ -2013,15 +1989,15 @@
             box-shadow: 0 0 6px #78ff78;
             animation: ticker-pulse 1.8s infinite;
         }
-
+        
         .tl-padlock-icon {
             width: 10px;
             height: 10px;
             stroke: rgba(255, 255, 255, 0.2);
             stroke-width: 2.5;
         }
-
         /* ─── Premium Build In Public Timeline Section Styles ─── */
+        
         .build-public-section {
             position: absolute;
             inset: 0;
@@ -2038,22 +2014,22 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(218, 108, 32, 0.2) transparent;
         }
-
+        
         .build-public-section::-webkit-scrollbar {
             width: 4px;
         }
-
+        
         .build-public-section::-webkit-scrollbar-thumb {
             background: rgba(218, 108, 32, 0.2);
             border-radius: 10px;
         }
-
+        
         .build-public-header {
             text-align: center;
             margin-bottom: 40px;
             max-width: 600px;
         }
-
+        
         .build-public-eyebrow {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -2065,7 +2041,7 @@
             margin-bottom: 8px;
             text-shadow: 0 0 10px rgba(218, 108, 32, 0.15);
         }
-
+        
         .build-public-title {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -2076,7 +2052,7 @@
             margin-bottom: 12px;
             text-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
         }
-
+        
         .build-public-subtext {
             font-family: 'Outfit', sans-serif;
             font-weight: 300;
@@ -2084,7 +2060,7 @@
             color: rgba(255, 255, 255, 0.4);
             line-height: 1.6;
         }
-
+        
         .public-feed-stream {
             position: relative;
             width: 100%;
@@ -2094,7 +2070,7 @@
             align-items: center;
             z-index: 10;
         }
-
+        
         .public-feed-pipeline {
             position: absolute;
             top: 0;
@@ -2105,20 +2081,17 @@
             transform: translateX(-50%);
             z-index: 1;
         }
-
+        
         .public-feed-glow {
             position: absolute;
             top: 0;
             left: -0.5px;
             width: 2px;
             height: 100%;
-            background: linear-gradient(180deg, 
-                transparent 0%, 
-                rgba(218, 108, 32, 0.6) 50%, 
-                transparent 100%);
+            background: linear-gradient(180deg, transparent 0%, rgba(218, 108, 32, 0.6) 50%, transparent 100%);
             animation: flowDown 6s linear infinite;
         }
-
+        
         .feed-node {
             display: flex;
             width: 100%;
@@ -2127,11 +2100,11 @@
             position: relative;
             z-index: 2;
         }
-
+        
         .feed-node:nth-child(even) {
             justify-content: flex-end;
         }
-
+        
         .feed-interceptor {
             position: absolute;
             left: 50%;
@@ -2145,15 +2118,15 @@
             z-index: 5;
             transition: all 0.4s ease;
         }
-
+        
         .feed-node:hover .feed-interceptor {
             border-color: #ffffff;
             background: rgb(218, 108, 32);
             box-shadow: 0 0 10px rgb(218, 108, 32);
             transform: translate(-50%, -50%) scale(1.2);
         }
-
         /* Build update terminal card layout */
+        
         .feed-card {
             width: 44%;
             background: rgba(15, 16, 17, 0.45);
@@ -2170,7 +2143,7 @@
             transition: all 0.4s ease;
             position: relative;
         }
-
+        
         @media (max-width: 768px) {
             .feed-card {
                 width: 88%;
@@ -2189,45 +2162,44 @@
                 margin-left: 12%;
             }
         }
-
+        
         .feed-card:hover {
             border-color: rgba(218, 108, 32, 0.2);
-            box-shadow: 0 18px 45px rgba(218, 108, 32, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            box-shadow: 0 18px 45px rgba(218, 108, 32, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
-
+        
         .feed-card-content {
             padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
+        
         .feed-creator-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .creator-info {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
+        
         .creator-name {
             font-family: 'Outfit', sans-serif;
             font-size: 10px;
             font-weight: 600;
             color: #ffffff;
         }
-
+        
         .creator-handle {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
             color: rgba(255, 255, 255, 0.35);
         }
-
+        
         .feed-project-name {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -2237,7 +2209,7 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
-
+        
         .feed-text {
             font-family: 'Outfit', sans-serif;
             font-size: 10px;
@@ -2246,8 +2218,8 @@
             line-height: 1.5;
             margin: 0;
         }
-
         /* Build update chips and progress */
+        
         .feed-metadata-row {
             display: flex;
             align-items: center;
@@ -2259,7 +2231,7 @@
             padding: 8px 12px;
             border-radius: 6px;
         }
-
+        
         .feed-chip {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
@@ -2272,33 +2244,33 @@
             border-radius: 4px;
             text-transform: uppercase;
         }
-
+        
         .feed-chip.ui-iteration {
             border-color: rgba(218, 108, 32, 0.2);
             color: rgb(218, 108, 32);
         }
-
+        
         .feed-chip.backend-integrated {
             border-color: rgba(120, 180, 255, 0.2);
             color: rgb(120, 180, 255);
         }
-
+        
         .feed-chip.deployment-success {
             border-color: rgba(120, 255, 120, 0.2);
             color: rgb(120, 255, 120);
         }
-
+        
         .feed-chip.prototype-complete {
             border-color: rgba(230, 120, 255, 0.2);
             color: rgb(230, 120, 255);
         }
-
+        
         .feed-progress-box {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
+        
         .feed-progress-bar {
             width: 35px;
             height: 3px;
@@ -2307,7 +2279,7 @@
             position: relative;
             overflow: hidden;
         }
-
+        
         .feed-progress-fill {
             position: absolute;
             top: 0;
@@ -2316,15 +2288,15 @@
             background: rgb(218, 108, 32);
             border-radius: 10px;
         }
-
+        
         .feed-progress-text {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.5);
         }
-
         /* Card bottom actions bar */
+        
         .feed-actions-bar {
             display: flex;
             justify-content: space-between;
@@ -2333,7 +2305,7 @@
             background: rgba(0, 0, 0, 0.15);
             border-top: 1px solid rgba(255, 255, 255, 0.03);
         }
-
+        
         .feed-appreciate-btn {
             background: transparent;
             border: none;
@@ -2344,7 +2316,7 @@
             color: rgba(255, 255, 255, 0.35);
             transition: all 0.3s ease;
         }
-
+        
         .feed-appreciate-btn svg {
             width: 10px;
             height: 10px;
@@ -2353,27 +2325,27 @@
             fill: none;
             transition: transform 0.3s ease;
         }
-
+        
         .feed-appreciate-btn:hover {
             color: rgb(218, 108, 32);
         }
-
+        
         .feed-appreciate-btn.active {
             color: rgb(218, 108, 32);
         }
-
+        
         .feed-appreciate-btn.active svg {
             fill: rgb(218, 108, 32);
             transform: scale(1.2);
             filter: drop-shadow(0 0 3px rgb(218, 108, 32));
         }
-
+        
         .appreciate-count {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
             font-weight: 500;
         }
-
+        
         .feed-cta-link {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
@@ -2387,20 +2359,20 @@
             gap: 4px;
             transition: color 0.3s ease;
         }
-
+        
         .feed-cta-link svg {
             width: 8px;
             height: 8px;
             stroke-width: 2.5px;
         }
-
+        
         .feed-cta-link:hover {
             color: rgb(218, 108, 32);
         }
-
         /* ==========================================================================
            CHALLENGE DOMAINS SECTION STYLING
            ========================================================================== */
+        
         .domains-section {
             position: absolute;
             inset: 0;
@@ -2413,31 +2385,32 @@
             opacity: 0;
             pointer-events: none;
             transform: translateY(120px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 12;
             padding: 80px 24px 40px;
             overflow-y: auto;
-            scrollbar-width: none; /* Hide scrollbar for standard cinematic container */
+            scrollbar-width: none;
+            /* Hide scrollbar for standard cinematic container */
         }
+        
         .domains-section::-webkit-scrollbar {
             display: none;
         }
-
+        
         .domains-section.active {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
-
         /* Domains Glass Header */
+        
         .domains-header {
             text-align: center;
             margin-bottom: 24px;
             z-index: 5;
             max-width: 600px;
         }
-
+        
         .domains-eyebrow {
             display: inline-flex;
             align-items: center;
@@ -2454,7 +2427,7 @@
             text-transform: uppercase;
             margin-bottom: 8px;
         }
-
+        
         .domains-eyebrow .pulse-dot {
             width: 3.5px;
             height: 3.5px;
@@ -2462,7 +2435,7 @@
             background: rgb(218, 108, 32);
             position: relative;
         }
-
+        
         .domains-title {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -2472,7 +2445,7 @@
             letter-spacing: 0.02em;
             margin-bottom: 6px;
         }
-
+        
         .domains-subtext {
             font-family: 'Outfit', sans-serif;
             font-size: 10px;
@@ -2481,8 +2454,8 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
-
         /* Horizontal rail category bar */
+        
         .category-rail-wrapper {
             width: 100%;
             max-width: 960px;
@@ -2490,7 +2463,7 @@
             position: relative;
             z-index: 5;
         }
-
+        
         .category-rail {
             display: flex;
             align-items: center;
@@ -2506,8 +2479,8 @@
         .category-rail::-webkit-scrollbar {
             display: none;
         }
-
         /* Category glass pills */
+        
         .category-pill {
             flex-shrink: 0;
             font-family: 'Outfit', sans-serif;
@@ -2527,23 +2500,22 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             user-select: none;
         }
-
+        
         .category-pill:hover {
             color: #ffffff;
             border-color: rgba(255, 255, 255, 0.15);
             background: rgba(255, 255, 255, 0.02);
             transform: translateY(-1px);
         }
-
         /* Active State Category */
+        
         .category-pill.active {
             color: rgb(218, 108, 32);
             border-color: rgba(218, 108, 32, 0.25);
             background: rgba(218, 108, 32, 0.04);
-            box-shadow: 0 4px 15px rgba(218, 108, 32, 0.05),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.02);
+            box-shadow: 0 4px 15px rgba(218, 108, 32, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.02);
         }
-
+        
         .category-pill.active::after {
             content: '';
             position: absolute;
@@ -2555,13 +2527,18 @@
             box-shadow: 0 0 8px rgb(218, 108, 32);
             animation: line-glow 2s infinite ease-in-out;
         }
-
+        
         @keyframes line-glow {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
         }
-
         /* Filtered Grid Section */
+        
         .domains-grid-wrapper {
             width: 100%;
             max-width: 1140px;
@@ -2570,7 +2547,7 @@
             z-index: 4;
             min-height: 280px;
         }
-
+        
         .domains-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(280px, 1fr));
@@ -2578,12 +2555,12 @@
             opacity: 1;
             transition: opacity 0.35s ease;
         }
-
+        
         .domains-grid.transitioning {
             opacity: 0;
         }
-
         /* Domains Terminal Cards */
+        
         .domain-card {
             background: rgba(15, 16, 17, 0.45);
             backdrop-filter: blur(28px);
@@ -2595,37 +2572,34 @@
             flex-direction: column;
             position: relative;
             transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03);
             opacity: 0;
             transform: translateY(20px);
         }
-
+        
         .domain-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
-
+        
         .domain-card:hover {
             border-color: rgba(218, 108, 32, 0.22);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                        0 0 35px rgba(218, 108, 32, 0.015);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 35px rgba(218, 108, 32, 0.015);
             transform: translateY(-3px);
         }
-
         /* Card System parameters tags */
+        
         .domain-card-content {
             padding: 20px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-
+        
         .domain-card-header {
             margin-bottom: 12px;
         }
-
+        
         .domain-card-title {
             font-family: 'Clash Display', sans-serif;
             font-weight: 500;
@@ -2634,7 +2608,7 @@
             color: #ffffff;
             line-height: 1.3;
         }
-
+        
         .domain-card-specs {
             display: flex;
             flex-direction: column;
@@ -2645,7 +2619,7 @@
             border: 1px solid rgba(255, 255, 255, 0.03);
             border-radius: 6px;
         }
-
+        
         .domain-spec-row {
             display: flex;
             justify-content: space-between;
@@ -2654,21 +2628,21 @@
             font-family: 'Outfit', sans-serif;
             letter-spacing: 0.06em;
         }
-
+        
         .domain-spec-lbl {
             color: rgba(255, 255, 255, 0.3);
             text-transform: uppercase;
         }
-
+        
         .domain-spec-val {
             color: rgba(255, 255, 255, 0.7);
         }
-
+        
         .domain-spec-val.xp {
             color: rgb(218, 108, 32);
             font-weight: 500;
         }
-
+        
         .domain-meta-row {
             display: flex;
             align-items: center;
@@ -2676,7 +2650,7 @@
             margin-top: auto;
             flex-wrap: wrap;
         }
-
+        
         .domain-meta-pill {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
@@ -2689,38 +2663,38 @@
             color: rgba(255, 255, 255, 0.45);
             text-transform: uppercase;
         }
-
+        
         .domain-meta-pill.difficulty-easy {
             border-color: rgba(80, 200, 120, 0.2);
             background: rgba(80, 200, 120, 0.03);
             color: rgb(80, 200, 120);
         }
-
+        
         .domain-meta-pill.difficulty-medium {
             border-color: rgba(218, 108, 32, 0.2);
             background: rgba(218, 108, 32, 0.03);
             color: rgb(218, 108, 32);
         }
-
+        
         .domain-meta-pill.difficulty-hard {
             border-color: rgba(230, 92, 92, 0.2);
             background: rgba(230, 92, 92, 0.03);
             color: rgb(230, 92, 92);
         }
-
+        
         .domain-meta-pill.difficulty-expert {
             border-color: rgba(160, 92, 240, 0.25);
             background: rgba(160, 92, 240, 0.04);
             color: rgb(160, 92, 240);
         }
-
         /* Domain Card bottom Action trigger */
+        
         .domain-cta-row {
             display: flex;
             border-top: 1px solid rgba(255, 255, 255, 0.03);
             background: rgba(0, 0, 0, 0.15);
         }
-
+        
         .domain-enroll-btn {
             width: 100%;
             background: transparent;
@@ -2738,25 +2712,25 @@
             gap: 6px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
+        
         .domain-enroll-btn svg {
             width: 8px;
             height: 8px;
             stroke-width: 2.5px;
             transition: transform 0.3s ease;
         }
-
+        
         .domain-enroll-btn:hover {
             background: rgba(218, 108, 32, 0.04);
             color: rgb(218, 108, 32);
         }
-
+        
         .domain-enroll-btn:hover svg {
             transform: translateX(3px);
             stroke: rgb(218, 108, 32);
         }
-
         /* Responsive styling for domains */
+        
         @media (max-width: 1024px) {
             .domains-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -2765,7 +2739,7 @@
                 padding-top: 100px;
             }
         }
-
+        
         @media (max-width: 640px) {
             .domains-grid {
                 grid-template-columns: 1fr;
@@ -2780,12 +2754,11 @@
                 padding-top: 120px;
             }
         }
-
         /* ─────────────────────────────────────────────────────────────────────────────
            SECTION NAVIGATION & FOCUS MODE ARCHITECTURE STYLE DEFS
            ───────────────────────────────────────────────────────────────────────────── */
-
         /* Fixed Navigation Rail (Desktop) — compact cinematic dock */
+        
         .system-nav-rail {
             position: fixed;
             left: 18px;
@@ -2806,16 +2779,15 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
             pointer-events: auto;
             opacity: 0;
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: transform, opacity;
         }
-
+        
         .system-nav-rail.nav-visible {
             opacity: 1;
             transform: translateY(-50%) translateX(0);
         }
-
+        
         .nav-rail-header {
             display: flex;
             align-items: center;
@@ -2824,7 +2796,7 @@
             padding-bottom: 8px;
             margin-bottom: 2px;
         }
-
+        
         .nav-rail-pulse {
             width: 5px;
             height: 5px;
@@ -2834,7 +2806,7 @@
             animation: ticker-pulse 2s infinite;
             flex-shrink: 0;
         }
-
+        
         .nav-rail-title {
             font-family: 'Outfit', sans-serif;
             font-size: 7px;
@@ -2843,13 +2815,13 @@
             letter-spacing: 0.14em;
             text-transform: uppercase;
         }
-
+        
         .nav-rail-items {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
-
+        
         .nav-rail-item {
             display: flex;
             align-items: center;
@@ -2861,11 +2833,11 @@
             user-select: none;
             border: 0.5px solid transparent;
         }
-
+        
         .nav-rail-item:hover {
             background: rgba(255, 255, 255, 0.02);
         }
-
+        
         .nav-rail-dot {
             width: 4px;
             height: 4px;
@@ -2874,7 +2846,7 @@
             transition: all 0.35s ease;
             flex-shrink: 0;
         }
-
+        
         .nav-rail-label {
             font-family: 'Outfit', sans-serif;
             font-size: 9px;
@@ -2886,49 +2858,49 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         /* Active Navigation Item State */
+        
         .nav-rail-item.active {
             background: rgba(218, 108, 32, 0.04);
             border-color: rgba(218, 108, 32, 0.15);
         }
-
+        
         .nav-rail-item.active .nav-rail-dot {
             background: rgb(218, 108, 32);
             box-shadow: 0 0 6px rgb(218, 108, 32);
             transform: scale(1.2);
         }
-
+        
         .nav-rail-item.active .nav-rail-label {
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
         }
-
         /* Focused Navigation State on Rail */
+        
         .system-nav-rail.focused {
             border-left-color: rgba(120, 255, 120, 0.3);
         }
-
+        
         .system-nav-rail.focused .nav-rail-pulse {
             background: #78ff78;
             box-shadow: 0 0 6px #78ff78;
         }
-
+        
         .system-nav-rail.focused .nav-rail-item.active {
             background: rgba(120, 255, 120, 0.04);
             border-color: rgba(120, 255, 120, 0.15);
         }
-
+        
         .system-nav-rail.focused .nav-rail-item.active .nav-rail-dot {
             background: #78ff78;
             box-shadow: 0 0 6px #78ff78;
         }
-
+        
         .system-nav-rail.focused .nav-rail-item.active .nav-rail-label {
             color: #ffffff;
         }
-
         /* Premium Return Overview Button */
+        
         .return-overview-btn {
             position: fixed;
             top: 90px;
@@ -2950,24 +2922,24 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             user-select: none;
         }
-
+        
         .return-overview-btn.visible {
             opacity: 1;
             transform: translateY(0) scale(1);
             pointer-events: auto;
         }
-
+        
         .return-overview-btn:hover {
             border-color: rgba(218, 108, 32, 0.35);
             background: rgba(218, 108, 32, 0.04);
         }
-
+        
         .return-btn-content {
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
+        
         .return-icon {
             font-family: monospace;
             font-weight: 700;
@@ -2975,7 +2947,7 @@
             color: rgb(218, 108, 32);
             letter-spacing: -0.05em;
         }
-
+        
         .return-text {
             font-family: 'Outfit', sans-serif;
             font-size: 7.5px;
@@ -2983,8 +2955,8 @@
             color: #ffffff;
             letter-spacing: 0.14em;
         }
-
         /* Responsive Layout for Nav Rail */
+        
         @media (max-width: 1024px) {
             .system-nav-rail {
                 width: 42px;
@@ -2994,12 +2966,23 @@
             .system-nav-rail.nav-visible {
                 transform: translateY(-50%) translateX(0);
             }
-            .nav-rail-header { justify-content: center; }
-            .nav-rail-title, .nav-rail-label { display: none; }
-            .nav-rail-item { justify-content: center; padding: 8px 0; }
-            .nav-rail-dot { width: 5px; height: 5px; }
+            .nav-rail-header {
+                justify-content: center;
+            }
+            .nav-rail-title,
+            .nav-rail-label {
+                display: none;
+            }
+            .nav-rail-item {
+                justify-content: center;
+                padding: 8px 0;
+            }
+            .nav-rail-dot {
+                width: 5px;
+                height: 5px;
+            }
         }
-
+        
         @media (max-width: 768px) {
             .system-nav-rail {
                 position: fixed;
@@ -3020,26 +3003,35 @@
                 transform: translateX(-50%) translateY(0);
                 opacity: 1;
             }
-            .nav-rail-header { display: none; }
-            .nav-rail-items { flex-direction: row; gap: 4px; }
-            .nav-rail-item { padding: 5px 6px; }
+            .nav-rail-header {
+                display: none;
+            }
+            .nav-rail-items {
+                flex-direction: row;
+                gap: 4px;
+            }
+            .nav-rail-item {
+                padding: 5px 6px;
+            }
             .return-overview-btn {
-                top: auto; bottom: 76px; right: 50%;
+                top: auto;
+                bottom: 76px;
+                right: 50%;
                 transform: translateX(50%) translateY(16px) scale(0.97);
             }
             .return-overview-btn.visible {
                 transform: translateX(50%) translateY(0) scale(1);
             }
         }
-
         /* Content left-offset to prevent sidebar overlap (desktop only) */
+        
         .challenge-section,
         .domains-section,
         .analysis-section,
         .recruitment-section {
             padding-left: 175px;
         }
-
+        
         @media (max-width: 1024px) {
             .challenge-section,
             .domains-section,
@@ -3048,7 +3040,7 @@
                 padding-left: 65px;
             }
         }
-
+        
         @media (max-width: 768px) {
             .challenge-section,
             .domains-section,
@@ -3057,7 +3049,6 @@
                 padding-left: 0;
             }
         }
-
         /* ─────────────────────────────────────────────────────────────────────────────
            GLOBAL FOCUS MODE ARCHITECTURE TRANSITIONS
            ───────────────────────────────────────────────────────────────────────────── */
@@ -3065,7 +3056,7 @@
         .in-focus-mode #stage {
             overflow: hidden !important;
         }
-
+        
         .in-focus-mode #content,
         .in-focus-mode #hint {
             opacity: 0 !important;
@@ -3073,8 +3064,8 @@
             pointer-events: none !important;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
-
         /* Make the focused section fill viewport with cinematic feel */
+        
         .focus-active {
             position: fixed !important;
             inset: 0 !important;
@@ -3092,32 +3083,36 @@
             background: rgba(10, 11, 12, 0.55) !important;
             backdrop-filter: blur(30px) !important;
             -webkit-backdrop-filter: blur(30px) !important;
-            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                        backdrop-filter 0.5s ease !important;
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.5s ease !important;
             will-change: transform, opacity;
             scrollbar-width: thin;
             scrollbar-color: rgba(218, 108, 32, 0.15) transparent;
         }
-
+        
         @media (max-width: 1024px) {
-            .focus-active { padding-left: 70px !important; }
+            .focus-active {
+                padding-left: 70px !important;
+            }
         }
+        
         @media (max-width: 768px) {
-            .focus-active { padding-left: 5% !important; padding-bottom: 100px !important; }
+            .focus-active {
+                padding-left: 5% !important;
+                padding-bottom: 100px !important;
+            }
         }
-
+        
         .focus-active::-webkit-scrollbar {
             width: 3px;
         }
+        
         .focus-active::-webkit-scrollbar-thumb {
             background: rgba(218, 108, 32, 0.15);
             border-radius: 10px;
         }
-
         /* ─── Immersive Interactive Details (Shown ONLY in Focus Mode) ─── */
-        
         /* Workspace panels shown in active Focus Mode */
+        
         .focus-only-panel {
             display: none;
             width: 100%;
@@ -3126,31 +3121,37 @@
             animation: paneFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             z-index: 10;
         }
-
+        
         .focus-active .focus-only-panel {
             display: block;
         }
-
+        
         @keyframes paneFadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
         /* Premium Diagnostic Console Grid */
+        
         .diagnostic-grid {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
             gap: 20px;
             width: 100%;
         }
-
+        
         @media (max-width: 768px) {
             .diagnostic-grid {
                 grid-template-columns: 1fr;
             }
         }
-
         /* Focus mode CTA button — section workspace launcher */
+        
         .section-focus-trigger {
             font-family: 'Outfit', sans-serif;
             font-size: 8.5px;
@@ -3171,7 +3172,7 @@
             pointer-events: auto;
             user-select: none;
         }
-
+        
         .section-focus-trigger:hover {
             border-color: rgba(218, 108, 32, 0.3);
             border-left-color: rgba(218, 108, 32, 0.5);
@@ -3180,7 +3181,7 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-
+        
         .section-focus-trigger svg {
             width: 10px;
             height: 10px;
@@ -3188,12 +3189,12 @@
             transition: transform 0.3s ease;
             flex-shrink: 0;
         }
-
+        
         .section-focus-trigger:hover svg {
             transform: scale(1.2);
         }
-
         /* CTA Dock — centered launcher wrapper below section content */
+        
         .section-cta-dock {
             display: flex;
             flex-direction: column;
@@ -3206,30 +3207,23 @@
             pointer-events: auto;
             opacity: 1;
             transform: translateY(0);
-            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                        margin 0.4s ease,
-                        max-height 0.4s ease;
+            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), margin 0.4s ease, max-height 0.4s ease;
             max-height: 80px;
             overflow: visible;
         }
-
+        
         .section-cta-dock .section-focus-trigger {
             align-self: center;
             margin: 12px 0 0 0;
         }
-
+        
         .cta-dock-divider {
             width: 48px;
             height: 1px;
-            background: linear-gradient(90deg,
-                transparent,
-                rgba(218, 108, 32, 0.18),
-                transparent
-            );
+            background: linear-gradient(90deg, transparent, rgba(218, 108, 32, 0.18), transparent);
         }
-
         /* ─── HIDE CTA dock when section is in focus/workspace mode ─── */
+        
         .focus-active .section-cta-dock {
             opacity: 0 !important;
             transform: translateY(12px) !important;
@@ -3239,33 +3233,33 @@
             margin-bottom: 0 !important;
             overflow: hidden !important;
         }
-
         /* Focused Section Overrides & Custom Enforcements */
+        
         .focus-active.challenge-section .cards-grid {
             grid-template-columns: repeat(3, 1fr) !important;
             gap: 24px !important;
             max-width: 1080px !important;
             margin-bottom: 30px !important;
         }
-
+        
         @media (max-width: 1024px) {
             .focus-active.challenge-section .cards-grid {
                 grid-template-columns: 1fr !important;
             }
         }
-
         /* Large chart center focus overlay */
+        
         .focus-active #radarCanvas {
             width: 380px !important;
             height: 380px !important;
             filter: drop-shadow(0 0 30px rgba(218, 108, 32, 0.15));
             transition: all 0.5s ease;
         }
-
+        
         .focus-active .radar-canvas-container {
             padding: 30px 0 !important;
         }
-
+        
         .focus-active.domains-section .domains-grid-wrapper {
             margin-top: 28px;
         }
@@ -3276,24 +3270,24 @@
             max-width: 1200px !important;
             width: 100% !important;
         }
-
+        
         .focus-active.domains-section .category-rail-wrapper {
             margin-bottom: 8px;
         }
-
+        
         @media (max-width: 1024px) {
             .focus-active.domains-section .domains-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
             }
         }
-
+        
         @media (max-width: 640px) {
             .focus-active.domains-section .domains-grid {
                 grid-template-columns: 1fr !important;
             }
         }
-
         /* Typewriter text console styling */
+        
         .terminal-diag-output {
             font-family: monospace;
             font-size: 9.5px;
@@ -3310,24 +3304,24 @@
             max-height: 180px;
             overflow-y: auto;
         }
-
+        
         .terminal-diag-output .diag-line {
             display: block;
             border-left: 2px solid rgba(255, 255, 255, 0.1);
             padding-left: 8px;
         }
-
+        
         .terminal-diag-output .diag-line.green {
             color: #78ff78;
             border-left-color: #78ff78;
         }
-
+        
         .terminal-diag-output .diag-line.amber {
             color: rgb(218, 108, 32);
             border-left-color: rgb(218, 108, 32);
         }
-
         /* Typewriter simulation terminal */
+        
         .interactive-compiler-box {
             background: rgba(15, 16, 17, 0.45);
             backdrop-filter: blur(28px);
@@ -3335,10 +3329,10 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             padding: 16px 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             text-align: left;
         }
-
+        
         .compiler-title-bar {
             display: flex;
             justify-content: space-between;
@@ -3347,16 +3341,16 @@
             padding-bottom: 8px;
             margin-bottom: 12px;
         }
-
+        
         .compiler-lbl {
             font-family: 'Outfit', sans-serif;
             font-size: 8px;
             font-weight: 500;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255, 255, 255, 0.3);
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
-
+        
         .compiler-input-wrap {
             display: flex;
             align-items: center;
@@ -3367,12 +3361,12 @@
             margin-bottom: 12px;
             transition: all 0.3s ease;
         }
-
+        
         .compiler-input-wrap:focus-within {
             border-color: rgba(218, 108, 32, 0.4);
             box-shadow: 0 0 10px rgba(218, 108, 32, 0.08);
         }
-
+        
         .compiler-prompt {
             font-family: monospace;
             font-size: 11px;
@@ -3381,7 +3375,7 @@
             font-weight: 700;
             user-select: none;
         }
-
+        
         .compiler-input {
             flex-grow: 1;
             background: transparent;
@@ -3391,7 +3385,7 @@
             font-family: monospace;
             font-size: 11px;
         }
-
+        
         .compiler-btn {
             background: rgb(218, 108, 32);
             border: none;
@@ -3406,7 +3400,7 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
         }
-
+        
         .compiler-btn:hover {
             background: rgb(240, 125, 45);
             box-shadow: 0 0 15px rgba(218, 108, 32, 0.35);
@@ -3422,7 +3416,7 @@
 </head>
 
 <body class="challenges-page">
-    <script src="../scripts/motion-engine.js"></script>
+    <script src="../scripts/motion-engine.js" defer></script>
 
     <!-- Fixed Vertical Navigation Rail -->
     <div class="system-nav-rail" id="systemNavRail">
@@ -3510,7 +3504,7 @@
                             <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
                             <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
                             <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
-                            <a href="upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+                            <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
                             <a href="challenges.html" class="dropdown-item nav-item-anim active-page">Challenges</a>
                         </div>
                         <div class="dropdown-divider"></div>
@@ -3571,8 +3565,7 @@
                     <div class="card-content">
                         <h2 class="challenge-title">The Modern Portfolio</h2>
                         <p class="challenge-desc">
-                            Architect and implement a GPU-accelerated, cursor-responsive portfolio using cinematic
-                            layouts.
+                            Architect and implement a GPU-accelerated, cursor-responsive portfolio using cinematic layouts.
                         </p>
 
                         <!-- Info tags -->
@@ -3633,8 +3626,7 @@
                     <div class="card-content">
                         <h2 class="challenge-title">System Design Engine</h2>
                         <p class="challenge-desc">
-                            Design and benchmark a distributed real-time messaging pipeline handling up to 100k
-                            requests/sec.
+                            Design and benchmark a distributed real-time messaging pipeline handling up to 100k requests/sec.
                         </p>
 
                         <!-- Info tags -->
@@ -3695,8 +3687,7 @@
                     <div class="card-content">
                         <h2 class="challenge-title">Compiler Sandbox</h2>
                         <p class="challenge-desc">
-                            Build a minimal, performant custom parser and AST compiler evaluating lightweight scripting
-                            syntax.
+                            Build a minimal, performant custom parser and AST compiler evaluating lightweight scripting syntax.
                         </p>
 
                         <!-- Info tags -->
@@ -3817,8 +3808,7 @@
             <div class="analysis-header">
                 <span class="analysis-eyebrow">CHALLENGE SCANNER</span>
                 <h2 class="analysis-title">CHALLENGE ANALYSIS</h2>
-                <p class="analysis-subtext">Understand the complexity, required skills, and team dynamics before
-                    entering the arena.</p>
+                <p class="analysis-subtext">Understand the complexity, required skills, and team dynamics before entering the arena.</p>
             </div>
 
             <div class="analysis-grid">
@@ -3889,8 +3879,7 @@
                         </div>
                         <div class="panel-body">
                             <p class="insight-text" id="insight-text">
-                                Best suited for creators interested in: interactive UI systems, cinematic web
-                                experiences, and modern frontend engineering.
+                                Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.
                             </p>
                         </div>
                     </div>
@@ -3978,27 +3967,27 @@
             <!-- Horizontal flowing live activity recruitment feed ticker -->
             <div class="recruitment-ticker-bar">
                 <div class="ticker-track">
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI
-                        Designer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI Designer
+                    </div>
                     <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer
                     </div>
                     <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert
                     </div>
                     <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots
                     </div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL
-                        Specialist</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL Specialist
+                    </div>
                     <!-- Duplicate for infinite marquee loop -->
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI
-                        Designer</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> PIXELFORGE is recruiting a UI Designer
+                    </div>
                     <div class="ticker-item"><span class="ticker-pulse-dot"></span> NOVASTACK needs a React Developer
                     </div>
                     <div class="ticker-item"><span class="ticker-pulse-dot"></span> MOTIONLAB searching for GSAP expert
                     </div>
                     <div class="ticker-item"><span class="ticker-pulse-dot"></span> CODEHIVE opened 2 backend spots
                     </div>
-                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL
-                        Specialist</div>
+                    <div class="ticker-item"><span class="ticker-pulse-dot"></span> AETHERIUM looking for WebGL Specialist
+                    </div>
                 </div>
             </div>
 
@@ -4244,266 +4233,266 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
                         </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Section Workspace Control -->
-            <div class="section-cta-dock">
-                <div class="cta-dock-divider"></div>
-                <button class="section-focus-trigger" onclick="enterFocusMode('evolutionSection', 0.71)">
+                <!-- Section Workspace Control -->
+                <div class="section-cta-dock">
+                    <div class="cta-dock-divider"></div>
+                    <button class="section-focus-trigger" onclick="enterFocusMode('evolutionSection', 0.71)">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
                     <span>Open Evolution Track</span>
                 </button>
-            </div>
+                </div>
 
-            <!-- Expanded rewards panel -->
-            <div class="focus-only-panel">
-                <div style="background: rgba(15, 16, 17, 0.45); backdrop-filter: blur(28px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left;">
-                    <div style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.1em;">UNLOCKED TELEMETRY REWARDS</div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
-                            <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">GENESIS KIT</div>
-                            <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Repository assets blueprint unlocked successfully.</div>
-                        </div>
-                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
-                            <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">COMPOSITOR NODES</div>
-                            <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Advanced WebGL fragment layers loaded dynamically.</div>
-                        </div>
-                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
-                            <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">RUST ORCHESTRATOR</div>
-                            <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Docker sandbox VM configuration template.</div>
+                <!-- Expanded rewards panel -->
+                <div class="focus-only-panel">
+                    <div style="background: rgba(15, 16, 17, 0.45); backdrop-filter: blur(28px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left;">
+                        <div style="font-family: 'Outfit', sans-serif; font-size: 8px; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.1em;">UNLOCKED TELEMETRY REWARDS</div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
+                                <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">GENESIS KIT</div>
+                                <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Repository assets blueprint unlocked successfully.</div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
+                                <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">COMPOSITOR NODES</div>
+                                <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Advanced WebGL fragment layers loaded dynamically.</div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px;">
+                                <div style="font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">RUST ORCHESTRATOR</div>
+                                <div style="font-family: monospace; font-size: 7.5px; color: rgba(255,255,255,0.4);">Docker sandbox VM configuration template.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Futuristic Build In Public Timeline Section -->
-        <div id="buildInPublicSection" class="build-public-section">
-            <div class="build-public-header">
-                <span class="build-public-eyebrow">WIP ACTIVITY STREAM</span>
-                <h2 class="build-public-title">BUILD IN PUBLIC</h2>
-                <p class="build-public-subtext">Every commit, every pixel, shared live by builders around the globe. Follow active dev sprints and celebrate interactive code milestones.</p>
-            </div>
-
-            <!-- Central Timeline Activity stream -->
-            <div class="public-feed-stream">
-                <div class="public-feed-pipeline">
-                    <div class="public-feed-glow"></div>
+            <!-- Futuristic Build In Public Timeline Section -->
+            <div id="buildInPublicSection" class="build-public-section">
+                <div class="build-public-header">
+                    <span class="build-public-eyebrow">WIP ACTIVITY STREAM</span>
+                    <h2 class="build-public-title">BUILD IN PUBLIC</h2>
+                    <p class="build-public-subtext">Every commit, every pixel, shared live by builders around the globe. Follow active dev sprints and celebrate interactive code milestones.</p>
                 </div>
 
-                <!-- Feed Node 1 -->
-                <div class="feed-node">
-                    <div class="feed-interceptor"></div>
-                    <div class="feed-card">
-                        <!-- Top Terminal Bar -->
-                        <div class="terminal-bar">
-                            <div class="terminal-dots">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                            <div class="terminal-file">feed_interaction.js</div>
-                            <div class="status-badge">
-                                <span class="pulse-dot"></span>
-                                <span style="text-transform: uppercase; font-size: 7px; color: rgb(218, 108, 32);">LIVE BUILD ACTIVE</span>
-                            </div>
-                        </div>
+                <!-- Central Timeline Activity stream -->
+                <div class="public-feed-stream">
+                    <div class="public-feed-pipeline">
+                        <div class="public-feed-glow"></div>
+                    </div>
 
-                        <!-- Card Content -->
-                        <div class="feed-card-content">
-                            <div class="feed-creator-row">
-                                <div class="creator-info">
-                                    <div class="tm-avatar" style="width:20px; height:20px; font-size:7px;">LD</div>
-                                    <span class="creator-name">Alex Rivera</span>
-                                    <span class="creator-handle">@lex_dev</span>
+                    <!-- Feed Node 1 -->
+                    <div class="feed-node">
+                        <div class="feed-interceptor"></div>
+                        <div class="feed-card">
+                            <!-- Top Terminal Bar -->
+                            <div class="terminal-bar">
+                                <div class="terminal-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
                                 </div>
-                                <span class="feed-project-name">The Modern Portfolio</span>
+                                <div class="terminal-file">feed_interaction.js</div>
+                                <div class="status-badge">
+                                    <span class="pulse-dot"></span>
+                                    <span style="text-transform: uppercase; font-size: 7px; color: rgb(218, 108, 32);">LIVE BUILD ACTIVE</span>
+                                </div>
                             </div>
 
-                            <p class="feed-text">Just completed the GPU-accelerated mesh warping container. Implementing the 3D cursor-tilting matrix and custom hover vectors.</p>
-
-                            <div class="feed-metadata-row">
-                                <span class="feed-chip ui-iteration">UI Iteration</span>
-                                <div class="feed-progress-box">
-                                    <div class="feed-progress-bar">
-                                        <div class="feed-progress-fill" style="width: 88%"></div>
+                            <!-- Card Content -->
+                            <div class="feed-card-content">
+                                <div class="feed-creator-row">
+                                    <div class="creator-info">
+                                        <div class="tm-avatar" style="width:20px; height:20px; font-size:7px;">LD</div>
+                                        <span class="creator-name">Alex Rivera</span>
+                                        <span class="creator-handle">@lex_dev</span>
                                     </div>
-                                    <span class="feed-progress-text">88% Build</span>
+                                    <span class="feed-project-name">The Modern Portfolio</span>
+                                </div>
+
+                                <p class="feed-text">Just completed the GPU-accelerated mesh warping container. Implementing the 3D cursor-tilting matrix and custom hover vectors.</p>
+
+                                <div class="feed-metadata-row">
+                                    <span class="feed-chip ui-iteration">UI Iteration</span>
+                                    <div class="feed-progress-box">
+                                        <div class="feed-progress-bar">
+                                            <div class="feed-progress-fill" style="width: 88%"></div>
+                                        </div>
+                                        <span class="feed-progress-text">88% Build</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Actions Bar -->
-                        <div class="feed-actions-bar">
-                            <button class="feed-appreciate-btn" onclick="appreciateBuild(this)">
+                            <!-- Actions Bar -->
+                            <div class="feed-actions-bar">
+                                <button class="feed-appreciate-btn" onclick="appreciateBuild(this)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                                 <span class="appreciate-count">42</span>
                             </button>
-                            <a href="javascript:void(0)" class="feed-cta-link">
-                                <span>VIEW PROGRESS</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <a href="javascript:void(0)" class="feed-cta-link">
+                                    <span>VIEW PROGRESS</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Feed Node 2 -->
-                <div class="feed-node">
-                    <div class="feed-interceptor"></div>
-                    <div class="feed-card">
-                        <!-- Top Terminal Bar -->
-                        <div class="terminal-bar">
-                            <div class="terminal-dots">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                            <div class="terminal-file">tokio_pipeline.rs</div>
-                            <div class="status-badge" style="background:rgba(255,255,255,0.02); color:rgba(255,255,255,0.55); border-color: rgba(255, 255, 255, 0.08);">
-                                <span class="pulse-dot" style="background:rgba(255,255,255,0.3);"></span>
-                                <span style="text-transform: uppercase; font-size: 7px;">STABLE</span>
-                            </div>
-                        </div>
-
-                        <!-- Card Content -->
-                        <div class="feed-card-content">
-                            <div class="feed-creator-row">
-                                <div class="creator-info">
-                                    <div class="tm-avatar" style="width:20px; height:20px; font-size:7px;">RW</div>
-                                    <span class="creator-name">Elena Rostova</span>
-                                    <span class="creator-handle">@rust_wizard</span>
+                    <!-- Feed Node 2 -->
+                    <div class="feed-node">
+                        <div class="feed-interceptor"></div>
+                        <div class="feed-card">
+                            <!-- Top Terminal Bar -->
+                            <div class="terminal-bar">
+                                <div class="terminal-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
                                 </div>
-                                <span class="feed-project-name">System Design Engine</span>
+                                <div class="terminal-file">tokio_pipeline.rs</div>
+                                <div class="status-badge" style="background:rgba(255,255,255,0.02); color:rgba(255,255,255,0.55); border-color: rgba(255, 255, 255, 0.08);">
+                                    <span class="pulse-dot" style="background:rgba(255,255,255,0.3);"></span>
+                                    <span style="text-transform: uppercase; font-size: 7px;">STABLE</span>
+                                </div>
                             </div>
 
-                            <p class="feed-text">Successfully wired the Tokio runtime. Handled multiplexing across gRPC streams. Redis caching layer integrated and passing standard latency benchmarks.</p>
-
-                            <div class="feed-metadata-row">
-                                <span class="feed-chip backend-integrated">Backend Integrated</span>
-                                <div class="feed-progress-box">
-                                    <div class="feed-progress-bar">
-                                        <div class="feed-progress-fill" style="width: 65%"></div>
+                            <!-- Card Content -->
+                            <div class="feed-card-content">
+                                <div class="feed-creator-row">
+                                    <div class="creator-info">
+                                        <div class="tm-avatar" style="width:20px; height:20px; font-size:7px;">RW</div>
+                                        <span class="creator-name">Elena Rostova</span>
+                                        <span class="creator-handle">@rust_wizard</span>
                                     </div>
-                                    <span class="feed-progress-text">65% Build</span>
+                                    <span class="feed-project-name">System Design Engine</span>
+                                </div>
+
+                                <p class="feed-text">Successfully wired the Tokio runtime. Handled multiplexing across gRPC streams. Redis caching layer integrated and passing standard latency benchmarks.</p>
+
+                                <div class="feed-metadata-row">
+                                    <span class="feed-chip backend-integrated">Backend Integrated</span>
+                                    <div class="feed-progress-box">
+                                        <div class="feed-progress-bar">
+                                            <div class="feed-progress-fill" style="width: 65%"></div>
+                                        </div>
+                                        <span class="feed-progress-text">65% Build</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Actions Bar -->
-                        <div class="feed-actions-bar">
-                            <button class="feed-appreciate-btn" onclick="appreciateBuild(this)">
+                            <!-- Actions Bar -->
+                            <div class="feed-actions-bar">
+                                <button class="feed-appreciate-btn" onclick="appreciateBuild(this)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                                 <span class="appreciate-count">19</span>
                             </button>
-                            <a href="javascript:void(0)" class="feed-cta-link">
-                                <span>VIEW PROGRESS</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <a href="javascript:void(0)" class="feed-cta-link">
+                                    <span>VIEW PROGRESS</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Feed Node 3 -->
-                <div class="feed-node">
-                    <div class="feed-interceptor"></div>
-                    <div class="feed-card">
-                        <!-- Top Terminal Bar -->
-                        <div class="terminal-bar">
-                            <div class="terminal-dots">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                            <div class="terminal-file">parser.go</div>
-                            <div class="status-badge" style="background:rgba(120,255,120,0.02); color:rgba(120,255,120,0.65); border-color:rgba(120,255,120,0.12);">
-                                <span class="pulse-dot" style="background:#78ff78;"></span>
-                                <span style="text-transform: uppercase; font-size: 7px;">PROTOTYPE COMPLETE</span>
-                            </div>
-                        </div>
-
-                        <!-- Card Content -->
-                        <div class="feed-card-content">
-                            <div class="feed-creator-row">
-                                <div class="creator-info">
-                                    <div class="tm-avatar" style="width:20px; height:20px; font-size:7px;">GH</div>
-                                    <span class="creator-name">Kenji Takahashi</span>
-                                    <span class="creator-handle">@go_hacker</span>
+                    <!-- Feed Node 3 -->
+                    <div class="feed-node">
+                        <div class="feed-interceptor"></div>
+                        <div class="feed-card">
+                            <!-- Top Terminal Bar -->
+                            <div class="terminal-bar">
+                                <div class="terminal-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
                                 </div>
-                                <span class="feed-project-name">Compiler Sandbox</span>
+                                <div class="terminal-file">parser.go</div>
+                                <div class="status-badge" style="background:rgba(120,255,120,0.02); color:rgba(120,255,120,0.65); border-color:rgba(120,255,120,0.12);">
+                                    <span class="pulse-dot" style="background:#78ff78;"></span>
+                                    <span style="text-transform: uppercase; font-size: 7px;">PROTOTYPE COMPLETE</span>
+                                </div>
                             </div>
 
-                            <p class="feed-text">Lexer and AST parsing pipelines compiled successfully to WASM target. Handled live input evaluation with standard memory buffer bounds.</p>
-
-                            <div class="feed-metadata-row">
-                                <span class="feed-chip prototype-complete">Prototype Complete</span>
-                                <div class="feed-progress-box">
-                                    <div class="feed-progress-bar">
-                                        <div class="feed-progress-fill" style="width: 100%"></div>
+                            <!-- Card Content -->
+                            <div class="feed-card-content">
+                                <div class="feed-creator-row">
+                                    <div class="creator-info">
+                                        <div class="tm-avatar" style="width:20px; height:20px; font-size:7px;">GH</div>
+                                        <span class="creator-name">Kenji Takahashi</span>
+                                        <span class="creator-handle">@go_hacker</span>
                                     </div>
-                                    <span class="feed-progress-text">100% Milestone</span>
+                                    <span class="feed-project-name">Compiler Sandbox</span>
+                                </div>
+
+                                <p class="feed-text">Lexer and AST parsing pipelines compiled successfully to WASM target. Handled live input evaluation with standard memory buffer bounds.</p>
+
+                                <div class="feed-metadata-row">
+                                    <span class="feed-chip prototype-complete">Prototype Complete</span>
+                                    <div class="feed-progress-box">
+                                        <div class="feed-progress-bar">
+                                            <div class="feed-progress-fill" style="width: 100%"></div>
+                                        </div>
+                                        <span class="feed-progress-text">100% Milestone</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Actions Bar -->
-                        <div class="feed-actions-bar">
-                            <button class="feed-appreciate-btn" onclick="appreciateBuild(this)">
+                            <!-- Actions Bar -->
+                            <div class="feed-actions-bar">
+                                <button class="feed-appreciate-btn" onclick="appreciateBuild(this)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                                 <span class="appreciate-count">56</span>
                             </button>
-                            <a href="javascript:void(0)" class="feed-cta-link">
-                                <span>VIEW PROGRESS</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <a href="javascript:void(0)" class="feed-cta-link">
+                                    <span>VIEW PROGRESS</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Section Workspace Control -->
-            <div class="section-cta-dock">
-                <div class="cta-dock-divider"></div>
-                <button class="section-focus-trigger" onclick="enterFocusMode('buildInPublicSection', 0.88)">
+                <!-- Section Workspace Control -->
+                <div class="section-cta-dock">
+                    <div class="cta-dock-divider"></div>
+                    <button class="section-focus-trigger" onclick="enterFocusMode('buildInPublicSection', 0.88)">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
                     <span>Open Live Build Feed</span>
                 </button>
-            </div>
+                </div>
 
-            <!-- Expanded Transmit Build Log compiler box -->
-            <div class="focus-only-panel">
-                <div class="diagnostic-grid">
-                    <div class="interactive-compiler-box" style="grid-column: 1 / -1;">
-                        <div class="compiler-title-bar">
-                            <span class="compiler-lbl">// TRANSMIT NEW BUILD SPRINT SIGNAL</span>
-                            <span style="font-size: 7px; color: rgba(255, 255, 255, 0.35);">STATUS: ONLINE</span>
+                <!-- Expanded Transmit Build Log compiler box -->
+                <div class="focus-only-panel">
+                    <div class="diagnostic-grid">
+                        <div class="interactive-compiler-box" style="grid-column: 1 / -1;">
+                            <div class="compiler-title-bar">
+                                <span class="compiler-lbl">// TRANSMIT NEW BUILD SPRINT SIGNAL</span>
+                                <span style="font-size: 7px; color: rgba(255, 255, 255, 0.35);">STATUS: ONLINE</span>
+                            </div>
+                            <div class="compiler-input-wrap">
+                                <span class="compiler-prompt">$ devstage commit -m "</span>
+                                <input type="text" class="compiler-input" id="sprintCommitInput" placeholder="cinematic scroll compositor v2.0" value="cinematic scroll compositor v2.0">
+                                <span class="compiler-prompt">"</span>
+                            </div>
+                            <button class="compiler-btn" id="sprintCommitBtn" onclick="transmitSprintCommit()">TRANSMIT SPRINT</button>
                         </div>
-                        <div class="compiler-input-wrap">
-                            <span class="compiler-prompt">$ devstage commit -m "</span>
-                            <input type="text" class="compiler-input" id="sprintCommitInput" placeholder="cinematic scroll compositor v2.0" value="cinematic scroll compositor v2.0">
-                            <span class="compiler-prompt">"</span>
-                        </div>
-                        <button class="compiler-btn" id="sprintCommitBtn" onclick="transmitSprintCommit()">TRANSMIT SPRINT</button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <canvas id="fgCanvas"></canvas>
-        <div id="hint">scroll to descend</div>
-    </div>
+            <canvas id="fgCanvas"></canvas>
+            <div id="hint">scroll to descend</div>
+        </div>
 
         <!-- Scripts -->
         <script>
@@ -4523,8 +4512,8 @@
             // Countdown Timer Logic
             const targetDates = [
                 new Date(Date.now() + 4 * 24 * 60 * 60 * 1000 + 12 * 60 * 60 * 1000 + 45 * 60 * 1000), // Card 1
-                new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 15 * 60 * 1000),  // Card 2
-                new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 19 * 60 * 60 * 1000 + 30 * 60 * 1000)  // Card 3
+                new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 15 * 60 * 1000), // Card 2
+                new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 19 * 60 * 60 * 1000 + 30 * 60 * 1000) // Card 3
             ];
 
             function updateValueWithTick(el, newVal) {
@@ -4582,7 +4571,9 @@
 
                     card.addEventListener('mouseleave', () => {
                         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)`;
-                    }, { passive: true });
+                    }, {
+                        passive: true
+                    });
                 });
             }
 
@@ -4649,14 +4640,30 @@
 
                 let W, H, DPR;
                 let particles = [];
-                let t0 = performance.now(), last = t0;
-                let mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+                let t0 = performance.now(),
+                    last = t0;
+                let mouse = {
+                    x: 0,
+                    y: 0,
+                    tx: 0,
+                    ty: 0
+                };
                 let targetScrollZ = 0;
                 let camVel = 0;
                 let isScrollLocked = false;
 
-                const CAM = { fov: 310, z: 0, tiltX: 0, tiltY: 0, near: 12 };
-                const VOL = { w: 2.6, h: 2.6, depth: 1700 };
+                const CAM = {
+                    fov: 310,
+                    z: 0,
+                    tiltX: 0,
+                    tiltY: 0,
+                    near: 12
+                };
+                const VOL = {
+                    w: 2.6,
+                    h: 2.6,
+                    depth: 1700
+                };
                 const TEXT_Z = 440;
 
                 setTimeout(() => {
@@ -4668,20 +4675,54 @@
                 (() => {
                     const a = new Uint8Array(256);
                     for (let i = 0; i < 256; i++) a[i] = i;
-                    for (let i = 255; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; }
+                    for (let i = 255; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [a[i], a[j]] = [a[j], a[i]];
+                    }
                     for (let i = 0; i < 512; i++) _p[i] = a[i & 255];
                 })();
                 const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
                 const lerp = (t, a, b) => a + (b - a) * t;
-                function grad(h, x, y, z) { h &= 15; const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); }
+
+                function grad(h, x, y, z) {
+                    h &= 15;
+                    const u = h < 8 ? x : y,
+                        v = h < 4 ? y : (h === 12 || h === 14 ? x : z);
+                    return ((h & 1) ? -u : u) + ((h & 2) ? -v : v);
+                }
+
                 function noise3(x, y, z) {
-                    const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
-                    x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
-                    const u = fade(x), v = fade(y), w = fade(z);
-                    const A = _p[X] + Y, AA = _p[A] + Z, AB = _p[A + 1] + Z, B = _p[X + 1] + Y, BA = _p[B] + Z, BB = _p[B + 1] + Z;
+                    const X = Math.floor(x) & 255,
+                        Y = Math.floor(y) & 255,
+                        Z = Math.floor(z) & 255;
+                    x -= Math.floor(x);
+                    y -= Math.floor(y);
+                    z -= Math.floor(z);
+                    const u = fade(x),
+                        v = fade(y),
+                        w = fade(z);
+                    const A = _p[X] + Y,
+                        AA = _p[A] + Z,
+                        AB = _p[A + 1] + Z,
+                        B = _p[X + 1] + Y,
+                        BA = _p[B] + Z,
+                        BB = _p[B + 1] + Z;
                     return lerp(w, lerp(v, lerp(u, grad(_p[AA], x, y, z), grad(_p[BA], x - 1, y, z)), lerp(u, grad(_p[AB], x, y - 1, z), grad(_p[BB], x - 1, y - 1, z))), lerp(v, lerp(u, grad(_p[AA + 1], x, y, z - 1), grad(_p[BA + 1], x - 1, y, z - 1)), lerp(u, grad(_p[AB + 1], x, y - 1, z - 1), grad(_p[BB + 1], x - 1, y - 1, z - 1)))) * 0.5 + 0.5;
                 }
-                function fbm(x, y, z, o) { let v = 0, a = 0.5, f = 1, n = 0; for (let i = 0; i < o; i++) { v += a * noise3(x * f, y * f, z * f); n += a; a *= 0.5; f *= 2.1; } return v / n; }
+
+                function fbm(x, y, z, o) {
+                    let v = 0,
+                        a = 0.5,
+                        f = 1,
+                        n = 0;
+                    for (let i = 0; i < o; i++) {
+                        v += a * noise3(x * f, y * f, z * f);
+                        n += a;
+                        a *= 0.5;
+                        f *= 2.1;
+                    }
+                    return v / n;
+                }
                 const E = 0.009;
                 const curlX = (x, y, z) => (fbm(x, y + E, z, 3) - fbm(x, y - E, z, 3) - (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3))) / (2 * E);
                 const curlY = (x, y, z) => (fbm(x, y, z + E, 3) - fbm(x, y, z - E, 3) - (fbm(x + E, y, z, 3) - fbm(x - E, y, z, 3))) / (2 * E);
@@ -4702,10 +4743,14 @@
                         x3: (Math.random() - .5) * VOL.w * W,
                         y3: (Math.random() - .5) * VOL.h * H,
                         z3: CAM.z + CAM.near + (Math.random() * VOL.depth),
-                        vx: 0, vy: 0, vz: 0,
+                        vx: 0,
+                        vy: 0,
+                        vz: 0,
                         life: 7000 + Math.random() * 6000,
                         age: init ? Math.random() * (7000 + Math.random() * 6000) : 0,
-                        seed: Math.random() * 400, seedY: Math.random() * 400, seedZ: Math.random() * 400,
+                        seed: Math.random() * 400,
+                        seedY: Math.random() * 400,
+                        seedZ: Math.random() * 400,
                         baseSize: 0.55 + Math.random() * 1.1,
                         tempPeak: 0.36 + Math.random() * 0.48,
                         flickPhase: Math.random() * Math.PI * 2,
@@ -4723,13 +4768,22 @@
                     const cz = z3 - CAM.z;
                     if (cz <= CAM.near) return null;
                     const scale = CAM.fov / cz;
-                    return { sx: (x3 + CAM.tiltX * cz * 0.0013) * scale + W / 2, sy: (y3 + CAM.tiltY * cz * 0.0008) * scale + H / 2, scale, cz };
+                    return {
+                        sx: (x3 + CAM.tiltX * cz * 0.0013) * scale + W / 2,
+                        sy: (y3 + CAM.tiltY * cz * 0.0008) * scale + H / 2,
+                        scale,
+                        cz
+                    };
                 }
 
                 function paintParticle(c2d, p, elapsed, aMult) {
                     const proj = project(p.x3, p.y3, p.z3);
                     if (!proj) return;
-                    const { sx, sy, scale } = proj;
+                    const {
+                        sx,
+                        sy,
+                        scale
+                    } = proj;
                     if (sx < -130 || sx > W + 130 || sy < -130 || sy > H + 130) return;
 
                     const age01 = Math.min(p.age / p.life, 1);
@@ -4758,7 +4812,9 @@
                     glow.addColorStop(0.4, `rgba(${Math.round(r * .68)},${Math.round(g * .2)},0,${ga * .25})`);
                     glow.addColorStop(1, 'rgba(0,0,0,0)');
                     c2d.fillStyle = glow;
-                    c2d.beginPath(); c2d.arc(sx, sy, gr, 0, Math.PI * 2); c2d.fill();
+                    c2d.beginPath();
+                    c2d.arc(sx, sy, gr, 0, Math.PI * 2);
+                    c2d.fill();
 
                     const cr = Math.max(sz * .5, 0.4);
                     const br2 = Math.min(1, temp + 0.22);
@@ -4768,27 +4824,53 @@
                     core.addColorStop(0.5, `rgba(${r},${Math.round(g * .45)},0,${ca * .58})`);
                     core.addColorStop(1, 'rgba(0,0,0,0)');
                     c2d.fillStyle = core;
-                    c2d.beginPath(); c2d.arc(sx, sy, cr, 0, Math.PI * 2); c2d.fill();
+                    c2d.beginPath();
+                    c2d.arc(sx, sy, cr, 0, Math.PI * 2);
+                    c2d.fill();
                     c2d.restore();
                 }
 
-                const CS = 0.0021, CSTR = 28, FWD = 0.036;
+                const CS = 0.0021,
+                    CSTR = 28,
+                    FWD = 0.036;
+
                 function updateP(p, dt, elapsed) {
                     p.age += dt;
                     const T = elapsed * 0.000036;
-                    const nx = p.x3 * CS + p.seed, ny = p.y3 * CS + p.seedY, nz = p.z3 * CS * 0.44 + p.seedZ + T;
-                    const cx = curlX(nx, ny, nz), cy = curlY(nx, ny, nz), cz2 = curlZ(nx, ny, nz);
+                    const nx = p.x3 * CS + p.seed,
+                        ny = p.y3 * CS + p.seedY,
+                        nz = p.z3 * CS * 0.44 + p.seedZ + T;
+                    const cx = curlX(nx, ny, nz),
+                        cy = curlY(nx, ny, nz),
+                        cz2 = curlZ(nx, ny, nz);
                     p.vx += (cx * CSTR) * dt * 0.001;
                     p.vy += (cy * CSTR - 0.14) * dt * 0.001;
                     p.vz += (cz2 * CSTR * 0.5 - FWD) * dt * 0.001;
                     const drag = Math.pow(0.975, dt / 16);
-                    p.vx *= drag; p.vy *= drag; p.vz *= drag;
-                    p.x3 += p.vx * dt * 0.06; p.y3 += p.vy * dt * 0.06; p.z3 += p.vz * dt * 0.06;
-                    const hW = VOL.w * W * .5, hH = VOL.h * H * .5;
-                    if (p.x3 > hW) p.x3 = -hW; if (p.x3 < -hW) p.x3 = hW;
-                    if (p.y3 > hH) p.y3 = -hH; if (p.y3 < -hH) p.y3 = hH;
-                    if (p.z3 - CAM.z < CAM.near) { p.z3 = CAM.z + VOL.depth; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
-                    if (p.z3 > CAM.z + VOL.depth + 300) { p.z3 = CAM.z + CAM.near + 20; p.x3 = (Math.random() - .5) * VOL.w * W; p.y3 = (Math.random() - .5) * VOL.h * H; p.age = 0; }
+                    p.vx *= drag;
+                    p.vy *= drag;
+                    p.vz *= drag;
+                    p.x3 += p.vx * dt * 0.06;
+                    p.y3 += p.vy * dt * 0.06;
+                    p.z3 += p.vz * dt * 0.06;
+                    const hW = VOL.w * W * .5,
+                        hH = VOL.h * H * .5;
+                    if (p.x3 > hW) p.x3 = -hW;
+                    if (p.x3 < -hW) p.x3 = hW;
+                    if (p.y3 > hH) p.y3 = -hH;
+                    if (p.y3 < -hH) p.y3 = hH;
+                    if (p.z3 - CAM.z < CAM.near) {
+                        p.z3 = CAM.z + VOL.depth;
+                        p.x3 = (Math.random() - .5) * VOL.w * W;
+                        p.y3 = (Math.random() - .5) * VOL.h * H;
+                        p.age = 0;
+                    }
+                    if (p.z3 > CAM.z + VOL.depth + 300) {
+                        p.z3 = CAM.z + CAM.near + 20;
+                        p.x3 = (Math.random() - .5) * VOL.w * W;
+                        p.y3 = (Math.random() - .5) * VOL.h * H;
+                        p.age = 0;
+                    }
                 }
 
                 function drawBG() {
@@ -4799,12 +4881,14 @@
                     atm.addColorStop(0, 'rgba(90,34,4,0.11)');
                     atm.addColorStop(0.5, 'rgba(52,18,2,0.04)');
                     atm.addColorStop(1, 'rgba(0,0,0,0)');
-                    bgCtx.fillStyle = atm; bgCtx.fillRect(0, 0, W, H);
+                    bgCtx.fillStyle = atm;
+                    bgCtx.fillRect(0, 0, W, H);
                     const vig = bgCtx.createRadialGradient(W * .5, H * .5, Math.min(W, H) * .15, W * .5, H * .5, Math.max(W, H) * .92);
                     vig.addColorStop(0, 'rgba(0,0,0,0)');
                     vig.addColorStop(0.52, 'rgba(0,0,0,0.09)');
                     vig.addColorStop(1, 'rgba(0,0,0,0.82)');
-                    bgCtx.fillStyle = vig; bgCtx.fillRect(0, 0, W, H);
+                    bgCtx.fillStyle = vig;
+                    bgCtx.fillRect(0, 0, W, H);
                 }
 
                 // TEXT PARALLAX — multi-layer organic float
@@ -4814,7 +4898,8 @@
                 const tagsParEl = document.querySelector('.tags');
                 const mainTitleEl = document.getElementById('mainTitle');
 
-                let pMX = 0, pMY = 0; // smoothed mouse
+                let pMX = 0,
+                    pMY = 0; // smoothed mouse
 
                 function applyTextParallax(elapsed) {
                     pMX += (mouse.x - pMX) * 0.038;
@@ -4835,10 +4920,14 @@
                     const gxA = Math.sin(T * 0.087 + 0.7) * 1.2;
                     const gyA = Math.cos(T * 0.141 + 2.4) * 0.8;
 
-                    const tX = mx * -16 + txA, tY = my * -11 + tyA;
-                    const eX = mx * -9 + exA, eY = my * -6 + eyA;
-                    const sX = mx * -5 + sxA, sY = my * -4 + syA;
-                    const gX = mx * -3 + gxA, gY = my * -2 + gyA;
+                    const tX = mx * -16 + txA,
+                        tY = my * -11 + tyA;
+                    const eX = mx * -9 + exA,
+                        eY = my * -6 + eyA;
+                    const sX = mx * -5 + sxA,
+                        sY = my * -4 + syA;
+                    const gX = mx * -3 + gxA,
+                        gY = my * -2 + gyA;
 
                     const breathe = 1 + Math.sin(T * 0.19 + 0.3) * 0.004;
 
@@ -4849,7 +4938,8 @@
                 }
 
                 // SCROLL DEPTH DISSOLUTION
-                let scrollDepth = 0, smoothVel = 0;
+                let scrollDepth = 0,
+                    smoothVel = 0;
 
                 function applyDepthDissolution(dt) {
                     if (window.isFocusMode) return;
@@ -4963,7 +5053,8 @@
                 // MAIN LOOP
                 function frame(now) {
                     requestAnimationFrame(frame);
-                    const dt = Math.min(50, now - last); last = now;
+                    const dt = Math.min(50, now - last);
+                    last = now;
                     const elapsed = now - t0;
 
                     const prevZ = CAM.z;
@@ -5001,10 +5092,13 @@
                 // RESIZE
                 function resize() {
                     DPR = Math.min(window.devicePixelRatio || 1, 2);
-                    W = stage.clientWidth; H = stage.clientHeight;
+                    W = stage.clientWidth;
+                    H = stage.clientHeight;
                     [bgCv, fgCv].forEach(cv => {
-                        cv.width = Math.floor(W * DPR); cv.height = Math.floor(H * DPR);
-                        cv.style.width = W + 'px'; cv.style.height = H + 'px';
+                        cv.width = Math.floor(W * DPR);
+                        cv.height = Math.floor(H * DPR);
+                        cv.style.width = W + 'px';
+                        cv.style.height = H + 'px';
                     });
                     bgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
                     fgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -5013,26 +5107,38 @@
 
                 // INPUT
                 document.addEventListener('mousemove', e => {
-                    mouse.x = e.clientX; mouse.y = e.clientY;
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
                     const r = stage.getBoundingClientRect();
                     mouse.tx = (e.clientX - r.left - W / 2) * 1.4;
                     mouse.ty = (e.clientY - r.top - H / 2) * 0.9;
-                }, { passive: true });
+                }, {
+                    passive: true
+                });
 
-                stage.addEventListener('mouseleave', () => { mouse.tx = 0; mouse.ty = 0; }, { passive: true });
+                stage.addEventListener('mouseleave', () => {
+                    mouse.tx = 0;
+                    mouse.ty = 0;
+                }, {
+                    passive: true
+                });
                 const maxScrollZ = VOL.depth * 4.5;
                 stage.addEventListener('wheel', e => {
                     if (isScrollLocked) return;
                     e.preventDefault();
                     targetScrollZ += e.deltaY * 2.0;
                     targetScrollZ = Math.max(0, Math.min(maxScrollZ, targetScrollZ));
-                }, { passive: false });
+                }, {
+                    passive: false
+                });
 
                 let _lTY = null;
-                stage.addEventListener('touchstart', e => { 
+                stage.addEventListener('touchstart', e => {
                     if (isScrollLocked) return;
-                    _lTY = e.touches[0].clientY; 
-                }, { passive: true });
+                    _lTY = e.touches[0].clientY;
+                }, {
+                    passive: true
+                });
                 stage.addEventListener('touchmove', e => {
                     if (isScrollLocked) return;
                     if (_lTY !== null) {
@@ -5041,10 +5147,18 @@
                         targetScrollZ = Math.max(0, Math.min(maxScrollZ, targetScrollZ));
                         _lTY = e.touches[0].clientY;
                     }
-                }, { passive: true });
-                stage.addEventListener('touchend', () => { _lTY = null; }, { passive: true });
+                }, {
+                    passive: true
+                });
+                stage.addEventListener('touchend', () => {
+                    _lTY = null;
+                }, {
+                    passive: true
+                });
 
-                window.addEventListener('resize', resize, { passive: true });
+                window.addEventListener('resize', resize, {
+                    passive: true
+                });
                 resize();
 
                 // Expose hooks for the global Focus Transition Engine
@@ -5126,10 +5240,13 @@
 
                 const eyebrowChars = eyebrowEl.querySelectorAll('.ch');
                 setTimeout(() => {
-                    eyebrowChars.forEach((ch, i) => { setTimeout(() => ch.classList.add('on'), i * 22); });
+                    eyebrowChars.forEach((ch, i) => {
+                        setTimeout(() => ch.classList.add('on'), i * 22);
+                    });
                 }, 400);
 
-                const N = charSpans.length, center = (N - 1) / 2;
+                const N = charSpans.length,
+                    center = (N - 1) / 2;
                 setTimeout(() => {
                     charSpans.forEach((span, i) => {
                         const dist = Math.abs(i - center);
@@ -5139,7 +5256,9 @@
 
                 setTimeout(() => subEl.classList.add('wipe'), 2200);
                 setTimeout(() => ruleEl.classList.add('show'), 2650);
-                setTimeout(() => { tagEls.forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 130)); }, 3050);
+                setTimeout(() => {
+                    tagEls.forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 130));
+                }, 3050);
 
                 // PREMIUM LETTER SWEEP
                 (function initSweep() {
@@ -5180,11 +5299,17 @@
                         span._fillEl = fill;
                     });
 
-                    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-                    function easeInCubic(t) { return t * t * t; }
+                    function easeOutCubic(t) {
+                        return 1 - Math.pow(1 - t, 3);
+                    }
+
+                    function easeInCubic(t) {
+                        return t * t * t;
+                    }
 
                     function animateFill(fillEl, fromPct, toPct, dur, easeFn, opFrom, opTo, cb) {
                         const start = performance.now();
+
                         function step(now) {
                             const raw = Math.min((now - start) / dur, 1);
                             const t = easeFn(raw);
@@ -5204,6 +5329,7 @@
 
                     function runCycle() {
                         let i = 0;
+
                         function nextLetter() {
                             if (i >= charSpans.length) {
                                 setTimeout(runCycle, CYCLE_PAUSE + EMPTY_DUR);
@@ -5229,46 +5355,55 @@
                 // ─────────────────────────────────────────────────────────────────────────────
                 // FUTURISTIC CHALLENGE SCANNER (RADAR CHART) ENGINE
                 // ─────────────────────────────────────────────────────────────────────────────
-                const CHALLENGE_PROFILES = [
-                    {
-                        filename: "portfolio.sh",
-                        stack: "Next.js + Three.js + Tailwind",
-                        role: "Creative Technologist / Frontend Lead",
-                        skills: ["React", "GSAP", "WebGL", "CSS Grid"],
-                        team: [
-                            { role: "1 Frontend Dev", desc: "Interactive Expert" },
-                            { role: "1 UI Designer", desc: "Matte/Layout Specialist" },
-                            { role: "1 Motion Designer", desc: "Cinematic Director" }
-                        ],
-                        insight: "Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.",
-                        metrics: [0.90, 0.95, 0.20, 0.95, 0.40, 0.30, 0.95, 0.60] // Creativity, Frontend, Backend, UI/UX, AI/Logic, Teamwork, Motion, Problem Solving
-                    },
-                    {
-                        filename: "scale_sys.rs",
-                        stack: "Rust + Tokio + Prometheus",
-                        role: "Systems Engineer / Infrastructure Lead",
-                        skills: ["Rust", "gRPC", "Redis", "Kubernetes"],
-                        team: [
-                            { role: "1 Systems Architect", desc: "Concurrency Architect" },
-                            { role: "1 Backend Engineer", desc: "Tokio/gRPC Developer" },
-                            { role: "1 DevOps Specialist", desc: "Grafana/K8s Deployer" }
-                        ],
-                        insight: "Best suited for developers interested in: highly concurrent microservices, distributed consensus protocols, and low-latency system profiling.",
-                        metrics: [0.40, 0.15, 0.95, 0.10, 0.90, 0.80, 0.05, 0.95]
-                    },
-                    {
-                        filename: "compiler.go",
-                        stack: "Go + WebAssembly + TypeScript",
-                        role: "Language Designer / Core Developer",
-                        skills: ["Go", "Lexing/Parsing", "AST Generation", "WebAssembly"],
-                        team: [
-                            { role: "1 Compiler Engineer", desc: "Language Designer" },
-                            { role: "1 WASM Integrator", desc: "TypeScript Interface Dev" }
-                        ],
-                        insight: "Best suited for engineers interested in: lexical analysis, formal language design, and optimizing AST parsing execution pipelines.",
-                        metrics: [0.50, 0.25, 0.80, 0.30, 0.95, 0.40, 0.10, 0.90]
-                    }
-                ];
+                const CHALLENGE_PROFILES = [{
+                    filename: "portfolio.sh",
+                    stack: "Next.js + Three.js + Tailwind",
+                    role: "Creative Technologist / Frontend Lead",
+                    skills: ["React", "GSAP", "WebGL", "CSS Grid"],
+                    team: [{
+                        role: "1 Frontend Dev",
+                        desc: "Interactive Expert"
+                    }, {
+                        role: "1 UI Designer",
+                        desc: "Matte/Layout Specialist"
+                    }, {
+                        role: "1 Motion Designer",
+                        desc: "Cinematic Director"
+                    }],
+                    insight: "Best suited for creators interested in: interactive UI systems, cinematic web experiences, and modern frontend engineering.",
+                    metrics: [0.90, 0.95, 0.20, 0.95, 0.40, 0.30, 0.95, 0.60] // Creativity, Frontend, Backend, UI/UX, AI/Logic, Teamwork, Motion, Problem Solving
+                }, {
+                    filename: "scale_sys.rs",
+                    stack: "Rust + Tokio + Prometheus",
+                    role: "Systems Engineer / Infrastructure Lead",
+                    skills: ["Rust", "gRPC", "Redis", "Kubernetes"],
+                    team: [{
+                        role: "1 Systems Architect",
+                        desc: "Concurrency Architect"
+                    }, {
+                        role: "1 Backend Engineer",
+                        desc: "Tokio/gRPC Developer"
+                    }, {
+                        role: "1 DevOps Specialist",
+                        desc: "Grafana/K8s Deployer"
+                    }],
+                    insight: "Best suited for developers interested in: highly concurrent microservices, distributed consensus protocols, and low-latency system profiling.",
+                    metrics: [0.40, 0.15, 0.95, 0.10, 0.90, 0.80, 0.05, 0.95]
+                }, {
+                    filename: "compiler.go",
+                    stack: "Go + WebAssembly + TypeScript",
+                    role: "Language Designer / Core Developer",
+                    skills: ["Go", "Lexing/Parsing", "AST Generation", "WebAssembly"],
+                    team: [{
+                        role: "1 Compiler Engineer",
+                        desc: "Language Designer"
+                    }, {
+                        role: "1 WASM Integrator",
+                        desc: "TypeScript Interface Dev"
+                    }],
+                    insight: "Best suited for engineers interested in: lexical analysis, formal language design, and optimizing AST parsing execution pipelines.",
+                    metrics: [0.50, 0.25, 0.80, 0.30, 0.95, 0.40, 0.10, 0.90]
+                }];
 
                 const RADAR_METRICS_LABELS = [
                     "Creativity", "Frontend", "Backend", "UI/UX",
@@ -5283,7 +5418,11 @@
                 let activeChallengeIdx = 0;
                 let hoveredAxisIndex = -1;
 
-                let radarMouse = { x: 0, y: 0, active: false };
+                let radarMouse = {
+                    x: 0,
+                    y: 0,
+                    active: false
+                };
 
                 function updateScannerUI(index) {
                     activeChallengeIdx = index;
@@ -5370,7 +5509,7 @@
                     radarCtx.scale(dpr, dpr);
                 }
 
-                window.drawRadarChart = function (elapsed) {
+                window.drawRadarChart = function(elapsed) {
                     const size = radarCanvas.width / (window.devicePixelRatio || 1);
                     if (size <= 0) return;
 
@@ -5425,9 +5564,9 @@
                             else radarCtx.lineTo(x, y);
                         }
                         radarCtx.closePath();
-                        radarCtx.strokeStyle = ringPct === 1.0
-                            ? 'rgba(255, 255, 255, 0.07)'
-                            : 'rgba(255, 255, 255, 0.035)';
+                        radarCtx.strokeStyle = ringPct === 1.0 ?
+                            'rgba(255, 255, 255, 0.07)' :
+                            'rgba(255, 255, 255, 0.035)';
                         radarCtx.lineWidth = 0.8;
                         radarCtx.stroke();
                     });
@@ -5443,18 +5582,18 @@
                         radarCtx.lineTo(outerX, outerY);
 
                         const isHovered = (i === hoveredAxisIndex);
-                        radarCtx.strokeStyle = isHovered
-                            ? 'rgba(218, 108, 32, 0.45)'
-                            : 'rgba(255, 255, 255, 0.035)';
+                        radarCtx.strokeStyle = isHovered ?
+                            'rgba(218, 108, 32, 0.45)' :
+                            'rgba(255, 255, 255, 0.035)';
                         radarCtx.lineWidth = isHovered ? 1.2 : 0.8;
                         radarCtx.stroke();
 
                         // Draw outer axis crosshair dot
                         radarCtx.beginPath();
                         radarCtx.arc(outerX, outerY, isHovered ? 2.5 : 1.5, 0, Math.PI * 2);
-                        radarCtx.fillStyle = isHovered
-                            ? 'rgba(218, 108, 32, 0.85)'
-                            : 'rgba(255, 255, 255, 0.15)';
+                        radarCtx.fillStyle = isHovered ?
+                            'rgba(218, 108, 32, 0.85)' :
+                            'rgba(255, 255, 255, 0.15)';
                         radarCtx.fill();
 
                         // Draw Labeled Metric text
@@ -5464,9 +5603,9 @@
 
                         radarCtx.font = "500 7px 'Outfit', sans-serif";
                         radarCtx.textAlign = "center";
-                        radarCtx.fillStyle = isHovered
-                            ? 'rgb(218, 108, 32)'
-                            : 'rgba(255, 255, 255, 0.35)';
+                        radarCtx.fillStyle = isHovered ?
+                            'rgb(218, 108, 32)' :
+                            'rgba(255, 255, 255, 0.35)';
 
                         let labelText = RADAR_METRICS_LABELS[i].toUpperCase();
                         // Append actual scanned metric percentage if hovered
@@ -5525,19 +5664,25 @@
                 // Radar Controller Initialization & Event Listeners
                 window.addEventListener('resize', () => {
                     resizeRadarCanvas();
-                }, { passive: true });
+                }, {
+                    passive: true
+                });
 
                 radarCanvas.addEventListener('mousemove', (e) => {
                     const rect = radarCanvas.getBoundingClientRect();
                     radarMouse.x = e.clientX - rect.left;
                     radarMouse.y = e.clientY - rect.top;
                     radarMouse.active = true;
-                }, { passive: true });
+                }, {
+                    passive: true
+                });
 
                 radarCanvas.addEventListener('mouseleave', () => {
                     radarMouse.active = false;
                     hoveredAxisIndex = -1;
-                }, { passive: true });
+                }, {
+                    passive: true
+                });
 
                 // Hook up card brief CTAs & Mouse clicks
                 const activeCards = document.querySelectorAll('.active-challenge-card');
@@ -5571,98 +5716,91 @@
                 // ─────────────────────────────────────────────────────────────────────────────
                 // FUTURISTIC TEAM RECRUITMENT DISCOVERY ENGINE
                 // ─────────────────────────────────────────────────────────────────────────────
-                const SQUAD_TEAMS = [
-                    {
-                        id: "squad-1",
-                        filename: "squad_01.json",
-                        teamName: "PixelForge",
-                        challenge: "The Modern Portfolio",
-                        category: "UI & UX",
-                        difficulty: "Advanced",
-                        matchScore: 94,
-                        status: "urgent", // urgent, recruiting, beginner
-                        statusText: "Urgent Need",
-                        members: ["LD", "UX"],
-                        neededRoles: ["Motion Designer", "Frontend Developer"],
-                        tech: ["React", "GSAP", "Three.js"],
-                        timestamp: 3
-                    },
-                    {
-                        id: "squad-2",
-                        filename: "squad_02.json",
-                        teamName: "NovaStack",
-                        challenge: "System Design Engine",
-                        category: "Architecture",
-                        difficulty: "Expert",
-                        matchScore: 88,
-                        status: "recruiting",
-                        statusText: "Recruiting",
-                        members: ["SA"],
-                        neededRoles: ["Backend Engineer", "DevOps Specialist"],
-                        tech: ["Rust", "Tokio", "gRPC"],
-                        timestamp: 1
-                    },
-                    {
-                        id: "squad-3",
-                        filename: "squad_03.json",
-                        teamName: "CodeHive",
-                        challenge: "Compiler Sandbox",
-                        category: "Compilers",
-                        difficulty: "Hard",
-                        matchScore: 76,
-                        status: "beginner",
-                        statusText: "Beginner Friendly",
-                        members: ["GD", "WE"],
-                        neededRoles: ["Frontend Developer"],
-                        tech: ["Go", "WebAssembly", "TypeScript"],
-                        timestamp: 2
-                    },
-                    {
-                        id: "squad-4",
-                        filename: "squad_04.json",
-                        teamName: "Aetherium",
-                        challenge: "cinematic particles",
-                        category: "Creative Tech",
-                        difficulty: "Expert",
-                        matchScore: 92,
-                        status: "urgent",
-                        statusText: "Urgent Need",
-                        members: ["WA", "GL"],
-                        neededRoles: ["WebGL Specialist"],
-                        tech: ["Three.js", "GLSL", "React"],
-                        timestamp: 4
-                    },
-                    {
-                        id: "squad-5",
-                        filename: "squad_05.json",
-                        teamName: "MotionLab",
-                        challenge: "liquid sharing",
-                        category: "Motion Engine",
-                        difficulty: "Hard",
-                        matchScore: 85,
-                        status: "recruiting",
-                        statusText: "Recruiting",
-                        members: ["GS", "AP"],
-                        neededRoles: ["Motion Designer"],
-                        tech: ["GSAP", "CSS", "SVG"],
-                        timestamp: 5
-                    },
-                    {
-                        id: "squad-6",
-                        filename: "squad_06.json",
-                        teamName: "CyberShell",
-                        challenge: "Modern Portfolio",
-                        category: "UI & UX",
-                        difficulty: "Advanced",
-                        matchScore: 79,
-                        status: "beginner",
-                        statusText: "Beginner Friendly",
-                        members: ["CS", "SH"],
-                        neededRoles: ["Frontend Developer"],
-                        tech: ["React", "Tailwind", "Vite"],
-                        timestamp: 6
-                    }
-                ];
+                const SQUAD_TEAMS = [{
+                    id: "squad-1",
+                    filename: "squad_01.json",
+                    teamName: "PixelForge",
+                    challenge: "The Modern Portfolio",
+                    category: "UI & UX",
+                    difficulty: "Advanced",
+                    matchScore: 94,
+                    status: "urgent", // urgent, recruiting, beginner
+                    statusText: "Urgent Need",
+                    members: ["LD", "UX"],
+                    neededRoles: ["Motion Designer", "Frontend Developer"],
+                    tech: ["React", "GSAP", "Three.js"],
+                    timestamp: 3
+                }, {
+                    id: "squad-2",
+                    filename: "squad_02.json",
+                    teamName: "NovaStack",
+                    challenge: "System Design Engine",
+                    category: "Architecture",
+                    difficulty: "Expert",
+                    matchScore: 88,
+                    status: "recruiting",
+                    statusText: "Recruiting",
+                    members: ["SA"],
+                    neededRoles: ["Backend Engineer", "DevOps Specialist"],
+                    tech: ["Rust", "Tokio", "gRPC"],
+                    timestamp: 1
+                }, {
+                    id: "squad-3",
+                    filename: "squad_03.json",
+                    teamName: "CodeHive",
+                    challenge: "Compiler Sandbox",
+                    category: "Compilers",
+                    difficulty: "Hard",
+                    matchScore: 76,
+                    status: "beginner",
+                    statusText: "Beginner Friendly",
+                    members: ["GD", "WE"],
+                    neededRoles: ["Frontend Developer"],
+                    tech: ["Go", "WebAssembly", "TypeScript"],
+                    timestamp: 2
+                }, {
+                    id: "squad-4",
+                    filename: "squad_04.json",
+                    teamName: "Aetherium",
+                    challenge: "cinematic particles",
+                    category: "Creative Tech",
+                    difficulty: "Expert",
+                    matchScore: 92,
+                    status: "urgent",
+                    statusText: "Urgent Need",
+                    members: ["WA", "GL"],
+                    neededRoles: ["WebGL Specialist"],
+                    tech: ["Three.js", "GLSL", "React"],
+                    timestamp: 4
+                }, {
+                    id: "squad-5",
+                    filename: "squad_05.json",
+                    teamName: "MotionLab",
+                    challenge: "liquid sharing",
+                    category: "Motion Engine",
+                    difficulty: "Hard",
+                    matchScore: 85,
+                    status: "recruiting",
+                    statusText: "Recruiting",
+                    members: ["GS", "AP"],
+                    neededRoles: ["Motion Designer"],
+                    tech: ["GSAP", "CSS", "SVG"],
+                    timestamp: 5
+                }, {
+                    id: "squad-6",
+                    filename: "squad_06.json",
+                    teamName: "CyberShell",
+                    challenge: "Modern Portfolio",
+                    category: "UI & UX",
+                    difficulty: "Advanced",
+                    matchScore: 79,
+                    status: "beginner",
+                    statusText: "Beginner Friendly",
+                    members: ["CS", "SH"],
+                    neededRoles: ["Frontend Developer"],
+                    tech: ["React", "Tailwind", "Vite"],
+                    timestamp: 6
+                }];
 
                 let activeFilters = {
                     role: "all",
@@ -5853,11 +5991,19 @@
                 }
 
                 // Custom Dropdowns Logic
-                const dropdowns = [
-                    { triggerId: 'filter-role-trigger', menuId: 'filter-role-menu', filterKey: 'role' },
-                    { triggerId: 'filter-difficulty-trigger', menuId: 'filter-difficulty-menu', filterKey: 'difficulty' },
-                    { triggerId: 'sort-trigger', menuId: 'sort-menu', filterKey: 'sort' }
-                ];
+                const dropdowns = [{
+                    triggerId: 'filter-role-trigger',
+                    menuId: 'filter-role-menu',
+                    filterKey: 'role'
+                }, {
+                    triggerId: 'filter-difficulty-trigger',
+                    menuId: 'filter-difficulty-menu',
+                    filterKey: 'difficulty'
+                }, {
+                    triggerId: 'sort-trigger',
+                    menuId: 'sort-menu',
+                    filterKey: 'sort'
+                }];
 
                 dropdowns.forEach(dd => {
                     const trigger = document.getElementById(dd.triggerId);
@@ -5928,6 +6074,7 @@
                 // CHALLENGE PROGRESSION TIMELINE INTERACTION
                 // ─────────────────────────────────────────────────────────────────────────────
                 let evolutionAnimated = false;
+
                 function animateEvolutionHUD() {
                     if (evolutionAnimated) return;
                     evolutionAnimated = true;
@@ -5952,7 +6099,7 @@
 
                     const countEl = btn.querySelector('.appreciate-count');
                     const currentCount = parseInt(countEl.textContent);
-                    
+
                     // Trigger bouncy micro-animation
                     btn.style.transform = 'scale(0.88)';
                     setTimeout(() => {
@@ -5982,8 +6129,7 @@
                         enrolled: "1.4K Enrolled",
                         status: "HOT",
                         filename: "glass_system.css"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://UI-UX-02",
                         title: "Dynamic Fluid Interfaces",
                         category: "ui-ux",
@@ -6007,8 +6153,7 @@
                         enrolled: "2.1K Enrolled",
                         status: "NEW",
                         filename: "hero_director.js"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://FRONT-02",
                         title: "Three.js Particle Portal",
                         category: "frontend",
@@ -6032,8 +6177,7 @@
                         enrolled: "670 Enrolled",
                         status: "STABLE",
                         filename: "tokio_thread.rs"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://BACK-02",
                         title: "Distributed Consensus Node",
                         category: "backend",
@@ -6057,8 +6201,7 @@
                         enrolled: "1.1K Enrolled",
                         status: "EXPERIMENTAL",
                         filename: "agent_runner.py"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://AI-02",
                         title: "Visual Matrix Parser",
                         category: "ai",
@@ -6082,8 +6225,7 @@
                         enrolled: "980 Enrolled",
                         status: "HOT",
                         filename: "socket_orchestrator.ts"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://FS-02",
                         title: "Edge KV Storage Hub",
                         category: "fullstack",
@@ -6107,8 +6249,7 @@
                         enrolled: "1.2K Enrolled",
                         status: "RECOMMENDED",
                         filename: "wasm_compiler.go"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://OS-02",
                         title: "V8 Profiler Hook",
                         category: "opensource",
@@ -6132,8 +6273,7 @@
                         enrolled: "380 Enrolled",
                         status: "HOT",
                         filename: "mesh_deformer.frag"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://MOTION-02",
                         title: "Canvas Liquid Simulation",
                         category: "motion",
@@ -6157,8 +6297,7 @@
                         enrolled: "840 Enrolled",
                         status: "NEW",
                         filename: "ast_sec_scan.py"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://CYBER-02",
                         title: "Memory Corruption Sandbox",
                         category: "cybersecurity",
@@ -6182,8 +6321,7 @@
                         enrolled: "950 Enrolled",
                         status: "LEGENDARY",
                         filename: "raymarching.frag"
-                    },
-                    {
+                    }, {
                         id: "DOMAIN://GAME-02",
                         title: "Low-poly ECS Pipeline",
                         category: "gamedev",
@@ -6205,16 +6343,16 @@
 
                     setTimeout(() => {
                         grid.innerHTML = '';
-                        const filtered = category === 'all' 
-                            ? DOMAIN_CHALLENGES 
-                            : DOMAIN_CHALLENGES.filter(c => c.category === category);
+                        const filtered = category === 'all' ?
+                            DOMAIN_CHALLENGES :
+                            DOMAIN_CHALLENGES.filter(c => c.category === category);
 
                         const listToRender = window.isFocusMode ? filtered : filtered.slice(0, 3);
                         listToRender.forEach((card, idx) => {
                             const cardEl = document.createElement('div');
                             cardEl.className = 'domain-card';
                             cardEl.id = `domain-card-${idx}`;
-                            
+
                             // Top terminal dots + status pill
                             cardEl.innerHTML = `
                                 <div class="terminal-bar">
@@ -6306,7 +6444,7 @@
                 window.enrollInDomain = function(btn, title) {
                     if (btn.classList.contains('enrolled')) return;
                     btn.classList.add('enrolled');
-                    
+
                     // Transmitting telemetry state
                     btn.innerHTML = '<span>TRANSMITTING...</span>';
                     btn.style.color = 'rgb(218, 108, 32)';
@@ -6349,10 +6487,10 @@
 
                 window.enterFocusMode = function(sectionId, ratio) {
                     if (window.isFocusMode && window.focusedSectionId === sectionId) return;
-                    
+
                     window.isFocusMode = true;
                     window.focusedSectionId = sectionId;
-                    
+
                     // Add global layout flags
                     document.body.classList.add('in-focus-mode');
                     const rail = document.getElementById('systemNavRail');
@@ -6360,16 +6498,16 @@
                         rail.classList.add('focused');
                         rail.classList.add('nav-visible');
                     }
-                    
+
                     const retBtn = document.getElementById('returnOverviewBtn');
                     if (retBtn) retBtn.classList.add('visible');
-                    
+
                     // Set scroll location to section & lock background scrolling
                     if (ratio !== undefined) {
                         window.setScrollDepthRatio(ratio);
                     }
                     window.setScrollLockState(true);
-                    
+
                     // Staggered section isolation — hide all, then reveal active with delay
                     const allSections = document.querySelectorAll('.challenge-section, .domains-section, .analysis-section, .recruitment-section, .evolution-section, .build-public-section');
                     allSections.forEach(sec => {
@@ -6390,7 +6528,7 @@
                             sec.style.pointerEvents = 'none';
                         }
                     });
-                    
+
                     // Highlight selected navigator rail item
                     document.querySelectorAll('.nav-rail-item').forEach(item => {
                         if (item.getAttribute('data-section') === sectionId) {
@@ -6414,22 +6552,22 @@
 
                 window.exitFocusMode = function() {
                     if (!window.isFocusMode) return;
-                    
+
                     const prevSectionId = window.focusedSectionId;
                     window.isFocusMode = false;
                     window.focusedSectionId = null;
-                    
+
                     // Reset global layouts
                     document.body.classList.remove('in-focus-mode');
                     const rail = document.getElementById('systemNavRail');
                     if (rail) rail.classList.remove('focused');
-                    
+
                     const retBtn = document.getElementById('returnOverviewBtn');
                     if (retBtn) retBtn.classList.remove('visible');
-                    
+
                     // Unlock wheel/touch controls
                     window.setScrollLockState(false);
-                    
+
                     // Clear focus-active class and inline styles — let applyDepthDissolution recalculate
                     document.querySelectorAll('.challenge-section, .domains-section, .analysis-section, .recruitment-section, .evolution-section, .build-public-section').forEach(sec => {
                         sec.classList.remove('focus-active');
@@ -6477,6 +6615,7 @@
 
                 // Auto Scroll Indicator Tracker — uses requestAnimationFrame-throttled polling
                 let _lastTrackerRun = 0;
+
                 function updateNavTracker() {
                     requestAnimationFrame(function navTrackerLoop(now) {
                         if (now - _lastTrackerRun > 120) {
@@ -6484,14 +6623,14 @@
                             if (!window.isFocusMode && window.getScrollDepthRatio) {
                                 const ratio = window.getScrollDepthRatio();
                                 let activeSection = 'challengeSection';
-                                
+
                                 if (ratio < 0.19) activeSection = 'challengeSection';
                                 else if (ratio < 0.33) activeSection = 'domainsSection';
                                 else if (ratio < 0.47) activeSection = 'analysisSection';
                                 else if (ratio < 0.61) activeSection = 'recruitmentSection';
                                 else if (ratio < 0.77) activeSection = 'evolutionSection';
                                 else activeSection = 'buildInPublicSection';
-                                
+
                                 document.querySelectorAll('.nav-rail-item').forEach(item => {
                                     if (item.getAttribute('data-section') === activeSection) {
                                         item.classList.add('active');
@@ -6510,16 +6649,16 @@
                 window.transmitSprintCommit = function() {
                     const input = document.getElementById('sprintCommitInput');
                     if (!input || !input.value.trim()) return;
-                    
+
                     const commitMsg = input.value.trim();
                     const stream = document.querySelector('.public-feed-stream');
                     if (!stream) return;
-                    
+
                     const node = document.createElement('div');
                     node.className = 'feed-node';
                     node.style.opacity = '0';
                     node.style.transform = 'translateY(-20px)';
-                    
+
                     node.innerHTML = `
                         <div class="feed-interceptor"></div>
                         <div class="feed-card" style="border-color: rgba(120, 255, 120, 0.2);">
@@ -6557,22 +6696,22 @@
                             </div>
                         </div>
                     `;
-                    
+
                     const pipeline = stream.querySelector('.public-feed-pipeline');
                     if (pipeline) {
                         pipeline.after(node);
                     } else {
                         stream.prepend(node);
                     }
-                    
+
                     setTimeout(() => {
                         node.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
                         node.style.opacity = '1';
                         node.style.transform = 'translateY(0)';
                     }, 50);
-                    
+
                     input.value = '';
-                    
+
                     const btn = document.getElementById('sprintCommitBtn');
                     if (btn) {
                         btn.textContent = 'TRANSMITTED!';
@@ -6587,9 +6726,8 @@
                 };
 
             })();
-
         </script>
-        
+
 </body>
 
 </html>

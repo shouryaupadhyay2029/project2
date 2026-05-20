@@ -88,7 +88,7 @@
         const target = link.getAttribute('target');
 
         // Skip if it's an external link, anchor, or has target="_blank"
-        if (!href || href.startsWith('#') || href.startsWith('javascript:') || 
+        if (!href || href.startsWith('#') || href.startsWith('javascript:') ||
             link.hasAttribute('download') || target === '_blank') {
             return;
         }
@@ -127,17 +127,24 @@ const init3DCursor = () => {
 
     document.body.appendChild(cursor);
 
+    window.__DEVSTAGE_CUSTOM_CURSOR_READY = true;
+    if (window.__DEVSTAGE_CUSTOM_CURSOR_CONTROLLER) return;
+
     const borderRing = cursor.querySelector('.border-ring');
 
     // 3. State & Physics Engine
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
-    let currentX = mouseX, currentY = mouseY;
-    let currentW = 24, currentH = 24;
+    let currentX = mouseX,
+        currentY = mouseY;
+    let currentW = 24,
+        currentH = 24;
     let currentR = 50;
 
-    let targetX = mouseX, targetY = mouseY;
-    let targetW = 24, targetH = 24;
+    let targetX = mouseX,
+        targetY = mouseY;
+    let targetW = 24,
+        targetH = 24;
     let targetR = 50;
 
     let isHovering = false;
@@ -223,200 +230,211 @@ const init3DCursor = () => {
 
 /* === SECTION 3: INTERACTIVE PARTICLE WAVE (Explore Background) === */
 const initParticleWaveSystem = (canvas) => {
-  const ctx = canvas.getContext('2d', { alpha: false }); 
-  const cursorEl = document.getElementById('cursor-ring');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const cursorEl = document.getElementById('cursor-ring');
 
-  const CFG = {
-    cols: 64, // Optimized density
-    rows: 32,
-    waveSpeed: 0.012,
-    attractStr: 0.015,
-    repelRadius: 100,
-    repelForce: 25,
-    friction: 0.82,
-    minRadius: 0.2,
-    maxRadius: 2.0,
-  };
+    const CFG = {
+        cols: 64, // Optimized density
+        rows: 32,
+        waveSpeed: 0.012,
+        attractStr: 0.015,
+        repelRadius: 100,
+        repelForce: 25,
+        friction: 0.82,
+        minRadius: 0.2,
+        maxRadius: 2.0,
+    };
 
-  let W, H, DPR;
-  let particles = [];
-  let time = 0;
-  let mouse = { x: -9999, y: -9999 };
-  let cursorVisible = false;
-  let gradient;
+    let W, H, DPR;
+    let particles = [];
+    let time = 0;
+    let mouse = { x: -9999, y: -9999 };
+    let cursorVisible = false;
+    let gradient;
 
-  function resize() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = W * DPR;
-    canvas.height = H * DPR;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    
-    // Deep Charcoal Gradient
-    gradient = ctx.createRadialGradient(
-      W * 0.38 * DPR, H * 0.35 * DPR, 0,
-      W * 0.50 * DPR, H * 0.50 * DPR, Math.max(W, H) * DPR * 0.90
-    );
-    gradient.addColorStop(0, '#1a1a1a');
-    gradient.addColorStop(0.5, '#121212');
-    gradient.addColorStop(1, '#0a0a0a');
-    
-    buildGrid();
-  }
+    function resize() {
+        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * DPR;
+        canvas.height = H * DPR;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
 
-  function buildGrid() {
-    particles = [];
-    const { cols, rows } = CFG;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const bx = (c / (cols - 1)) * W;
-        const by = (r / (rows - 1)) * H;
-        particles.push({
-          bx, by, x: bx, y: by, vx: 0, vy: 0,
-          phase: c * 0.23 + r * 0.17 + Math.random() * 0.4,
-        });
-      }
+        // Deep Charcoal Gradient
+        gradient = ctx.createRadialGradient(
+            W * 0.38 * DPR, H * 0.35 * DPR, 0,
+            W * 0.50 * DPR, H * 0.50 * DPR, Math.max(W, H) * DPR * 0.90
+        );
+        gradient.addColorStop(0, '#1a1a1a');
+        gradient.addColorStop(0.5, '#121212');
+        gradient.addColorStop(1, '#0a0a0a');
+
+        buildGrid();
     }
-  }
 
-  const sin = Math.sin;
-  const cos = Math.cos;
-  const sqrt = Math.sqrt;
-
-  function waveAt(p, t) {
-    const nx = p.bx / W;
-    const ny = p.by / H;
-    const w1 = sin(nx * 3.8 + ny * 2.2 - t * 1.9) * 0.5 + 0.5;
-    const w2 = sin(nx * 2.1 - ny * 3.1 + t * 1.3 + 1.8) * 0.5 + 0.5;
-    const w3 = sin(nx * 5.5 + ny * 1.8 + t * 2.6 + 3.2) * 0.5 + 0.5;
-    const combined = w1 * 0.52 + w2 * 0.30 + w3 * 0.18;
-    const amp = 14 * combined;
-    const ox = sin(nx * 4.2 + ny * 2.1 - t * 1.7 + p.phase) * amp;
-    const oy = cos(ny * 3.8 + nx * 1.6 + t * 1.5 + 0.9 + p.phase) * amp;
-    return { ox, oy, combined };
-  }
-
-  function draw() {
-    time += CFG.waveSpeed;
-    
-    // Draw background
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const mx = mouse.x * DPR;
-    const my = mouse.y * DPR;
-    const repelR = CFG.repelRadius * DPR;
-
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      const { ox, oy, combined } = waveAt(p, time);
-      const tx = p.bx * DPR + ox * DPR;
-      const ty = p.by * DPR + oy * DPR;
-
-      const dx = mx - p.x;
-      const dy = my - p.y;
-      const d2 = dx * dx + dy * dy;
-      let repX = 0, repY = 0;
-
-      if (d2 < repelR * repelR && d2 > 0.25) {
-        const dist = sqrt(d2);
-        const strength = (1 - dist / repelR) ** 2;
-        repX = -(dx / dist) * strength * CFG.repelForce * DPR;
-        repY = -(dy / dist) * strength * CFG.repelForce * DPR;
-      }
-
-      p.vx = p.vx * CFG.friction + (tx + repX - p.x) * CFG.attractStr;
-      p.vy = p.vy * CFG.friction + (ty + repY - p.y) * CFG.attractStr;
-      p.x += p.vx;
-      p.y += p.vy;
-
-      const distToMouse = sqrt((mx - p.x)**2 + (my - p.y)**2) / DPR;
-      const cursorBoost = Math.max(0, 1 - distToMouse / 100);
-      const radius = Math.max(0.2, (0.5 + combined * 1.5) * DPR);
-      const alpha = (0.2 + combined * 0.2 + cursorBoost * 0.2).toFixed(2);
-
-      ctx.fillStyle = cursorBoost > 0.5 
-        ? `rgba(232, 112, 30, ${alpha})` 
-        : `rgba(255, 255, 255, ${alpha})`;
-      
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, radius, 0, 6.28);
-      ctx.fill();
+    function buildGrid() {
+        particles = [];
+        const { cols, rows } = CFG;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const bx = (c / (cols - 1)) * W;
+                const by = (r / (rows - 1)) * H;
+                particles.push({
+                    bx,
+                    by,
+                    x: bx,
+                    y: by,
+                    vx: 0,
+                    vy: 0,
+                    phase: c * 0.23 + r * 0.17 + Math.random() * 0.4,
+                });
+            }
+        }
     }
-    
-    requestAnimationFrame(draw);
-  }
 
-  function showCursor() {
-    if (!cursorVisible && cursorEl) {
-      cursorEl.style.opacity = '1';
-      cursorVisible = true;
+    const sin = Math.sin;
+    const cos = Math.cos;
+    const sqrt = Math.sqrt;
+
+    function waveAt(p, t) {
+        const nx = p.bx / W;
+        const ny = p.by / H;
+        const w1 = sin(nx * 3.8 + ny * 2.2 - t * 1.9) * 0.5 + 0.5;
+        const w2 = sin(nx * 2.1 - ny * 3.1 + t * 1.3 + 1.8) * 0.5 + 0.5;
+        const w3 = sin(nx * 5.5 + ny * 1.8 + t * 2.6 + 3.2) * 0.5 + 0.5;
+        const combined = w1 * 0.52 + w2 * 0.30 + w3 * 0.18;
+        const amp = 14 * combined;
+        const ox = sin(nx * 4.2 + ny * 2.1 - t * 1.7 + p.phase) * amp;
+        const oy = cos(ny * 3.8 + nx * 1.6 + t * 1.5 + 0.9 + p.phase) * amp;
+        return { ox, oy, combined };
     }
-  }
 
-  document.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    if (cursorEl) {
-      requestAnimationFrame(() => {
-        cursorEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      });
+    function draw() {
+        if (document.hidden) {
+            requestAnimationFrame(draw);
+            return;
+        }
+
+        time += CFG.waveSpeed;
+
+        // Draw background
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const mx = mouse.x * DPR;
+        const my = mouse.y * DPR;
+        const repelR = CFG.repelRadius * DPR;
+
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            const { ox, oy, combined } = waveAt(p, time);
+            const tx = p.bx * DPR + ox * DPR;
+            const ty = p.by * DPR + oy * DPR;
+
+            const dx = mx - p.x;
+            const dy = my - p.y;
+            const d2 = dx * dx + dy * dy;
+            let repX = 0,
+                repY = 0;
+
+            if (d2 < repelR * repelR && d2 > 0.25) {
+                const dist = sqrt(d2);
+                const strength = (1 - dist / repelR) ** 2;
+                repX = -(dx / dist) * strength * CFG.repelForce * DPR;
+                repY = -(dy / dist) * strength * CFG.repelForce * DPR;
+            }
+
+            p.vx = p.vx * CFG.friction + (tx + repX - p.x) * CFG.attractStr;
+            p.vy = p.vy * CFG.friction + (ty + repY - p.y) * CFG.attractStr;
+            p.x += p.vx;
+            p.y += p.vy;
+
+            const distToMouse = sqrt((mx - p.x) ** 2 + (my - p.y) ** 2) / DPR;
+            const cursorBoost = Math.max(0, 1 - distToMouse / 100);
+            const radius = Math.max(0.2, (0.5 + combined * 1.5) * DPR);
+            const alpha = (0.2 + combined * 0.2 + cursorBoost * 0.2).toFixed(2);
+
+            ctx.fillStyle = cursorBoost > 0.5 ?
+                `rgba(232, 112, 30, ${alpha})` :
+                `rgba(255, 255, 255, ${alpha})`;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, radius, 0, 6.28);
+            ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
     }
-    showCursor();
-  }, { passive: true });
 
-  document.addEventListener('mouseleave', () => {
-    mouse.x = -9999;
-    mouse.y = -9999;
-    if (cursorEl) cursorEl.style.opacity = '0';
-    cursorVisible = false;
-  });
+    function showCursor() {
+        if (!cursorVisible && cursorEl) {
+            cursorEl.style.opacity = '1';
+            cursorVisible = true;
+        }
+    }
 
-  document.addEventListener('touchmove', e => {
-    mouse.x = e.touches[0].clientX;
-    mouse.y = e.touches[0].clientY;
-  }, { passive: true });
+    document.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        if (cursorEl) {
+            requestAnimationFrame(() => {
+                cursorEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            });
+        }
+        showCursor();
+    }, { passive: true });
 
-  window.addEventListener('resize', resize, { passive: true });
-  resize();
-  draw();
-  console.log("[DevStage] Particle Wave System Restored");
+    document.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+        if (cursorEl) cursorEl.style.opacity = '0';
+        cursorVisible = false;
+    });
+
+    document.addEventListener('touchmove', e => {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+    draw();
+    console.log("[DevStage] Particle Wave System Restored");
 };
 
 /* === SECTION 4: GRID DISTORTION PRESSURE FIELD (Explore Grid) === */
 const initGridDistortionSystem = (canvas) => {
     const ctx = canvas.getContext('2d');
 
-    let width  = window.innerWidth;
+    let width = window.innerWidth;
     let height = window.innerHeight;
 
     // ── Resize with DPI support ─────────────────────────────────
     function resize() {
-        width  = window.innerWidth;
+        width = window.innerWidth;
         height = window.innerHeight;
         const dpr = window.devicePixelRatio || 1;
-        canvas.width  = width  * dpr;
+        canvas.width = width * dpr;
         canvas.height = height * dpr;
-        canvas.style.width  = width  + 'px';
+        canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
-        ctx.scale(dpr, dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     window.addEventListener('resize', resize);
     resize();
 
     // ── Cursor State ─────────────────────────────────────────────
-    let targetX  = -9999; // Off-screen initially — no effect on load
-    let targetY  = -9999;
+    let targetX = -9999; // Off-screen initially — no effect on load
+    let targetY = -9999;
     let currentX = targetX;
     let currentY = targetY;
     let isOnPage = false;
     let inputFocused = false;
 
     window.addEventListener('mousemove', (e) => {
-        targetX  = e.clientX;
-        targetY  = e.clientY;
+        targetX = e.clientX;
+        targetY = e.clientY;
         isOnPage = true;
     });
 
@@ -426,7 +444,7 @@ const initGridDistortionSystem = (canvas) => {
     });
 
     // Input field tension boost
-    document.addEventListener('focusin',  (e) => {
+    document.addEventListener('focusin', (e) => {
         if (e.target.matches('input, textarea, select')) inputFocused = true;
     });
     document.addEventListener('focusout', (e) => {
@@ -434,17 +452,22 @@ const initGridDistortionSystem = (canvas) => {
     });
 
     // ── Configuration ────────────────────────────────────────────
-    const GRID_SPACING    = 32;    // Must match CSS grid
-    const RADIUS          = 320;   // Influence circle radius
-    const MAX_STRENGTH    = 28;    // Absolute maximum displacement
-    const INPUT_BOOST     = 1.2;   // Tension multiplier
-    const LERP_FACTOR     = 0.07;  // Smoothing
-    const SAMPLE_STEP     = 8;     // Sampling resolution
-    const LINE_OPACITY    = 0.055; // Base canvas line opacity
+    const GRID_SPACING = 32; // Must match CSS grid
+    const RADIUS = 320; // Influence circle radius
+    const MAX_STRENGTH = 28; // Absolute maximum displacement
+    const INPUT_BOOST = 1.2; // Tension multiplier
+    const LERP_FACTOR = 0.07; // Smoothing
+    const SAMPLE_STEP = 8; // Sampling resolution
+    const LINE_OPACITY = 0.055; // Base canvas line opacity
     const LINE_OPACITY_IN = 0.075; // Opacity near cursor
 
     // ── Draw Loop ────────────────────────────────────────────────
     function draw() {
+        if (document.hidden) {
+            requestAnimationFrame(draw);
+            return;
+        }
+
         ctx.clearRect(0, 0, width, height);
 
         // LERP cursor tracking
@@ -461,11 +484,11 @@ const initGridDistortionSystem = (canvas) => {
         const strength = MAX_STRENGTH * (inputFocused ? INPUT_BOOST : 1.0);
 
         // Bounding box
-        const buf    = RADIUS + GRID_SPACING;
-        const startX = Math.max(0,     Math.floor((currentX - buf) / GRID_SPACING) * GRID_SPACING);
-        const endX   = Math.min(width, Math.ceil( (currentX + buf) / GRID_SPACING) * GRID_SPACING);
-        const startY = Math.max(0,     Math.floor((currentY - buf) / GRID_SPACING) * GRID_SPACING);
-        const endY   = Math.min(height,Math.ceil( (currentY + buf) / GRID_SPACING) * GRID_SPACING);
+        const buf = RADIUS + GRID_SPACING;
+        const startX = Math.max(0, Math.floor((currentX - buf) / GRID_SPACING) * GRID_SPACING);
+        const endX = Math.min(width, Math.ceil((currentX + buf) / GRID_SPACING) * GRID_SPACING);
+        const startY = Math.max(0, Math.floor((currentY - buf) / GRID_SPACING) * GRID_SPACING);
+        const endY = Math.min(height, Math.ceil((currentY + buf) / GRID_SPACING) * GRID_SPACING);
 
         // ── Vertical Lines ─────────────────────────────────────
         for (let x = startX; x <= endX; x += GRID_SPACING) {
@@ -473,11 +496,12 @@ const initGridDistortionSystem = (canvas) => {
             let firstPoint = true;
 
             for (let y = startY; y <= endY; y += SAMPLE_STEP) {
-                const dx  = currentX - x;
-                const dy  = currentY - y;
+                const dx = currentX - x;
+                const dy = currentY - y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                let ox = 0, oy = 0;
+                let ox = 0,
+                    oy = 0;
 
                 if (dist < RADIUS && dist > 0) {
                     const influence = (1 - dist / RADIUS);
@@ -508,11 +532,12 @@ const initGridDistortionSystem = (canvas) => {
             let firstPoint = true;
 
             for (let x = startX; x <= endX; x += SAMPLE_STEP) {
-                const dx  = currentX - x;
-                const dy  = currentY - y;
+                const dx = currentX - x;
+                const dy = currentY - y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                let ox = 0, oy = 0;
+                let ox = 0,
+                    oy = 0;
 
                 if (dist < RADIUS && dist > 0) {
                     const influence = (1 - dist / RADIUS);
@@ -546,172 +571,177 @@ const initGridDistortionSystem = (canvas) => {
 
 /* === SECTION 5: 3D PERSPECTIVE TERRAIN MESH (Landing Background) === */
 const initTerrainSystem = (cv) => {
-  const cx = cv.getContext('2d');
-  let W, H, t = 0;
-  const M = { x: -9999, y: -9999, on: false };
+    const cx = cv.getContext('2d');
+    let W, H, t = 0;
+    const M = { x: -9999, y: -9999, on: false };
 
-  // Grid density
-  const COLS = 64;
-  const ROWS = 36;
+    // Grid density
+    const COLS = 64;
+    const ROWS = 36;
 
-  // Perspective camera
-  const FOV = 300;
-  const NEAR_Z = 90;
-  const FAR_Z = 1000;
+    // Perspective camera
+    const FOV = 300;
+    const NEAR_Z = 90;
+    const FAR_Z = 1000;
 
-  let DPR = Math.max(1, window.devicePixelRatio || 1);
+    let DPR = Math.max(1, window.devicePixelRatio || 1);
 
-  function resize() {
-    W = window.innerWidth;
-    H = window.innerHeight;
-    DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
-    cv.width = Math.floor(W * DPR);
-    cv.height = Math.floor(H * DPR);
-    cv.style.width = W + 'px';
-    cv.style.height = H + 'px';
-    cx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-
-  function pk(x) {
-    return Math.sin(x)
-      + 0.25 * Math.sin(2 * x)
-      + 0.05 * Math.sin(3 * x);
-  }
-
-  function waveH(nx, nz, time) {
-    const w1 = pk(nx * 9.2 + nz * 20.0 - time * 0.72) * 0.52;
-    const w2 = pk(-nx * 5.8 + nz * 13.5 + time * 0.55) * 0.26;
-    const w3 = pk(nx * 16.0 - nz * 8.0 - time * 0.88) * 0.14;
-    const w4 = Math.sin(nx * 28.0 + nz * 5.5 + time * 1.05) * 0.05;
-    const w5 = Math.sin(-nx * 7.0 + nz * 32.0 - time * 1.30) * 0.04;
-    return (w1 + w2 + w3 + w4 + w5) / 1.01;
-  }
-
-  function swayX(nx, nz, time) {
-    const s1 = Math.sin(nx * 7.0 + nz * 9.0 - time * 0.65) * 0.016;
-    const s2 = Math.sin(nx * 18.0 - nz * 6.0 + time * 0.95) * 0.010;
-    const s3 = Math.sin(nx * 3.6 + nz * 24.0 + time * 0.40) * 0.006;
-    return s1 + s2 + s3;
-  }
-
-  const pts = [];
-
-  function buildPts() {
-    const AMP = H * 0.15;
-    const CAMH = H * 0.260;
-    const HY = H * 0.268;
-
-    for (let ri = 0; ri < ROWS; ri++) {
-      if (!pts[ri]) pts[ri] = [];
-      const rf = ri / (ROWS - 1);
-      const z = NEAR_Z + (FAR_Z - NEAR_Z) * rf;
-      const scl = FOV / z;
-      const nz = 1 - rf;
-
-      for (let ci = 0; ci < COLS; ci++) {
-        const nx = ci / (COLS - 1);
-        const wval = waveH(nx, nz, t);
-        const xDrift = swayX(nx, nz, t) * W * (0.85 - rf * 0.45);
-
-        const sx = nx * W + xDrift;
-        let sy = HY + (CAMH - wval * AMP) * scl;
-
-        if (M.on) {
-          const dx = sx - M.x;
-          const dy = sy - M.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < 140 * 140) {
-            const d = Math.sqrt(d2);
-            const f = 1 - d / 140;
-            sy -= f * f * f * 68;
-          }
-        }
-
-        const hn = (wval + 1.15) / 2.3;
-        const dm = 0.42 + (1 - rf) * 0.58;
-        const pkBoost = hn > 0.70 ? (hn - 0.70) * 0.55 : 0;
-        const alpha = Math.min(0.90, (0.03 + hn * 0.80 + pkBoost) * dm);
-
-        pts[ri][ci] = { sx, sy, scl, alpha, rf };
-      }
-    }
-  }
-
-  function seg(p1, p2, alphaMult, widthMult) {
-    const a = (p1.alpha + p2.alpha) * 0.5 * alphaMult;
-    if (a < 0.02) return;
-
-    const lw = Math.max(0.12, ((p1.scl + p2.scl) * 0.5) * widthMult);
-    cx.beginPath();
-    cx.moveTo(p1.sx, p1.sy);
-    cx.lineTo(p2.sx, p2.sy);
-    cx.strokeStyle = `rgba(205,205,205,${a.toFixed(2)})`;
-    cx.lineWidth = lw;
-    cx.stroke();
-  }
-
-  function dot(p) {
-    if (p.alpha < 0.05) return;
-
-    const r = Math.max(0.45, Math.min(2.35, 0.55 + p.scl * 0.20));
-    cx.beginPath();
-    cx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
-    cx.fillStyle = `rgba(235,235,235,${Math.min(0.92, p.alpha + 0.08).toFixed(2)})`;
-    cx.fill();
-  }
-
-  function draw() {
-    t += 0.010;
-
-    cx.clearRect(0, 0, W, H);
-
-    buildPts();
-
-    for (let ri = ROWS - 1; ri >= 0; ri--) {
-      for (let ci = 0; ci < COLS; ci++) {
-        const p = pts[ri][ci];
-        if (!p) continue;
-
-        if (ci < COLS - 1) {
-          const p2 = pts[ri][ci + 1];
-          if (p2) seg(p, p2, 1.00, 0.80);
-        }
-
-        if (ri > 0) {
-          const p2 = pts[ri - 1][ci];
-          if (p2) seg(p, p2, 0.50, 0.50);
-        }
-      }
+    function resize() {
+        W = window.innerWidth;
+        H = window.innerHeight;
+        DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+        cv.width = Math.floor(W * DPR);
+        cv.height = Math.floor(H * DPR);
+        cv.style.width = W + 'px';
+        cv.style.height = H + 'px';
+        cx.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
 
-    for (let ri = ROWS - 1; ri >= 0; ri--) {
-      for (let ci = 0; ci < COLS; ci++) {
-        const p = pts[ri][ci];
-        if (p) dot(p);
-      }
+    function pk(x) {
+        return Math.sin(x) +
+            0.25 * Math.sin(2 * x) +
+            0.05 * Math.sin(3 * x);
     }
 
-    requestAnimationFrame(draw);
-  }
+    function waveH(nx, nz, time) {
+        const w1 = pk(nx * 9.2 + nz * 20.0 - time * 0.72) * 0.52;
+        const w2 = pk(-nx * 5.8 + nz * 13.5 + time * 0.55) * 0.26;
+        const w3 = pk(nx * 16.0 - nz * 8.0 - time * 0.88) * 0.14;
+        const w4 = Math.sin(nx * 28.0 + nz * 5.5 + time * 1.05) * 0.05;
+        const w5 = Math.sin(-nx * 7.0 + nz * 32.0 - time * 1.30) * 0.04;
+        return (w1 + w2 + w3 + w4 + w5) / 1.01;
+    }
 
-  cv.addEventListener('mousemove', e => {
-    M.x = e.clientX;
-    M.y = e.clientY;
-    M.on = true;
-  });
-  cv.addEventListener('mouseleave', () => { M.on = false; });
-  cv.addEventListener('touchmove', e => {
-    e.preventDefault();
-    M.x = e.touches[0].clientX;
-    M.y = e.touches[0].clientY;
-    M.on = true;
-  }, { passive: false });
-  cv.addEventListener('touchend', () => { M.on = false; });
-  window.addEventListener('resize', resize);
+    function swayX(nx, nz, time) {
+        const s1 = Math.sin(nx * 7.0 + nz * 9.0 - time * 0.65) * 0.016;
+        const s2 = Math.sin(nx * 18.0 - nz * 6.0 + time * 0.95) * 0.010;
+        const s3 = Math.sin(nx * 3.6 + nz * 24.0 + time * 0.40) * 0.006;
+        return s1 + s2 + s3;
+    }
 
-  resize();
-  draw();
-  console.log("[DevStage] Terrain System Restored");
+    const pts = [];
+
+    function buildPts() {
+        const AMP = H * 0.15;
+        const CAMH = H * 0.260;
+        const HY = H * 0.268;
+
+        for (let ri = 0; ri < ROWS; ri++) {
+            if (!pts[ri]) pts[ri] = [];
+            const rf = ri / (ROWS - 1);
+            const z = NEAR_Z + (FAR_Z - NEAR_Z) * rf;
+            const scl = FOV / z;
+            const nz = 1 - rf;
+
+            for (let ci = 0; ci < COLS; ci++) {
+                const nx = ci / (COLS - 1);
+                const wval = waveH(nx, nz, t);
+                const xDrift = swayX(nx, nz, t) * W * (0.85 - rf * 0.45);
+
+                const sx = nx * W + xDrift;
+                let sy = HY + (CAMH - wval * AMP) * scl;
+
+                if (M.on) {
+                    const dx = sx - M.x;
+                    const dy = sy - M.y;
+                    const d2 = dx * dx + dy * dy;
+                    if (d2 < 140 * 140) {
+                        const d = Math.sqrt(d2);
+                        const f = 1 - d / 140;
+                        sy -= f * f * f * 68;
+                    }
+                }
+
+                const hn = (wval + 1.15) / 2.3;
+                const dm = 0.42 + (1 - rf) * 0.58;
+                const pkBoost = hn > 0.70 ? (hn - 0.70) * 0.55 : 0;
+                const alpha = Math.min(0.90, (0.03 + hn * 0.80 + pkBoost) * dm);
+
+                pts[ri][ci] = { sx, sy, scl, alpha, rf };
+            }
+        }
+    }
+
+    function seg(p1, p2, alphaMult, widthMult) {
+        const a = (p1.alpha + p2.alpha) * 0.5 * alphaMult;
+        if (a < 0.02) return;
+
+        const lw = Math.max(0.12, ((p1.scl + p2.scl) * 0.5) * widthMult);
+        cx.beginPath();
+        cx.moveTo(p1.sx, p1.sy);
+        cx.lineTo(p2.sx, p2.sy);
+        cx.strokeStyle = `rgba(205,205,205,${a.toFixed(2)})`;
+        cx.lineWidth = lw;
+        cx.stroke();
+    }
+
+    function dot(p) {
+        if (p.alpha < 0.05) return;
+
+        const r = Math.max(0.45, Math.min(2.35, 0.55 + p.scl * 0.20));
+        cx.beginPath();
+        cx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+        cx.fillStyle = `rgba(235,235,235,${Math.min(0.92, p.alpha + 0.08).toFixed(2)})`;
+        cx.fill();
+    }
+
+    function draw() {
+        if (document.hidden) {
+            requestAnimationFrame(draw);
+            return;
+        }
+
+        t += 0.010;
+
+        cx.clearRect(0, 0, W, H);
+
+        buildPts();
+
+        for (let ri = ROWS - 1; ri >= 0; ri--) {
+            for (let ci = 0; ci < COLS; ci++) {
+                const p = pts[ri][ci];
+                if (!p) continue;
+
+                if (ci < COLS - 1) {
+                    const p2 = pts[ri][ci + 1];
+                    if (p2) seg(p, p2, 1.00, 0.80);
+                }
+
+                if (ri > 0) {
+                    const p2 = pts[ri - 1][ci];
+                    if (p2) seg(p, p2, 0.50, 0.50);
+                }
+            }
+        }
+
+        for (let ri = ROWS - 1; ri >= 0; ri--) {
+            for (let ci = 0; ci < COLS; ci++) {
+                const p = pts[ri][ci];
+                if (p) dot(p);
+            }
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    cv.addEventListener('mousemove', e => {
+        M.x = e.clientX;
+        M.y = e.clientY;
+        M.on = true;
+    });
+    cv.addEventListener('mouseleave', () => { M.on = false; });
+    cv.addEventListener('touchmove', e => {
+        e.preventDefault();
+        M.x = e.touches[0].clientX;
+        M.y = e.touches[0].clientY;
+        M.on = true;
+    }, { passive: false });
+    cv.addEventListener('touchend', () => { M.on = false; });
+    window.addEventListener('resize', resize);
+
+    resize();
+    draw();
+    console.log("[DevStage] Terrain System Restored");
 };
 
 /* === SECTION 6: INTERACTIVE MESH CANVAS (Upload Background) === */
@@ -727,17 +757,34 @@ const initUploadMeshSystem = (canvas) => {
             this.ripples = [];
             this.lastRippleTime = 0;
 
-            this.layers = [
-                {
-                    cols: 12, rows: 8, speed: 0.50, amp: 28, opacity: 0.07, lineWidth: 0.7, phase: 0,
+            this.layers = [{
+                    cols: 12,
+                    rows: 8,
+                    speed: 0.50,
+                    amp: 28,
+                    opacity: 0.07,
+                    lineWidth: 0.7,
+                    phase: 0,
                     vertices: []
                 },
                 {
-                    cols: 20, rows: 12, speed: 0.72, amp: 20, opacity: 0.10, lineWidth: 0.6, phase: 2.1,
+                    cols: 20,
+                    rows: 12,
+                    speed: 0.72,
+                    amp: 20,
+                    opacity: 0.10,
+                    lineWidth: 0.6,
+                    phase: 2.1,
                     vertices: []
                 },
                 {
-                    cols: 28, rows: 17, speed: 0.98, amp: 13, opacity: 0.13, lineWidth: 0.55, phase: 4.3,
+                    cols: 28,
+                    rows: 17,
+                    speed: 0.98,
+                    amp: 13,
+                    opacity: 0.13,
+                    lineWidth: 0.55,
+                    phase: 4.3,
                     vertices: []
                 }
             ];
@@ -783,6 +830,11 @@ const initUploadMeshSystem = (canvas) => {
         }
 
         animate(timestamp) {
+            if (document.hidden) {
+                requestAnimationFrame((t) => this.animate(t));
+                return;
+            }
+
             this.ctx.clearRect(0, 0, this.width, this.height);
 
             // Auto ripples every 3200ms
@@ -818,13 +870,13 @@ const initUploadMeshSystem = (canvas) => {
                     const oy = r / (rows - 1);
 
                     // Vertex displacement formula
-                    let dx = Math.sin(ox * Math.PI * 3 + tw + phase) * Math.cos(oy * Math.PI * 2 + tw * 0.7) * amp
-                        + Math.sin(ox * Math.PI * 1.5 + tw * 0.6 + phase) * amp * 0.4
-                        + Math.cos((ox + oy) * Math.PI * 2 + tw * 1.1 + phase) * amp * 0.25;
+                    let dx = Math.sin(ox * Math.PI * 3 + tw + phase) * Math.cos(oy * Math.PI * 2 + tw * 0.7) * amp +
+                        Math.sin(ox * Math.PI * 1.5 + tw * 0.6 + phase) * amp * 0.4 +
+                        Math.cos((ox + oy) * Math.PI * 2 + tw * 1.1 + phase) * amp * 0.25;
 
-                    let dy = Math.sin(oy * Math.PI * 4 + tw * 1.2 + phase) * Math.cos(ox * Math.PI * 2.5 + tw * 0.5) * amp * 0.9
-                        + Math.cos(oy * Math.PI * 2 + tw * 0.8 + phase) * amp * 0.35
-                        + Math.sin((ox - oy) * Math.PI * 1.8 + tw * 0.9 + phase) * amp * 0.22;
+                    let dy = Math.sin(oy * Math.PI * 4 + tw * 1.2 + phase) * Math.cos(ox * Math.PI * 2.5 + tw * 0.5) * amp * 0.9 +
+                        Math.cos(oy * Math.PI * 2 + tw * 0.8 + phase) * amp * 0.35 +
+                        Math.sin((ox - oy) * Math.PI * 1.8 + tw * 0.9 + phase) * amp * 0.22;
 
                     let x = c * colSpacing + dx;
                     let y = r * rowSpacing + dy;
@@ -845,9 +897,9 @@ const initUploadMeshSystem = (canvas) => {
 
                         const lifeProgress = (timestamp - ripple.startTime) / ripple.duration;
                         const life = 1 - lifeProgress;
-                        
+
                         const wave = Math.sin(distToRipple * 0.045 - life * 18) * Math.exp(-distToRipple * 0.011) * life * 12;
-                        
+
                         x += wave * (x - ripple.x) / distToRipple * 0.4;
                         y += wave;
                     });
@@ -868,13 +920,13 @@ const initUploadMeshSystem = (canvas) => {
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
                     const v = vertices[r][c];
-                    
+
                     if (c < cols - 1) {
                         const nextV = vertices[r][c + 1];
                         this.ctx.moveTo(v.x, v.y);
                         this.ctx.lineTo(nextV.x, nextV.y);
                     }
-                    
+
                     if (r < rows - 1) {
                         const nextV = vertices[r + 1][c];
                         this.ctx.moveTo(v.x, v.y);
@@ -891,20 +943,20 @@ const initUploadMeshSystem = (canvas) => {
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
                     const v = vertices[r][c];
-                    
+
                     if (v.distToMouse < 100) {
                         const strength = Math.pow(1 - v.distToMouse / 100, 1.2);
-                        
+
                         this.ctx.beginPath();
                         this.ctx.fillStyle = `rgba(210, 100, 20, ${0.13 * strength})`;
                         this.ctx.arc(v.x, v.y, 5 + strength * 3, 0, Math.PI * 2);
                         this.ctx.fill();
-                        
+
                         this.ctx.beginPath();
                         this.ctx.fillStyle = `rgba(224, 120, 32, ${0.22 * strength})`;
                         this.ctx.arc(v.x, v.y, 3 + strength * 1.5, 0, Math.PI * 2);
                         this.ctx.fill();
-                        
+
                         this.ctx.beginPath();
                         this.ctx.fillStyle = `rgba(235, 145, 55, ${0.82 + strength * 0.18})`;
                         this.ctx.arc(v.x, v.y, 2 + strength * 1, 0, Math.PI * 2);
@@ -919,7 +971,7 @@ const initUploadMeshSystem = (canvas) => {
             }
         }
     }
-    
+
     new MeshBackground(canvas);
     console.log("[DevStage] Upload Mesh Background Restored");
 };
@@ -927,30 +979,30 @@ const initUploadMeshSystem = (canvas) => {
 /* === UNIFIED SMART INITIALIZER === */
 const initAllVisualSystems = () => {
     console.log("[DevStage] Initializing Visual Systems...");
-    
+
     // 1. Initialize Custom 3D Cursor (global)
     if (typeof init3DCursor === 'function') {
         init3DCursor();
     }
-    
-    // 2. Initialize 3D Perspective Terrain (Landing Background)
+
+    // 2. Initialize 3D Perspective Terrain (Landing Background - only on landing page)
     const cv = document.getElementById('c');
-    if (cv) {
+    if (cv && document.body.classList.contains('home-page')) {
         initTerrainSystem(cv);
     }
-    
+
     // 3. Initialize Interactive Particle Wave (Explore Background)
     const waveCanvas = document.getElementById('particle-wave-canvas');
     if (waveCanvas) {
         initParticleWaveSystem(waveCanvas);
     }
-    
+
     // 4. Initialize Grid Distortion Pressure Field (Explore Grid)
     const distortionCanvas = document.getElementById('grid-distortion-canvas');
     if (distortionCanvas) {
         initGridDistortionSystem(distortionCanvas);
     }
-    
+
     // 5. Initialize Interactive Mesh Canvas (Upload Background)
     const uploadCanvas = document.getElementById('upload-mesh-canvas');
     if (uploadCanvas) {

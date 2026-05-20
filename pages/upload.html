@@ -10,34 +10,32 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="../styles/global.css">
-    
+
 
     <style>
         body {
-
             margin: 0;
             overflow-x: hidden;
         }
-
         /* Ensure all existing content sits above the background canvas */
+        
         .navbar {
             position: absolute !important;
             z-index: 1000;
         }
-
+        
         .upload-wrapper,
         #loader-wrapper {
             position: relative;
             z-index: 1;
         }
-
+        
         #upload-mesh-canvas {
             position: fixed;
             top: 0;
@@ -54,7 +52,7 @@
 
 <body class="upload-page">
     <canvas id="upload-mesh-canvas"></canvas>
-    <script src="../scripts/motion-engine.js"></script>
+    <script src="../scripts/motion-engine.js" defer></script>
 
 
     <nav class="navbar" id="main-navbar">
@@ -94,11 +92,11 @@
                     <div class="premium-dropdown" id="hamburger-dropdown">
                         <div class="dropdown-group primary-nav">
                             <a href="../index.html" class="dropdown-item nav-item-anim">Home</a>
-                            <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
-                            <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
-                            <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
-                            <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
-                            <a href="upload.html" class="dropdown-item nav-item-anim active-page">Upload Project</a>
+                            <a href="./explore.html" class="dropdown-item nav-item-anim">Explore</a>
+                            <a href="./feed.html" class="dropdown-item nav-item-anim">Feed</a>
+                            <a href="./beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                            <a href="./teams.html" class="dropdown-item nav-item-anim">Teams</a>
+                            <a href="./upload.html" class="dropdown-item nav-item-anim active-page">Upload Project</a>
                         </div>
                         <div class="dropdown-divider"></div>
                         <div class="dropdown-group secondary-nav">
@@ -151,8 +149,7 @@
                             <div class="terminal-row">
                                 <span class="row-prefix">› desc =</span>
                                 <div class="terminal-input-wrapper">
-                                    <textarea id="project-desc" required placeholder="brief_execution_summary"
-                                        rows="3"></textarea>
+                                    <textarea id="project-desc" required placeholder="brief_execution_summary" rows="3"></textarea>
                                     <div class="focus-underline"></div>
                                 </div>
                             </div>
@@ -205,16 +202,13 @@
                             <!-- Progress Bar (Integrated into Terminal) -->
                             <div id="upload-progress-container" style="display: none; margin-top: 10px;">
                                 <div class="glass-progress-track">
-                                    <div id="upload-progress-bar" class="glass-progress-fill"
-                                        style="background: #ff8c00;"></div>
+                                    <div id="upload-progress-bar" class="glass-progress-fill" style="background: #ff8c00;"></div>
                                 </div>
-                                <p id="upload-progress-text"
-                                    style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #ff8c00; margin-top: 5px;">
+                                <p id="upload-progress-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #ff8c00; margin-top: 5px;">
                                     0% Complete</p>
                             </div>
 
-                            <div id="upload-status" class="auth-message"
-                                style="display: none; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+                            <div id="upload-status" class="auth-message" style="display: none; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
                             </div>
 
                             <button type="submit" id="upload-submit-btn" class="terminal-btn">
@@ -239,8 +233,7 @@
                     <div class="preview-panel-header">
                         <span class="preview-badge">LIVE PREVIEW</span>
                         <div class="live-indicator">
-                            <span class="pulse-dot"></span>
-                            LIVE
+                            <span class="pulse-dot"></span> LIVE
                         </div>
                     </div>
 
@@ -313,10 +306,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-    <script src="../scripts/firebase-config.js"></script>
-    <script src="../scripts/upload.js"></script>
-    
-    
+    <script src="../scripts/firebase-config.js" defer></script>
+    <script src="../scripts/upload.js" defer></script>
+
+
     <script>
         lucide.createIcons();
     </script>

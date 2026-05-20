@@ -10,15 +10,13 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@800&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Global Styles -->
     <link rel="stylesheet" href="../styles/global.css">
-    
+
     <style>
         .navbar {
             position: absolute !important;
@@ -27,6 +25,7 @@
 </head>
 
 <body class="matte-theme">
+    <script src="../scripts/motion-engine.js" defer></script>
     <!-- GPU-Accelerated Background Canvas (Topographic Terrain) -->
     <canvas id="teams-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></canvas>
     <div class="crosshair" id="xhair"></div>
@@ -79,7 +78,7 @@
                                 <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
                                 <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
                                 <a href="teams.html" class="dropdown-item nav-item-anim active-page">Teams</a>
-                                <a href="upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+                                <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
                             </div>
                             <div class="dropdown-divider"></div>
                             <div class="dropdown-group secondary-nav">
@@ -153,331 +152,332 @@
                         </div>
                     </div>
                 </div>
-            <!-- Filter & Sort System -->
-            <section class="teams-filter-container">
-                <div class="filter-bar">
-                    <!-- Search -->
-                    <div class="filter-search-wrapper">
-                        <i data-lucide="search" class="search-icon-fixed"></i>
-                        <input type="text" class="filter-search-input" placeholder="Search teams, projects, or stacks...">
+                <!-- Filter & Sort System -->
+                <section class="teams-filter-container">
+                    <div class="filter-bar">
+                        <!-- Search -->
+                        <div class="filter-search-wrapper">
+                            <i data-lucide="search" class="search-icon-fixed"></i>
+                            <input type="text" class="filter-search-input" placeholder="Search teams, projects, or stacks...">
+                        </div>
+
+                        <!-- Skill Filter -->
+                        <div class="custom-dropdown" id="skill-dropdown">
+                            <div class="dropdown-trigger">
+                                <span>SKILLS</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="dropdown-panel">
+                                <div class="dropdown-option" data-value="Frontend">Frontend</div>
+                                <div class="dropdown-option" data-value="Backend">Backend</div>
+                                <div class="dropdown-option" data-value="UI/UX">UI/UX</div>
+                                <div class="dropdown-option" data-value="AI/ML">AI/ML</div>
+                                <div class="dropdown-option" data-value="DevOps">DevOps</div>
+                                <div class="dropdown-option" data-value="App Dev">App Dev</div>
+                                <div class="dropdown-option" data-value="Game Dev">Game Dev</div>
+                                <div class="dropdown-option" data-value="Research">Research</div>
+                            </div>
+                        </div>
+
+                        <!-- Team Type Filter -->
+                        <div class="custom-dropdown" id="type-dropdown">
+                            <div class="dropdown-trigger">
+                                <span>TEAM TYPE</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="dropdown-panel">
+                                <div class="dropdown-option" data-value="Startup">Startup</div>
+                                <div class="dropdown-option" data-value="Hackathon">Hackathon</div>
+                                <div class="dropdown-option" data-value="Open Source">Open Source</div>
+                                <div class="dropdown-option" data-value="Research">Research</div>
+                                <div class="dropdown-option" data-value="Beginner Friendly">Beginner Friendly</div>
+                            </div>
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div class="custom-dropdown" id="status-dropdown">
+                            <div class="dropdown-trigger">
+                                <span>STATUS</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="dropdown-panel">
+                                <div class="dropdown-option" data-value="Recruiting">Recruiting</div>
+                                <div class="dropdown-option" data-value="Active">Active</div>
+                                <div class="dropdown-option" data-value="Full">Full</div>
+                                <div class="dropdown-option" data-value="Open Source">Open Source</div>
+                            </div>
+                        </div>
+
+                        <!-- Sort By -->
+                        <div class="custom-dropdown" id="sort-dropdown">
+                            <div class="dropdown-trigger">
+                                <span>SORT BY</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="dropdown-panel">
+                                <div class="dropdown-option" data-value="Latest">Latest Teams</div>
+                                <div class="dropdown-option" data-value="Active">Most Active</div>
+                                <div class="dropdown-option" data-value="Updated">Recently Updated</div>
+                                <div class="dropdown-option" data-value="Members">Most Members</div>
+                                <div class="dropdown-option" data-value="Trending">Trending</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Skill Filter -->
-                    <div class="custom-dropdown" id="skill-dropdown">
-                        <div class="dropdown-trigger">
-                            <span>SKILLS</span>
-                            <i data-lucide="chevron-down"></i>
-                        </div>
-                        <div class="dropdown-panel">
-                            <div class="dropdown-option" data-value="Frontend">Frontend</div>
-                            <div class="dropdown-option" data-value="Backend">Backend</div>
-                            <div class="dropdown-option" data-value="UI/UX">UI/UX</div>
-                            <div class="dropdown-option" data-value="AI/ML">AI/ML</div>
-                            <div class="dropdown-option" data-value="DevOps">DevOps</div>
-                            <div class="dropdown-option" data-value="App Dev">App Dev</div>
-                            <div class="dropdown-option" data-value="Game Dev">Game Dev</div>
-                            <div class="dropdown-option" data-value="Research">Research</div>
-                        </div>
+                    <!-- Active Filter Tags Row -->
+                    <div class="active-filters-row" id="active-filters-tags">
+                        <!-- Dynamic Tags Here -->
+                        <button class="clear-all-filters" id="clear-all-filters" style="display: none;">Clear all filters</button>
                     </div>
+                </section>
 
-                    <!-- Team Type Filter -->
-                    <div class="custom-dropdown" id="type-dropdown">
-                        <div class="dropdown-trigger">
-                            <span>TEAM TYPE</span>
-                            <i data-lucide="chevron-down"></i>
-                        </div>
-                        <div class="dropdown-panel">
-                            <div class="dropdown-option" data-value="Startup">Startup</div>
-                            <div class="dropdown-option" data-value="Hackathon">Hackathon</div>
-                            <div class="dropdown-option" data-value="Open Source">Open Source</div>
-                            <div class="dropdown-option" data-value="Research">Research</div>
-                            <div class="dropdown-option" data-value="Beginner Friendly">Beginner Friendly</div>
-                        </div>
+                <!-- No Results State -->
+                <section class="no-results-state" id="no-results-state">
+                    <div class="no-results-content">
+                        <i data-lucide="search-x" class="no-results-icon"></i>
+                        <h3>No matching opportunities.</h3>
+                        <p>Try adjusting your filters or refining your search parameters to discover new collaboration clusters.</p>
                     </div>
+                </section>
 
-                    <!-- Status Filter -->
-                    <div class="custom-dropdown" id="status-dropdown">
-                        <div class="dropdown-trigger">
-                            <span>STATUS</span>
-                            <i data-lucide="chevron-down"></i>
-                        </div>
-                        <div class="dropdown-panel">
-                            <div class="dropdown-option" data-value="Recruiting">Recruiting</div>
-                            <div class="dropdown-option" data-value="Active">Active</div>
-                            <div class="dropdown-option" data-value="Full">Full</div>
-                            <div class="dropdown-option" data-value="Open Source">Open Source</div>
-                        </div>
-                    </div>
-
-                    <!-- Sort By -->
-                    <div class="custom-dropdown" id="sort-dropdown">
-                        <div class="dropdown-trigger">
-                            <span>SORT BY</span>
-                            <i data-lucide="chevron-down"></i>
-                        </div>
-                        <div class="dropdown-panel">
-                            <div class="dropdown-option" data-value="Latest">Latest Teams</div>
-                            <div class="dropdown-option" data-value="Active">Most Active</div>
-                            <div class="dropdown-option" data-value="Updated">Recently Updated</div>
-                            <div class="dropdown-option" data-value="Members">Most Members</div>
-                            <div class="dropdown-option" data-value="Trending">Trending</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Filter Tags Row -->
-                <div class="active-filters-row" id="active-filters-tags">
-                    <!-- Dynamic Tags Here -->
-                    <button class="clear-all-filters" id="clear-all-filters" style="display: none;">Clear all filters</button>
-                </div>
-            </section>
-
-            <!-- No Results State -->
-            <section class="no-results-state" id="no-results-state">
-                <div class="no-results-content">
-                    <i data-lucide="search-x" class="no-results-icon"></i>
-                    <h3>No matching opportunities.</h3>
-                    <p>Try adjusting your filters or refining your search parameters to discover new collaboration clusters.</p>
-                </div>
-            </section>
-
-            <!-- Empty State Section -->
-            <section class="teams-empty-state">
-                <div class="empty-state-content">
-                    <h2>No active teams yet.</h2>
-                    <p>The next great breakthrough starts with a single invitation. Initialize your own squad or wait
-                        for an uplink request.</p>
-                    <button class="terminal-btn create-team-btn" style="max-width: 240px; margin: 30px auto 0;">
+                <!-- Empty State Section -->
+                <section class="teams-empty-state">
+                    <div class="empty-state-content">
+                        <h2>No active teams yet.</h2>
+                        <p>The next great breakthrough starts with a single invitation. Initialize your own squad or wait for an uplink request.</p>
+                        <button class="terminal-btn create-team-btn" style="max-width: 240px; margin: 30px auto 0;">
                         <i data-lucide="plus" style="width: 18px; margin-right: 8px;"></i>
                         CREATE TEAM
                     </button>
-                </div>
-            </section>
-
-            <!-- Featured Teams Feed -->
-            <section class="featured-teams-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2>Featured Squads</h2>
-                        <p>High-signal collaborative clusters active right now.</p>
                     </div>
-                    <div class="header-right">
-                        <span class="active-builders" style="color: #d78a2f;">32 Clusters Active</span>
-                    </div>
-                </div>
+                </section>
 
-                <div class="teams-feed-grid">
-                    <!-- Team Card 1 -->
-                    <div class="featured-team-card">
-                        <div class="card-terminal-bar">
-                            <div class="window-dots">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                            <span class="system-label">neural_forge.sh</span>
-                            <span class="status-chip recruiting">RECRUITING</span>
+                <!-- Featured Teams Feed -->
+                <section class="featured-teams-section">
+                    <div class="section-header">
+                        <div class="header-left">
+                            <h2>Featured Squads</h2>
+                            <p>High-signal collaborative clusters active right now.</p>
                         </div>
-                        <div class="card-body">
-                            <h3 class="team-name">NeuralForge</h3>
-                            <p class="mission">Building AI-powered student workflow tools and portfolio assistants.</p>
+                        <div class="header-right">
+                            <span class="active-builders" style="color: #d78a2f;">32 Clusters Active</span>
+                        </div>
+                    </div>
 
-                            <div class="card-details">
-                                <div class="detail-item">
-                                    <span class="detail-label">Current Build:</span>
-                                    <span class="detail-value">AI Portfolio Assistant</span>
+                    <div class="teams-feed-grid">
+                        <!-- Team Card 1 -->
+                        <div class="featured-team-card">
+                            <div class="card-terminal-bar">
+                                <div class="window-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
                                 </div>
-                                <div class="stack-tags">
-                                    <span class="tag">Next.js</span>
-                                    <span class="tag">PyTorch</span>
-                                    <span class="tag">Vercel</span>
+                                <span class="system-label">neural_forge.sh</span>
+                                <span class="status-chip recruiting">RECRUITING</span>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="team-name">NeuralForge</h3>
+                                <p class="mission">Building AI-powered student workflow tools and portfolio assistants.</p>
+
+                                <div class="card-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Current Build:</span>
+                                        <span class="detail-value">AI Portfolio Assistant</span>
+                                    </div>
+                                    <div class="stack-tags">
+                                        <span class="tag">Next.js</span>
+                                        <span class="tag">PyTorch</span>
+                                        <span class="tag">Vercel</span>
+                                    </div>
+                                    <div class="looking-for">
+                                        <span class="detail-label">Looking For:</span>
+                                        <ul>
+                                            <li>• UI Designer</li>
+                                            <li>• ML Engineer (Python)</li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="looking-for">
-                                    <span class="detail-label">Looking For:</span>
-                                    <ul>
-                                        <li>• UI Designer</li>
-                                        <li>• ML Engineer (Python)</li>
+
+                                <div class="card-footer">
+                                    <span class="active-builders">4 Builders Active</span>
+                                    <button class="join-btn">JOIN MISSION</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Team Card 2 -->
+                        <div class="featured-team-card">
+                            <div class="card-terminal-bar">
+                                <div class="window-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                                <span class="system-label">quantum_codex.run</span>
+                                <span class="status-chip active">ACTIVE</span>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="team-name">Quantum Codex</h3>
+                                <p class="mission">Developing low-latency decentralized data structures for real-time collaboration.</p>
+
+                                <div class="card-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Current Build:</span>
+                                        <span class="detail-value">SyncNode Protocol</span>
+                                    </div>
+                                    <div class="stack-tags">
+                                        <span class="tag">Rust</span>
+                                        <span class="tag">WebAssembly</span>
+                                        <span class="tag">Go</span>
+                                    </div>
+                                    <div class="looking-for">
+                                        <span class="detail-label">Looking For:</span>
+                                        <ul>
+                                            <li>• Systems Architect</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer">
+                                    <span class="active-builders">6 Builders Active</span>
+                                    <button class="join-btn">JOIN MISSION</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Team Card 3 -->
+                        <div class="featured-team-card">
+                            <div class="card-terminal-bar">
+                                <div class="window-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                                <span class="system-label">biostream.io</span>
+                                <span class="status-chip full">FULL</span>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="team-name">BioStream</h3>
+                                <p class="mission">Visualizing complex biological data sets through interactive 3D web environments.</p>
+
+                                <div class="card-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Current Build:</span>
+                                        <span class="detail-value">GenomeMap v2</span>
+                                    </div>
+                                    <div class="stack-tags">
+                                        <span class="tag">Three.js</span>
+                                        <span class="tag">D3.js</span>
+                                        <span class="tag">WebGPU</span>
+                                    </div>
+                                    <div class="looking-for">
+                                        <span class="detail-label">Looking For:</span>
+                                        <ul>
+                                            <li>• Positions currently closed</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer">
+                                    <span class="active-builders">3 Builders Active</span>
+                                    <button class="join-btn" disabled style="opacity: 0.5; cursor: not-allowed;">MISSION FULL</button>
+                                </div>
+                            </div>
+                        </div>
+                </section>
+
+                <!-- Open Collaboration Requests -->
+                <section class="collab-requests-section">
+                    <div class="section-header">
+                        <div class="header-left">
+                            <h2>Open Collaboration Requests</h2>
+                            <p>Find teams actively looking for builders.</p>
+                        </div>
+                    </div>
+
+                    <div class="collab-grid">
+                        <!-- Collab Card 1 -->
+                        <div class="collab-card">
+                            <div class="collab-card-left">
+                                <h3 class="collab-team-name">NeuralForge</h3>
+                                <div class="collab-looking-for">
+                                    <span class="label">Looking For:</span>
+                                    <ul class="collab-roles">
+                                        <li>Frontend Developer</li>
+                                        <li>UI/UX Designer</li>
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="card-footer">
-                                <span class="active-builders">4 Builders Active</span>
-                                <button class="join-btn">JOIN MISSION</button>
+                            <div class="collab-card-right">
+                                <div class="collab-project-info">
+                                    <span class="label">Project</span>
+                                    <span class="collab-project-name">AI Workflow Assistant</span>
+                                </div>
+                                <button class="apply-btn">Apply <i data-lucide="arrow-right" style="width:12px;"></i></button>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Team Card 2 -->
-                    <div class="featured-team-card">
-                        <div class="card-terminal-bar">
-                            <div class="window-dots">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                            <span class="system-label">quantum_codex.run</span>
-                            <span class="status-chip active">ACTIVE</span>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="team-name">Quantum Codex</h3>
-                            <p class="mission">Developing low-latency decentralized data structures for real-time collaboration.</p>
-
-                            <div class="card-details">
-                                <div class="detail-item">
-                                    <span class="detail-label">Current Build:</span>
-                                    <span class="detail-value">SyncNode Protocol</span>
-                                </div>
-                                <div class="stack-tags">
-                                    <span class="tag">Rust</span>
-                                    <span class="tag">WebAssembly</span>
-                                    <span class="tag">Go</span>
-                                </div>
-                                <div class="looking-for">
-                                    <span class="detail-label">Looking For:</span>
-                                    <ul>
-                                        <li>• Systems Architect</li>
+                        <!-- Collab Card 2 -->
+                        <div class="collab-card">
+                            <div class="collab-card-left">
+                                <h3 class="collab-team-name">Quantum Codex</h3>
+                                <div class="collab-looking-for">
+                                    <span class="label">Looking For:</span>
+                                    <ul class="collab-roles">
+                                        <li>Systems Architect</li>
+                                        <li>Rust Developer</li>
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="card-footer">
-                                <span class="active-builders">6 Builders Active</span>
-                                <button class="join-btn">JOIN MISSION</button>
+                            <div class="collab-card-right">
+                                <div class="collab-project-info">
+                                    <span class="label">Project</span>
+                                    <span class="collab-project-name">SyncNode Protocol</span>
+                                </div>
+                                <button class="apply-btn">Apply <i data-lucide="arrow-right" style="width:12px;"></i></button>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Team Card 3 -->
-                    <div class="featured-team-card">
-                        <div class="card-terminal-bar">
-                            <div class="window-dots">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                            <span class="system-label">biostream.io</span>
-                            <span class="status-chip full">FULL</span>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="team-name">BioStream</h3>
-                            <p class="mission">Visualizing complex biological data sets through interactive 3D web environments.</p>
-
-                            <div class="card-details">
-                                <div class="detail-item">
-                                    <span class="detail-label">Current Build:</span>
-                                    <span class="detail-value">GenomeMap v2</span>
-                                </div>
-                                <div class="stack-tags">
-                                    <span class="tag">Three.js</span>
-                                    <span class="tag">D3.js</span>
-                                    <span class="tag">WebGPU</span>
-                                </div>
-                                <div class="looking-for">
-                                    <span class="detail-label">Looking For:</span>
-                                    <ul>
-                                        <li>• Positions currently closed</li>
+                        <!-- Collab Card 3 -->
+                        <div class="collab-card">
+                            <div class="collab-card-left">
+                                <h3 class="collab-team-name">BioStream</h3>
+                                <div class="collab-looking-for">
+                                    <span class="label">Looking For:</span>
+                                    <ul class="collab-roles">
+                                        <li>3D Artist</li>
+                                        <li>WebGL Expert</li>
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="card-footer">
-                                <span class="active-builders">3 Builders Active</span>
-                                <button class="join-btn" disabled style="opacity: 0.5; cursor: not-allowed;">MISSION FULL</button>
+                            <div class="collab-card-right">
+                                <div class="collab-project-info">
+                                    <span class="label">Project</span>
+                                    <span class="collab-project-name">GenomeMap v2</span>
+                                </div>
+                                <button class="apply-btn">Apply <i data-lucide="arrow-right" style="width:12px;"></i></button>
                             </div>
                         </div>
                     </div>
-            </section>
-
-            <!-- Open Collaboration Requests -->
-            <section class="collab-requests-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2>Open Collaboration Requests</h2>
-                        <p>Find teams actively looking for builders.</p>
-                    </div>
-                </div>
-
-                <div class="collab-grid">
-                    <!-- Collab Card 1 -->
-                    <div class="collab-card">
-                        <div class="collab-card-left">
-                            <h3 class="collab-team-name">NeuralForge</h3>
-                            <div class="collab-looking-for">
-                                <span class="label">Looking For:</span>
-                                <ul class="collab-roles">
-                                    <li>Frontend Developer</li>
-                                    <li>UI/UX Designer</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="collab-card-right">
-                            <div class="collab-project-info">
-                                <span class="label">Project</span>
-                                <span class="collab-project-name">AI Workflow Assistant</span>
-                            </div>
-                            <button class="apply-btn">Apply <i data-lucide="arrow-right" style="width:12px;"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Collab Card 2 -->
-                    <div class="collab-card">
-                        <div class="collab-card-left">
-                            <h3 class="collab-team-name">Quantum Codex</h3>
-                            <div class="collab-looking-for">
-                                <span class="label">Looking For:</span>
-                                <ul class="collab-roles">
-                                    <li>Systems Architect</li>
-                                    <li>Rust Developer</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="collab-card-right">
-                            <div class="collab-project-info">
-                                <span class="label">Project</span>
-                                <span class="collab-project-name">SyncNode Protocol</span>
-                            </div>
-                            <button class="apply-btn">Apply <i data-lucide="arrow-right" style="width:12px;"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Collab Card 3 -->
-                    <div class="collab-card">
-                        <div class="collab-card-left">
-                            <h3 class="collab-team-name">BioStream</h3>
-                            <div class="collab-looking-for">
-                                <span class="label">Looking For:</span>
-                                <ul class="collab-roles">
-                                    <li>3D Artist</li>
-                                    <li>WebGL Expert</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="collab-card-right">
-                            <div class="collab-project-info">
-                                <span class="label">Project</span>
-                                <span class="collab-project-name">GenomeMap v2</span>
-                            </div>
-                            <button class="apply-btn">Apply <i data-lucide="arrow-right" style="width:12px;"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
             </section>
         </main>
-    </div>
+        </div>
 
-    <!-- Firebase System (Standard for DevStage) -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="../scripts/firebase-config.js"></script>
+        <!-- Firebase System (Standard for DevStage) -->
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+        <script src="../scripts/firebase-config.js" defer></script>
 
-    <!-- Scripts -->
-    
-    <script src="../scripts/teams.js"></script>
-    <script>lucide.createIcons();</script>
+        <!-- Scripts -->
+
+        <script src="../scripts/teams.js" defer></script>
+        <script>
+            lucide.createIcons();
+        </script>
 </body>
 
 </html>
