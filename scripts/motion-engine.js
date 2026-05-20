@@ -6,8 +6,10 @@
 // Lightweight helpers used by multiple canvas systems
 const debounce = (fn, ms) => {
     let id;
-    return (...args) => { clearTimeout(id);
-        id = setTimeout(() => fn(...args), ms); };
+    return (...args) => {
+        clearTimeout(id);
+        id = setTimeout(() => fn(...args), ms);
+    };
 };
 
 const onVisibilityChange = (pauseFn, resumeFn) => {
@@ -120,143 +122,63 @@ const onVisibilityChange = (pauseFn, resumeFn) => {
     });
 })();
 
-/* === SECTION 2: 3D HOLLOW CURSOR === */
+/* === SECTION 2: GLOBAL CUSTOM CURSOR === */
 const init3DCursor = () => {
-    // 1. Safety Check: Prevent duplicate initialization
-    if (document.getElementById('hollow-3d-cursor')) return;
+    if (typeof document === 'undefined' || !document.body) return;
 
-    // 2. Dynamically Create 3D Cursor Structure
     const cursor = document.createElement('div');
-    cursor.id = 'hollow-3d-cursor';
-
-    cursor.innerHTML = `
-        <div class="halo-glow"></div>
-        <div class="border-ring"></div>
-        <div class="highlight-layer"></div>
-        <div class="click-cross">
-            <div class="cross-h"></div>
-            <div class="cross-v"></div>
-        </div>
-    `;
-
+    cursor.id = 'custom-cursor';
+    cursor.className = 'custom-cursor';
     document.body.appendChild(cursor);
 
-    window.__DEVSTAGE_CUSTOM_CURSOR_READY = true;
-    if (window.__DEVSTAGE_CUSTOM_CURSOR_CONTROLLER) return;
+    const hoverSelector = [
+        'a',
+        'button',
+        'input',
+        'textarea',
+        'select',
+        'label',
+        '.service-item',
+        '.project-card',
+        '.nav-link',
+        '.dropdown-item',
+        '.stat-btn',
+        '.cta-link',
+        '.btn-outline',
+        '.hamburger',
+        '.social-btn',
+        '.profile-avatar',
+        '.filter-trigger',
+        '.modal-close'
+    ].join(',');
 
-    const borderRing = cursor.querySelector('.border-ring');
+    let activeHoverTarget = null;
 
-    // 3. State & Physics Engine
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let currentX = mouseX,
-        currentY = mouseY;
-    let currentW = 24,
-        currentH = 24;
-    let currentR = 50;
-
-    let targetX = mouseX,
-        targetY = mouseY;
-    let targetW = 24,
-        targetH = 24;
-    let targetR = 50;
-
-    let isHovering = false;
-    let hoverTarget = null;
-    let hoverRect = null;
-    let rafHandle = null;
-    const LERP = 0.12;
-
-    // 4. Input Tracking
     document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-
-        if (isHovering && hoverTarget && hoverRect) {
-            const rect = hoverRect;
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            const pullX = (mouseX - centerX) * 0.2;
-            const pullY = (mouseY - centerY) * 0.2;
-            hoverTarget.style.transform = `translate3d(${pullX}px, ${pullY - 2}px, 0) scale(1.02)`;
-
-            const padding = 8;
-            targetX = rect.left - padding + (pullX * 0.5);
-            targetY = rect.top - padding + (pullY * 0.5);
-            targetW = rect.width + padding * 2;
-            targetH = rect.height + padding * 2;
-            targetR = 12;
-        } else {
-            targetX = mouseX - (targetW / 2);
-            targetY = mouseY - (targetH / 2);
-            targetW = 24;
-            targetH = 24;
-            targetR = 50;
-        }
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
     }, { passive: true });
 
-    // 5. Interaction Listeners
     document.addEventListener('mouseover', (e) => {
-        const target = e.target.closest('a, button, input, .clickable, .dropdown-item');
-        if (target) {
-            isHovering = true;
-            hoverTarget = target;
-            hoverRect = target.getBoundingClientRect();
-            cursor.classList.add('is-hovering');
-            target.classList.add('energy-field-active');
+        const target = e.target.closest(hoverSelector);
+        if (target && target !== activeHoverTarget) {
+            activeHoverTarget = target;
+            cursor.classList.add('hover');
         }
-    }, { passive: true });
+    });
 
     document.addEventListener('mouseout', (e) => {
-        const target = e.target.closest('a, button, input, .clickable, .dropdown-item');
-        if (target) {
-            isHovering = false;
-            if (hoverTarget) hoverTarget.style.transform = '';
-            hoverTarget = null;
-            hoverRect = null;
-            cursor.classList.remove('is-hovering');
-            target.classList.remove('energy-field-active');
+        const related = e.relatedTarget;
+        if (activeHoverTarget && (!related || !related.closest(hoverSelector))) {
+            activeHoverTarget = null;
+            cursor.classList.remove('hover');
         }
-    }, { passive: true });
-
-    window.addEventListener('scroll', () => {
-        if (hoverTarget) hoverRect = hoverTarget.getBoundingClientRect();
-    }, { passive: true });
-
-    document.addEventListener('mousedown', () => cursor.classList.add('is-clicking'), { passive: true });
-    document.addEventListener('mouseup', () => cursor.classList.remove('is-clicking'), { passive: true });
-
-    // 6. Animation Loop (60fps)
-    const animate = () => {
-        // Smoothly interpolate position and size
-        currentX += (targetX - currentX) * LERP;
-        currentY += (targetY - currentY) * LERP;
-        currentW += (targetW - currentW) * LERP;
-        currentH += (targetH - currentH) * LERP;
-        currentR += (targetR - currentR) * LERP;
-
-        cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-        borderRing.style.width = `${currentW}px`;
-        borderRing.style.height = `${currentH}px`;
-        borderRing.style.borderRadius = `${currentR}%`;
-
-        rafHandle = requestAnimationFrame(animate);
-    };
-
-    const pauseCursor = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
-            rafHandle = null; } };
-    const resumeCursor = () => { if (!rafHandle) rafHandle = requestAnimationFrame(animate); };
-    onVisibilityChange(pauseCursor, resumeCursor);
-
-    rafHandle = requestAnimationFrame(animate);
-    console.log("3D Hollow Cursor Restored Everywhere");
+    });
 };
 
 /* === SECTION 3: INTERACTIVE PARTICLE WAVE (Explore Background) === */
 const initParticleWaveSystem = (canvas) => {
     const ctx = canvas.getContext('2d', { alpha: false });
-    const cursorEl = document.getElementById('cursor-ring');
 
     const CFG = {
         cols: 64, // Optimized density
@@ -275,6 +197,9 @@ const initParticleWaveSystem = (canvas) => {
     let time = 0;
     let mouse = { x: -9999, y: -9999 };
     let cursorVisible = false;
+    // Custom cursor is now created globally by init3DCursor().
+    // Declare variable so legacy checks don't throw ReferenceError.
+    let cursorEl = null;
     let gradient;
     let rafHandle = null;
 
@@ -428,8 +353,12 @@ const initParticleWaveSystem = (canvas) => {
     window.addEventListener('resize', debounce(resize, 100), { passive: true });
     resize();
 
-    const pauseWave = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
-            rafHandle = null; } };
+    const pauseWave = () => {
+        if (rafHandle) {
+            cancelAnimationFrame(rafHandle);
+            rafHandle = null;
+        }
+    };
     const resumeWave = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
     onVisibilityChange(pauseWave, resumeWave);
 
@@ -601,8 +530,12 @@ const initGridDistortionSystem = (canvas) => {
         requestAnimationFrame(draw);
     }
 
-    const pauseDistortion = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
-            rafHandle = null; } };
+    const pauseDistortion = () => {
+        if (rafHandle) {
+            cancelAnimationFrame(rafHandle);
+            rafHandle = null;
+        }
+    };
     const resumeDistortion = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
     onVisibilityChange(pauseDistortion, resumeDistortion);
 
@@ -782,8 +715,12 @@ const initTerrainSystem = (cv) => {
     cv.addEventListener('touchend', () => { M.on = false; }, { passive: true });
     window.addEventListener('resize', debounce(resize, 100), { passive: true });
 
-    const pauseTerrain = () => { if (rafHandle) { cancelAnimationFrame(rafHandle);
-            rafHandle = null; } };
+    const pauseTerrain = () => {
+        if (rafHandle) {
+            cancelAnimationFrame(rafHandle);
+            rafHandle = null;
+        }
+    };
     const resumeTerrain = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
     onVisibilityChange(pauseTerrain, resumeTerrain);
 
@@ -859,8 +796,12 @@ const initUploadMeshSystem = (canvas) => {
                 this.spawnRipple(e.clientX, e.clientY);
             }, { passive: true });
 
-            const pause = () => { if (this.rafHandle) { cancelAnimationFrame(this.rafHandle);
-                    this.rafHandle = null; } };
+            const pause = () => {
+                if (this.rafHandle) {
+                    cancelAnimationFrame(this.rafHandle);
+                    this.rafHandle = null;
+                }
+            };
             const resume = () => { if (!this.rafHandle) this.rafHandle = requestAnimationFrame((t) => this.animate(t)); };
             onVisibilityChange(pause, resume);
 

@@ -16,7 +16,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 window.auth = auth;
-window.db = db;
+if (!window.db) {
+    window.db = db;
+}
 
 // ─── GLOBAL USER UI LOADER ───
 window.loadUserUI = function () {

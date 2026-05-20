@@ -10,7 +10,8 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Global Styles -->
@@ -21,52 +22,18 @@
         .explore-page {
             background: #0f0f0f;
         }
-        
+
         #particle-wave-canvas {
             position: fixed;
             inset: 0;
             z-index: -1;
             pointer-events: none;
         }
-        /* ==============================
-       PREMIUM CURSOR
-    ============================== */
-        
-        #cursor-ring {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 42px;
-            height: 42px;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.25s ease;
-            mix-blend-mode: screen;
-        }
-        
-        #cursor-ring circle.outer {
-            fill: none;
-            stroke: #e8701e;
-            stroke-width: 1;
-            opacity: 0.55;
-            transform-origin: center;
-            animation: rotateRing 7s linear infinite;
-        }
-        
-        #cursor-ring circle.dot {
-            fill: #e8701e;
-            opacity: 0.95;
-        }
-        
-        @keyframes rotateRing {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+
+
+
         /* ─── Uiverse Hamburger Menu ─── */
-        
+
         .uiverse-hamburger {
             cursor: pointer;
             display: flex;
@@ -76,14 +43,15 @@
             height: 40px;
             position: relative;
         }
-        
+
         .uiverse-hamburger svg {
             height: 38px;
             width: 38px;
             transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         /* ─── Command Palette ─── */
-        
+
         .palette-backdrop {
             position: fixed;
             inset: 0;
@@ -95,12 +63,12 @@
             display: flex;
             justify-content: center;
         }
-        
+
         .palette-backdrop.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .palette-container {
             position: relative;
             top: 80px;
@@ -114,11 +82,11 @@
             transition: transform 180ms ease-out;
             overflow: hidden;
         }
-        
+
         .palette-backdrop.active .palette-container {
             transform: translateY(0);
         }
-        
+
         .palette-header {
             padding: 0 16px;
             height: 52px;
@@ -126,7 +94,7 @@
             align-items: center;
             gap: 12px;
         }
-        
+
         .palette-input {
             flex: 1;
             background: none;
@@ -135,7 +103,7 @@
             font-size: 16px;
             outline: none;
         }
-        
+
         .palette-shortcut {
             background: rgba(255, 255, 255, 0.08);
             padding: 4px 8px;
@@ -144,7 +112,7 @@
             font-size: 11px;
             font-weight: 600;
         }
-        
+
         .palette-results {
             padding: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -154,7 +122,7 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        
+
         .palette-category label {
             display: block;
             font-size: 10px;
@@ -164,13 +132,13 @@
             color: #666;
             margin-bottom: 8px;
         }
-        
+
         .palette-chips {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        
+
         .palette-chip {
             padding: 5px 12px;
             border-radius: 100px;
@@ -180,19 +148,20 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .palette-chip:hover {
             background: rgba(232, 129, 58, 0.15);
             border-color: #E8813A;
             color: #E8813A;
         }
-        
+
         .palette-chip.hidden {
             display: none;
         }
+
         /* ─── Premium Dropdown Menu ─── */
         /* ─── Explore Platform Layout ─── */
-        
+
         .explore-layout {
             max-width: 1300px;
             margin: 100px auto 80px;
@@ -201,14 +170,15 @@
             gap: 32px;
             padding: 0 40px;
         }
+
         /* Sidebar Styles */
-        
+
         .sidebar-sticky {
             position: sticky;
             top: 100px;
             height: fit-content;
         }
-        
+
         .sidebar-card {
             background: rgba(20, 20, 24, 0.42);
             backdrop-filter: blur(18px);
@@ -222,14 +192,15 @@
             will-change: transform, box-shadow, border-color;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
         }
-        
+
         .sidebar-card:hover {
             transform: translateY(-5px);
             border-color: rgba(255, 140, 66, 0.25);
             box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 24px rgba(255, 140, 66, 0.04);
         }
+
         /* Terminal Header System */
-        
+
         .card-terminal-header {
             background: rgba(255, 255, 255, 0.02);
             padding: 10px 16px;
@@ -238,25 +209,25 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .terminal-header-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .terminal-dots {
             display: flex;
             gap: 5px;
         }
-        
+
         .terminal-dot {
             width: 4px;
             height: 4px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
         }
-        
+
         .terminal-filename {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.62rem;
@@ -265,7 +236,7 @@
             text-transform: uppercase;
             font-weight: 600;
         }
-        
+
         .terminal-status {
             display: flex;
             align-items: center;
@@ -277,7 +248,7 @@
             font-weight: 700;
             letter-spacing: 0.05em;
         }
-        
+
         .status-pulse {
             width: 5px;
             height: 5px;
@@ -286,26 +257,28 @@
             box-shadow: 0 0 8px #ff8c42;
             animation: pulse-amber 2.5s infinite ease-in-out;
         }
-        
+
         @keyframes pulse-amber {
             0% {
                 opacity: 0.4;
                 transform: scale(0.9);
             }
+
             50% {
                 opacity: 1;
                 transform: scale(1.15);
             }
+
             100% {
                 opacity: 0.4;
                 transform: scale(0.9);
             }
         }
-        
+
         .sidebar-card-content {
             padding: 20px;
         }
-        
+
         .sidebar-title {
             color: #fff;
             font-size: 0.82rem;
@@ -317,13 +290,13 @@
             letter-spacing: 0.02em;
             opacity: 0.9;
         }
-        
+
         .segmented-control {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
+
         .segment-chip {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -342,38 +315,39 @@
             text-align: left;
             position: relative;
         }
-        
+
         .segment-chip:hover {
             background: rgba(255, 140, 66, 0.04);
             border-color: rgba(255, 140, 66, 0.2);
             color: #fff;
             transform: translateX(6px);
         }
-        
+
         .segment-chip.active {
             background: rgba(255, 140, 66, 0.08);
             border-color: #ff8c42;
             color: #ff8c42;
             box-shadow: 0 0 20px rgba(255, 140, 66, 0.06);
         }
-        
+
         .chip-icon {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s ease;
         }
-        
+
         .segment-chip.active .chip-icon {
             color: #ff8c42;
         }
+
         /* ─── Tech Stack Chips ─── */
-        
+
         .tech-chip-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         .tech-chip {
             display: inline-flex;
             align-items: center;
@@ -394,33 +368,33 @@
             text-transform: uppercase;
             letter-spacing: 0.02em;
         }
-        
+
         .tech-chip:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.15);
             color: #fff;
             transform: translateY(-2px);
         }
-        
+
         .tech-chip.active {
             background: rgba(255, 140, 66, 0.1);
             border-color: #ff8c42;
             color: #fff;
             box-shadow: 0 4px 16px rgba(255, 140, 66, 0.08);
         }
-        
+
         .tech-chip-icon {
             font-size: 0.8rem;
             filter: grayscale(1) brightness(2);
             opacity: 0.5;
             transition: all 0.3s ease;
         }
-        
+
         .tech-chip.active .tech-chip-icon {
             filter: none;
             opacity: 1;
         }
-        
+
         .tech-chip-badge {
             background: rgba(255, 255, 255, 0.08);
             color: rgba(255, 255, 255, 0.4);
@@ -431,13 +405,14 @@
             line-height: 1.2;
             margin-left: 4px;
         }
-        
+
         .tech-chip.active .tech-chip-badge {
             background: #ff8c42;
             color: #000;
         }
+
         /* Ripple Effect */
-        
+
         .tech-chip-ripple {
             position: absolute;
             border-radius: 50%;
@@ -446,19 +421,20 @@
             animation: ripple-burst 0.5s linear;
             pointer-events: none;
         }
-        
+
         @keyframes ripple-burst {
             to {
                 transform: scale(4);
                 opacity: 0;
             }
         }
+
         /* Feed & Search */
-        
+
         .search-section {
             margin-bottom: 32px;
         }
-        
+
         .search-box {
             height: 56px;
             background: rgba(255, 255, 255, 0.06);
@@ -474,14 +450,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             position: relative;
         }
-        
+
         .search-box:focus-within {
             transform: scale(1.02);
             background: rgba(255, 255, 255, 0.09);
             border-color: rgba(255, 140, 66, 0.4);
             box-shadow: 0 0 20px rgba(255, 140, 66, 0.15), 0 12px 40px rgba(0, 0, 0, 0.3);
         }
-        
+
         .search-box i {
             color: rgba(255, 255, 255, 0.4);
             font-size: 1.2rem;
@@ -489,11 +465,11 @@
             margin: 0;
             /* Override previous margin */
         }
-        
+
         .search-box:focus-within i {
             color: #ff8c42;
         }
-        
+
         .search-box input {
             flex: 1;
             background: none;
@@ -503,16 +479,16 @@
             font-size: 1.05rem;
             outline: none;
         }
-        
+
         .search-box input::placeholder {
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s ease;
         }
-        
+
         .search-box:focus-within input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
-        
+
         .search-shortcut {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -526,19 +502,20 @@
             user-select: none;
             transition: all 0.3s ease;
         }
-        
+
         .search-box:focus-within .search-shortcut {
             opacity: 0;
             transform: translateX(10px);
         }
+
         /* Trending List */
-        
+
         .trending-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .trending-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.04);
@@ -551,13 +528,13 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .trending-card:hover {
             background: rgba(255, 140, 66, 0.03);
             border-color: rgba(255, 140, 66, 0.15);
             transform: translateX(4px);
         }
-        
+
         .trending-thumb {
             width: 48px;
             height: 48px;
@@ -571,17 +548,17 @@
             color: #ff8c42;
             transition: all 0.3s ease;
         }
-        
+
         .trending-card:hover .trending-thumb {
             border-color: #ff8c42;
             box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
         }
-        
+
         .trending-info {
             flex: 1;
             min-width: 0;
         }
-        
+
         .trending-info h4 {
             color: #fff;
             font-size: 0.88rem;
@@ -589,14 +566,14 @@
             margin-bottom: 4px;
             letter-spacing: 0.01em;
         }
-        
+
         .trending-info p {
             color: rgba(255, 255, 255, 0.35);
             font-size: 0.72rem;
             line-height: 1.4;
             margin-bottom: 10px;
         }
-        
+
         .trending-stats {
             display: flex;
             gap: 14px;
@@ -605,13 +582,13 @@
             font-size: 0.65rem;
             font-weight: 600;
         }
-        
+
         .trending-stats span {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        
+
         .trending-arrow {
             position: absolute;
             right: 16px;
@@ -623,19 +600,20 @@
             width: 16px;
             height: 16px;
         }
-        
+
         .trending-card:hover .trending-arrow {
             opacity: 1;
             transform: translateY(-50%) translateX(0);
         }
+
         /* Suggested Users */
-        
+
         .user-suggestions {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .user-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -647,13 +625,13 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
-        
+
         .user-card:hover {
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
-        
+
         .user-card-avatar {
             width: 42px;
             height: 42px;
@@ -664,12 +642,12 @@
             background: rgba(255, 255, 255, 0.02);
             transition: all 0.3s ease;
         }
-        
+
         .user-card:hover .user-card-avatar {
             border-color: #ff8c42;
             box-shadow: 0 0 10px rgba(255, 140, 66, 0.15);
         }
-        
+
         .user-card-info h4 {
             color: #fff;
             font-size: 0.85rem;
@@ -677,7 +655,7 @@
             margin-bottom: 2px;
             letter-spacing: 0.01em;
         }
-        
+
         .user-card-info p {
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.7rem;
@@ -686,7 +664,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .view-profile-text {
             color: #ff8c42;
             font-size: 0.7rem;
@@ -699,13 +677,13 @@
             height: 0;
             overflow: hidden;
         }
-        
+
         .user-card:hover .view-profile-text {
             opacity: 1;
             transform: translateY(0);
             height: 14px;
         }
-        
+
         .follow-btn {
             background: rgba(255, 140, 66, 0.06);
             border: 1px solid rgba(255, 140, 66, 0.2);
@@ -720,7 +698,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        
+
         .follow-btn:hover {
             background: #ff8c42;
             border-color: #ff8c42;
@@ -728,24 +706,25 @@
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(255, 140, 66, 0.2);
         }
-        
+
         .follow-btn.following {
             background: transparent;
             color: rgba(255, 255, 255, 0.5);
         }
-        
+
         .trending-info span {
             color: var(--text-tertiary);
             font-size: 0.75rem;
         }
+
         /* Project Cards (Hybrid Style) */
-        
+
         .project-feed {
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
-        
+
         .project-card {
             background: rgba(20, 20, 24, 0.42);
             backdrop-filter: blur(18px);
@@ -757,57 +736,57 @@
             will-change: transform, border-color;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
         }
-        
+
         .project-card:hover {
             transform: translateY(-8px);
             border-color: rgba(255, 140, 66, 0.3);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 140, 66, 0.05);
         }
-        
+
         .card-head {
             padding: 20px 24px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .card-head img {
             width: 40px;
             height: 40px;
             border-radius: 50%;
         }
-        
+
         .card-head .meta {
             flex: 1;
         }
-        
+
         .card-head h4 {
             color: #fff;
             font-size: 0.95rem;
         }
-        
+
         .card-head span {
             color: var(--text-tertiary);
             font-size: 0.75rem;
         }
-        
+
         .card-body {
             padding: 0 24px 20px;
         }
-        
+
         .card-body h3 {
             color: #fff;
             font-size: 1.1rem;
             margin-bottom: 8px;
         }
-        
+
         .card-body p {
             color: var(--text-secondary);
             font-size: 0.9rem;
             line-height: 1.5;
             margin-bottom: 16px;
         }
-        
+
         .card-footer {
             padding: 12px 24px;
             border-top: 1px solid var(--border-soft);
@@ -815,25 +794,25 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .stats {
             display: flex;
             gap: 20px;
             color: var(--text-tertiary);
             font-size: 0.8rem;
         }
-        
+
         .stats span {
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        
+
         .stats i {
             width: 16px;
             height: 16px;
         }
-        
+
         .view-btn {
             color: var(--brand-orange);
             font-weight: 700;
@@ -843,21 +822,24 @@
             align-items: center;
             gap: 6px;
         }
+
         /* Responsive */
-        
+
         @media (max-width: 1100px) {
             .explore-layout {
                 grid-template-columns: 260px 1fr;
             }
+
             .sidebar-right {
                 display: none;
             }
         }
-        
+
         @media (max-width: 850px) {
             .explore-layout {
                 grid-template-columns: 1fr;
             }
+
             .sidebar-left {
                 display: none;
             }
@@ -868,11 +850,7 @@
 <body class="explore-page">
     <canvas id="particle-wave-canvas"></canvas>
 
-    <!-- Premium Cursor Overlay -->
-    <svg id="cursor-ring" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <circle class="outer" cx="24" cy="24" r="18" stroke-dasharray="5 6" />
-    <circle class="dot" cx="24" cy="24" r="2.7" />
-  </svg>
+
     <nav class="navbar">
         <div class="nav-container">
             <div class="breadcrumb-header">
@@ -899,33 +877,33 @@
             <!-- Right side: Animated Hamburger Menu -->
             <div class="nav-actions">
                 <label class="uiverse-hamburger" id="hamburger-menu-label">
-          <input type="checkbox" id="hamburger-checkbox">
-          <svg viewBox="0 0 32 32">
-            <path class="line line-top-bottom"
-              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
-            </path>
-            <path class="line" d="M7 16 27 16"></path>
-          </svg>
+                    <input type="checkbox" id="hamburger-checkbox">
+                    <svg viewBox="0 0 32 32">
+                        <path class="line line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        </path>
+                        <path class="line" d="M7 16 27 16"></path>
+                    </svg>
 
-          <!-- Premium Dropdown Menu -->
-          <div class="premium-dropdown" id="hamburger-dropdown">
-            <div class="dropdown-group primary-nav">
-              <a href="../index.html" class="dropdown-item nav-item-anim">Home</a>
-              <a href="explore.html" class="dropdown-item nav-item-anim active-page">Explore</a>
-              <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
-              <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
-              <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
-              <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-group secondary-nav">
-              <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
-              <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
-              <a href="#" class="dropdown-item nav-item-anim">Settings</a>
-              <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
-            </div>
-          </div>
-        </label>
+                    <!-- Premium Dropdown Menu -->
+                    <div class="premium-dropdown" id="hamburger-dropdown">
+                        <div class="dropdown-group primary-nav">
+                            <a href="../index.html" class="dropdown-item nav-item-anim">Home</a>
+                            <a href="explore.html" class="dropdown-item nav-item-anim active-page">Explore</a>
+                            <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
+                            <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
+                            <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
+                            <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-group secondary-nav">
+                            <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
+                            <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
+                            <a href="#" class="dropdown-item nav-item-anim">Settings</a>
+                            <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                </label>
             </div>
         </div>
     </nav>
@@ -952,17 +930,17 @@
                     <h3 class="sidebar-title"><i data-lucide="filter"></i> Filter By</h3>
                     <div class="segmented-control" id="filter-control">
                         <button class="segment-chip active" data-filter="latest">
-              <i data-lucide="clock" class="chip-icon"></i>
-              <span class="chip-text">Latest</span>
-            </button>
+                            <i data-lucide="clock" class="chip-icon"></i>
+                            <span class="chip-text">Latest</span>
+                        </button>
                         <button class="segment-chip" data-filter="most-liked">
-              <i data-lucide="heart" class="chip-icon"></i>
-              <span class="chip-text">Most Liked</span>
-            </button>
+                            <i data-lucide="heart" class="chip-icon"></i>
+                            <span class="chip-text">Most Liked</span>
+                        </button>
                         <button class="segment-chip" data-filter="trending">
-              <i data-lucide="zap" class="chip-icon"></i>
-              <span class="chip-text">Trending</span>
-            </button>
+                            <i data-lucide="zap" class="chip-icon"></i>
+                            <span class="chip-text">Trending</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -985,35 +963,35 @@
                     <h3 class="sidebar-title"><i data-lucide="code"></i> Tech Stack</h3>
                     <div class="tech-chip-grid" id="tech-chip-grid">
                         <button class="tech-chip" data-tech="react">
-              <i data-lucide="box" class="tech-chip-icon"></i>
-              REACT
-              <span class="tech-chip-badge">24</span>
-            </button>
+                            <i data-lucide="box" class="tech-chip-icon"></i>
+                            REACT
+                            <span class="tech-chip-badge">24</span>
+                        </button>
                         <button class="tech-chip" data-tech="python">
-              <i data-lucide="binary" class="tech-chip-icon"></i>
-              PYTHON
-              <span class="tech-chip-badge">18</span>
-            </button>
+                            <i data-lucide="binary" class="tech-chip-icon"></i>
+                            PYTHON
+                            <span class="tech-chip-badge">18</span>
+                        </button>
                         <button class="tech-chip" data-tech="typescript">
-              <i data-lucide="shield" class="tech-chip-icon"></i>
-              TYPESCRIPT
-              <span class="tech-chip-badge">12</span>
-            </button>
+                            <i data-lucide="shield" class="tech-chip-icon"></i>
+                            TYPESCRIPT
+                            <span class="tech-chip-badge">12</span>
+                        </button>
                         <button class="tech-chip" data-tech="ui-ux">
-              <i data-lucide="layout" class="tech-chip-icon"></i>
-              UI/UX
-              <span class="tech-chip-badge">30</span>
-            </button>
+                            <i data-lucide="layout" class="tech-chip-icon"></i>
+                            UI/UX
+                            <span class="tech-chip-badge">30</span>
+                        </button>
                         <button class="tech-chip" data-tech="nodejs">
-              <i data-lucide="server" class="tech-chip-icon"></i>
-              NODE.JS
-              <span class="tech-chip-badge">15</span>
-            </button>
+                            <i data-lucide="server" class="tech-chip-icon"></i>
+                            NODE.JS
+                            <span class="tech-chip-badge">15</span>
+                        </button>
                         <button class="tech-chip" data-tech="flutter">
-              <i data-lucide="layers" class="tech-chip-icon"></i>
-              FLUTTER
-              <span class="tech-chip-badge">8</span>
-            </button>
+                            <i data-lucide="layers" class="tech-chip-icon"></i>
+                            FLUTTER
+                            <span class="tech-chip-badge">8</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1031,8 +1009,10 @@
 
             <div id="explore-feed" class="project-feed">
                 <!-- Skeleton Loading -->
-                <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;"></div>
-                <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;"></div>
+                <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;">
+                </div>
+                <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;">
+                </div>
             </div>
         </section>
 
@@ -1114,7 +1094,8 @@
                     <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
                     <div class="user-suggestions">
                         <div class="user-card">
-                            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers" class="user-card-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff"
+                                alt="Alex Rivers" class="user-card-avatar">
                             <div class="user-card-info">
                                 <h4>Alex Rivers</h4>
                                 <p>Full-stack Developer</p>
@@ -1123,7 +1104,8 @@
                             <button class="follow-btn">Follow</button>
                         </div>
                         <div class="user-card">
-                            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen" class="user-card-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff"
+                                alt="Sarah Chen" class="user-card-avatar">
                             <div class="user-card-info">
                                 <h4>Sarah Chen</h4>
                                 <p>UI/UX Designer</p>
@@ -1132,7 +1114,8 @@
                             <button class="follow-btn">Follow</button>
                         </div>
                         <div class="user-card">
-                            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane" class="user-card-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff"
+                                alt="Marcus Vane" class="user-card-avatar">
                             <div class="user-card-info">
                                 <h4>Marcus Vane</h4>
                                 <p>AI Engineer</p>
@@ -1165,7 +1148,7 @@
 
         const feed = document.getElementById('explore-feed');
 
-        const fetchProjects = async(filter = 'latest') => {
+        const fetchProjects = async (filter = 'latest') => {
             try {
                 let query = db.collection('projects');
                 if (filter === 'latest') {

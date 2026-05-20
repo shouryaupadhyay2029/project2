@@ -7,402 +7,1330 @@
     <title>DevStage | Student Project Platform</title>
     <meta name="description" content="DevStage is a modern platform for students to showcase their projects, find teams, and level up their skills.">
 
-    <!-- Premium Typography: Clash Display & Inter -->
+    <!-- Premium Typography: Clash Display, Syne, Cormorant Garamond & DM Sans -->
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Keep global styling for dropdowns, modals, and custom cursor definitions -->
     <link rel="stylesheet" href="styles/global.css">
 
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+         :root {
+            --ink: #0b0b0b;
+            --paper: #f5f2ec;
+            --paper-dim: #e8e4db;
+            --accent: #c8b89a;
+            --accent-warm: #b5a48a;
+            --muted: #6e6860;
+            --pill-bg: rgba(245, 242, 236, 0.08);
+            --pill-border: rgba(245, 242, 236, 0.18);
+            --line: rgba(245, 242, 236, 0.1);
+            --line-strong: rgba(245, 242, 236, 0.18);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: var(--ink) !important;
+            color: var(--paper) !important;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+        /* Noise texture overlay */
+        
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* Grid dot background */
+        
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(245, 242, 236, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* ===== NAV ===== */
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            height: 68px;
+            border-bottom: 0.5px solid var(--line);
+            background: rgba(11, 11, 11, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.55);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--paper);
+        }
+        /* Auth integration styled for minimalist aesthetic */
+        
+        .auth-controls {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .auth-controls button {
+            background: none;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.55);
+            transition: color 0.2s, opacity 0.2s;
+        }
+        
+        .auth-controls button:hover {
+            color: var(--paper);
+        }
+        
+        #signupBtn {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: var(--ink) !important;
+            background: var(--paper);
+            padding: 9px 22px;
+            border-radius: 100px;
+            text-decoration: none;
+        }
+        
+        #signupBtn:hover {
+            opacity: 0.85;
+        }
+        
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 0.5px solid var(--pill-border);
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-avatar:hover {
+            border-color: var(--paper);
+        }
+        /* Right nav layout elements container */
+        
+        .nav-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        /* ===== SECTIONS ===== */
+        
+        section {
+            position: relative;
+            z-index: 2;
+        }
+        /* ===== HERO ===== */
+        
+        .hero {
+            min-height: calc(100vh - 68px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 48px 88px;
+            border-bottom: 0.5px solid var(--line);
+            overflow: hidden;
+            position: relative;
+            background: transparent !important;
+        }
+        
+        .hero-grid {
+            width: 100%;
+            max-width: 1480px;
+            display: grid;
+            grid-template-columns: minmax(320px, 45%) minmax(360px, 55%);
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 36px;
+            max-width: 720px;
+            z-index: 2;
+        }
+        
+        .hero-tag {
+            position: relative;
+            top: auto;
+            right: auto;
+            transform: none;
+            writing-mode: horizontal-tb;
+            text-orientation: initial;
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(245, 242, 236, 0.55);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0;
+        }
+        
+        .hero-tag-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff8c00;
+            flex-shrink: 0;
+        }
+        
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0;
+        }
+        
+        .hero-right {
+            position: relative;
+            width: 100%;
+            min-height: 64vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            background: transparent;
+            mask-image: radial-gradient(circle at 25% 45%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.18) 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at 25% 45%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.18) 40%, transparent 100%);
+        }
+        
+        .hero-right::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(11, 11, 11, 0.96) 0%, rgba(11, 11, 11, 0.08) 15%, rgba(11, 11, 11, 0.08) 85%, rgba(11, 11, 11, 0.96) 100%), linear-gradient(90deg, rgba(11, 11, 11, 0.96) 0%, rgba(11, 11, 11, 0.1) 14%, rgba(11, 11, 11, 0.02) 38%, rgba(11, 11, 11, 0.02) 62%, rgba(11, 11, 11, 0.9) 100%);
+            pointer-events: none;
+            z-index: 2;
+            mix-blend-mode: normal;
+        }
+        
+        .hero-right::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.03), transparent 18%), radial-gradient(circle at 80% 15%, rgba(255, 255, 255, 0.02), transparent 20%);
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.8;
+        }
+        
+        .hero-right canvas#c {
+            position: absolute !important;
+            top: 0 !important;
+            right: 0 !important;
+            left: auto !important;
+            width: 105% !important;
+            height: 105% !important;
+            transform: translateX(4%) scale(1.02);
+            opacity: 0.98;
+        }
+        
+        body.home-page #c {
+            position: absolute !important;
+            top: 0 !important;
+            right: 0 !important;
+            left: auto !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 0 !important;
+        }
+        
+        .hero h1 {
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 800;
+            font-size: clamp(48px, 7vw, 100px);
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: var(--paper);
+            max-width: 1000px;
+            margin-bottom: 48px;
+        }
+        
+        .hero h1 em {
+            font-style: italic;
+            color: #ff8c00;
+        }
+        
+        .hero-bottom {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .hero-desc {
+            font-size: 15px;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.5);
+            max-width: 520px;
+            line-height: 1.7;
+        }
+        
+        .hero-scroll {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(245, 242, 236, 0.3);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        
+        .scroll-line {
+            width: 40px;
+            height: 0.5px;
+            background: rgba(245, 242, 236, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: var(--paper);
+            animation: scanline 2s ease-in-out infinite;
+        }
+        
+        @media (max-width: 980px) {
+            .hero {
+                min-height: auto;
+                padding: 64px 24px 64px;
+            }
+            .hero-grid {
+                display: block;
+                gap: 40px;
+            }
+            .hero-right {
+                min-height: 320px;
+            }
+            .hero-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 24px;
+            }
+        }
+        
+        .eyebrow-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff8c00;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.7);
+            }
+        }
+        
+        .eyebrow-text {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(245, 242, 236, 0.45);
+        }
+        
+        .hero h1 {
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 800;
+            font-size: clamp(48px, 7vw, 100px);
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: var(--paper);
+            max-width: 1000px;
+            margin-bottom: 48px;
+        }
+        
+        .hero h1 em {
+            font-style: italic;
+            color: #ff8c00;
+        }
+        
+        .hero-bottom {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        
+        .hero-desc {
+            font-size: 15px;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.5);
+            max-width: 440px;
+            line-height: 1.7;
+        }
+        
+        .hero-scroll {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(245, 242, 236, 0.3);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        
+        .scroll-line {
+            width: 40px;
+            height: 0.5px;
+            background: rgba(245, 242, 236, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: var(--paper);
+            animation: scanline 2s ease-in-out infinite;
+        }
+        
+        @keyframes scanline {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+        /* ===== MARQUEE ===== */
+        
+        .marquee-wrap {
+            border-top: 0.5px solid var(--line);
+            border-bottom: 0.5px solid var(--line);
+            overflow: hidden;
+            padding: 18px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .marquee-track {
+            display: flex;
+            gap: 0;
+            width: max-content;
+            animation: marquee 28s linear infinite;
+        }
+        
+        @keyframes marquee {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+        
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 0 36px;
+            white-space: nowrap;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-style: italic;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.35);
+        }
+        
+        .marquee-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #ff8c00;
+            flex-shrink: 0;
+        }
+        /* ===== ABOUT ===== */
+        
+        .about {
+            padding: 120px 48px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+            border-bottom: 0.5px solid var(--line);
+        }
+        
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 0.5px solid var(--pill-border);
+            background: var(--pill-bg);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(245, 242, 236, 0.45);
+            margin-bottom: 40px;
+        }
+        
+        .about-left h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(38px, 4.5vw, 64px);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+            margin-bottom: 0;
+        }
+        
+        .about-left h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        
+        .about-right {
+            padding-top: 60px;
+        }
+        
+        .about-right p {
+            font-size: 16px;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.6);
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+        
+        .about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--paper);
+            text-decoration: none;
+            border-bottom: 0.5px solid rgba(245, 242, 236, 0.2);
+            padding-bottom: 4px;
+            transition: border-color 0.2s;
+            cursor: auto;
+        }
+        
+        .about-link:hover {
+            border-color: var(--paper);
+        }
+        
+        .about-link span {
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+        
+        .about-link:hover span {
+            transform: translateX(4px);
+        }
+        /* ===== SERVICES ===== */
+        
+        .services {
+            padding: 120px 48px;
+            border-bottom: 0.5px solid var(--line);
+        }
+        
+        .services-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 80px;
+        }
+        
+        .services-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(36px, 4vw, 60px);
+            font-weight: 300;
+            line-height: 1.1;
+            max-width: 500px;
+        }
+        
+        .services-header h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+        
+        .service-item {
+            padding: 40px 36px;
+            border-left: 0.5px solid var(--line);
+            position: relative;
+            cursor: auto;
+            transition: background 0.3s;
+            overflow: hidden;
+        }
+        
+        .service-item:last-child {
+            border-right: 0.5px solid var(--line);
+        }
+        
+        .service-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(245, 242, 236, 0.02);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .service-item:hover::before {
+            opacity: 1;
+        }
+        
+        .service-num {
+            font-size: 11px;
+            color: rgba(245, 242, 236, 0.25);
+            letter-spacing: 0.1em;
+            margin-bottom: 48px;
+        }
+        
+        .service-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        
+        .service-desc {
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(245, 242, 236, 0.45);
+            line-height: 1.7;
+        }
+        
+        .service-arrow {
+            position: absolute;
+            bottom: 36px;
+            right: 36px;
+            width: 32px;
+            height: 32px;
+            border: 0.5px solid var(--line-strong);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: rgba(245, 242, 236, 0.4);
+            transition: all 0.2s;
+        }
+        
+        .service-item:hover .service-arrow {
+            border-color: var(--paper);
+            color: var(--paper);
+        }
+        /* ===== PROJECTS ===== */
+        
+        .projects {
+            padding: 120px 48px;
+            border-bottom: 0.5px solid var(--line);
+        }
+        
+        .projects-header {
+            margin-bottom: 64px;
+        }
+        
+        .projects-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(36px, 4vw, 60px);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        
+        .projects-header p {
+            font-size: 15px;
+            color: rgba(245, 242, 236, 0.45);
+            max-width: 460px;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--line);
+        }
+        
+        .project-card {
+            background: var(--ink);
+            padding: 40px 36px;
+            position: relative;
+            cursor: auto;
+            overflow: hidden;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: background 0.3s;
+        }
+        
+        .project-card:hover {
+            background: rgba(245, 242, 236, 0.03);
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: auto;
+        }
+        
+        .project-tag {
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(245, 242, 236, 0.35);
+            border: 0.5px solid var(--line-strong);
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+        
+        .project-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 300;
+            margin: 32px 0 12px;
+        }
+        
+        .project-desc {
+            font-size: 13px;
+            color: rgba(245, 242, 236, 0.4);
+            line-height: 1.6;
+        }
+        
+        .project-card:last-child {
+            background: rgba(200, 184, 154, 0.06);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: none;
+        }
+        
+        .project-cta h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            color: rgba(245, 242, 236, 0.7);
+        }
+        
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--paper);
+            border: 0.5px solid var(--pill-border);
+            padding: 12px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(245, 242, 236, 0.06);
+            border-color: rgba(245, 242, 236, 0.35);
+        }
+        /* ===== CTA SECTION ===== */
+        
+        .cta-section {
+            padding: 160px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 184, 154, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(40px, 6vw, 88px);
+            font-weight: 300;
+            line-height: 1.05;
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        
+        .cta-section h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        
+        .cta-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 13px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--paper);
+            padding: 16px 36px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        
+        .cta-link:hover {
+            opacity: 0.85;
+        }
+        /* ===== FOOTER ===== */
+        
+        footer {
+            padding: 64px 48px;
+            border-top: 0.5px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+            background: var(--ink);
+        }
+        
+        .footer-logo {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(245, 242, 236, 0.4);
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            font-size: 12px;
+            color: rgba(245, 242, 236, 0.3);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        
+        .footer-links a:hover {
+            color: var(--paper);
+        }
+        
+        .footer-copy {
+            font-size: 12px;
+            color: rgba(245, 242, 236, 0.2);
+            letter-spacing: 0.04em;
+        }
+        /* ===== FADE IN ===== */
+        
+        .fade-up {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 900px) {
+            nav {
+                padding: 0 24px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero {
+                padding: 0 24px 64px;
+            }
+            .about {
+                grid-template-columns: 1fr;
+                padding: 80px 24px;
+                gap: 40px;
+            }
+            .about-right {
+                padding-top: 0;
+            }
+            .services {
+                padding: 80px 24px;
+            }
+            .services-list {
+                grid-template-columns: 1fr 1fr;
+            }
+            .service-item:nth-child(odd) {
+                border-left: 0.5px solid var(--line);
+            }
+            .service-item:nth-child(even) {
+                border-right: 0.5px solid var(--line);
+            }
+            .projects {
+                padding: 80px 24px;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            footer {
+                flex-direction: column;
+                gap: 32px;
+                align-items: flex-start;
+                padding: 48px 24px;
+            }
+            .cta-section {
+                padding: 100px 24px;
+            }
+        }
+    </style>
 </head>
 
 <body class="home-page">
-    <!-- Core Loader Logic -->
+
+    <!-- Core Loader & Interactive Background Logic -->
     <script src="scripts/motion-engine.js" defer></script>
 
-    <canvas id="c" aria-hidden="true"></canvas>
-
-    <div class="main-wrapper">
-        <div class="hero-section">
-            <nav class="navbar" id="main-navbar">
-                <div class="nav-container">
-
-                    <!-- Left: Logo -->
-                    <a href="#" class="logo-bloom-wrapper" id="devstage-logo">
-                        <div class="logo-chars">
-                            <span class="char" style="--i:0">D</span>
-                            <span class="char" style="--i:1">e</span>
-                            <span class="char" style="--i:2">v</span>
-                            <div class="logo-separator"></div>
-                            <span class="char outline" style="--i:3">S</span>
-                            <span class="char outline" style="--i:4">t</span>
-                            <span class="char outline" style="--i:5">a</span>
-                            <span class="char outline" style="--i:6">g</span>
-                            <span class="char outline" style="--i:7">e</span>
-                            <div class="logo-dot"></div>
-                        </div>
-                        <div class="logo-underline"></div>
-                    </a>
-
-                    <!-- Center: Search Bar (Uiverse Animated) -->
-                    <div class="input-container">
-                        <input type="text" name="text" class="input" placeholder="Search..." id="nav-search" autocomplete="off">
-                        <span class="icon">
-              <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path opacity="0.6" d="M14 5H20" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"></path>
-                <path opacity="0.6" d="M14 8H17" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M21 11.5C21 16.75 16.75 21 11.5 21C6.25 21 2 16.75 2 11.5C2 6.25 6.25 2 11.5 2"
-                  stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                </path>
-                <path d="M22 22L20 20" stroke="#ff8c00" stroke-width="3.5" stroke-linecap="round"
-                  stroke-linejoin="round"></path>
-              </svg>
-            </span>
-                    </div>
-
-                    <!-- Right: Navigation & Profile -->
-                    <div class="nav-menu">
-                        <ul class="nav-links" id="nav-links">
-                            <li>
-                                <a href="pages/explore.html" class="fancy">
-                                    <span class="top-key"></span>
-                                    <span class="text">Explore</span>
-                                    <span class="bottom-key-1"></span>
-                                    <span class="bottom-key-2"></span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="pages/upload.html" class="fancy" id="nav-upload-btn">
-                                    <span class="top-key"></span>
-                                    <span class="text">Upload</span>
-                                    <span class="bottom-key-1"></span>
-                                    <span class="bottom-key-2"></span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="pages/teams.html" class="fancy" id="nav-teams-btn">
-                                    <span class="top-key"></span>
-                                    <span class="text">Teams</span>
-                                    <span class="bottom-key-1"></span>
-                                    <span class="bottom-key-2"></span>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <!-- GUEST SECTION -->
-                        <div class="auth-controls" id="guestSection">
-                            <button id="loginBtn" class="nav-link-btn">Login</button>
-                            <button id="signupBtn" class="button-primary-sm">Sign Up</button>
-                        </div>
-
-                        <!-- USER SECTION -->
-                        <div class="profile-container" id="userSection" style="display:none;">
-                            <div class="profile-avatar" id="user-profile">
-                                <img id="navAvatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
-                            </div>
-                            <span id="navName" style="display: none;"></span>
-
-                            <!-- Profile Dropdown -->
-                            <div class="profile-dropdown" id="profile-dropdown">
-                                <div class="dropdown-header">
-                                    <p class="user-name" id="dropdown-user-name">Guest User</p>
-                                    <p class="user-email" id="dropdown-user-email">guest@example.com</p>
-                                </div>
-                                <div class="dropdown-divider"></div>
-                                <div class="dropdown-content">
-                                    <a href="pages/dashboard.html" class="dropdown-item">
-                                        <div class="item-left">
-                                            <i data-lucide="layout-dashboard"></i>
-                                            <span>Dashboard</span>
-                                        </div>
-                                    </a>
-                                    <a href="pages/profile.html" class="dropdown-item">
-                                        <div class="item-left">
-                                            <i data-lucide="user"></i>
-                                            <span>Profile</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        <div class="item-left">
-                                            <i data-lucide="settings"></i>
-                                            <span>Settings</span>
-                                        </div>
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
-                    <div class="item-left">
-                      <i data-lucide="log-out"></i>
-                      <span>Logout</span>
-                    </div>
-                  </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mobile Hamburger -->
-                        <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-                    </div>
-
-                </div>
-            </nav>
-
-            <main class="hero">
-                <div class="hero-glow"></div>
-                <div class="hero-content">
-                    <span class="hero-tag">Student Project Platform</span>
-                    <h1 class="hero-title">
-                        <span>Build.</span>
-                        <svg style="display:inline; overflow:visible; width:auto; height:1.15em; vertical-align: -0.18em; margin: 0 -0.05em;" viewBox="0 0 380 130" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <clipPath id="shareClip">
-                  <text x="190" y="108" text-anchor="middle" font-family="inherit" font-size="115" font-weight="800"
-                    letter-spacing="-2">
-                    Share.
-                  </text>
-                </clipPath>
-                <linearGradient id="fluidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#ffb347" />
-                  <stop offset="55%" stop-color="#ff7c00" />
-                  <stop offset="100%" stop-color="#e05500" />
-                </linearGradient>
-                <linearGradient id="shimmer" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#ffe8b0" stop-opacity="0.5" />
-                  <stop offset="100%" stop-color="#ff6a00" stop-opacity="0" />
-                </linearGradient>
-                <path id="wavePath"
-                  d="M0,70 C47.5,55 95,85 142.5,70 C190,55 237.5,85 285,70 C332.5,55 380,85 427.5,70 C475,55 522.5,85 570,70 C617.5,55 665,85 712.5,70 C760,55 807.5,85 855,70 L855,140 L0,140 Z" />
-              </defs>
-
-              <!-- Fluid inside letters with horizontal flow -->
-              <g clip-path="url(#shareClip)">
-                <use href="#wavePath" fill="url(#fluidGrad)">
-                  <animate attributeName="x" from="0" to="-285" dur="3s" repeatCount="indefinite" />
-                </use>
-                <use href="#wavePath" fill="#ffb040" opacity="0.25">
-                  <animate attributeName="x" from="-285" to="0" dur="4.5s" repeatCount="indefinite" />
-                </use>
-                <rect x="0" y="0" width="380" height="140" fill="url(#shimmer)" />
-              </g>
-
-              <!-- White hollow outline — same as your existing Share. style -->
-              <text x="190" y="108" text-anchor="middle" font-family="inherit" font-size="115" font-weight="800"
-                letter-spacing="-2" fill="none" stroke="white" stroke-width="1.2" opacity="0.6">
-                Share.
-              </text>
-            </svg>
-                        <span>Improve.</span>
-                    </h1>
-                    <p>A platform where students showcase projects, get real feedback, and find teammates.</p>
-                </div>
-
-                <div class="card-preview">
-                    <!-- Card 1: Discovery Feed -->
-                    <a href="pages/feed.html" class="clickable-module feature-terminal-card">
-                        <div class="card-terminal-bar">
-                            <div class="window-dots">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                            <div class="system-label">discover_feed.sys</div>
-                            <div class="status-chip recruiting" style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
-                                LIVE</div>
-                        </div>
-                        <div class="card-inner-content">
-                            <div class="card-icon"><i data-lucide="layout-list"></i></div>
-                            <h3 class="card-title">Live Discovery Feed</h3>
-                            <p class="card-desc">Quickly discover trending and recent student projects in a simple, curated live feed.
-                            </p>
-                            <span class="card-action-text">→ OPEN FEED</span>
-                        </div>
-                        <div class="card-glow"></div>
-                    </a>
-
-                    <!-- Card 2: Beginner Zone -->
-                    <a href="pages/beginner.html" class="clickable-module feature-terminal-card">
-                        <div class="card-terminal-bar">
-                            <div class="window-dots">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                            <div class="system-label">beginner_zone.init</div>
-                            <div class="status-chip active" style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
-                                READY</div>
-                        </div>
-                        <div class="card-inner-content">
-                            <div class="card-icon"><i data-lucide="seedling"></i></div>
-                            <h3 class="card-title">Beginner Zone</h3>
-                            <p class="card-desc">New to building? Explore starter ideas, simple project guides, and guided inspiration.
-                            </p>
-                            <span class="card-action-text">→ START EXPLORING</span>
-                        </div>
-                        <div class="card-glow"></div>
-                    </a>
-
-                    <!-- Card 3: Weekly Challenges -->
-                    <a href="pages/challenges.html" class="clickable-module feature-terminal-card">
-                        <div class="card-terminal-bar">
-                            <div class="window-dots">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                            <div class="system-label">weekly_challenges.exe</div>
-                            <div class="status-chip recruiting" style="font-size: 0.5rem; padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;">
-                                ACTIVE</div>
-                        </div>
-                        <div class="card-inner-content">
-                            <div class="card-icon"><i data-lucide="trophy"></i></div>
-                            <h3 class="card-title">Weekly Challenges</h3>
-                            <p class="card-desc">Participate in themed challenges, build projects, and compete with others.</p>
-                            <span class="card-action-text">→ VIEW CHALLENGES</span>
-                        </div>
-                        <div class="card-glow"></div>
-                    </a>
-                </div>
-            </main>
-
-        </div>
-        <!-- End Hero Section -->
-
-        <!-- Awwwards-Inspired Explore Section -->
-        <section class="lower-section">
-            <div class="vertical-waves"></div>
-            <div class="explore-discovery-container">
-                <div class="discovery-header">
-                    <span class="badge-premium">Discovery Engine</span>
-                    <h2 class="discovery-title">Explore Global Projects</h2>
-                    <p class="discovery-subtitle">Curated by the community, built by students.</p>
-                </div>
-
-                <!-- Filter Bar -->
-                <div class="filter-bar">
-                    <div class="filter-dropdown" id="domain-dropdown">
-                        <div class="filter-trigger">All Domains <span class="tilt-line"></span></div>
-                        <div class="filter-menu">
-                            <div class="menu-col">
-                                <p class="menu-title">Primary Domains</p>
-                                <a data-value="all" class="active">All Domains</a>
-                                <a data-value="web">Web Development</a>
-                                <a data-value="app">Mobile Apps</a>
-                                <a data-value="ai">AI / ML</a>
-                                <a data-value="design">UI/UX Design</a>
-                            </div>
-                            <div class="menu-col">
-                                <p class="menu-title">Specialized</p>
-                                <a data-value="blockchain">Blockchain</a>
-                                <a data-value="cyber">Cybersecurity</a>
-                                <a data-value="data">Data Science</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="filter-dropdown" id="tech-dropdown">
-                        <div class="filter-trigger">All Tech <span class="tilt-line"></span></div>
-                        <div class="filter-menu">
-                            <div class="menu-col">
-                                <p class="menu-title">Languages</p>
-                                <a data-value="all" class="active">All Tech</a>
-                                <a data-value="python">Python</a>
-                                <a data-value="javascript">JavaScript</a>
-                                <a data-value="java">Java</a>
-                                <a data-value="cpp">C++</a>
-                            </div>
-                            <div class="menu-col">
-                                <p class="menu-title">Frameworks</p>
-                                <a data-value="react">React</a>
-                                <a data-value="node">Node.js</a>
-                                <a data-value="figma">Figma</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="filter-dropdown" id="difficulty-dropdown">
-                        <div class="filter-trigger">Difficulty <span class="tilt-line"></span></div>
-                        <div class="filter-menu">
-                            <div class="menu-col">
-                                <p class="menu-title">Level</p>
-                                <a data-value="all" class="active">All Levels</a>
-                                <a data-value="beginner">Beginner</a>
-                                <a data-value="intermediate">Intermediate</a>
-                                <a data-value="advanced">Advanced</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="filter-dropdown" id="sort-dropdown">
-                        <div class="filter-trigger">Newest First <span class="tilt-line"></span></div>
-                        <div class="filter-menu">
-                            <div class="menu-col">
-                                <p class="menu-title">Sort By</p>
-                                <a data-value="newest" class="active">Newest First</a>
-                                <a data-value="likes">Most Liked</a>
-                                <a data-value="views">Most Viewed</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Discovery Layout: Grid + Sidebar -->
-                <div class="discovery-layout">
-                    <!-- Project Grid -->
-                    <div id="explore-grid" class="discovery-grid">
-                        <!-- Cards injected by Firestore -->
-                        <div class="skeleton-card"></div>
-                        <div class="skeleton-card"></div>
-                        <div class="skeleton-card"></div>
-                    </div>
-
-                    <!-- Activity Sidebar -->
-                    <aside class="activity-pulse-sidebar">
-                        <div class="sidebar-header">
-                            <i data-lucide="zap" class="pulse-icon"></i>
-                            <h3>Activity Pulse</h3>
-                        </div>
-                        <div id="activity-list" class="activity-list">
-                            <!-- Activity items injected by JS -->
-                            <p class="loading-text">Monitoring community...</p>
-                        </div>
-                    </aside>
-                </div>
-
-                <!-- Feed Footer -->
-                <div class="feed-footer">
-                    <div class="feed-footer-line"></div>
-                    <span class="feed-footer-label">More projects loading&hellip;</span>
-                    <div class="feed-footer-line"></div>
-                </div>
-
+    <!-- NAV -->
+    <nav id="main-navbar">
+        <!-- Left: Animated Weight Bloom Logo -->
+        <a href="#" class="logo-bloom-wrapper" id="devstage-logo">
+            <div class="logo-chars">
+                <span class="char" style="--i:0">D</span>
+                <span class="char" style="--i:1">e</span>
+                <span class="char" style="--i:2">v</span>
+                <div class="logo-separator"></div>
+                <span class="char outline" style="--i:3">S</span>
+                <span class="char outline" style="--i:4">t</span>
+                <span class="char outline" style="--i:5">a</span>
+                <span class="char outline" style="--i:6">g</span>
+                <span class="char outline" style="--i:7">e</span>
+                <div class="logo-dot"></div>
             </div>
-        </section>
-    </div>
-    <!-- End Main Wrapper -->
+            <div class="logo-underline"></div>
+        </a>
 
-    <!-- Custom Scrollbar -->
+        <!-- Center: Platform Links -->
+        <ul class="nav-links" id="nav-links">
+            <li><a href="pages/explore.html">Explore</a></li>
+            <li><a href="pages/upload.html" id="nav-upload-btn">Upload</a></li>
+            <li><a href="pages/teams.html" id="nav-teams-btn">Teams</a></li>
+        </ul>
+
+        <!-- Right Actions: Auth, Profiles, and Mobile Menu Toggle -->
+        <div class="nav-right-actions">
+            <!-- GUEST SECTION -->
+            <div class="auth-controls" id="guestSection">
+                <button id="loginBtn">Login</button>
+                <button id="signupBtn">Sign Up</button>
+            </div>
+
+            <!-- USER SECTION -->
+            <div class="profile-container" id="userSection" style="display:none;">
+                <div class="profile-avatar" id="user-profile">
+                    <img id="navAvatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
+                </div>
+                <span id="navName" style="display: none;"></span>
+
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <div class="dropdown-header">
+                        <p class="user-name" id="dropdown-user-name">Guest User</p>
+                        <p class="user-email" id="dropdown-user-email">guest@example.com</p>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-content">
+                        <a href="pages/dashboard.html" class="dropdown-item">
+                            <div class="item-left">
+                                <i data-lucide="layout-dashboard"></i>
+                                <span>Dashboard</span>
+                            </div>
+                        </a>
+                        <a href="pages/profile.html" class="dropdown-item">
+                            <div class="item-left">
+                                <i data-lucide="user"></i>
+                                <span>Profile</span>
+                            </div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <div class="item-left">
+                                <i data-lucide="settings"></i>
+                                <span>Settings</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
+                        <div class="item-left">
+                            <i data-lucide="log-out"></i>
+                            <span>Logout</span>
+                        </div>
+                    </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Hamburger Toggle Menu -->
+            <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="hero-left">
+                <div class="hero-tag">
+                    <span class="hero-tag-dot"></span> DevStage · Student Platform
+                </div>
+
+                <div class="hero-eyebrow fade-up">
+                    <div class="eyebrow-dot"></div>
+                    <span class="eyebrow-text">Elevate your development stage</span>
+                </div>
+
+                <!-- Beautiful original animated title containing the waving Share. SVG -->
+                <h1 class="fade-up hero-title">
+                    <span>Build.</span>
+                    <svg style="display:inline; overflow:visible; width:auto; height:1.15em; vertical-align: -0.18em; margin: 0 -0.05em;" viewBox="0 0 380 130" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                      <clipPath id="shareClip">
+                          <text x="190" y="108" text-anchor="middle" font-family="inherit" font-size="115"
+                              font-weight="800" letter-spacing="-2">
+                              Share.
+                          </text>
+                      </clipPath>
+                      <linearGradient id="fluidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stop-color="#ffb347" />
+                          <stop offset="55%" stop-color="#ff7c00" />
+                          <stop offset="100%" stop-color="#e05500" />
+                      </linearGradient>
+                      <linearGradient id="shimmer" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stop-color="#ffe8b0" stop-opacity="0.5" />
+                          <stop offset="100%" stop-color="#ff6a00" stop-opacity="0" />
+                      </linearGradient>
+                      <path id="wavePath"
+                          d="M0,70 C47.5,55 95,85 142.5,70 C190,55 237.5,85 285,70 C332.5,55 380,85 427.5,70 C475,55 522.5,85 570,70 C617.5,55 665,85 712.5,70 C760,55 807.5,85 855,70 L855,140 L0,140 Z" />
+                  </defs>
+
+                  <!-- Fluid inside letters with horizontal flow -->
+                  <g clip-path="url(#shareClip)">
+                      <use href="#wavePath" fill="url(#fluidGrad)">
+                          <animate attributeName="x" from="0" to="-285" dur="3s" repeatCount="indefinite" />
+                      </use>
+                      <use href="#wavePath" fill="#ffb040" opacity="0.25">
+                          <animate attributeName="x" from="-285" to="0" dur="4.5s" repeatCount="indefinite" />
+                      </use>
+                      <rect x="0" y="0" width="380" height="140" fill="url(#shimmer)" />
+                  </g>
+
+                  <!-- White hollow outline -->
+                  <text x="190" y="108" text-anchor="middle" font-family="inherit" font-size="115"
+                      font-weight="800" letter-spacing="-2" fill="none" stroke="white" stroke-width="1.2"
+                      opacity="0.6">
+                      Share.
+                  </text>
+              </svg>
+                    <span>Improve.</span>
+                </h1>
+
+                <div class="hero-bottom fade-up">
+                    <p class="hero-desc">
+                        A premium showcase for student-built projects. Find teammates, share your work, level up your engineering skills, and get inspired.
+                    </p>
+                    <div class="hero-scroll">
+                        <div class="scroll-line"></div>
+                        Scroll
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <canvas id="c" aria-hidden="true"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+        <div class="marquee-track">
+            <span class="marquee-item"><span class="marquee-dot"></span> Fullstack Engineering</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Artificial Intelligence</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Systems Architecture</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> UI/UX Design</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Team Matchmaking</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Open Source</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Structural Hacking</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Peer Feedback Loops</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Fullstack Engineering</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Artificial Intelligence</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Systems Architecture</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> UI/UX Design</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Team Matchmaking</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Open Source</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Structural Hacking</span>
+            <span class="marquee-item"><span class="marquee-dot"></span> Peer Feedback Loops</span>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section class="about">
+        <div class="about-left fade-up">
+            <div class="section-label">About DevStage</div>
+            <h2>
+                A stage built for<br> the next <em>generation.</em>
+            </h2>
+        </div>
+        <div class="about-right fade-up">
+            <p>
+                DevStage was founded on a simple belief: students learn best by building real-world projects and collaborating with like-minded creators. We provide the visual canvas and collaborative machinery to turn your raw ideas into deployed engineering marvels.
+            </p>
+            <a href="pages/explore.html" class="about-link">Explore projects <span>→</span></a>
+        </div>
+    </section>
+
+    <!-- SERVICES / FEATURES -->
+    <section class="services">
+        <div class="services-header fade-up">
+            <div>
+                <div class="section-label">Platform Core</div>
+                <h2>Designed to help you<br><em>build and scale.</em></h2>
+            </div>
+        </div>
+        <div class="services-list">
+            <div class="service-item fade-up">
+                <div class="service-num">01</div>
+                <div class="service-title">Showcase</div>
+                <div class="service-desc">Dynamic visual portfolios, documentation repositories, and demo hosting to share your engineering creations.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-item fade-up">
+                <div class="service-num">02</div>
+                <div class="service-title">Team Match</div>
+                <div class="service-desc">AI-powered skill matchmaking algorithms that pair developers, designers, and researchers to construct epic products.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-item fade-up">
+                <div class="service-num">03</div>
+                <div class="service-title">Challenges</div>
+                <div class="service-desc">Participate in themed high-intensity hackathons and weekly structural design prompts verified by industry judges.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-item fade-up">
+                <div class="service-num">04</div>
+                <div class="service-title">Feedback</div>
+                <div class="service-desc">Structured code review loops, interactive peer feedback forms, and dedicated mentorship channels to level up.</div>
+                <div class="service-arrow">→</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS / FEATURED WORK -->
+    <section class="projects">
+        <div class="projects-header fade-up">
+            <div class="section-label">Featured Projects</div>
+            <h2>Engineered by students.<br><em>Curated by the community.</em></h2>
+            <p>Dive into outstanding, production-ready systems constructed by peers globally.</p>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card fade-up">
+                <div class="project-tags">
+                    <span class="project-tag">AI / ML</span>
+                    <span class="project-tag">Python</span>
+                    <span class="project-tag">Research</span>
+                </div>
+                <div>
+                    <div class="project-name">NeuroScan</div>
+                    <div class="project-desc">Deep learning medical imaging pipeline that detects early-stage neuropathology with 98.4% diagnostic accuracy.</div>
+                </div>
+            </div>
+            <div class="project-card fade-up">
+                <div class="project-tags">
+                    <span class="project-tag">UX / UI</span>
+                    <span class="project-tag">React</span>
+                    <span class="project-tag">Design</span>
+                </div>
+                <div>
+                    <div class="project-name">AuraOS</div>
+                    <div class="project-desc">A premium modular workspace layout designed to minimize administrative friction for neurodivergent builders.</div>
+                </div>
+            </div>
+            <div class="project-card fade-up">
+                <div class="project-tags">
+                    <span class="project-tag">Web3</span>
+                    <span class="project-tag">Rust</span>
+                    <span class="project-tag">Cryptology</span>
+                </div>
+                <div>
+                    <div class="project-name">SolVault</div>
+                    <div class="project-desc">Decentralized institutional escrow platform employing Zero-Knowledge proofs for multi-party secure smart contracts.</div>
+                </div>
+            </div>
+            <div class="project-card fade-up">
+                <div class="project-tags">
+                    <span class="project-tag">Fullstack</span>
+                    <span class="project-tag">Next.js</span>
+                    <span class="project-tag">SQL</span>
+                </div>
+                <div>
+                    <div class="project-name">HoloDesk</div>
+                    <div class="project-desc">Interactive 3D real-time whiteboard environment using WebSockets to host low-latency collaborative mapping sessions.</div>
+                </div>
+            </div>
+            <div class="project-card fade-up">
+                <div class="project-tags">
+                    <span class="project-tag">DevOps</span>
+                    <span class="project-tag">Go</span>
+                    <span class="project-tag">Infrastructure</span>
+                </div>
+                <div>
+                    <div class="project-name">KubeFlow</div>
+                    <div class="project-desc">Autonomous orchestration daemon that dynamic-scales multi-cloud Kubernetes clusters based on telemetry projections.</div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-cta">
+                    <h3>Got a project in mind?</h3>
+                    <a href="#" class="btn-outline" onclick="window.openLoginModal('signup'); return false;">Start building →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2 class="fade-up">
+            Ready to elevate your project<br>to the next <em>stage?</em>
+        </h2>
+        <a href="#" class="cta-link fade-up" onclick="window.openLoginModal('signup'); return false;">Join the community →</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">DEVSTAGE © 2026</div>
+        <ul class="footer-links">
+            <li><a href="pages/explore.html">Explore</a></li>
+            <li><a href="pages/upload.html">Upload</a></li>
+            <li><a href="pages/teams.html">Teams</a></li>
+            <li><a href="#" onclick="window.openLoginModal('login'); return false;">Account</a></li>
+        </ul>
+        <div class="footer-copy">Built for student engineers worldwide</div>
+    </footer>
+
+    <!-- Premium Cinematic Scrollbar -->
     <div id="custom-scrollbar" class="scrollbar-container">
         <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
     </div>
-
-
 
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-card" id="auth-card">
             <div class="card-glow"></div>
             <button id="close-auth-modal" class="modal-close" aria-label="Close">
-        <i data-lucide="x"></i>
-      </button>
+              <i data-lucide="x"></i>
+          </button>
 
             <div class="auth-header">
                 <h2 id="auth-title">Welcome Back</h2>
@@ -425,9 +1353,9 @@
                 </div>
 
                 <button type="submit" id="auth-submit-btn" class="premium-btn">
-          <span>Sign In</span>
-          <div class="btn-shine"></div>
-        </button>
+                  <span>Sign In</span>
+                  <div class="btn-shine"></div>
+              </button>
             </form>
 
             <div class="auth-divider">
@@ -436,16 +1364,15 @@
 
             <div class="social-auth-group">
                 <button id="google-login-btn" class="social-btn google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-          <span>Google</span>
-        </button>
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                  <span>Google</span>
+              </button>
                 <button id="github-login-btn" class="social-btn github-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-          </svg>
-          <span>GitHub</span>
-        </button>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                  <span>GitHub</span>
+              </button>
             </div>
 
             <div class="auth-footer">
@@ -456,20 +1383,42 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs (Modular & Compat for gradual migration) -->
+    <!-- Firebase SDKs (Modular & Compat Layer) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
+    <script src="scripts/firebase-config.js" defer></script>
 
     <!-- App Logic -->
     <script src="scripts/auth.js" type="module" defer></script>
     <script src="scripts/script.js" defer></script>
 
-
     <script>
+        // Fade-in Intersection Observer
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => entry.target.classList.add('visible'), delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15
+        });
+
+        document.querySelectorAll('.fade-up').forEach((el, i) => {
+            el.dataset.delay = (i % 4) * 90;
+            observer.observe(el);
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
+            if (window.lucide) {
+                lucide.createIcons();
+            }
         });
     </script>
 </body>
+
+</html>

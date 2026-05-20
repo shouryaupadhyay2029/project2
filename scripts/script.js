@@ -1,4 +1,3 @@
-window.__DEVSTAGE_CUSTOM_CURSOR_CONTROLLER = true;
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Lucide Icons immediately
     if (window.lucide) {
@@ -58,131 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ─── 3D Hollow Cursor Engine ───
-    const cursor = document.getElementById('hollow-3d-cursor');
-    const borderRing = cursor.querySelector('.border-ring');
-    const haloGlow = cursor.querySelector('.halo-glow');
-
-    // State & Physics
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let currentX = mouseX,
-        currentY = mouseY;
-    let currentW = 16,
-        currentH = 16;
-    let currentR = 50;
-    let currentScale = 1;
-
-    let targetX = mouseX,
-        targetY = mouseY;
-    let targetW = 16,
-        targetH = 16;
-    let targetR = 50;
-    let targetScale = 1;
-
-    let isHovering = false;
-    let isClicking = false;
-    let hoverTarget = null;
-    const LERP = 0.12; // Weighted feel
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-
-        // Pulse effect during motion
-        targetScale = 1.1;
-        clearTimeout(window.cursorPulseTimeout);
-        window.cursorPulseTimeout = setTimeout(() => targetScale = 1.0, 50);
-
-        // Magnetic Attraction / Micro-parallax
-        if (isHovering && hoverTarget) {
-            const rect = hoverTarget.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            // Element pulls toward mouse (Magnetic effect)
-            const pullX = (e.clientX - centerX) * 0.2; // 20% attraction
-            const pullY = (e.clientY - centerY) * 0.2;
-            hoverTarget.style.transform = `translate3d(${pullX}px, ${pullY - 2}px, 0) scale(1.02)`;
-
-            // Cursor target position also pulls slightly toward mouse center for "sticky" feel
-            const padding = 8;
-            targetX = rect.left - padding + (pullX * 0.5);
-            targetY = rect.top - padding + (pullY * 0.5);
-        }
-    });
-
-    document.addEventListener('mousedown', () => {
-        isClicking = true;
-        cursor.classList.add('is-clicking');
-        setTimeout(() => {
-            isClicking = false;
-            cursor.classList.remove('is-clicking');
-        }, 120);
-    });
-
-    // Target Detection
-    document.addEventListener('mouseover', (e) => {
-        const target = e.target.closest('.hero-title span, a, button, .card, .discovery-card, .hero-tag, .logo-bloom-wrapper, input, select, label, .modal-close');
-
-        if (target) {
-            isHovering = true;
-            hoverTarget = target;
-            cursor.classList.add('is-hovering');
-            target.classList.add('energy-field-active');
-
-            const rect = target.getBoundingClientRect();
-            const style = window.getComputedStyle(target);
-            const borderRadius = style.borderRadius;
-
-            const padding = 8;
-            targetW = rect.width + padding * 2;
-            targetH = rect.height + padding * 2;
-            targetX = rect.left - padding;
-            targetY = rect.top - padding;
-            targetR = borderRadius.includes('%') ? 50 : parseInt(borderRadius) || 8;
-        } else {
-            isHovering = false;
-            if (hoverTarget) {
-                hoverTarget.style.transform = 'translate3d(0, 0, 0) scale(1)';
-                hoverTarget.classList.remove('energy-field-active');
-                hoverTarget = null;
-            }
-            cursor.classList.remove('is-hovering');
-            targetW = 16;
-            targetH = 16;
-            targetR = 50;
-        }
-    });
-
-    function animateCursor() {
-        // Positioning (Idle: center mouse. Hover: dynamic magnetic target)
-        const destX = isHovering ? targetX : mouseX - targetW / 2;
-        const destY = isHovering ? targetY : mouseY - targetH / 2;
-
-        currentX += (destX - currentX) * LERP;
-        currentY += (destY - currentY) * LERP;
-        currentW += (targetW - currentW) * LERP;
-        currentH += (targetH - currentH) * LERP;
-        currentR += (targetR - currentR) * LERP;
-        currentScale += (targetScale - currentScale) * 0.1;
-
-        // Apply transformations
-        cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-        borderRing.style.width = `${currentW}px`;
-        borderRing.style.height = `${currentH}px`;
-        borderRing.style.borderRadius = isHovering ? `${currentR}px` : `${currentR}%`;
-        borderRing.style.transform = `scale(${currentScale})`;
-
-        // Edge Lighting - Gradient shift based on movement
-        const gradX = (currentX / window.innerWidth) * 100;
-        const gradY = (currentY / window.innerHeight) * 100;
-        borderRing.style.background = `linear-gradient(${gradX + gradY}deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%)`;
-
-        requestAnimationFrame(animateCursor);
-    }
-
-    animateCursor();
+    // Custom cursor support removed — native system cursor restored.
 
     // ─── Premium Localized Card Interaction Engine ───
     const featureCards = document.querySelectorAll('.feature-terminal-card');
@@ -565,7 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Like
                 await likeRef.set({ userId, projectId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                 const pDoc = await projectRef.get();
-                const pTitle = pDoc.data() ? .title || "a project";
+                const pData = (pDoc && typeof pDoc.data === 'function') ? pDoc.data() : null;
+                const pTitle = (pData && pData.title) ? pData.title : "a project";
 
                 await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(1) });
 

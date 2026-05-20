@@ -17,166 +17,7 @@
     /* Borders */
     --border-soft: rgba(255, 255, 255, 0.06);
     --border-default: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.12);
-    /* Brand */
-    --brand-orange: #d78a2f;
-    --brand-orange-dark: #b87326;
-    --brand-orange-shadow: rgba(215, 138, 47, 0.2);
-    /* Shadows — Tight & Controlled (Apple / Linear) */
-    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-card-hover: 0 8px 18px rgba(0, 0, 0, 0.28), 0 2px 4px rgba(0, 0, 0, 0.2);
-    --shadow-btn: 0 0 8px rgba(255, 140, 0, 0.2);
-    --shadow-btn-hover: 0 0 12px rgba(255, 140, 0, 0.25);
-    /* Typography */
-    --font-heading: 'Clash Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    /* Layout */
-    --navbar-height: 68px;
-    --max-width: 1200px;
-    /* Motion */
-    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    --duration: 0.3s;
-}
-
-
-/* ── Reset ─────────────────────────────────── */
-
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-/* ── Base ─────────────────────────────────── */
-
-html {
-    scroll-behavior: smooth;
-}
-
-
-/* =========================
-DARK MATTE GREY SYSTEM
-========================= */
-
-body {
-    margin: 0;
-    font-family: var(--font-body);
-    background: #232326;
-    color: #e6e6e8;
-    position: relative;
-    overflow-x: hidden;
-    font-size: 15px;
-    /* 14-16px, medium weight feel */
-    font-weight: 500;
-    line-height: 1.5;
-    letter-spacing: 0.01em;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-    cursor: none !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    scrollbar-gutter: stable;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: var(--font-heading);
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-    font-weight: 500;
-    /* normal/medium */
-    margin-bottom: 0.5em;
-    color: var(--text-primary);
-    transition: opacity 0.3s ease;
-}
-
-h1:hover,
-h2:hover,
-h3:hover,
-h4:hover,
-h5:hover,
-h6:hover {
-    /* filter:brightness and font-weight removed — both trigger full repaint/layout
-     opacity is GPU-composited and does not cause layout recalculation */
-    opacity: 0.92;
-}
-
-h1 {
-    font-size: clamp(56px, 6vw, 64px);
-    font-weight: 700;
-    line-height: 1.1;
-}
-
-h2 {
-    font-size: clamp(36px, 4vw, 44px);
-}
-
-h3 {
-    font-size: clamp(24px, 2.5vw, 28px);
-}
-
-body::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari, Edge */
-}
-
-
-/* ─── Custom Minimal Scrollbar ─── */
-
-.scrollbar-container {
-    position: fixed;
-    right: 4px;
-    top: 10%;
-    height: 80%;
-    width: 24px;
-    z-index: 99998;
-    pointer-events: auto;
-    display: flex;
-    justify-content: center;
-    opacity: 0;
-    /* Default hidden, managed by JS on scroll */
-    transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-
-/* The barely visible track */
-
-.scrollbar-container::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1.5px;
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateX(-50%);
-    border-radius: 10px;
-    transition: background 0.3s ease;
-}
-
-.scrollbar-container:hover::before {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.scrollbar-thumb {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 7px;
-    height: 7px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    transform: translate3d(-50%, 0, 0);
-    transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, opacity 0.3s ease;
-    will-change: transform;
+    /* Previously-merged custom cursor CSS removed. Native cursors are used. */
 }
 
 .scrollbar-container:hover .scrollbar-thumb {
@@ -205,21 +46,10 @@ body.modal-open .scrollbar-container {
 }
 
 
-/* Ensure cursor stays hidden on interactive elements */
+/* Interactive elements use default cursors for accessibility */
 
-a,
-button,
-input,
-select,
-textarea,
-label,
-.modal-card,
-.modal-overlay,
-.discovery-card,
-.lower-section,
-.filter-select {
-    cursor: none !important;
-}
+
+/* No global cursor hiding applied. */
 
 
 /* ─── Premium Topographic Background Styles ─── */
@@ -251,140 +81,7 @@ label,
 }
 
 
-/* ─── 3D Hollow Cursor System ─── */
-
-#hollow-3d-cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 99999;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-/* Outer Halo Glow */
-
-.halo-glow {
-    position: absolute;
-    inset: -15px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 122, 24, 0.15) 0%, transparent 70%);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    will-change: transform;
-}
-
-
-/* Border Ring (The physical object) */
-
-.border-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid #ff7a18;
-    box-shadow: 0 0 10px rgba(255, 122, 24, 0.4), 0 0 5px rgba(255, 122, 24, 0.2) inset;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-    /* width/height/border-radius driven by JS LERP — remove competing CSS transitions */
-    transition: border-color 0.3s ease;
-    will-change: transform, width, height;
-}
-
-
-/* Inner Depth Highlight */
-
-.highlight-layer {
-    position: absolute;
-    inset: 4px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
-    opacity: 0.5;
-    transition: opacity 0.3s ease;
-}
-
-
-/* Click Cross */
-
-.click-cross {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.1s ease;
-}
-
-.cross-h,
-.cross-v {
-    position: absolute;
-    background: #ff7a18;
-    border-radius: 1px;
-}
-
-.cross-h {
-    width: 60%;
-    height: 2px;
-}
-
-.cross-v {
-    width: 2px;
-    height: 60%;
-}
-
-
-/* ─── Interaction States ─── */
-
-
-/* Energy Field Active - Applied to elements */
-
-.energy-field-active {
-    transform: translateY(-2px) scale(1.02) !important;
-    box-shadow: 0 5px 15px rgba(255, 122, 24, 0.15) !important;
-    /* filter:brightness removed — causes compositing layer promotion on every hover element
-     which spikes GPU. Box-shadow already provides visual highlight. */
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
-}
-
-
-/* Cursor Reaction when hovering */
-
-#hollow-3d-cursor.is-hovering .border-ring {
-    border-color: #ff9d52;
-    box-shadow: 0 0 20px rgba(255, 122, 24, 0.6), 0 0 10px rgba(255, 122, 24, 0.3) inset;
-}
-
-#hollow-3d-cursor.is-hovering .halo-glow {
-    opacity: 1;
-    transform: scale(1.2);
-}
-
-
-/* Click Animation */
-
-#hollow-3d-cursor.is-clicking .border-ring {
-    transform: scale(0.85);
-    opacity: 0;
-}
-
-#hollow-3d-cursor.is-clicking .click-cross {
-    opacity: 1;
-}
-
-
-/* Handle mobile */
-
-@media (max-width: 768px) {
-    #hollow-3d-cursor {
-        display: none !important;
-    }
-    body {
-        cursor: auto !important;
-    }
-}
+/* Custom cursor styles removed to restore native cursors and reduce rendering work. */
 
 
 /* ─── Word-Level Hero Targeting ─── */
@@ -6567,157 +6264,7 @@ body::before {
 }
 
 
-/* === MERGED FROM: cursor.css === */
-
-
-/* ─── Premium 3D Hollow Cursor Design ─── */
-
-html,
-body,
-a,
-button,
-input,
-textarea,
-label,
-[role="button"] {
-    cursor: none !important;
-    /* Hide default cursor globally */
-}
-
-body {
-    cursor: none !important;
-}
-
-#hollow-3d-cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 24px;
-    height: 24px;
-    pointer-events: none;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.3s ease;
-}
-
-
-/* Outer Halo Glow */
-
-.halo-glow {
-    position: absolute;
-    inset: -15px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 122, 24, 0.15) 0%, transparent 70%);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    will-change: transform;
-    opacity: 0;
-}
-
-
-/* Border Ring (The physical object) */
-
-.border-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid #ff7a18;
-    box-shadow: 0 0 10px rgba(255, 122, 24, 0.4), 0 0 5px rgba(255, 122, 24, 0.2) inset;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1), height 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-radius 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
-    will-change: transform;
-}
-
-
-/* Inner Depth Highlight */
-
-.highlight-layer {
-    position: absolute;
-    inset: 4px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
-    opacity: 0.5;
-    transition: opacity 0.3s ease;
-}
-
-
-/* Click Cross */
-
-.click-cross {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.1s ease;
-}
-
-.cross-h,
-.cross-v {
-    position: absolute;
-    background: #ff7a18;
-    border-radius: 1px;
-}
-
-.cross-h {
-    width: 60%;
-    height: 2px;
-}
-
-.cross-v {
-    width: 2px;
-    height: 60%;
-}
-
-
-/* Interaction States */
-
-#hollow-3d-cursor.is-hovering .border-ring {
-    border-color: #ff9d52;
-    box-shadow: 0 0 20px rgba(255, 122, 24, 0.6), 0 0 10px rgba(255, 122, 24, 0.3) inset;
-}
-
-#hollow-3d-cursor.is-hovering .halo-glow {
-    opacity: 1;
-    transform: scale(1.2);
-}
-
-#hollow-3d-cursor.is-clicking .border-ring {
-    transform: scale(0.85);
-    opacity: 0;
-}
-
-#hollow-3d-cursor.is-clicking .click-cross {
-    opacity: 1;
-}
-
-.energy-field-active {
-    transform: translateY(-2px) scale(1.02) !important;
-    box-shadow: 0 5px 15px rgba(255, 122, 24, 0.15) !important;
-    filter: brightness(1.1);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease !important;
-}
-
-
-/* Hide on Mobile */
-
-@media (max-width: 768px) {
-    #hollow-3d-cursor {
-        display: none !important;
-    }
-    html,
-    body,
-    a,
-    button,
-    input {
-        cursor: auto !important;
-    }
-}
-
-
-/* === MERGED FROM: motion.css === */
+/* Previously-merged cursor styles removed. Native cursors are used site-wide. */
 
 
 /* =============================================
@@ -7276,4 +6823,38 @@ button:active,
     .wave-container {
         height: 60px !important;
     }
+}
+
+
+/* Global custom cursor */
+
+html,
+body {
+    cursor: none !important;
+}
+
+body *:not(.custom-cursor) {
+    cursor: none !important;
+}
+
+.custom-cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--paper);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+    mix-blend-mode: difference;
+    opacity: 1;
+}
+
+.custom-cursor.hover {
+    width: 40px;
+    height: 40px;
+    opacity: 0.6;
 }
