@@ -22,6 +22,8 @@
         '.nav-link',
         '.nav-links a',
         '.dropdown-item',
+        '.profile-dropdown',
+        '.pro-badge',
         '.stat-btn',
         '.cta-link',
         '.btn-outline',

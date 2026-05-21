@@ -1041,107 +1041,61 @@
                 </div>
                 <span id="navName" style="display: none;"></span>
 
-                <!-- Profile Dropdown -->
-                <div class="profile-dropdown" id="profile-dropdown">
-                    <!-- ═════════════════════════════════════════ -->
-                    <!-- TOP USER SECTION -->
-                    <!-- ═════════════════════════════════════════ -->
-                    <div class="dropdown-user-section">
-                        <div class="user-card">
-                            <div class="user-avatar-wrapper">
-                                <img id="dropdown-avatar" class="user-avatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
-                                <div class="online-indicator"></div>
+                <!-- Profile Dropdown — premium account menu -->
+                <div class="profile-dropdown" id="profile-dropdown" role="menu" aria-label="Account menu">
+                    <header class="profile-dropdown__user">
+                        <a href="pages/profile.html" class="profile-dropdown__user-link">
+                            <img id="dropdown-avatar" class="profile-dropdown__avatar" src="https://ui-avatars.com/api/?name=Guest&background=c8b89a&color=0b0b0b" alt="">
+                            <div class="profile-dropdown__identity">
+                                <p class="profile-dropdown__name" id="dropdown-user-name">Guest User</p>
+                                <p class="profile-dropdown__email" id="dropdown-user-email">guest@example.com</p>
                             </div>
-                            <div class="user-info">
-                                <p class="user-name" id="dropdown-user-name">Guest User</p>
-                                <p class="user-role">DevStage Member</p>
-                                <p class="user-email" id="dropdown-user-email">guest@example.com</p>
-                            </div>
-                        </div>
-                    </div>
+                        </a>
+                    </header>
 
-                    <div class="dropdown-divider"></div>
+                    <div class="profile-dropdown__rule" role="separator"></div>
 
-                    <!-- ═════════════════════════════════════════ -->
-                    <!-- MAIN MENU SECTION -->
-                    <!-- ═════════════════════════════════════════ -->
-                    <div class="dropdown-section">
-                        <div class="section-label">Main</div>
-                        <nav class="dropdown-menu">
-                            <a href="pages/profile.html" class="dropdown-item">
-                                <i data-lucide="user" class="menu-icon"></i>
-                                <span>My Profile</span>
-                            </a>
-                            <a href="pages/dashboard.html" class="dropdown-item">
-                                <i data-lucide="layout-dashboard" class="menu-icon"></i>
-                                <span>Dashboard</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i data-lucide="folder-open" class="menu-icon"></i>
-                                <span>My Projects</span>
-                            </a>
-                            <a href="pages/upload.html" class="dropdown-item">
-                                <i data-lucide="upload-cloud" class="menu-icon"></i>
-                                <span>Upload Project</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i data-lucide="bookmark" class="menu-icon"></i>
-                                <span>Saved Projects</span>
-                            </a>
-                            <a href="pages/teams.html" class="dropdown-item">
-                                <i data-lucide="users" class="menu-icon"></i>
-                                <span>Teams & Collaborations</span>
-                            </a>
-                            <a href="pages/challenges.html" class="dropdown-item">
-                                <i data-lucide="trophy" class="menu-icon"></i>
-                                <span>Challenges</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i data-lucide="bell" class="menu-icon"></i>
-                                <span>Notifications</span>
-                                <span class="notification-badge">3</span>
-                            </a>
-                        </nav>
-                    </div>
+                    <section class="profile-dropdown__section" aria-label="Main">
+                        <a href="pages/dashboard.html" class="dropdown-item" role="menuitem">
+                            <i data-lucide="layout-dashboard" class="menu-icon" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="pages/teams.html" class="dropdown-item" role="menuitem">
+                            <i data-lucide="users" class="menu-icon" aria-hidden="true"></i>
+                            <span>Community</span>
+                        </a>
+                        <a href="pages/profile.html" class="dropdown-item dropdown-item--pro" role="menuitem">
+                            <i data-lucide="sparkles" class="menu-icon" aria-hidden="true"></i>
+                            <span>Subscription</span>
+                            <span class="pro-badge" aria-label="Pro plan"><span>Pro</span></span>
+                        </a>
+                    </section>
 
-                    <div class="dropdown-divider"></div>
+                    <div class="profile-dropdown__rule" role="separator"></div>
 
-                    <!-- ═════════════════════════════════════════ -->
-                    <!-- ACCOUNT SECTION -->
-                    <!-- ═════════════════════════════════════════ -->
-                    <div class="dropdown-section">
-                        <div class="section-label">Account</div>
-                        <nav class="dropdown-menu">
-                            <a href="#" class="dropdown-item">
-                                <i data-lucide="settings" class="menu-icon"></i>
-                                <span>Settings</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i data-lucide="moon" class="menu-icon"></i>
-                                <span>Appearance</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i data-lucide="help-circle" class="menu-icon"></i>
-                                <span>Help & Support</span>
-                            </a>
-                        </nav>
-                    </div>
+                    <section class="profile-dropdown__section" aria-label="Account">
+                        <a href="pages/profile.html" class="dropdown-item" role="menuitem">
+                            <i data-lucide="user" class="menu-icon" aria-hidden="true"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item" role="menuitem">
+                            <i data-lucide="settings" class="menu-icon" aria-hidden="true"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="dropdown-item" role="menuitem">
+                            <i data-lucide="circle-help" class="menu-icon" aria-hidden="true"></i>
+                            <span>Help center</span>
+                        </a>
+                    </section>
 
-                    <div class="dropdown-divider"></div>
+                    <div class="profile-dropdown__rule" role="separator"></div>
 
-                    <!-- ═════════════════════════════════════════ -->
-                    <!-- BOTTOM SECTION -->
-                    <!-- ═════════════════════════════════════════ -->
-                    <div class="dropdown-footer">
-                        <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
-                            <i data-lucide="log-out" class="menu-icon"></i>
-                            <span>Sign Out</span>
+                    <section class="profile-dropdown__section profile-dropdown__section--logout">
+                        <button type="button" class="dropdown-item logout-btn" id="dropdown-logout-btn" role="menuitem">
+                            <i data-lucide="log-out" class="menu-icon" aria-hidden="true"></i>
+                            <span>Sign out</span>
                         </button>
-                        <div class="footer-branding">
-                            <p class="devstage-label">DevStage</p>
-                            <p class="version-text">v1.0</p>
-                        </div>
-                    </div>
+                    </section>
                 </div>
             </div>
 
@@ -1400,7 +1354,7 @@
         <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
     </div>
 
-    <!-- Auth Modal (Uiverse-style animated labels — JkHuger) -->
+    <!-- Auth Modal — premium dark glass -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-card auth-card-uiverse auth-mode-login" id="auth-card">
             <button id="close-auth-modal" class="modal-close auth-ui-close" aria-label="Close">

@@ -31,7 +31,6 @@ window.loadUserUI = function() {
     const dropdownName = document.getElementById("dropdown-user-name");
     const dropdownEmail = document.getElementById("dropdown-user-email");
     const dropdownAvatar = document.getElementById("dropdown-avatar");
-
     if (!cachedUser) {
         if (guestSection) guestSection.style.display = "flex";
         if (userSection) userSection.style.display = "none";
@@ -42,13 +41,14 @@ window.loadUserUI = function() {
     if (guestSection) guestSection.style.display = "none";
     if (userSection) userSection.style.display = "flex";
 
-    if (navAvatar) navAvatar.src = cachedUser.photoURL || `https://ui-avatars.com/api/?name=${cachedUser.displayName}`;
-    if (navName) navName.textContent = cachedUser.displayName || 'User';
+    const avatarUrl = cachedUser.photoURL ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(cachedUser.displayName || 'User')}&background=c8b89a&color=0b0b0b`;
 
-    // Also update dropdown if present
+    if (navAvatar) navAvatar.src = avatarUrl;
+    if (navName) navName.textContent = cachedUser.displayName || 'User';
     if (dropdownName) dropdownName.textContent = cachedUser.displayName || 'User';
     if (dropdownEmail) dropdownEmail.textContent = cachedUser.email || '';
-    if (dropdownAvatar) dropdownAvatar.src = cachedUser.photoURL || `https://ui-avatars.com/api/?name=${cachedUser.displayName}`;
+    if (dropdownAvatar) dropdownAvatar.src = avatarUrl;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,11 +387,41 @@ document.addEventListener('DOMContentLoaded', () => {
         if (profileDropdown) profileDropdown.classList.remove('active');
     };
 
+    const adjustProfileDropdownPosition = () => {
+        if (!profileDropdown || !profileDropdown.classList.contains('active')) return;
+
+        profileDropdown.style.top = '';
+        profileDropdown.style.bottom = '';
+        profileDropdown.style.right = '0';
+        profileDropdown.style.left = '';
+
+        const rect = profileDropdown.getBoundingClientRect();
+        const pad = 12;
+
+        if (rect.right > window.innerWidth - pad) {
+            profileDropdown.style.right = '0';
+        }
+        if (rect.left < pad) {
+            profileDropdown.style.right = 'auto';
+            profileDropdown.style.left = '0';
+        }
+        if (rect.bottom > window.innerHeight - pad) {
+            profileDropdown.style.top = 'auto';
+            profileDropdown.style.bottom = 'calc(100% + 10px)';
+        }
+    };
+
     userProfile?.addEventListener('click', (e) => {
         e.stopPropagation();
         userSection?.classList.toggle('active');
         profileDropdown?.classList.toggle('active');
+        if (profileDropdown?.classList.contains('active')) {
+            if (window.lucide) lucide.createIcons();
+            requestAnimationFrame(adjustProfileDropdownPosition);
+        }
     });
+
+    window.addEventListener('resize', adjustProfileDropdownPosition);
 
     // Close dropdown when clicking outside (but not on the dropdown itself or profile button)
     document.addEventListener('click', (e) => {
