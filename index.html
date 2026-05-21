@@ -18,6 +18,7 @@
 
     <!-- Keep global styling for dropdowns, modals, and custom cursor definitions -->
     <link rel="stylesheet" href="styles/global.css">
+    <script src="scripts/cursor.js" defer></script>
 
     <style>
         *,
@@ -130,11 +131,19 @@
             font-size: 13px;
             font-weight: 300;
             color: rgba(245, 242, 236, 0.55);
-            transition: color 0.2s, opacity 0.2s;
+            cursor: pointer;
+            pointer-events: auto;
+            position: relative;
+            z-index: 2;
+            transition: color 0.2s, opacity 0.2s, box-shadow 0.25s ease;
         }
         
         .auth-controls button:hover {
             color: var(--paper);
+        }
+        
+        #loginBtn:hover {
+            text-shadow: 0 0 20px rgba(255, 180, 80, 0.35);
         }
         
         #signupBtn {
@@ -182,6 +191,9 @@
             display: flex;
             align-items: center;
             gap: 24px;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
         }
         /* ===== SECTIONS ===== */
         
@@ -593,7 +605,6 @@
             border-bottom: 0.5px solid rgba(245, 242, 236, 0.2);
             padding-bottom: 4px;
             transition: border-color 0.2s;
-            cursor: auto;
         }
         
         .about-link:hover {
@@ -645,7 +656,6 @@
             padding: 40px 36px;
             border-left: 0.5px solid var(--line);
             position: relative;
-            cursor: auto;
             transition: background 0.3s;
             overflow: hidden;
         }
@@ -745,7 +755,6 @@
             background: var(--ink);
             padding: 40px 36px;
             position: relative;
-            cursor: auto;
             overflow: hidden;
             min-height: 280px;
             display: flex;
@@ -1021,8 +1030,8 @@
         <div class="nav-right-actions">
             <!-- GUEST SECTION -->
             <div class="auth-controls" id="guestSection">
-                <button id="loginBtn">Login</button>
-                <button id="signupBtn">Sign Up</button>
+                <button type="button" id="loginBtn" aria-haspopup="dialog">Login</button>
+                <button type="button" id="signupBtn" aria-haspopup="dialog">Sign Up</button>
             </div>
 
             <!-- USER SECTION -->
@@ -1034,37 +1043,104 @@
 
                 <!-- Profile Dropdown -->
                 <div class="profile-dropdown" id="profile-dropdown">
-                    <div class="dropdown-header">
-                        <p class="user-name" id="dropdown-user-name">Guest User</p>
-                        <p class="user-email" id="dropdown-user-email">guest@example.com</p>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-content">
-                        <a href="pages/dashboard.html" class="dropdown-item">
-                            <div class="item-left">
-                                <i data-lucide="layout-dashboard"></i>
-                                <span>Dashboard</span>
+                    <!-- ═════════════════════════════════════════ -->
+                    <!-- TOP USER SECTION -->
+                    <!-- ═════════════════════════════════════════ -->
+                    <div class="dropdown-user-section">
+                        <div class="user-card">
+                            <div class="user-avatar-wrapper">
+                                <img id="dropdown-avatar" class="user-avatar" src="https://ui-avatars.com/api/?name=Guest&background=64748b&color=fff" alt="User Profile">
+                                <div class="online-indicator"></div>
                             </div>
-                        </a>
-                        <a href="pages/profile.html" class="dropdown-item">
-                            <div class="item-left">
-                                <i data-lucide="user"></i>
-                                <span>Profile</span>
+                            <div class="user-info">
+                                <p class="user-name" id="dropdown-user-name">Guest User</p>
+                                <p class="user-role">DevStage Member</p>
+                                <p class="user-email" id="dropdown-user-email">guest@example.com</p>
                             </div>
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <div class="item-left">
-                                <i data-lucide="settings"></i>
-                                <span>Settings</span>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
-                        <div class="item-left">
-                            <i data-lucide="log-out"></i>
-                            <span>Logout</span>
                         </div>
-                    </button>
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- ═════════════════════════════════════════ -->
+                    <!-- MAIN MENU SECTION -->
+                    <!-- ═════════════════════════════════════════ -->
+                    <div class="dropdown-section">
+                        <div class="section-label">Main</div>
+                        <nav class="dropdown-menu">
+                            <a href="pages/profile.html" class="dropdown-item">
+                                <i data-lucide="user" class="menu-icon"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="pages/dashboard.html" class="dropdown-item">
+                                <i data-lucide="layout-dashboard" class="menu-icon"></i>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i data-lucide="folder-open" class="menu-icon"></i>
+                                <span>My Projects</span>
+                            </a>
+                            <a href="pages/upload.html" class="dropdown-item">
+                                <i data-lucide="upload-cloud" class="menu-icon"></i>
+                                <span>Upload Project</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i data-lucide="bookmark" class="menu-icon"></i>
+                                <span>Saved Projects</span>
+                            </a>
+                            <a href="pages/teams.html" class="dropdown-item">
+                                <i data-lucide="users" class="menu-icon"></i>
+                                <span>Teams & Collaborations</span>
+                            </a>
+                            <a href="pages/challenges.html" class="dropdown-item">
+                                <i data-lucide="trophy" class="menu-icon"></i>
+                                <span>Challenges</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i data-lucide="bell" class="menu-icon"></i>
+                                <span>Notifications</span>
+                                <span class="notification-badge">3</span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- ═════════════════════════════════════════ -->
+                    <!-- ACCOUNT SECTION -->
+                    <!-- ═════════════════════════════════════════ -->
+                    <div class="dropdown-section">
+                        <div class="section-label">Account</div>
+                        <nav class="dropdown-menu">
+                            <a href="#" class="dropdown-item">
+                                <i data-lucide="settings" class="menu-icon"></i>
+                                <span>Settings</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i data-lucide="moon" class="menu-icon"></i>
+                                <span>Appearance</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i data-lucide="help-circle" class="menu-icon"></i>
+                                <span>Help & Support</span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- ═════════════════════════════════════════ -->
+                    <!-- BOTTOM SECTION -->
+                    <!-- ═════════════════════════════════════════ -->
+                    <div class="dropdown-footer">
+                        <button class="dropdown-item logout-btn" id="dropdown-logout-btn">
+                            <i data-lucide="log-out" class="menu-icon"></i>
+                            <span>Sign Out</span>
+                        </button>
+                        <div class="footer-branding">
+                            <p class="devstage-label">DevStage</p>
+                            <p class="version-text">v1.0</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1324,61 +1400,79 @@
         <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
     </div>
 
-    <!-- Auth Modal -->
+    <!-- Auth Modal (Uiverse-style animated labels — JkHuger) -->
     <div id="auth-modal" class="modal-overlay">
-        <div class="modal-card" id="auth-card">
-            <div class="card-glow"></div>
-            <button id="close-auth-modal" class="modal-close" aria-label="Close">
+        <div class="modal-card auth-card-uiverse auth-mode-login" id="auth-card">
+            <button id="close-auth-modal" class="modal-close auth-ui-close" aria-label="Close">
               <i data-lucide="x"></i>
           </button>
 
-            <div class="auth-header">
-                <h2 id="auth-title">Welcome Back</h2>
-                <p class="auth-subtitle">Elevate your development stage</p>
-            </div>
-
             <div id="auth-message" class="auth-message"></div>
 
-            <form id="auth-form" class="auth-form">
-                <div class="floating-group">
-                    <input type="email" id="auth-email" placeholder=" " required autocomplete="email">
-                    <label for="auth-email">Email Address</label>
-                    <div class="input-accent"></div>
+            <div class="auth-ui-card">
+                <h2 id="auth-title" class="auth-login-title">Log in</h2>
+
+                <form id="auth-form" class="auth-form" novalidate>
+                    <div class="inputBox inputBox--name signup-field" id="fullname-group">
+                        <input type="text" id="auth-fullname" required autocomplete="name">
+                        <span>Name</span>
+                    </div>
+
+                    <div class="inputBox inputBox--user signup-field" id="username-group">
+                        <input type="text" id="auth-username" required autocomplete="username">
+                        <span>Username</span>
+                    </div>
+
+                    <div class="inputBox inputBox--email">
+                        <input type="email" id="auth-email" required autocomplete="email">
+                        <span>Email</span>
+                    </div>
+
+                    <div class="inputBox inputBox--pass">
+                        <input type="password" id="auth-password" required autocomplete="current-password">
+                        <span>Password</span>
+                    </div>
+
+                    <div class="inputBox inputBox--confirm signup-field" id="confirm-password-group">
+                        <input type="password" id="auth-confirm-password" required autocomplete="new-password">
+                        <span>Confirm</span>
+                    </div>
+
+                    <div class="checkbox-group login-field" id="remember-me-group">
+                        <div class="remember-row">
+                            <input type="checkbox" id="auth-remember" class="custom-checkbox">
+                            <label for="auth-remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" id="auth-submit-btn" class="enter">
+                        <span>Enter</span>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>Or</span>
                 </div>
 
-                <div class="floating-group">
-                    <input type="password" id="auth-password" placeholder=" " required autocomplete="current-password">
-                    <label for="auth-password">Password</label>
-                    <div class="input-accent"></div>
+                <div class="social-auth-group">
+                    <button type="button" id="google-login-btn" class="social-btn social-btn-ui google-btn">
+                      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
+                      <span>Google</span>
+                  </button>
+                    <button type="button" id="github-login-btn" class="social-btn social-btn-ui github-btn">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                      <span>GitHub</span>
+                  </button>
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="premium-btn">
-                  <span>Sign In</span>
-                  <div class="btn-shine"></div>
-              </button>
-            </form>
-
-            <div class="auth-divider">
-                <span>OR</span>
-            </div>
-
-            <div class="social-auth-group">
-                <button id="google-login-btn" class="social-btn google-btn">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                  <span>Google</span>
-              </button>
-                <button id="github-login-btn" class="social-btn github-btn">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
-                  <span>GitHub</span>
-              </button>
-            </div>
-
-            <div class="auth-footer">
-                <p id="auth-toggle-text">
-                    Don't have an account? <a href="#" id="toggle-auth">Sign Up</a>
-                </p>
+                <div class="auth-footer">
+                    <p id="auth-toggle-text">
+                        Don't have an account? <a href="#" id="toggle-auth" class="toggle-auth-link">Sign Up</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

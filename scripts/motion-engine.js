@@ -122,61 +122,7 @@ const onVisibilityChange = (pauseFn, resumeFn) => {
     });
 })();
 
-/* === SECTION 2: GLOBAL CUSTOM CURSOR === */
-const init3DCursor = () => {
-    if (typeof document === 'undefined' || !document.body) return;
-
-    const cursor = document.createElement('div');
-    cursor.id = 'custom-cursor';
-    cursor.className = 'custom-cursor';
-    document.body.appendChild(cursor);
-
-    const hoverSelector = [
-        'a',
-        'button',
-        'input',
-        'textarea',
-        'select',
-        'label',
-        '.service-item',
-        '.project-card',
-        '.nav-link',
-        '.dropdown-item',
-        '.stat-btn',
-        '.cta-link',
-        '.btn-outline',
-        '.hamburger',
-        '.social-btn',
-        '.profile-avatar',
-        '.filter-trigger',
-        '.modal-close'
-    ].join(',');
-
-    let activeHoverTarget = null;
-
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = `${e.clientX}px`;
-        cursor.style.top = `${e.clientY}px`;
-    }, { passive: true });
-
-    document.addEventListener('mouseover', (e) => {
-        const target = e.target.closest(hoverSelector);
-        if (target && target !== activeHoverTarget) {
-            activeHoverTarget = target;
-            cursor.classList.add('hover');
-        }
-    });
-
-    document.addEventListener('mouseout', (e) => {
-        const related = e.relatedTarget;
-        if (activeHoverTarget && (!related || !related.closest(hoverSelector))) {
-            activeHoverTarget = null;
-            cursor.classList.remove('hover');
-        }
-    });
-};
-
-/* === SECTION 3: INTERACTIVE PARTICLE WAVE (Explore Background) === */
+/* === SECTION 2: INTERACTIVE PARTICLE WAVE (Explore Background) === */
 const initParticleWaveSystem = (canvas) => {
     const ctx = canvas.getContext('2d', { alpha: false });
 
@@ -980,30 +926,27 @@ const initUploadMeshSystem = (canvas) => {
 const initAllVisualSystems = () => {
     console.log("[DevStage] Initializing Visual Systems...");
 
-    // 1. Initialize Custom 3D Cursor (global)
-    if (typeof init3DCursor === 'function') {
-        init3DCursor();
-    }
+    // Custom cursor: scripts/cursor.js (loaded globally on every page)
 
-    // 2. Initialize 3D Perspective Terrain (Landing Background - only on landing page)
+    // 1. Initialize 3D Perspective Terrain (Landing Background - only on landing page)
     const cv = document.getElementById('c');
     if (cv && document.body.classList.contains('home-page')) {
         initTerrainSystem(cv);
     }
 
-    // 3. Initialize Interactive Particle Wave (Explore Background)
+    // 2. Initialize Interactive Particle Wave (Explore Background)
     const waveCanvas = document.getElementById('particle-wave-canvas');
     if (waveCanvas) {
         initParticleWaveSystem(waveCanvas);
     }
 
-    // 4. Initialize Grid Distortion Pressure Field (Explore Grid)
+    // 3. Initialize Grid Distortion Pressure Field (Explore Grid)
     const distortionCanvas = document.getElementById('grid-distortion-canvas');
     if (distortionCanvas) {
         initGridDistortionSystem(distortionCanvas);
     }
 
-    // 5. Initialize Interactive Mesh Canvas (Upload Background)
+    // 4. Initialize Interactive Mesh Canvas (Upload Background)
     const uploadCanvas = document.getElementById('upload-mesh-canvas');
     if (uploadCanvas) {
         initUploadMeshSystem(uploadCanvas);
