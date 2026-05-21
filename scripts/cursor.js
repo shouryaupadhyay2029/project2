@@ -18,6 +18,7 @@
         '[role="link"]',
         '[tabindex]:not([tabindex="-1"])',
         '.service-item',
+        '.service-card-link',
         '.project-card',
         '.nav-link',
         '.nav-links a',

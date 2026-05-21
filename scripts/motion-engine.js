@@ -124,7 +124,9 @@ const onVisibilityChange = (pauseFn, resumeFn) => {
 
 /* === SECTION 2: INTERACTIVE PARTICLE WAVE (Explore Background) === */
 const initParticleWaveSystem = (canvas) => {
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', {
+        alpha: false
+    });
 
     const CFG = {
         cols: 64, // Optimized density
@@ -141,7 +143,10 @@ const initParticleWaveSystem = (canvas) => {
     let W, H, DPR;
     let particles = [];
     let time = 0;
-    let mouse = { x: -9999, y: -9999 };
+    let mouse = {
+        x: -9999,
+        y: -9999
+    };
     let cursorVisible = false;
     // Custom cursor is now created globally by init3DCursor().
     // Declare variable so legacy checks don't throw ReferenceError.
@@ -173,7 +178,10 @@ const initParticleWaveSystem = (canvas) => {
 
     function buildGrid() {
         particles = [];
-        const { cols, rows } = CFG;
+        const {
+            cols,
+            rows
+        } = CFG;
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const bx = (c / (cols - 1)) * W;
@@ -205,7 +213,11 @@ const initParticleWaveSystem = (canvas) => {
         const amp = 14 * combined;
         const ox = sin(nx * 4.2 + ny * 2.1 - t * 1.7 + p.phase) * amp;
         const oy = cos(ny * 3.8 + nx * 1.6 + t * 1.5 + 0.9 + p.phase) * amp;
-        return { ox, oy, combined };
+        return {
+            ox,
+            oy,
+            combined
+        };
     }
 
     function draw() {
@@ -227,7 +239,11 @@ const initParticleWaveSystem = (canvas) => {
 
         for (let i = 0; i < particles.length; i++) {
             const p = particles[i];
-            const { ox, oy, combined } = waveAt(p, time);
+            const {
+                ox,
+                oy,
+                combined
+            } = waveAt(p, time);
             const tx = p.bx * DPR + ox * DPR;
             const ty = p.by * DPR + oy * DPR;
 
@@ -282,7 +298,9 @@ const initParticleWaveSystem = (canvas) => {
             });
         }
         showCursor();
-    }, { passive: true });
+    }, {
+        passive: true
+    });
 
     document.addEventListener('mouseleave', () => {
         mouse.x = -9999;
@@ -294,9 +312,13 @@ const initParticleWaveSystem = (canvas) => {
     document.addEventListener('touchmove', e => {
         mouse.x = e.touches[0].clientX;
         mouse.y = e.touches[0].clientY;
-    }, { passive: true });
+    }, {
+        passive: true
+    });
 
-    window.addEventListener('resize', debounce(resize, 100), { passive: true });
+    window.addEventListener('resize', debounce(resize, 100), {
+        passive: true
+    });
     resize();
 
     const pauseWave = () => {
@@ -305,7 +327,9 @@ const initParticleWaveSystem = (canvas) => {
             rafHandle = null;
         }
     };
-    const resumeWave = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
+    const resumeWave = () => {
+        if (!rafHandle) rafHandle = requestAnimationFrame(draw);
+    };
     onVisibilityChange(pauseWave, resumeWave);
 
     rafHandle = requestAnimationFrame(draw);
@@ -332,7 +356,9 @@ const initGridDistortionSystem = (canvas) => {
         canvas.style.height = height + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-    window.addEventListener('resize', debounce(resize, 100), { passive: true });
+    window.addEventListener('resize', debounce(resize, 100), {
+        passive: true
+    });
     resize();
 
     // ── Cursor State ─────────────────────────────────────────────
@@ -347,12 +373,16 @@ const initGridDistortionSystem = (canvas) => {
         targetX = e.clientX;
         targetY = e.clientY;
         isOnPage = true;
-    }, { passive: true });
+    }, {
+        passive: true
+    });
 
     // Smoothly exit when cursor leaves the window
     window.addEventListener('mouseleave', () => {
         isOnPage = false;
-    }, { passive: true });
+    }, {
+        passive: true
+    });
 
     // Input field tension boost
     document.addEventListener('focusin', (e) => {
@@ -482,7 +512,9 @@ const initGridDistortionSystem = (canvas) => {
             rafHandle = null;
         }
     };
-    const resumeDistortion = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
+    const resumeDistortion = () => {
+        if (!rafHandle) rafHandle = requestAnimationFrame(draw);
+    };
     onVisibilityChange(pauseDistortion, resumeDistortion);
 
     rafHandle = requestAnimationFrame(draw);
@@ -493,7 +525,11 @@ const initGridDistortionSystem = (canvas) => {
 const initTerrainSystem = (cv) => {
     const cx = cv.getContext('2d');
     let W, H, t = 0;
-    const M = { x: -9999, y: -9999, on: false };
+    const M = {
+        x: -9999,
+        y: -9999,
+        on: false
+    };
 
     // Grid density
     const COLS = 64;
@@ -579,7 +615,13 @@ const initTerrainSystem = (cv) => {
                 const pkBoost = hn > 0.70 ? (hn - 0.70) * 0.55 : 0;
                 const alpha = Math.min(0.90, (0.03 + hn * 0.80 + pkBoost) * dm);
 
-                pts[ri][ci] = { sx, sy, scl, alpha, rf };
+                pts[ri][ci] = {
+                    sx,
+                    sy,
+                    scl,
+                    alpha,
+                    rf
+                };
             }
         }
     }
@@ -651,15 +693,25 @@ const initTerrainSystem = (cv) => {
         M.y = e.clientY;
         M.on = true;
     });
-    cv.addEventListener('mouseleave', () => { M.on = false; });
+    cv.addEventListener('mouseleave', () => {
+        M.on = false;
+    });
     cv.addEventListener('touchmove', e => {
         e.preventDefault();
         M.x = e.touches[0].clientX;
         M.y = e.touches[0].clientY;
         M.on = true;
-    }, { passive: false });
-    cv.addEventListener('touchend', () => { M.on = false; }, { passive: true });
-    window.addEventListener('resize', debounce(resize, 100), { passive: true });
+    }, {
+        passive: false
+    });
+    cv.addEventListener('touchend', () => {
+        M.on = false;
+    }, {
+        passive: true
+    });
+    window.addEventListener('resize', debounce(resize, 100), {
+        passive: true
+    });
 
     const pauseTerrain = () => {
         if (rafHandle) {
@@ -667,7 +719,9 @@ const initTerrainSystem = (cv) => {
             rafHandle = null;
         }
     };
-    const resumeTerrain = () => { if (!rafHandle) rafHandle = requestAnimationFrame(draw); };
+    const resumeTerrain = () => {
+        if (!rafHandle) rafHandle = requestAnimationFrame(draw);
+    };
     onVisibilityChange(pauseTerrain, resumeTerrain);
 
     resize();
@@ -684,7 +738,11 @@ const initUploadMeshSystem = (canvas) => {
             this.width = 0;
             this.height = 0;
 
-            this.mouse = { x: -1000, y: -1000, onCanvas: false };
+            this.mouse = {
+                x: -1000,
+                y: -1000,
+                onCanvas: false
+            };
             this.ripples = [];
             this.lastRippleTime = 0;
             this.rafHandle = null;
@@ -726,21 +784,29 @@ const initUploadMeshSystem = (canvas) => {
 
         init() {
             this.resize();
-            window.addEventListener('resize', debounce(() => this.resize(), 100), { passive: true });
+            window.addEventListener('resize', debounce(() => this.resize(), 100), {
+                passive: true
+            });
 
             window.addEventListener('mousemove', (e) => {
                 this.mouse.x = e.clientX;
                 this.mouse.y = e.clientY;
                 this.mouse.onCanvas = true;
-            }, { passive: true });
+            }, {
+                passive: true
+            });
 
             window.addEventListener('mouseout', () => {
                 this.mouse.onCanvas = false;
-            }, { passive: true });
+            }, {
+                passive: true
+            });
 
             window.addEventListener('mousedown', (e) => {
                 this.spawnRipple(e.clientX, e.clientY);
-            }, { passive: true });
+            }, {
+                passive: true
+            });
 
             const pause = () => {
                 if (this.rafHandle) {
@@ -748,7 +814,9 @@ const initUploadMeshSystem = (canvas) => {
                     this.rafHandle = null;
                 }
             };
-            const resume = () => { if (!this.rafHandle) this.rafHandle = requestAnimationFrame((t) => this.animate(t)); };
+            const resume = () => {
+                if (!this.rafHandle) this.rafHandle = requestAnimationFrame((t) => this.animate(t));
+            };
             onVisibilityChange(pause, resume);
 
             this.rafHandle = requestAnimationFrame((t) => this.animate(t));
@@ -802,7 +870,13 @@ const initUploadMeshSystem = (canvas) => {
         }
 
         computeLayer(layer, timestamp) {
-            const { cols, rows, speed, amp, phase } = layer;
+            const {
+                cols,
+                rows,
+                speed,
+                amp,
+                phase
+            } = layer;
             const tw = timestamp * speed * 0.001;
             const colSpacing = this.width / (cols - 1);
             const rowSpacing = this.height / (rows - 1);
@@ -850,14 +924,24 @@ const initUploadMeshSystem = (canvas) => {
                         y += wave;
                     });
 
-                    rowArr.push({ x, y, distToMouse });
+                    rowArr.push({
+                        x,
+                        y,
+                        distToMouse
+                    });
                 }
                 layer.vertices.push(rowArr);
             }
         }
 
         drawLayerLines(layer) {
-            const { vertices, opacity, lineWidth, cols, rows } = layer;
+            const {
+                vertices,
+                opacity,
+                lineWidth,
+                cols,
+                rows
+            } = layer;
 
             this.ctx.beginPath();
             this.ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
@@ -884,7 +968,12 @@ const initUploadMeshSystem = (canvas) => {
         }
 
         drawLayerDots(layer) {
-            const { vertices, opacity, cols, rows } = layer;
+            const {
+                vertices,
+                opacity,
+                cols,
+                rows
+            } = layer;
 
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {

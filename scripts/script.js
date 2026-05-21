@@ -582,6 +582,34 @@ document.addEventListener('DOMContentLoaded', () => {
     setupFilterDropdowns();
     initDiscoveryFeed();
     initActivityPulse();
+    initPlatformCoreCardNavigation();
+
+    // ─── Platform Core feature cards → page navigation ───
+    function initPlatformCoreCardNavigation() {
+        const cards = document.querySelectorAll('.service-card-link');
+        if (!cards.length) return;
+
+        const NAV_DELAY_MS = 160;
+
+        cards.forEach((card) => {
+            card.addEventListener('click', (e) => {
+                const href = card.getAttribute('href');
+                if (!href || href.startsWith('#')) return;
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+                e.preventDefault();
+                card.classList.add('is-navigating');
+
+                if (window.pageLoader?.show) {
+                    window.pageLoader.show();
+                }
+
+                window.setTimeout(() => {
+                    window.location.assign(href);
+                }, NAV_DELAY_MS);
+            });
+        });
+    }
 
     // ─── Vertical Waves Cursor Interaction ───
     const verticalWaves = document.querySelector(".vertical-waves");
