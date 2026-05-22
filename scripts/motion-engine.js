@@ -267,7 +267,7 @@ const initParticleWaveSystem = (canvas) => {
 
             const distToMouse = sqrt((mx - p.x) ** 2 + (my - p.y) ** 2) / DPR;
             const cursorBoost = Math.max(0, 1 - distToMouse / 100);
-            const radius = Math.max(0.2, (0.5 + combined * 1.5) * DPR);
+            const radius = Math.max(0.12, (0.22 + combined * 0.45) * DPR);
             const alpha = (0.2 + combined * 0.2 + cursorBoost * 0.2).toFixed(2);
 
             ctx.fillStyle = cursorBoost > 0.5 ?

@@ -15,6 +15,7 @@
 
     <!-- Global Styles -->
     <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/explore-sidebar-cards.css">
     <script src="../scripts/cursor.js" defer></script>
 
     <style>
@@ -29,7 +30,25 @@
             pointer-events: none;
         }
 
+        body.explore-page .logo-chars {
+            font-size: 1.1rem;
+        }
 
+        body.explore-page .char.outline {
+            -webkit-text-stroke-width: 1.1px;
+        }
+
+        body.explore-page .logo-dot {
+            width: 6px;
+            height: 6px;
+            right: -8px;
+            top: -1px;
+        }
+
+        body.explore-page .breadcrumb-slash,
+        body.explore-page .breadcrumb-current {
+            font-size: 1.05rem;
+        }
 
         /* ─── Uiverse Hamburger Menu ─── */
 
@@ -190,12 +209,6 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: transform, box-shadow, border-color;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-        }
-
-        .sidebar-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 140, 66, 0.25);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 24px rgba(255, 140, 66, 0.04);
         }
 
         /* Terminal Header System */
@@ -716,8 +729,6 @@
             font-size: 0.75rem;
         }
 
-        /* Project Cards (Hybrid Style) */
-
         .project-feed {
             display: flex;
             flex-direction: column;
@@ -737,89 +748,49 @@
         }
 
         .project-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 140, 66, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 140, 66, 0.05);
+            transform: translateY(-6px);
+            border-color: rgba(255, 140, 66, 0.2);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 140, 66, 0.06);
         }
 
-        .card-head {
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .project-card-body {
+            padding: 20px 22px;
         }
 
-        .card-head img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .card-head .meta {
-            flex: 1;
-        }
-
-        .card-head h4 {
+        .project-card-body h3 {
             color: #fff;
-            font-size: 0.95rem;
-        }
-
-        .card-head span {
-            color: var(--text-tertiary);
-            font-size: 0.75rem;
-        }
-
-        .card-body {
-            padding: 0 24px 20px;
-        }
-
-        .card-body h3 {
-            color: #fff;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
-        .card-body p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 16px;
-        }
-
-        .card-footer {
-            padding: 12px 24px;
-            border-top: 1px solid var(--border-soft);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stats {
-            display: flex;
-            gap: 20px;
-            color: var(--text-tertiary);
-            font-size: 0.8rem;
-        }
-
-        .stats span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .stats i {
-            width: 16px;
-            height: 16px;
-        }
-
-        .view-btn {
-            color: var(--brand-orange);
-            font-weight: 700;
+        .project-card-body p {
+            color: rgba(255, 255, 255, 0.45);
             font-size: 0.85rem;
-            text-decoration: none;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .project-card-meta {
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             align-items: center;
-            gap: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .project-card-meta .project-tag {
+            color: #ff8c42;
+            border: 1px solid rgba(255, 140, 66, 0.25);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        #empty-state {
+            text-align: center;
+            padding: 48px 24px;
         }
 
         /* Responsive */
@@ -909,7 +880,7 @@
     <main class="explore-layout">
         <!-- Left Sidebar: Filters -->
         <aside class="sidebar-left sidebar-sticky">
-            <div class="sidebar-card">
+            <div class="sidebar-card premium-side-panel">
                 <div class="card-terminal-header">
                     <div class="terminal-header-left">
                         <div class="terminal-dots">
@@ -942,7 +913,7 @@
                     </div>
                 </div>
             </div>
-            <div class="sidebar-card">
+            <div class="sidebar-card premium-side-panel">
                 <div class="card-terminal-header">
                     <div class="terminal-header-left">
                         <div class="terminal-dots">
@@ -1005,18 +976,12 @@
                 </div>
             </div>
 
-            <div id="explore-feed" class="project-feed">
-                <!-- Skeleton Loading -->
-                <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;">
-                </div>
-                <div class="project-card" style="height: 200px; opacity: 0.1; background: #fff; border-radius: 20px;">
-                </div>
-            </div>
+            <div id="explore-feed" class="project-feed"></div>
         </section>
 
         <!-- Right Sidebar: Suggested -->
         <aside class="sidebar-right sidebar-sticky">
-            <div class="sidebar-card">
+            <div class="sidebar-card premium-side-panel">
                 <div class="card-terminal-header">
                     <div class="terminal-header-left">
                         <div class="terminal-dots">
@@ -1073,7 +1038,7 @@
                     </div>
                 </div>
             </div>
-            <div class="sidebar-card">
+            <div class="sidebar-card premium-side-panel">
                 <div class="card-terminal-header">
                     <div class="terminal-header-left">
                         <div class="terminal-dots">
@@ -1124,6 +1089,8 @@
         </aside>
     </main>
 
+    <script src="../scripts/card-tilt.js"></script>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -1143,128 +1110,85 @@
 
         const feed = document.getElementById('explore-feed');
 
+        const renderProject = (p, id) => {
+            const card = document.createElement('article');
+            card.className = 'project-card';
+            const tags = (p.tags && p.tags.length)
+                ? p.tags.slice(0, 3).map(t => `<span class="project-tag">${String(t)}</span>`).join('')
+                : '';
+            const likes = p.likes?.length || p.likesCount || 0;
+            card.innerHTML = `
+                <div class="project-card-body">
+                    <h3>${p.title || 'Untitled Project'}</h3>
+                    <p>${p.description || 'No description provided.'}</p>
+                    <div class="project-card-meta">
+                        <span>${p.userName || 'Anonymous'}</span>
+                        <span><i data-lucide="heart"></i> ${likes}</span>
+                        ${tags}
+                    </div>
+                </div>`;
+            if (p.fileURL) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => window.open(p.fileURL, '_blank'));
+            }
+            return card;
+        };
+
+        const startEmptyTypewriter = () => {
+            const el = document.getElementById('tw-text');
+            if (!el) return;
+            const suggestions = ['Try uploading a project', 'Search "React"', 'Search "AI tools"'];
+            let si = 0, ci = 0, typing = true;
+            const tick = () => {
+                if (!document.getElementById('tw-text')) return;
+                const target = suggestions[si];
+                if (typing) {
+                    el.textContent = target.slice(0, ++ci);
+                    if (ci === target.length) { typing = false; setTimeout(tick, 1400); return; }
+                    setTimeout(tick, 45);
+                } else {
+                    el.textContent = target.slice(0, --ci);
+                    if (ci === 0) { typing = true; si = (si + 1) % suggestions.length; setTimeout(tick, 250); return; }
+                    setTimeout(tick, 25);
+                }
+            };
+            tick();
+        };
+
         const fetchProjects = async (filter = 'latest') => {
             try {
                 let query = db.collection('projects');
-                if (filter === 'latest') {
-                    query = query.orderBy('createdAt', 'desc');
-                }
-
+                if (filter === 'latest') query = query.orderBy('createdAt', 'desc');
                 const snapshot = await query.get();
                 feed.innerHTML = '';
 
                 if (snapshot.empty) {
                     feed.innerHTML = `
-            <div id="empty-state" style="text-align:center; padding: 40px;">
-              <span style="color: rgba(255,255,255,0.3); font-size: 15px;">Try searching </span>
-              <span id="tw-text" style="color: rgba(255,255,255,0.6); font-size: 15px;"></span>
-              <span id="tw-cursor" style="
-                display: inline-block;
-                width: 1px; height: 16px;
-                background: #E8813A;
-                margin-left: 2px;
-                vertical-align: middle;
-                animation: tw-blink 900ms step-end infinite;
-              "></span>
-              <style>
-                @keyframes tw-blink { 0%,100%{opacity:1} 50%{opacity:0} }
-              </style>
-            </div>
-          `;
-
-                    // Typewriter Logic
-                    const suggestions = ['"React dashboard"...', '"AI tools"...', '"Sarah Chen"...', '"TypeScript starter"...', '"Node.js API"...', '"Marcus Vane"...'];
-                    let si = 0,
-                        ci = 0,
-                        typing = true;
-                    const el = document.getElementById('tw-text');
-
-                    const tick = () => {
-                        if (!document.getElementById('tw-text')) return; // Stop if removed
-                        const target = suggestions[si];
-                        if (typing) {
-                            el.textContent = target.slice(0, ++ci);
-                            if (ci === target.length) {
-                                typing = false;
-                                setTimeout(tick, 1600);
-                                return;
-                            }
-                            setTimeout(tick, 52);
-                        } else {
-                            el.textContent = target.slice(0, --ci);
-                            if (ci === 0) {
-                                typing = true;
-                                si = (si + 1) % suggestions.length;
-                                setTimeout(tick, 300);
-                                return;
-                            }
-                            setTimeout(tick, 28);
-                        }
-                    };
-                    tick();
+                        <div id="empty-state">
+                            <span style="color: rgba(255,255,255,0.3); font-size: 15px;">Try searching </span>
+                            <span id="tw-text" style="color: rgba(255,255,255,0.5); font-size: 15px;"></span>
+                        </div>`;
+                    startEmptyTypewriter();
                     return;
                 }
 
-                snapshot.forEach(doc => {
-                    renderProject(doc.data(), doc.id);
-                });
-
+                snapshot.forEach(doc => feed.appendChild(renderProject(doc.data(), doc.id)));
+                lucide.createIcons();
             } catch (error) {
-                console.error("Explore fetch error:", error);
+                console.error('Explore fetch error:', error);
+                feed.innerHTML = `
+                    <div id="empty-state">
+                        <span style="color: rgba(255,255,255,0.3); font-size: 15px;">Try searching </span>
+                        <span id="tw-text" style="color: rgba(255,255,255,0.5); font-size: 15px;"></span>
+                    </div>`;
+                startEmptyTypewriter();
             }
         };
 
-        const renderProject = (p, id) => {
-            const card = document.createElement('div');
-            card.className = 'project-card';
-            card.innerHTML = `
-        <div class="card-terminal-header">
-          <div class="terminal-header-left">
-            <div class="terminal-dots">
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-              <div class="terminal-dot"></div>
-            </div>
-            <span class="terminal-filename">PROJECT_DATA_${id.substring(0, 6).toUpperCase()}.SYS</span>
-          </div>
-          <div class="terminal-status">
-            <div class="status-pulse"></div>
-            STABLE
-          </div>
-        </div>
-        <div class="sidebar-card-content">
-          <div class="card-head">
-            <img src="${p.userAvatar || 'https://ui-avatars.com/api/?name=' + (p.userName || 'User')}" alt="User">
-            <div class="meta">
-              <h4>${p.userName || 'Anonymous'}</h4>
-              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.3);">${p.createdAt ? new Date(p.createdAt.toDate()).toDateString() : 'RECENT_ENTRY'}</span>
-            </div>
-            <button class="action-btn" style="background:none; border:none; color:gray;"><i data-lucide="more-horizontal"></i></button>
-          </div>
-          <div class="card-body">
-            <h3 style="font-family: var(--font-heading); color: #fff; font-size: 1.25rem; margin-bottom: 8px;">${p.title}</h3>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.6;">${p.description}</p>
-          </div>
-          <div class="card-footer" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-            <div class="stats" style="display: flex; gap: 16px; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-              <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="thumbs-up" style="width:14px; height:14px;"></i> ${p.likes?.length || 0}</span>
-              <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="message-square" style="width:14px; height:14px;"></i> ${p.commentCount || 0}</span>
-            </div>
-            <a href="${p.fileURL}" target="_blank" class="view-btn" style="color: #ff8c42; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">EXECUTE <i data-lucide="terminal" style="width:14px; height:14px;"></i></a>
-          </div>
-        </div>
-      `;
-            feed.appendChild(card);
-            lucide.createIcons();
-        };
-
-        // Search logic
         document.getElementById('feed-search').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const cards = feed.querySelectorAll('.project-card');
-            cards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                card.style.display = text.includes(term) ? 'block' : 'none';
+            feed.querySelectorAll('.project-card').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(term) ? 'block' : 'none';
             });
         });
 
@@ -1452,10 +1376,29 @@
             });
         };
 
-        // Initialize
+        window.exploreSetFilter = (f) => fetchProjects(f);
+        document.querySelectorAll('.segment-chip').forEach((chip) => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.segment-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                fetchProjects(chip.dataset.filter || 'latest');
+            });
+        });
+
         fetchProjects();
+        if (window.initCardTilt) {
+            window.initCardTilt(document.querySelector('.explore-layout'));
+        }
         lucide.createIcons();
         initCommandPalette();
+
+        document.querySelectorAll('.follow-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const on = btn.classList.toggle('following');
+                btn.textContent = on ? 'Following' : 'Follow';
+            });
+        });
     </script>
 
     <script src="../scripts/script.js" defer></script>

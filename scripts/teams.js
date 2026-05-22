@@ -125,16 +125,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const SEGS = [
-            [], [[3, 0]], [[0, 1]], [[3, 1]],
-            [[1, 2]], [[3, 0], [1, 2]], [[0, 2]], [[3, 2]],
-            [[2, 3]], [[0, 2], [2, 3]], [[2, 1], [0, 3]], [[2, 1]],
-            [[1, 3]], [[0, 3], [1, 0]], [[2, 0]], []
+            [],
+            [
+                [3, 0]
+            ],
+            [
+                [0, 1]
+            ],
+            [
+                [3, 1]
+            ],
+            [
+                [1, 2]
+            ],
+            [
+                [3, 0],
+                [1, 2]
+            ],
+            [
+                [0, 2]
+            ],
+            [
+                [3, 2]
+            ],
+            [
+                [2, 3]
+            ],
+            [
+                [0, 2],
+                [2, 3]
+            ],
+            [
+                [2, 1],
+                [0, 3]
+            ],
+            [
+                [2, 1]
+            ],
+            [
+                [1, 3]
+            ],
+            [
+                [0, 3],
+                [1, 0]
+            ],
+            [
+                [2, 0]
+            ],
+            []
         ];
 
         function edgePt(edge, x, y, s, v) {
             const cx = [x, x + s, x + s, x];
             const cy = [y, y, y + s, y + s];
-            const p = [[0, 1], [1, 2], [2, 3], [3, 0]];
+            const p = [
+                [0, 1],
+                [1, 2],
+                [2, 3],
+                [3, 0]
+            ];
             const [a, b] = p[edge];
             const tt = (v[a] === v[b]) ? .5 : (-v[a]) / (v[b] - v[a]);
             return [cx[a] + tt * (cx[b] - cx[a]), cy[a] + tt * (cy[b] - cy[a])];
@@ -198,9 +247,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isPrimary = lvl % 3 === 0;
                 const isAccent = lvl % 9 === 0;
 
-                const baseAlpha = isPrimary
-                    ? 0.08 + 0.11 * Math.pow(Math.sin((lvl / (LEVELS - 1)) * Math.PI), 1.2)
-                    : 0.03 + 0.05 * Math.pow(Math.sin((lvl / (LEVELS - 1)) * Math.PI), 1.5);
+                const baseAlpha = isPrimary ?
+                    0.08 + 0.11 * Math.pow(Math.sin((lvl / (LEVELS - 1)) * Math.PI), 1.2) :
+                    0.03 + 0.05 * Math.pow(Math.sin((lvl / (LEVELS - 1)) * Math.PI), 1.5);
 
                 const baseSegments = [];
                 const orangeSegments = [];
@@ -238,7 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         const span = 0.12 + intensity * 0.22; // Reduced span
                                         const a = clamp(tProj - span * .5, 0, 1);
                                         const b = clamp(tProj + span * .5, 0, 1);
-                                        orangeSegments.push([[p1[0] + vx * a, p1[1] + vy * a], [p1[0] + vx * b, p1[1] + vy * b]]);
+                                        orangeSegments.push([
+                                            [p1[0] + vx * a, p1[1] + vy * a],
+                                            [p1[0] + vx * b, p1[1] + vy * b]
+                                        ]);
                                     }
                                 }
                             }
@@ -415,16 +467,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function applyFilters() {
-        const hasFilters = activeFilters.skills.length > 0 || 
-                           activeFilters.type.length > 0 || 
-                           activeFilters.status.length > 0 || 
-                           activeFilters.search.length > 0;
+        const hasFilters = activeFilters.skills.length > 0 ||
+            activeFilters.type.length > 0 ||
+            activeFilters.status.length > 0 ||
+            activeFilters.search.length > 0;
 
         // For demo purposes, we'll just toggle sections
         // In a real app, this would filter card visibility
         if (hasFilters) {
             emptyStateSection.style.display = 'none';
-            
+
             // Mock filtering: if "Research" is in search, show nothing to demonstrate no-results
             if (activeFilters.search === 'empty_test') {
                 featuredSection.style.display = 'none';
@@ -445,22 +497,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── 5. CARD INTERACTION (3D TILT) ───────────────────────────
     const teamCards = document.querySelectorAll('.featured-team-card');
-    
+
     teamCards.forEach(card => {
         card.addEventListener('mousemove', e => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
+
             const rotateX = (y - centerY) / 15;
             const rotateY = (centerX - x) / 15;
-            
+
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
         });
-        
+
         card.addEventListener('mouseleave', () => {
             card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
         });

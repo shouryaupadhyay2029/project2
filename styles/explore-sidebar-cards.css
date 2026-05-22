@@ -1,0 +1,199 @@
+/* Explore side panels — Teams-page card design system */
+
+body.explore-page .premium-side-panel {
+    position: relative;
+    background: linear-gradient(145deg, rgba(18, 18, 22, 0.92), rgba(12, 12, 16, 0.98)) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px !important;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+        0 16px 40px rgba(0, 0, 0, 0.42) !important;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: border-color 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    will-change: transform;
+}
+
+body.explore-page .premium-side-panel::before {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(circle at center, rgba(255, 138, 31, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body.explore-page .premium-side-panel:hover::before {
+    opacity: 1;
+}
+
+body.explore-page .premium-side-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.explore-page .premium-side-panel .card-terminal-header {
+    background: rgba(0, 0, 0, 0.28);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+body.explore-page .premium-side-panel .terminal-dot:nth-child(1) {
+    background: rgba(255, 95, 86, 0.45);
+}
+body.explore-page .premium-side-panel .terminal-dot:nth-child(2) {
+    background: rgba(255, 189, 46, 0.4);
+}
+body.explore-page .premium-side-panel .terminal-dot:nth-child(3) {
+    background: rgba(39, 201, 63, 0.4);
+}
+
+/* Filter chips */
+body.explore-page .premium-side-panel .segment-chip {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body.explore-page .premium-side-panel .segment-chip:hover {
+    background: rgba(255, 138, 31, 0.06);
+    border-color: rgba(255, 138, 31, 0.22);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(255, 138, 31, 0.08);
+    transform: translateX(4px);
+}
+
+body.explore-page .premium-side-panel .segment-chip.active {
+    background: rgba(255, 138, 31, 0.1);
+    border-color: rgba(255, 138, 31, 0.45);
+    color: #ff8a1f;
+    box-shadow:
+        0 0 0 1px rgba(255, 138, 31, 0.12) inset,
+        0 0 20px rgba(255, 138, 31, 0.12);
+}
+
+/* Tech stack pills */
+body.explore-page .premium-side-panel .tech-chip {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body.explore-page .premium-side-panel .tech-chip-badge {
+    transition: color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+body.explore-page .premium-side-panel .tech-chip:hover {
+    background: rgba(255, 138, 31, 0.08);
+    border-color: rgba(255, 138, 31, 0.28);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(255, 138, 31, 0.1);
+}
+
+body.explore-page .premium-side-panel .tech-chip:hover .tech-chip-badge {
+    color: #ff8a1f;
+    box-shadow: 0 0 10px rgba(255, 138, 31, 0.25);
+}
+
+body.explore-page .premium-side-panel .tech-chip.active {
+    background: rgba(255, 138, 31, 0.12);
+    border-color: rgba(255, 138, 31, 0.4);
+    box-shadow: 0 0 18px rgba(255, 138, 31, 0.1);
+}
+
+body.explore-page .premium-side-panel .tech-chip.active .tech-chip-badge {
+    background: rgba(255, 138, 31, 0.85);
+    color: #0a0a0a;
+}
+
+body.explore-page .premium-side-panel .trending-list {
+    gap: 14px;
+}
+
+/* Trending mini modules */
+body.explore-page .premium-side-panel .trending-card {
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+body.explore-page .premium-side-panel .trending-card:hover {
+    background: rgba(255, 138, 31, 0.05);
+    border-color: rgba(255, 138, 31, 0.22);
+    transform: translateX(3px) translateY(-1px);
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.25),
+        0 0 16px rgba(255, 138, 31, 0.08);
+}
+
+body.explore-page .premium-side-panel .trending-card:hover .trending-thumb {
+    border-color: rgba(255, 138, 31, 0.4);
+    box-shadow: 0 0 14px rgba(255, 138, 31, 0.15);
+}
+
+body.explore-page .premium-side-panel .trending-card:hover .trending-arrow {
+    color: #ff8a1f;
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+body.explore-page .premium-side-panel .trending-info h4 {
+    letter-spacing: 0.02em;
+}
+
+body.explore-page .premium-side-panel .trending-info p {
+    line-height: 1.45;
+}
+
+/* Suggested users */
+body.explore-page .premium-side-panel .user-card {
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body.explore-page .premium-side-panel .user-card:hover {
+    background: rgba(255, 138, 31, 0.04);
+    border-color: rgba(255, 138, 31, 0.12);
+    transform: translateX(2px);
+}
+
+body.explore-page .premium-side-panel .user-card:hover .user-card-avatar {
+    box-shadow: 0 0 16px rgba(255, 138, 31, 0.2);
+    border-color: rgba(255, 138, 31, 0.35);
+}
+
+body.explore-page .premium-side-panel .follow-btn {
+    background: rgba(255, 138, 31, 0.06);
+    border: 1px solid rgba(255, 138, 31, 0.28);
+    color: #ff8a1f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body.explore-page .premium-side-panel .follow-btn:hover {
+    background: rgba(255, 138, 31, 0.14);
+    border-color: rgba(255, 138, 31, 0.5);
+    color: #fff;
+    box-shadow: 0 0 14px rgba(255, 138, 31, 0.2);
+    transform: scale(1.04);
+}
+
+body.explore-page .premium-side-panel .follow-btn.following {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.5);
+}
