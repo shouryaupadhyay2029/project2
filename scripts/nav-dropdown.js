@@ -70,6 +70,36 @@ function initPremiumNavDropdown() {
         if (e.key === 'Escape' && checkbox.checked) closeMenu();
     });
 
+    const getUploadHref = () => {
+        const currentPath = window.location.pathname;
+        const inPages = /\/pages\//i.test(currentPath);
+        if (!inPages) return 'pages/upload.html';
+
+        const afterPages = currentPath.split('/pages/')[1] || '';
+        const segments = afterPages.split('/').filter(Boolean);
+        const depth = Math.max(0, segments.length - 1);
+        return '../'.repeat(depth) + 'upload.html';
+    };
+
+    const normalizeUploadNavigation = () => {
+        const uploadHref = getUploadHref();
+        const uploadSelectors = [
+            'a[href$="upload.html"]',
+            'a[href$="pages/upload.html"]',
+            'a[href*="action=upload"]'
+        ].join(', ');
+
+        document.querySelectorAll(uploadSelectors).forEach((link) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+            if (href.includes('action=upload') || href.endsWith('upload.html') || href.endsWith('pages/upload.html')) {
+                link.setAttribute('href', uploadHref);
+            }
+        });
+    };
+
+    normalizeUploadNavigation();
+
     const logoutBtn = document.getElementById('nav-logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
