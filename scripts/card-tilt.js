@@ -17,9 +17,14 @@ function initCardTilt(root) {
             const rotateX = (y - rect.height / 2) / divisor;
             const rotateY = (rect.width / 2 - x) / divisor;
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(${lift}px)`;
-            card.style.borderColor = 'rgba(255, 138, 31, 0.28)';
-            card.style.boxShadow =
-                '0 0 0 1px rgba(255, 138, 31, 0.08) inset, 0 20px 48px rgba(0, 0, 0, 0.48), 0 0 24px rgba(255, 138, 31, 0.08)';
+            if (side) {
+                card.style.borderColor = 'rgba(255, 140, 40, 0.12)';
+                card.style.boxShadow = '0 14px 36px rgba(0, 0, 0, 0.55), 0 0 12px rgba(255, 140, 40, 0.04)';
+            } else {
+                card.style.borderColor = 'rgba(255, 138, 31, 0.28)';
+                card.style.boxShadow =
+                    '0 0 0 1px rgba(255, 138, 31, 0.08) inset, 0 20px 48px rgba(0, 0, 0, 0.48), 0 0 24px rgba(255, 138, 31, 0.08)';
+            }
         });
 
         card.addEventListener('mouseleave', () => {
