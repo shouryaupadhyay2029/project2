@@ -3418,6 +3418,7 @@
 
 <body class="challenges-page">
     <script src="../scripts/motion-engine.js" defer></script>
+    <script src="../scripts/nav-dropdown.js" defer></script>
 
     <!-- Fixed Vertical Navigation Rail -->
     <div class="system-nav-rail" id="systemNavRail">
@@ -3498,22 +3499,24 @@
                     </svg>
 
                     <!-- Premium Dropdown Menu -->
-                    <div class="premium-dropdown" id="hamburger-dropdown">
-                        <div class="dropdown-group primary-nav">
-                            <a href="../index.html" class="dropdown-item nav-item-anim">Home</a>
-                            <a href="explore.html" class="dropdown-item nav-item-anim">Explore</a>
-                            <a href="feed.html" class="dropdown-item nav-item-anim">Feed</a>
-                            <a href="beginner.html" class="dropdown-item nav-item-anim">Beginner Zone</a>
-                            <a href="teams.html" class="dropdown-item nav-item-anim">Teams</a>
-                            <a href="./upload.html" class="dropdown-item nav-item-anim">Upload Project</a>
-                            <a href="challenges.html" class="dropdown-item nav-item-anim active-page">Challenges</a>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-group secondary-nav">
-                            <a href="dashboard.html" class="dropdown-item nav-item-anim">Dashboard</a>
-                            <a href="profile.html" class="dropdown-item nav-item-anim">Profile</a>
-                            <a href="#" class="dropdown-item nav-item-anim">Settings</a>
-                            <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn">Logout</a>
+                    <div class="premium-dropdown" id="hamburger-dropdown" role="menu" aria-label="Main navigation">
+                        <div class="dropdown-inner">
+                            <div class="dropdown-group primary-nav">
+                                <a href="../index.html" class="dropdown-item nav-item-anim"><i data-lucide="home" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Home</span></a>
+                                <a href="explore.html" class="dropdown-item nav-item-anim"><i data-lucide="compass" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Explore</span></a>
+                                <a href="feed.html" class="dropdown-item nav-item-anim"><i data-lucide="rss" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Feed</span></a>
+                                <a href="challenges.html" class="dropdown-item nav-item-anim active-page"><i data-lucide="trophy" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Challenges</span></a>
+                                <a href="beginner.html" class="dropdown-item nav-item-anim"><i data-lucide="graduation-cap" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Beginner Zone</span></a>
+                                <a href="teams.html" class="dropdown-item nav-item-anim"><i data-lucide="users" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Teams</span></a>
+                                <a href="upload.html" class="dropdown-item nav-item-anim"><i data-lucide="upload" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Upload Project</span></a>
+                            </div>
+                            <div class="dropdown-divider" role="separator"></div>
+                            <div class="dropdown-group secondary-nav">
+                                <a href="dashboard.html" class="dropdown-item nav-item-anim"><i data-lucide="layout-dashboard" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Dashboard</span></a>
+                                <a href="profile.html" class="dropdown-item nav-item-anim"><i data-lucide="user" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Profile</span></a>
+                                <a href="#" class="dropdown-item nav-item-anim"><i data-lucide="settings" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Settings</span></a>
+                                <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn" role="menuitem"><i data-lucide="log-out" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Logout</span></a>
+                            </div>
                         </div>
                     </div>
                 </label>
@@ -4577,53 +4580,6 @@
                     });
                 });
             }
-
-            // Hamburger Dropdown Logic
-            const hamburgerCheckbox = document.getElementById('hamburger-checkbox');
-            const hamburgerDropdown = document.getElementById('hamburger-dropdown');
-            const hamburgerLabel = document.getElementById('hamburger-menu-label');
-            const navItems = hamburgerDropdown.querySelectorAll('.nav-item-anim');
-
-            hamburgerCheckbox.addEventListener('change', () => {
-                if (hamburgerCheckbox.checked) {
-                    hamburgerDropdown.classList.add('active');
-
-                    // Staggered Entrance Animation
-                    navItems.forEach((item) => {
-                        item.classList.remove('nav-item-visible');
-                        item.style.transitionDelay = '0ms';
-                    });
-
-                    requestAnimationFrame(() => {
-                        navItems.forEach((item, index) => {
-                            item.style.transitionDelay = `${index * 35}ms`;
-                            item.classList.add('nav-item-visible');
-                        });
-                    });
-                } else {
-                    hamburgerDropdown.classList.remove('active');
-                    navItems.forEach(item => {
-                        item.classList.remove('nav-item-visible');
-                        item.style.transitionDelay = '0ms';
-                    });
-                }
-            });
-
-            // Close on click outside
-            document.addEventListener('click', (e) => {
-                if (!hamburgerLabel.contains(e.target) && hamburgerCheckbox.checked) {
-                    hamburgerCheckbox.checked = false;
-                    hamburgerDropdown.classList.remove('active');
-                }
-            });
-
-            // Close on ESC
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && hamburgerCheckbox.checked) {
-                    hamburgerCheckbox.checked = false;
-                    hamburgerDropdown.classList.remove('active');
-                }
-            });
 
             // ─────────────────────────────────────────────────────────────────────────────
             // 3D DEPTH PARTICLE ENGINE & NOISE

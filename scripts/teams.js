@@ -10,59 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 
-    const navToggle = document.getElementById('nav-toggle');
-    const navDropdown = document.getElementById('nav-dropdown');
-
-    if (navToggle && navDropdown) {
-        const navItems = navDropdown.querySelectorAll('.nav-item-anim');
-
-        navToggle.addEventListener('change', () => {
-            if (navToggle.checked) {
-                navDropdown.classList.add('active');
-
-                // Staggered Entrance Animation
-                navItems.forEach((item) => {
-                    item.classList.remove('nav-item-visible');
-                    item.style.transitionDelay = '0ms';
-                });
-
-                requestAnimationFrame(() => {
-                    navItems.forEach((item, index) => {
-                        item.style.transitionDelay = `${index * 35}ms`;
-                        item.classList.add('nav-item-visible');
-                    });
-                });
-            } else {
-                navDropdown.classList.remove('active');
-                // Instantly reset
-                navItems.forEach(item => {
-                    item.classList.remove('nav-item-visible');
-                    item.style.transitionDelay = '0ms';
-                });
-            }
-        });
-
-        // Cursor Following Highlight inside dropdown
-        navDropdown.addEventListener('mousemove', (e) => {
-            const rect = navDropdown.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-            navDropdown.style.setProperty('--mouse-x', `${x}%`);
-            navDropdown.style.setProperty('--mouse-y', `${y}%`);
-        });
-
-        document.addEventListener('click', (e) => {
-            const hamburgerWrapper = document.querySelector('.hamburger-wrapper');
-            if (navToggle.checked && !hamburgerWrapper.contains(e.target)) {
-                navToggle.checked = false;
-                navDropdown.classList.remove('active');
-                navItems.forEach(item => {
-                    item.classList.remove('nav-item-visible');
-                });
-            }
-        });
-    }
-
     // ─── 2. TERRAIN BACKGROUND ──────────────────────────────────────────
     const canvas = document.getElementById('teams-canvas');
     if (canvas) {

@@ -1168,12 +1168,33 @@
                 </div>
             </div>
 
-            <!-- Mobile Hamburger Toggle Menu -->
-            <button class="hamburger" id="hamburger-menu" aria-label="Toggle Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <label class="uiverse-hamburger global-nav-toggle" id="hamburger-menu-label" aria-label="Open navigation menu">
+                <input type="checkbox" id="hamburger-checkbox">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                    <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+                    <path class="line" d="M7 16 27 16"></path>
+                </svg>
+                <div class="premium-dropdown" id="hamburger-dropdown" role="menu" aria-label="Main navigation">
+                    <div class="dropdown-inner">
+                        <div class="dropdown-group primary-nav">
+                            <a href="index.html" class="dropdown-item nav-item-anim active-page"><i data-lucide="home" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Home</span></a>
+                            <a href="pages/explore.html" class="dropdown-item nav-item-anim"><i data-lucide="compass" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Explore</span></a>
+                            <a href="pages/feed.html" class="dropdown-item nav-item-anim"><i data-lucide="rss" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Feed</span></a>
+                            <a href="pages/challenges.html" class="dropdown-item nav-item-anim"><i data-lucide="trophy" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Challenges</span></a>
+                            <a href="pages/beginner.html" class="dropdown-item nav-item-anim"><i data-lucide="graduation-cap" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Beginner Zone</span></a>
+                            <a href="pages/teams.html" class="dropdown-item nav-item-anim"><i data-lucide="users" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Teams</span></a>
+                            <a href="pages/upload.html" class="dropdown-item nav-item-anim"><i data-lucide="upload" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Upload Project</span></a>
+                        </div>
+                        <div class="dropdown-divider" role="separator"></div>
+                        <div class="dropdown-group secondary-nav">
+                            <a href="pages/dashboard.html" class="dropdown-item nav-item-anim"><i data-lucide="layout-dashboard" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Dashboard</span></a>
+                            <a href="pages/profile.html" class="dropdown-item nav-item-anim"><i data-lucide="user" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Profile</span></a>
+                            <a href="#" class="dropdown-item nav-item-anim"><i data-lucide="settings" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Settings</span></a>
+                            <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn" role="menuitem"><i data-lucide="log-out" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Logout</span></a>
+                        </div>
+                    </div>
+                </div>
+            </label>
         </div>
     </nav>
 
@@ -1505,6 +1526,7 @@
 
     <!-- App Logic -->
     <script src="scripts/auth.js" type="module" defer></script>
+    <script src="scripts/nav-dropdown.js" defer></script>
     <script src="scripts/script.js" defer></script>
 
     <script>

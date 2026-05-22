@@ -163,30 +163,38 @@ body::before {
 }
 
 
-/* ─── Premium Dropdown Menu ─── */
+/* ─── Premium Global Nav Dropdown ─── */
+
+.nav-actions,
+.hamburger-wrapper,
+.uiverse-hamburger {
+    position: relative;
+}
 
 .premium-dropdown {
     position: absolute;
-    top: calc(100% + 15px);
-    right: 20px;
-    width: 210px;
-    background: rgba(20, 20, 20, 0.75);
+    top: calc(100% + 12px);
+    right: 0;
+    width: 236px;
+    background: rgba(10, 10, 12, 0.94);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 8px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
     opacity: 0;
     visibility: hidden;
-    transform: scale(0.98) translateY(-6px);
-    transition: all 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(-10px) scale(0.96);
+    transition:
+        opacity 320ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 320ms cubic-bezier(0.22, 1, 0.36, 1);
     z-index: 2000;
-    display: flex;
-    flex-direction: column;
     pointer-events: none;
     --mouse-x: 50%;
-    --mouse-y: 50%;
+    --mouse-y: 0%;
 }
 
 .premium-dropdown::after {
@@ -194,79 +202,151 @@ body::before {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 140, 66, 0.06), transparent 45%);
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 140, 40, 0.07), transparent 50%);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.6s ease;
-    z-index: 1;
+    transition: opacity 0.5s ease;
+    z-index: 0;
 }
 
-.premium-dropdown:hover::after {
+.premium-dropdown:hover::after,
+.premium-dropdown.active::after {
     opacity: 1;
 }
 
 .premium-dropdown.active {
     opacity: 1;
     visibility: visible;
-    transform: scale(1) translateY(0);
-    pointer-events: all;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
 }
 
-.dropdown-group {
+.premium-dropdown .dropdown-inner {
     display: flex;
     flex-direction: column;
     gap: 6px;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
-.dropdown-item {
-    padding: 10px 14px;
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.92rem;
+.premium-dropdown .dropdown-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.premium-dropdown .dropdown-item {
+    padding: 9px 10px;
+    margin: 0;
+    border-radius: 10px;
+    border: none;
+    border-left: 2px solid transparent;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.8125rem;
     font-weight: 500;
+    letter-spacing: 0.02em;
+    font-family: 'Inter', 'DM Sans', system-ui, sans-serif;
     text-decoration: none;
     display: flex;
     align-items: center;
-    position: relative;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
     background: transparent;
-    transition: all 0.2s ease;
+    cursor: pointer;
+    transition:
+        background 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.nav-item-anim {
+.premium-dropdown .nav-menu-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.38);
+    stroke-width: 1.75;
+    transition: color 0.25s cubic-bezier(0.22, 1, 0.36, 1), transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.premium-dropdown .nav-menu-label {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.premium-dropdown .nav-item-anim {
     opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 180ms ease-out, transform 180ms ease-out;
+    transform: translateY(5px);
+    transition:
+        opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.nav-item-visible {
+.premium-dropdown .nav-item-visible {
     opacity: 1 !important;
     transform: translateY(0) !important;
-    filter: none !important;
 }
 
-.dropdown-item:hover {
-    background: rgba(255, 255, 255, 0.06);
+.premium-dropdown .dropdown-item:hover,
+.premium-dropdown .dropdown-item:focus-visible {
+    background: rgba(255, 140, 40, 0.08);
+    border-left-color: rgba(255, 140, 40, 0.7);
+    color: rgba(255, 255, 255, 0.95);
+    outline: none;
+    transform: none;
+    box-shadow: none;
+}
+
+.premium-dropdown .dropdown-item:hover .nav-menu-icon,
+.premium-dropdown .dropdown-item:focus-visible .nav-menu-icon {
+    color: rgba(255, 180, 100, 0.95);
+    transform: translateX(2px);
+}
+
+.premium-dropdown .dropdown-item.active-page {
+    background: rgba(255, 140, 40, 0.08);
+    border-left-color: rgba(255, 140, 40, 0.85);
     color: #fff;
-    transform: translateX(3px);
 }
 
-.dropdown-item.active-page {
-    color: #fff;
-    background: rgba(255, 140, 66, 0.12);
+.premium-dropdown .dropdown-item.active-page .nav-menu-icon {
+    color: rgba(255, 160, 80, 0.95);
 }
 
-.dropdown-divider {
+.premium-dropdown .dropdown-item.logout-btn:hover {
+    background: rgba(255, 80, 60, 0.08);
+    border-left-color: rgba(255, 100, 80, 0.55);
+}
+
+.premium-dropdown .dropdown-item.logout-btn:hover .nav-menu-icon {
+    color: rgba(255, 140, 120, 0.95);
+}
+
+.premium-dropdown .dropdown-divider {
     height: 1px;
-    margin: 6px 0;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+    margin: 4px 6px;
+    flex-shrink: 0;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.35s ease 0.08s;
 }
 
 .premium-dropdown.active .dropdown-divider {
     opacity: 1;
+}
+
+.nav-right-actions .global-nav-toggle,
+.navbar .nav-actions .uiverse-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.navbar .nav-container {
+    position: relative;
 }
 
 

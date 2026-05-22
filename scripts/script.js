@@ -20,42 +20,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const hamburger = document.getElementById('hamburger-menu');
     const navLinks = document.getElementById('nav-links');
-    const navbar = document.getElementById('main-navbar');
 
-    // Toggle mobile menu
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('open');
-        navLinks.classList.toggle('active');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            navLinks.classList.toggle('active');
 
-        // Prevent scrolling when menu is open
-        if (navLinks.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-            document.body.classList.add('modal-open');
-        } else {
-            document.body.style.overflow = 'auto';
-            document.body.classList.remove('modal-open');
-        }
-    });
-
-    // Close mobile menu when clicking a link
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('open');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            document.body.classList.remove('modal-open');
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('modal-open');
+            } else {
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('modal-open');
+            }
         });
-    });
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains('active')) {
-            hamburger.classList.remove('open');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('modal-open');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains('active')) {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
 
     // Custom cursor support removed — native system cursor restored.
 
