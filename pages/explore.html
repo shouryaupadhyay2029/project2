@@ -22,36 +22,35 @@
         .explore-page {
             background: #0f0f0f;
         }
-
+        
         #particle-wave-canvas {
             position: fixed;
             inset: 0;
             z-index: -1;
             pointer-events: none;
         }
-
+        
         body.explore-page .logo-chars {
             font-size: 1.1rem;
         }
-
+        
         body.explore-page .char.outline {
             -webkit-text-stroke-width: 1.1px;
         }
-
+        
         body.explore-page .logo-dot {
             width: 6px;
             height: 6px;
             right: -8px;
             top: -1px;
         }
-
+        
         body.explore-page .breadcrumb-slash,
         body.explore-page .breadcrumb-current {
             font-size: 1.05rem;
         }
-
         /* ─── Uiverse Hamburger Menu ─── */
-
+        
         .uiverse-hamburger {
             cursor: pointer;
             display: flex;
@@ -61,15 +60,14 @@
             height: 40px;
             position: relative;
         }
-
+        
         .uiverse-hamburger svg {
             height: 38px;
             width: 38px;
             transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         /* ─── Command Palette ─── */
-
+        
         .palette-backdrop {
             position: fixed;
             inset: 0;
@@ -81,12 +79,12 @@
             display: flex;
             justify-content: center;
         }
-
+        
         .palette-backdrop.active {
             opacity: 1;
             visibility: visible;
         }
-
+        
         .palette-container {
             position: relative;
             top: 80px;
@@ -100,11 +98,11 @@
             transition: transform 180ms ease-out;
             overflow: hidden;
         }
-
+        
         .palette-backdrop.active .palette-container {
             transform: translateY(0);
         }
-
+        
         .palette-header {
             padding: 0 16px;
             height: 52px;
@@ -112,7 +110,7 @@
             align-items: center;
             gap: 12px;
         }
-
+        
         .palette-input {
             flex: 1;
             background: none;
@@ -121,7 +119,7 @@
             font-size: 16px;
             outline: none;
         }
-
+        
         .palette-shortcut {
             background: rgba(255, 255, 255, 0.08);
             padding: 4px 8px;
@@ -130,7 +128,7 @@
             font-size: 11px;
             font-weight: 600;
         }
-
+        
         .palette-results {
             padding: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -140,7 +138,7 @@
             max-height: 400px;
             overflow-y: auto;
         }
-
+        
         .palette-category label {
             display: block;
             font-size: 10px;
@@ -150,13 +148,13 @@
             color: #666;
             margin-bottom: 8px;
         }
-
+        
         .palette-chips {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-
+        
         .palette-chip {
             padding: 5px 12px;
             border-radius: 100px;
@@ -166,20 +164,19 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
+        
         .palette-chip:hover {
             background: rgba(232, 129, 58, 0.15);
             border-color: #E8813A;
             color: #E8813A;
         }
-
+        
         .palette-chip.hidden {
             display: none;
         }
-
         /* ─── Premium Dropdown Menu ─── */
         /* ─── Explore Platform Layout ─── */
-
+        
         .explore-layout {
             max-width: 1520px;
             margin: 100px auto 72px;
@@ -188,15 +185,14 @@
             gap: 26px;
             padding: 0 18px;
         }
-
         /* Sidebar Styles */
-
+        
         .sidebar-sticky {
             position: sticky;
             top: 100px;
             height: fit-content;
         }
-
+        
         .sidebar-card {
             background: linear-gradient(180deg, rgba(10, 10, 12, 0.96), rgba(14, 14, 16, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -208,9 +204,8 @@
             will-change: transform;
             box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
         }
-
         /* Terminal Header System */
-
+        
         .card-terminal-header {
             background: rgba(255, 255, 255, 0.02);
             padding: 10px 16px;
@@ -219,25 +214,25 @@
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .terminal-header-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
+        
         .terminal-dots {
             display: flex;
             gap: 5px;
         }
-
+        
         .terminal-dot {
             width: 4px;
             height: 4px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
         }
-
+        
         .terminal-filename {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.62rem;
@@ -246,7 +241,7 @@
             text-transform: uppercase;
             font-weight: 600;
         }
-
+        
         .terminal-status {
             display: flex;
             align-items: center;
@@ -258,7 +253,7 @@
             font-weight: 700;
             letter-spacing: 0.05em;
         }
-
+        
         .status-pulse {
             width: 5px;
             height: 5px;
@@ -267,28 +262,26 @@
             box-shadow: 0 0 8px #ff8c42;
             animation: pulse-amber 2.5s infinite ease-in-out;
         }
-
+        
         @keyframes pulse-amber {
             0% {
                 opacity: 0.4;
                 transform: scale(0.9);
             }
-
             50% {
                 opacity: 1;
                 transform: scale(1.15);
             }
-
             100% {
                 opacity: 0.4;
                 transform: scale(0.9);
             }
         }
-
+        
         .sidebar-card-content {
             padding: 16px 14px 18px;
         }
-
+        
         .sidebar-title {
             color: rgba(255, 255, 255, 0.55);
             font-size: 0.78rem;
@@ -301,13 +294,13 @@
             text-transform: uppercase;
             opacity: 1;
         }
-
+        
         .segmented-control {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-
+        
         .segment-chip {
             background: transparent;
             border: none;
@@ -327,42 +320,41 @@
             text-align: left;
             position: relative;
         }
-
+        
         .segment-chip:not(:last-child) {
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-
+        
         .segment-chip:hover {
             background: rgba(255, 140, 40, 0.04);
             border-left-color: rgba(255, 140, 40, 0.25);
             color: rgba(255, 255, 255, 0.9);
         }
-
+        
         .segment-chip.active {
             background: rgba(255, 140, 40, 0.06);
             border-left: 2px solid #ff8c28;
             color: rgba(255, 180, 120, 0.95);
             box-shadow: none;
         }
-
+        
         .chip-icon {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s ease;
         }
-
+        
         .segment-chip.active .chip-icon {
             color: #ff8c42;
         }
-
         /* ─── Tech Stack Chips ─── */
-
+        
         .tech-chip-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 2px 10px;
         }
-
+        
         .tech-chip {
             display: inline-flex;
             align-items: center;
@@ -383,30 +375,30 @@
             text-transform: uppercase;
             letter-spacing: 0.06em;
         }
-
+        
         .tech-chip:hover {
             background: rgba(255, 140, 40, 0.05);
             color: rgba(255, 255, 255, 0.88);
         }
-
+        
         .tech-chip.active {
             background: rgba(255, 140, 40, 0.06);
             color: #ff8c28;
             box-shadow: none;
         }
-
+        
         .tech-chip-icon {
             font-size: 0.8rem;
             filter: grayscale(1) brightness(2);
             opacity: 0.5;
             transition: all 0.3s ease;
         }
-
+        
         .tech-chip.active .tech-chip-icon {
             filter: none;
             opacity: 1;
         }
-
+        
         .tech-chip-badge {
             background: transparent;
             color: rgba(255, 255, 255, 0.32);
@@ -417,14 +409,13 @@
             line-height: 1.2;
             margin-left: 4px;
         }
-
+        
         .tech-chip.active .tech-chip-badge,
         .tech-chip:hover .tech-chip-badge {
             color: rgba(255, 140, 40, 0.85);
         }
-
         /* Ripple Effect */
-
+        
         .tech-chip-ripple {
             position: absolute;
             border-radius: 50%;
@@ -433,20 +424,19 @@
             animation: ripple-burst 0.5s linear;
             pointer-events: none;
         }
-
+        
         @keyframes ripple-burst {
             to {
                 transform: scale(4);
                 opacity: 0;
             }
         }
-
         /* Feed & Search */
-
+        
         .search-section {
             margin-bottom: 32px;
         }
-
+        
         .search-box {
             height: 52px;
             background: rgba(10, 10, 12, 0.92);
@@ -460,24 +450,24 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
             position: relative;
         }
-
+        
         .search-box:focus-within {
             background: rgba(10, 10, 12, 0.98);
             border-color: rgba(255, 140, 40, 0.6);
             box-shadow: 0 0 18px rgba(255, 140, 40, 0.08);
         }
-
+        
         .search-box i {
             color: rgba(255, 255, 255, 0.32);
             font-size: 1rem;
             transition: color 0.3s ease;
             margin: 0;
         }
-
+        
         .search-box:focus-within i {
             color: rgba(255, 140, 40, 0.85);
         }
-
+        
         .search-box input {
             flex: 1;
             background: none;
@@ -487,16 +477,16 @@
             font-size: 0.92rem;
             outline: none;
         }
-
+        
         .search-box input::placeholder {
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s ease;
         }
-
+        
         .search-box:focus-within input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
-
+        
         .search-shortcut {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -510,20 +500,19 @@
             user-select: none;
             transition: all 0.3s ease;
         }
-
+        
         .search-box:focus-within .search-shortcut {
             opacity: 0;
             transform: translateX(10px);
         }
-
         /* Trending List */
-
+        
         .trending-list {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-
+        
         .trending-card {
             background: transparent;
             border: none;
@@ -536,16 +525,16 @@
             position: relative;
             overflow: hidden;
         }
-
+        
         .trending-card:not(:last-child) {
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-
+        
         .trending-card:hover {
             background: rgba(255, 140, 40, 0.04);
             padding-left: 8px;
         }
-
+        
         .trending-thumb {
             width: 48px;
             height: 48px;
@@ -559,17 +548,17 @@
             color: #ff8c42;
             transition: all 0.3s ease;
         }
-
+        
         .trending-card:hover .trending-thumb {
             border-color: #ff8c42;
             box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
         }
-
+        
         .trending-info {
             flex: 1;
             min-width: 0;
         }
-
+        
         .trending-info h4 {
             color: #fff;
             font-size: 0.88rem;
@@ -577,14 +566,14 @@
             margin-bottom: 4px;
             letter-spacing: 0.01em;
         }
-
+        
         .trending-info p {
             color: rgba(255, 255, 255, 0.35);
             font-size: 0.72rem;
             line-height: 1.4;
             margin-bottom: 10px;
         }
-
+        
         .trending-stats {
             display: flex;
             gap: 14px;
@@ -593,13 +582,13 @@
             font-size: 0.65rem;
             font-weight: 600;
         }
-
+        
         .trending-stats span {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-
+        
         .trending-arrow {
             position: absolute;
             right: 16px;
@@ -611,20 +600,19 @@
             width: 16px;
             height: 16px;
         }
-
+        
         .trending-card:hover .trending-arrow {
             opacity: 1;
             transform: translateY(-50%) translateX(0);
         }
-
         /* Suggested Users */
-
+        
         .user-suggestions {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-
+        
         .user-card {
             background: transparent;
             border: none;
@@ -636,16 +624,16 @@
             transition: background 0.3s ease, padding-left 0.3s ease;
             position: relative;
         }
-
+        
         .user-card:not(:last-child) {
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-
+        
         .user-card:hover {
             background: rgba(255, 140, 40, 0.04);
             padding-left: 8px;
         }
-
+        
         .user-card-avatar {
             width: 42px;
             height: 42px;
@@ -656,12 +644,12 @@
             background: rgba(255, 255, 255, 0.02);
             transition: all 0.3s ease;
         }
-
+        
         .user-card:hover .user-card-avatar {
             border-color: #ff8c42;
             box-shadow: 0 0 10px rgba(255, 140, 66, 0.15);
         }
-
+        
         .user-card-info h4 {
             color: #fff;
             font-size: 0.85rem;
@@ -669,7 +657,7 @@
             margin-bottom: 2px;
             letter-spacing: 0.01em;
         }
-
+        
         .user-card-info p {
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.7rem;
@@ -678,7 +666,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
+        
         .view-profile-text {
             color: #ff8c42;
             font-size: 0.7rem;
@@ -691,13 +679,13 @@
             height: 0;
             overflow: hidden;
         }
-
+        
         .user-card:hover .view-profile-text {
             opacity: 1;
             transform: translateY(0);
             height: 14px;
         }
-
+        
         .follow-btn {
             background: transparent;
             border: none;
@@ -712,28 +700,28 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
-
+        
         .follow-btn:hover {
             background: rgba(255, 140, 40, 0.08);
             color: #ffb070;
         }
-
+        
         .follow-btn.following {
             background: transparent;
             color: rgba(255, 255, 255, 0.38);
         }
-
+        
         .trending-info span {
             color: var(--text-tertiary);
             font-size: 0.75rem;
         }
-
+        
         .project-feed {
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
-
+        
         .project-card {
             background: linear-gradient(180deg, rgba(10, 10, 12, 0.94), rgba(14, 14, 16, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -743,31 +731,31 @@
             will-change: transform, border-color;
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
         }
-
+        
         .project-card:hover {
             transform: translateY(-3px);
             border-color: rgba(255, 140, 40, 0.18);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 14px rgba(255, 140, 40, 0.06);
         }
-
+        
         .project-card-body {
             padding: 20px 22px;
         }
-
+        
         .project-card-body h3 {
             color: #fff;
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 8px;
         }
-
+        
         .project-card-body p {
             color: rgba(255, 255, 255, 0.45);
             font-size: 0.85rem;
             line-height: 1.5;
             margin-bottom: 14px;
         }
-
+        
         .project-card-meta {
             display: flex;
             flex-wrap: wrap;
@@ -777,37 +765,34 @@
             font-size: 0.68rem;
             color: rgba(255, 255, 255, 0.35);
         }
-
+        
         .project-card-meta .project-tag {
             color: rgba(255, 140, 40, 0.75);
             border: none;
             padding: 0;
             background: transparent;
         }
-
+        
         #empty-state {
             text-align: center;
             padding: 48px 24px;
         }
-
         /* Responsive */
-
+        
         @media (max-width: 1100px) {
             .explore-layout {
                 grid-template-columns: 268px minmax(0, 1fr);
                 padding: 0 20px;
             }
-
             .sidebar-right {
                 display: none;
             }
         }
-
+        
         @media (max-width: 850px) {
             .explore-layout {
                 grid-template-columns: 1fr;
             }
-
             .sidebar-left {
                 display: none;
             }
@@ -865,7 +850,6 @@
                             </div>
                             <div class="dropdown-divider" role="separator"></div>
                             <div class="dropdown-group secondary-nav">
-                                <a href="dashboard.html" class="dropdown-item nav-item-anim"><i data-lucide="layout-dashboard" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Dashboard</span></a>
                                 <a href="profile.html" class="dropdown-item nav-item-anim"><i data-lucide="user" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Profile</span></a>
                                 <a href="#" class="dropdown-item nav-item-anim"><i data-lucide="settings" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Settings</span></a>
                                 <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn" role="menuitem"><i data-lucide="log-out" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Logout</span></a>
@@ -1113,10 +1097,10 @@
         const renderProject = (p, id) => {
             const card = document.createElement('article');
             card.className = 'project-card';
-            const tags = (p.tags && p.tags.length)
-                ? p.tags.slice(0, 3).map(t => `<span class="project-tag">${String(t)}</span>`).join('')
-                : '';
-            const likes = p.likes?.length || p.likesCount || 0;
+            const tags = (p.tags && p.tags.length) ?
+                p.tags.slice(0, 3).map(t => `<span class="project-tag">${String(t)}</span>`).join('') :
+                '';
+            const likes = p.likes ? .length || p.likesCount || 0;
             card.innerHTML = `
                 <div class="project-card-body">
                     <h3>${p.title || 'Untitled Project'}</h3>
@@ -1138,24 +1122,35 @@
             const el = document.getElementById('tw-text');
             if (!el) return;
             const suggestions = ['Try uploading a project', 'Search "React"', 'Search "AI tools"'];
-            let si = 0, ci = 0, typing = true;
+            let si = 0,
+                ci = 0,
+                typing = true;
             const tick = () => {
                 if (!document.getElementById('tw-text')) return;
                 const target = suggestions[si];
                 if (typing) {
                     el.textContent = target.slice(0, ++ci);
-                    if (ci === target.length) { typing = false; setTimeout(tick, 1400); return; }
+                    if (ci === target.length) {
+                        typing = false;
+                        setTimeout(tick, 1400);
+                        return;
+                    }
                     setTimeout(tick, 45);
                 } else {
                     el.textContent = target.slice(0, --ci);
-                    if (ci === 0) { typing = true; si = (si + 1) % suggestions.length; setTimeout(tick, 250); return; }
+                    if (ci === 0) {
+                        typing = true;
+                        si = (si + 1) % suggestions.length;
+                        setTimeout(tick, 250);
+                        return;
+                    }
                     setTimeout(tick, 25);
                 }
             };
             tick();
         };
 
-        const fetchProjects = async (filter = 'latest') => {
+        const fetchProjects = async(filter = 'latest') => {
             try {
                 let query = db.collection('projects');
                 if (filter === 'latest') query = query.orderBy('createdAt', 'desc');

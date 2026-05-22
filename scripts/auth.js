@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLoginMode = true;
 
     function isMockSession(userData) {
-        return userData?.uid && String(userData.uid).startsWith('mock-');
+        return userData ? .uid && String(userData.uid).startsWith('mock-');
     }
 
     // ─── 2. AUTH STATE CHANGE LISTENER ───
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveUserToFirestore(result.user);
                 if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
                     const isRoot = window.location.pathname.includes("index.html") || window.location.pathname.endsWith("/") || window.location.pathname.endsWith("/project2") || window.location.pathname.endsWith("/project2/");
-                    window.location.href = isRoot ? "pages/dashboard.html" : "dashboard.html";
+                    window.location.href = isRoot ? "pages/profile.html" : "profile.html";
                 }
             })
             .catch((error) => {
@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!authModal) return;
         isLoginMode = (mode === 'login');
 
-        authCard?.classList.toggle('auth-mode-login', isLoginMode);
-        authCard?.classList.toggle('auth-mode-signup', !isLoginMode);
+        authCard ? .classList.toggle('auth-mode-login', isLoginMode);
+        authCard ? .classList.toggle('auth-mode-signup', !isLoginMode);
 
         // Update header text
         if (authTitle) authTitle.innerText = isLoginMode ? 'Log in' : 'Sign Up';
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    closeAuthModal?.addEventListener('click', closeModal);
+    closeAuthModal ? .addEventListener('click', closeModal);
 
     function saveMockSession(userData) {
         localStorage.setItem('devstageUser', JSON.stringify(userData));
@@ -223,8 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
         authForm.addEventListener('submit', async(e) => {
             e.preventDefault();
 
-            const email = document.getElementById('auth-email')?.value.trim();
-            const password = document.getElementById('auth-password')?.value;
+            const email = document.getElementById('auth-email') ? .value.trim();
+            const password = document.getElementById('auth-password') ? .value;
 
             if (!email || !password) {
                 showMessage('Please fill in all required fields', 'error');
@@ -239,18 +239,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
 
-                    const displayName = stored?.displayName || email.split('@')[0];
+                    const displayName = stored ? .displayName || email.split('@')[0];
                     completeMockAuth({
                         displayName,
                         email,
-                        photoURL: stored?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=c8b89a&color=0b0b0b`,
-                        uid: stored?.uid || `mock-${email}`,
-                        joined: stored?.joined || new Date().toISOString()
+                        photoURL: stored ? .photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=c8b89a&color=0b0b0b`,
+                        uid: stored ? .uid || `mock-${email}`,
+                        joined: stored ? .joined || new Date().toISOString()
                     }, 'Welcome back!');
                 } else {
-                    const fullname = document.getElementById('auth-fullname')?.value.trim();
-                    const username = document.getElementById('auth-username')?.value.trim();
-                    const confirmPassword = document.getElementById('auth-confirm-password')?.value;
+                    const fullname = document.getElementById('auth-fullname') ? .value.trim();
+                    const username = document.getElementById('auth-username') ? .value.trim();
+                    const confirmPassword = document.getElementById('auth-confirm-password') ? .value;
 
                     if (!fullname || !username || !confirmPassword) {
                         showMessage('Please fill in all required fields', 'error');
@@ -324,12 +324,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    loginBtn?.addEventListener('click', (e) => {
+    loginBtn ? .addEventListener('click', (e) => {
         e.preventDefault();
         window.openLoginModal('login');
     });
 
-    signupBtn?.addEventListener('click', (e) => {
+    signupBtn ? .addEventListener('click', (e) => {
         e.preventDefault();
         window.openLoginModal('signup');
     });
@@ -340,11 +340,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('[DevStage Auth] Warning: Login or Sign Up button not found in DOM');
     }
 
-    document.getElementById('google-login-btn')?.addEventListener('click', () => {
+    document.getElementById('google-login-btn') ? .addEventListener('click', () => {
         window.loginWithGoogle();
     });
 
-    document.getElementById('github-login-btn')?.addEventListener('click', () => {
+    document.getElementById('github-login-btn') ? .addEventListener('click', () => {
         const name = isLoginMode ? 'GitHub User' : 'New GitHub User';
         completeMockAuth({
             displayName: name,
@@ -411,11 +411,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    userProfile?.addEventListener('click', (e) => {
+    userProfile ? .addEventListener('click', (e) => {
         e.stopPropagation();
-        userSection?.classList.toggle('active');
-        profileDropdown?.classList.toggle('active');
-        if (profileDropdown?.classList.contains('active')) {
+        userSection ? .classList.toggle('active');
+        profileDropdown ? .classList.toggle('active');
+        if (profileDropdown ? .classList.contains('active')) {
             if (window.lucide) lucide.createIcons();
             requestAnimationFrame(adjustProfileDropdownPosition);
         }
