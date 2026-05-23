@@ -71,6 +71,10 @@
             z-index: 9999;
             pointer-events: none;
             overflow: hidden;
+            display: none;
+        }
+        #reveal-overlay.active {
+            display: block;
         }
         
         #reveal-panel-top {
@@ -80,8 +84,8 @@
             right: 0;
             height: 50%;
             background: #0e0e0e;
-            transform: translateY(0);
-            transition: transform 0.72s cubic-bezier(0.76, 0, 0.24, 1);
+            transform: translateY(-100%);
+            transition: transform 0.52s cubic-bezier(0.76, 0, 0.24, 1);
         }
         
         #reveal-panel-bot {
@@ -91,8 +95,16 @@
             right: 0;
             height: 50%;
             background: #0e0e0e;
+            transform: translateY(100%);
+            transition: transform 0.52s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        /* STATE: panels closed (come together) */
+        #reveal-overlay.closed #reveal-panel-top {
             transform: translateY(0);
-            transition: transform 0.72s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        #reveal-overlay.closed #reveal-panel-bot {
+            transform: translateY(0);
         }
         
         #reveal-line {
@@ -112,29 +124,49 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, calc(-50% + 28px));
-            font-family: 'DM Sans', sans-serif;
-            font-size: 10px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+            transform: translate(-50%, calc(-50% + 22px));
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 300;
+            letter-spacing: 1.5px;
             color: rgba(201, 185, 154, 0);
             transition: color 0.4s ease, opacity 0.5s ease;
             white-space: nowrap;
             opacity: 0;
         }
+
+        #reveal-subtitle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, calc(-50% + 50px));
+            font-family: 'DM Sans', sans-serif;
+            font-size: 9px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(201, 185, 154, 0);
+            transition: color 0.4s ease 0.08s, opacity 0.5s ease 0.08s;
+            white-space: nowrap;
+            opacity: 0;
+        }
+
         /* STATE: line drawn */
-        
         #reveal-overlay.line-in #reveal-line {
             width: 100vw;
             opacity: 1;
         }
         
         #reveal-overlay.line-in #reveal-wordmark {
-            color: rgba(201, 185, 154, 0.35);
+            color: rgba(232, 230, 225, 0.85);
             opacity: 1;
         }
+
+        #reveal-overlay.line-in #reveal-subtitle {
+            color: rgba(201, 185, 154, 0.45);
+            opacity: 1;
+        }
+
         /* STATE: panels split open */
-        
         #reveal-overlay.split #reveal-panel-top {
             transform: translateY(-100%);
         }
@@ -148,6 +180,10 @@
         }
         
         #reveal-overlay.split #reveal-wordmark {
+            opacity: 0;
+        }
+
+        #reveal-overlay.split #reveal-subtitle {
             opacity: 0;
         }
         /* ─── SIDEBAR ─── */
@@ -1777,6 +1813,7 @@
             <div id="reveal-panel-bot"></div>
             <div id="reveal-line"></div>
             <div id="reveal-wordmark">Shourya Upadhyay</div>
+            <div id="reveal-subtitle"></div>
         </div>
 
         <div class="page-content">
@@ -2545,40 +2582,90 @@
                 document.getElementById('year-display').textContent = new Date().getFullYear();
             </script>
 
-            <!-- Tab navigation system -->
+            <!-- Tab navigation system with cinematic transition -->
             <script>
                 (function() {
                     const navItems = document.querySelectorAll('.nav-item[data-tab]');
                     const tabContents = document.querySelectorAll('.tab-content');
+                    const overlay = document.getElementById('reveal-overlay');
+                    const wordmark = document.getElementById('reveal-wordmark');
+                    const subtitle = document.getElementById('reveal-subtitle');
+                    let isTransitioning = false;
+                    let currentTab = 'overview';
+
+                    // Tab display names
+                    const tabNames = {
+                        overview: 'Overview',
+                        projects: 'Projects',
+                        articles: 'Articles',
+                        contact: 'Contact'
+                    };
 
                     // Set year display on projects tab too
                     const projYearEl = document.querySelector('.year-display-proj');
                     if (projYearEl) projYearEl.textContent = new Date().getFullYear();
 
+                    function switchTab(targetTab) {
+                        // Update nav active state
+                        navItems.forEach(n => n.classList.remove('active'));
+                        document.querySelector('.nav-item[data-tab="' + targetTab + '"]').classList.add('active');
+
+                        // Switch tab content
+                        tabContents.forEach(tc => tc.classList.remove('active'));
+                        const targetContent = document.getElementById('tab-' + targetTab);
+                        if (targetContent) {
+                            targetContent.classList.add('active');
+                        }
+
+                        // Scroll to top
+                        window.scrollTo({ top: 0 });
+                        currentTab = targetTab;
+                    }
+
+                    function cinematicTransition(targetTab) {
+                        if (isTransitioning || targetTab === currentTab) return;
+                        isTransitioning = true;
+
+                        // Set wordmark and subtitle text
+                        wordmark.textContent = 'Shourya Upadhyay';
+                        subtitle.textContent = tabNames[targetTab] || targetTab;
+
+                        // Reset overlay to clean state
+                        overlay.className = '';
+                        overlay.style.display = '';
+                        overlay.classList.add('active');
+
+                        // Step 1: Panels close together (come in from top/bottom)
+                        requestAnimationFrame(() => {
+                            overlay.classList.add('closed');
+                        });
+
+                        // Step 2: Once panels are closed, draw the line + show text
+                        setTimeout(() => {
+                            overlay.classList.add('line-in');
+                        }, 520);
+
+                        // Step 3: Switch the actual tab content (hidden behind panels)
+                        setTimeout(() => {
+                            switchTab(targetTab);
+                        }, 750);
+
+                        // Step 4: Split panels open to reveal new content
+                        setTimeout(() => {
+                            overlay.classList.add('split');
+                        }, 1050);
+
+                        // Step 5: Cleanup — hide overlay
+                        setTimeout(() => {
+                            overlay.classList.remove('active', 'closed', 'line-in', 'split');
+                            overlay.style.display = 'none';
+                            isTransitioning = false;
+                        }, 1800);
+                    }
+
                     navItems.forEach(item => {
                         item.addEventListener('click', () => {
-                            const targetTab = item.dataset.tab;
-
-                            // Update nav active state
-                            navItems.forEach(n => n.classList.remove('active'));
-                            item.classList.add('active');
-
-                            // Switch tab content
-                            tabContents.forEach(tc => {
-                                tc.classList.remove('active');
-                            });
-
-                            const targetContent = document.getElementById('tab-' + targetTab);
-                            if (targetContent) {
-                                // Small delay for the fade-out to feel natural
-                                requestAnimationFrame(() => {
-                                    targetContent.classList.add('active');
-                                });
-                            }
-
-                            // Scroll main area to top on tab switch
-                            document.querySelector('.main').scrollTop = 0;
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            cinematicTransition(item.dataset.tab);
                         });
                     });
                 })();
@@ -2644,13 +2731,23 @@
                 })();
             </script>
 
-            <!-- Cinematic entry overlay -->
+            <!-- Cinematic initial page load -->
             <script>
                 (function() {
                     const overlay = document.getElementById('reveal-overlay');
                     const content = document.querySelector('.page-content');
+                    const wordmark = document.getElementById('reveal-wordmark');
+                    const subtitle = document.getElementById('reveal-subtitle');
+
+                    // Set initial text
+                    wordmark.textContent = 'Shourya Upadhyay';
+                    subtitle.textContent = 'Overview';
 
                     function seq() {
+                        // Show overlay with panels already closed
+                        overlay.className = 'active closed';
+                        overlay.style.display = '';
+
                         setTimeout(function() {
                             overlay.classList.add('line-in');
                         }, 300);
@@ -2661,6 +2758,7 @@
                             content.classList.add('revealed');
                         }, 1080);
                         setTimeout(function() {
+                            overlay.classList.remove('active', 'closed', 'line-in', 'split');
                             overlay.style.display = 'none';
                         }, 2000);
                     }
