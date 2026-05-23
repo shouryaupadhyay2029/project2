@@ -1,6 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<head<meta charset="UTF-8">
+<head><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shourya Upadhyay — Designer & Developer</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -414,6 +414,21 @@
         
         .main {
             padding: 52px 64px 80px;
+        }
+
+        /* ─── TAB CONTENT SYSTEM ─── */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        .tab-content.active {
+            display: block;
+            animation: tabFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         
         .main-inner {
@@ -1030,6 +1045,728 @@
                 transform: translateY(0);
             }
         }
+
+        /* ═══════════════════════════════════════════
+           PROJECTS TAB STYLES
+        ═══════════════════════════════════════════ */
+
+        .proj-page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+            font-weight: 300;
+            color: var(--text-primary);
+            line-height: 1.25;
+            letter-spacing: -0.3px;
+            margin-bottom: 28px;
+        }
+        .proj-page-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 38px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 13px;
+            border: 1px solid var(--border-hover);
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: transparent;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.18s;
+            letter-spacing: 0.3px;
+        }
+        .filter-chip:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: var(--accent-dim);
+        }
+        .filter-chip.active {
+            border-color: rgba(201, 185, 154, 0.3);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .chip-count {
+            font-size: 9.5px;
+            color: var(--text-muted);
+        }
+        .filter-chip.active .chip-count {
+            color: rgba(201, 185, 154, 0.4);
+        }
+
+        .sort-toggle {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .sort-btn {
+            padding: 5px 12px;
+            font-size: 9.5px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.15s;
+        }
+        .sort-btn:not(:last-child) {
+            border-right: 1px solid var(--border);
+        }
+        .sort-btn.active {
+            background: var(--surface);
+            color: var(--text-secondary);
+        }
+        .sort-btn:hover {
+            color: var(--text-primary);
+        }
+
+        /* ── STATUS BADGES ── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 100px;
+            font-size: 8.5px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+        .status-badge::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-badge.live {
+            background: rgba(74, 158, 107, 0.10);
+            color: #4a9e6b;
+            border-color: rgba(74, 158, 107, 0.2);
+        }
+        .status-badge.live::before { background: #4a9e6b; }
+
+        .status-badge.wip {
+            background: rgba(201, 160, 80, 0.10);
+            color: #c9a050;
+            border-color: rgba(201, 160, 80, 0.2);
+        }
+        .status-badge.wip::before {
+            background: #c9a050;
+            animation: wipPulse 1.4s ease-in-out infinite;
+        }
+
+        .status-badge.oss {
+            background: rgba(100, 140, 201, 0.10);
+            color: #648cc9;
+            border-color: rgba(100, 140, 201, 0.2);
+        }
+        .status-badge.oss::before { background: #648cc9; }
+
+        .status-badge.archived {
+            background: rgba(90, 90, 90, 0.08);
+            color: #555;
+            border-color: rgba(90, 90, 90, 0.14);
+        }
+        .status-badge.archived::before { background: #555; }
+
+        @keyframes wipPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* ── TECH TAGS ── */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .tech-tag {
+            padding: 3px 10px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 9.5px;
+            color: var(--text-muted);
+            letter-spacing: 0.4px;
+            cursor: default;
+            transition: all 0.15s;
+        }
+        .tech-tag:hover {
+            border-color: rgba(201, 185, 154, 0.2);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        /* ── FEATURED CARD ── */
+        .feat-wrap {
+            margin-bottom: 44px;
+            transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.35s ease, margin-bottom 0.4s ease;
+            max-height: 600px;
+            overflow: hidden;
+        }
+        .feat-wrap.filtered-out {
+            max-height: 0 !important;
+            opacity: 0 !important;
+            margin-bottom: 0 !important;
+            pointer-events: none;
+        }
+
+        .feat-eyebrow {
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        .feat-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 1px;
+            background: var(--accent);
+            opacity: 0.4;
+        }
+
+        .feat-card {
+            display: flex;
+            border: 1px solid var(--border-hover);
+            border-radius: 14px;
+            overflow: hidden;
+            background: var(--surface);
+            cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s,
+                        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+        .feat-card:hover {
+            border-color: rgba(201, 185, 154, 0.22);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(201, 185, 154, 0.07);
+            transform: translateY(-3px);
+        }
+
+        .feat-cover {
+            width: 220px;
+            flex-shrink: 0;
+            background: #161410;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 210px;
+        }
+        .feat-cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 55% 38%, rgba(201, 185, 154, 0.1) 0%, transparent 60%);
+        }
+        .feat-cover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 22px 22px;
+        }
+
+        .feat-cover-art { position: relative; z-index: 1; }
+
+        .feat-cover-num {
+            position: absolute;
+            bottom: 14px;
+            left: 16px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            color: rgba(201, 185, 154, 0.25);
+            letter-spacing: 3px;
+            z-index: 2;
+        }
+        .feat-pin-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-size: 8px;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: rgba(201, 185, 154, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 2;
+        }
+        .feat-pin-badge::before {
+            content: '';
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.5;
+        }
+
+        .feat-sep {
+            width: 1px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+
+        .feat-body {
+            flex: 1;
+            padding: 26px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .feat-status-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .feat-year {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .feat-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 23px;
+            font-weight: 300;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .feat-desc {
+            font-size: 12.5px;
+            line-height: 1.85;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+
+        .feat-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9.5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.18s;
+            border: none;
+            background: none;
+            font-family: 'DM Sans', sans-serif;
+            padding: 0;
+        }
+        .view-link:hover { color: var(--accent); }
+
+        /* ── YEAR GROUPS ── */
+        .year-group {
+            transition: opacity 0.35s ease,
+                        max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        margin-bottom 0.35s ease;
+            max-height: 1200px;
+        }
+        .year-group.hidden {
+            opacity: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden;
+            margin-bottom: 0 !important;
+            pointer-events: none;
+        }
+
+        .year-divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .year-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            white-space: nowrap;
+        }
+        .year-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── PROJECT GRID ── */
+        .proj-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+
+        .proj-tile {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--surface);
+            cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s,
+                        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.3s ease, filter 0.3s ease;
+        }
+        .proj-tile:hover {
+            border-color: rgba(201, 185, 154, 0.15);
+            box-shadow: 0 14px 44px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(201, 185, 154, 0.06);
+            transform: translateY(-4px);
+        }
+        .proj-tile.filtered-out {
+            opacity: 0.07;
+            filter: grayscale(0.5);
+            pointer-events: none;
+            transform: scale(0.97);
+        }
+
+        .proj-tile-cover {
+            height: 116px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 10px 12px;
+        }
+
+        .proj-tile[data-cats="design"] .proj-tile-cover { background: #161410; }
+        .proj-tile[data-cats="dev"] .proj-tile-cover { background: #0f1318; }
+        .proj-tile[data-cats*="oss"] .proj-tile-cover { background: #0d1410; }
+        .proj-tile[data-cats="branding"] .proj-tile-cover { background: #130f14; }
+
+        .proj-tile-cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 65% 30%, rgba(201, 185, 154, 0.07) 0%, transparent 60%);
+        }
+        .proj-tile-cover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 18px 18px;
+        }
+
+        .tile-top-row {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 2;
+        }
+
+        .tile-yr {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 10px;
+            color: rgba(201, 185, 154, 0.22);
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .tile-arrow {
+            font-size: 13px;
+            color: rgba(201, 185, 154, 0);
+            transition: all 0.22s;
+            transform: translate(-2px, 2px);
+        }
+        .proj-tile:hover .tile-arrow {
+            color: rgba(201, 185, 154, 0.55);
+            transform: translate(0, 0);
+        }
+
+        .proj-tile-body {
+            padding: 13px 15px 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .tile-status-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+
+        .proj-tile-title {
+            font-size: 13.5px;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .proj-tile-desc {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        /* ── CURRENTLY BUILDING ── */
+        .building-wrap {
+            margin-bottom: 44px;
+        }
+
+        .building-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .building-label {
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #c9a050;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: rgba(201, 160, 80, 0.35);
+            animation: pulseRing 1.6s ease-out infinite;
+        }
+        @keyframes pulseRing {
+            0%   { transform: scale(0.7); opacity: 0.9; }
+            100% { transform: scale(2.3); opacity: 0; }
+        }
+
+        .building-card {
+            border: 1px solid rgba(201, 160, 80, 0.14);
+            border-radius: 12px;
+            background: rgba(201, 160, 80, 0.026);
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            cursor: pointer;
+            transition: border-color 0.25s, background 0.25s, transform 0.25s;
+        }
+        .building-card:hover {
+            border-color: rgba(201, 160, 80, 0.26);
+            background: rgba(201, 160, 80, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .building-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(201, 160, 80, 0.07);
+            border: 1px solid rgba(201, 160, 80, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 19px;
+            color: rgba(201, 160, 80, 0.45);
+            font-weight: 300;
+        }
+
+        .building-info { flex: 1; min-width: 0; }
+        .building-name {
+            font-size: 13.5px;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .building-sub {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 9px;
+        }
+
+        /* ── END STATE ── */
+        .end-state {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0 0;
+            border-top: 1px solid var(--border);
+        }
+        .end-count {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+        }
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 9.5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.18s;
+            border: none;
+            background: none;
+            font-family: 'DM Sans', sans-serif;
+            padding: 0;
+        }
+        .github-link:hover { color: var(--accent); }
+
+        /* ── RIGHT COL: PROJECT STATS ── */
+        .proj-stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .proj-stat-cell {
+            background: var(--bg);
+            padding: 16px;
+            transition: background 0.15s;
+            cursor: default;
+        }
+        .proj-stat-cell:hover { background: var(--surface-2); }
+        .proj-stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            font-weight: 300;
+            color: var(--text-primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .proj-stat-lbl {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        /* Currently shipping (right col) */
+        .ship-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding-top: 14px;
+        }
+        .ship-dot-col { padding-top: 3px; flex-shrink: 0; }
+        .ship-name {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 400;
+            margin-bottom: 3px;
+        }
+        .ship-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        /* ── PLACEHOLDER TAB STATES ── */
+        .tab-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            text-align: center;
+        }
+        .tab-placeholder-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .tab-placeholder-icon svg {
+            width: 22px;
+            height: 22px;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+        .tab-placeholder-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .tab-placeholder-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.7;
+            max-width: 320px;
+        }
     </style>
     </head>
 
@@ -1087,16 +1824,16 @@
                     <div class="divider"></div>
 
                     <nav class="nav">
-                        <div class="nav-item active">
+                        <div class="nav-item active" data-tab="overview">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Overview
                         </div>
-                        <div class="nav-item">
+                        <div class="nav-item" data-tab="projects">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>                            Projects
                         </div>
-                        <div class="nav-item">
+                        <div class="nav-item" data-tab="articles">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Articles
                         </div>
-                        <div class="nav-item">
+                        <div class="nav-item" data-tab="contact">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Contact
                         </div>
                     </nav>
@@ -1105,195 +1842,579 @@
 
                 <!-- MAIN -->
                 <main class="main">
-                    <p class="section-label">Profile · Overview</p>
 
-                    <div class="main-inner">
-                        <div class="main-left">
+                    <!-- ════════════════════════════════════════════
+                         TAB: OVERVIEW
+                    ════════════════════════════════════════════ -->
+                    <div class="tab-content active" id="tab-overview">
+                        <p class="section-label">Profile · Overview</p>
 
-                            <span class="hero-line"></span>
+                        <div class="main-inner">
+                            <div class="main-left">
 
-                            <div class="hero-quote" id="hero-text">
-                                Designing systems that feel <em>inevitable.</em>
-                            </div>
+                                <span class="hero-line"></span>
 
-                            <!-- bio with typewriter -->
-                            <p class="bio" id="bio-text"></p>
-
-                            <!-- tags — with more space below hero and above section title -->
-                            <div class="tag-row">
-                                <span class="tag">Product Design</span>
-                                <span class="tag">Design Systems</span>
-                                <span class="tag">React</span>
-                                <span class="tag">TypeScript</span>
-                                <span class="tag">Motion</span>
-                                <span class="tag">Figma</span>
-                                <span class="tag">Node.js</span>
-                            </div>
-
-                            <!-- ── DECK OF CARDS ── -->
-                            <div class="deck-section">
-                                <div class="deck-header">
-                                    <p class="section-title" style="margin-bottom:0;">Selected Work</p>
-                                    <div class="deck-controls">
-                                        <button class="deck-btn" id="deck-prev">←</button>
-                                        <button class="deck-btn" id="deck-next">→</button>
-                                    </div>
+                                <div class="hero-quote" id="hero-text">
+                                    Designing systems that feel <em>inevitable.</em>
                                 </div>
 
-                                <div class="deck-stage" id="deck-stage">
+                                <!-- bio with typewriter -->
+                                <p class="bio" id="bio-text"></p>
 
-                                    <!-- Card 1 -->
-                                    <div class="proj-card" data-idx="0">
-                                        <div class="proj-card-img">
-                                            <span class="proj-card-num">01</span>
-                                            <span class="proj-card-pill">Design Systems</span>
-                                        </div>
-                                        <div class="proj-card-body">
-                                            <p class="proj-card-name">Lumen Design System</p>
-                                            <p class="proj-card-tag">60+ components · Enterprise</p>
+                                <!-- tags -->
+                                <div class="tag-row">
+                                    <span class="tag">Product Design</span>
+                                    <span class="tag">Design Systems</span>
+                                    <span class="tag">React</span>
+                                    <span class="tag">TypeScript</span>
+                                    <span class="tag">Motion</span>
+                                    <span class="tag">Figma</span>
+                                    <span class="tag">Node.js</span>
+                                </div>
+
+                                <!-- ── DECK OF CARDS ── -->
+                                <div class="deck-section">
+                                    <div class="deck-header">
+                                        <p class="section-title" style="margin-bottom:0;">Selected Work</p>
+                                        <div class="deck-controls">
+                                            <button class="deck-btn" id="deck-prev">←</button>
+                                            <button class="deck-btn" id="deck-next">→</button>
                                         </div>
                                     </div>
 
-                                    <!-- Card 2 -->
-                                    <div class="proj-card" data-idx="1">
-                                        <div class="proj-card-img">
-                                            <span class="proj-card-num">02</span>
-                                            <span class="proj-card-pill">Data · Frontend</span>
+                                    <div class="deck-stage" id="deck-stage">
+
+                                        <!-- Card 1 -->
+                                        <div class="proj-card" data-idx="0">
+                                            <div class="proj-card-img">
+                                                <span class="proj-card-num">01</span>
+                                                <span class="proj-card-pill">Design Systems</span>
+                                            </div>
+                                            <div class="proj-card-body">
+                                                <p class="proj-card-name">Lumen Design System</p>
+                                                <p class="proj-card-tag">60+ components · Enterprise</p>
+                                            </div>
                                         </div>
-                                        <div class="proj-card-body">
-                                            <p class="proj-card-name">Carta Analytics</p>
-                                            <p class="proj-card-tag">Fintech · 50k daily users</p>
+
+                                        <!-- Card 2 -->
+                                        <div class="proj-card" data-idx="1">
+                                            <div class="proj-card-img">
+                                                <span class="proj-card-num">02</span>
+                                                <span class="proj-card-pill">Data · Frontend</span>
+                                            </div>
+                                            <div class="proj-card-body">
+                                                <p class="proj-card-name">Carta Analytics</p>
+                                                <p class="proj-card-tag">Fintech · 50k daily users</p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Card 3 -->
-                                    <div class="proj-card" data-idx="2">
-                                        <div class="proj-card-img">
-                                            <span class="proj-card-num">03</span>
-                                            <span class="proj-card-pill">Mobile · Motion</span>
+                                        <!-- Card 3 -->
+                                        <div class="proj-card" data-idx="2">
+                                            <div class="proj-card-img">
+                                                <span class="proj-card-num">03</span>
+                                                <span class="proj-card-pill">Mobile · Motion</span>
+                                            </div>
+                                            <div class="proj-card-body">
+                                                <p class="proj-card-name">Noor — Meditation</p>
+                                                <p class="proj-card-tag">Motion-first · End-to-end</p>
+                                            </div>
                                         </div>
-                                        <div class="proj-card-body">
-                                            <p class="proj-card-name">Noor — Meditation</p>
-                                            <p class="proj-card-tag">Motion-first · End-to-end</p>
+
+                                        <!-- Card 4 -->
+                                        <div class="proj-card" data-idx="3">
+                                            <div class="proj-card-img">
+                                                <span class="proj-card-num">04</span>
+                                                <span class="proj-card-pill">Open Source</span>
+                                            </div>
+                                            <div class="proj-card-body">
+                                                <p class="proj-card-name">Drift — OSS CLI</p>
+                                                <p class="proj-card-tag">2.1k stars · Node.js</p>
+                                            </div>
                                         </div>
+
                                     </div>
 
-                                    <!-- Card 4 -->
-                                    <div class="proj-card" data-idx="3">
-                                        <div class="proj-card-img">
-                                            <span class="proj-card-num">04</span>
-                                            <span class="proj-card-pill">Open Source</span>
+                                    <!-- dot indicators -->
+                                    <div class="deck-dots" id="deck-dots"></div>
+                                </div>
+
+                                <!-- Activity -->
+                                <div class="contrib-wrap">
+                                    <p class="section-title">Activity · 2024</p>
+                                    <div class="contrib-grid" id="contrib-grid"></div>
+                                </div>
+
+                                <!-- Skills -->
+                                <p class="section-title" style="opacity:0;animation:riseIn 0.6s 0.62s ease forwards;">Expertise</p>
+                                <div class="skills-grid">
+                                    <div class="skill-item">
+                                        <p class="skill-name">UI / UX Design</p>
+                                        <div class="skill-bar-wrap">
+                                            <div class="skill-bar" style="width:0" data-w="92%"></div>
                                         </div>
-                                        <div class="proj-card-body">
-                                            <p class="proj-card-name">Drift — OSS CLI</p>
-                                            <p class="proj-card-tag">2.1k stars · Node.js</p>
+                                        <p class="skill-level">Expert</p>
+                                    </div>
+                                    <div class="skill-item">
+                                        <p class="skill-name">Frontend Dev</p>
+                                        <div class="skill-bar-wrap">
+                                            <div class="skill-bar" style="width:0" data-w="85%"></div>
                                         </div>
+                                        <p class="skill-level">Advanced</p>
                                     </div>
-
-                                </div>
-
-                                <!-- dot indicators -->
-                                <div class="deck-dots" id="deck-dots"></div>
-                            </div>
-
-                            <!-- Activity -->
-                            <div class="contrib-wrap">
-                                <p class="section-title">Activity · 2024</p>
-                                <div class="contrib-grid" id="contrib-grid"></div>
-                            </div>
-
-                            <!-- Skills -->
-                            <p class="section-title" style="opacity:0;animation:riseIn 0.6s 0.62s ease forwards;">Expertise</p>
-                            <div class="skills-grid">
-                                <div class="skill-item">
-                                    <p class="skill-name">UI / UX Design</p>
-                                    <div class="skill-bar-wrap">
-                                        <div class="skill-bar" style="width:0" data-w="92%"></div>
+                                    <div class="skill-item">
+                                        <p class="skill-name">Motion Design</p>
+                                        <div class="skill-bar-wrap">
+                                            <div class="skill-bar" style="width:0" data-w="78%"></div>
+                                        </div>
+                                        <p class="skill-level">Advanced</p>
                                     </div>
-                                    <p class="skill-level">Expert</p>
-                                </div>
-                                <div class="skill-item">
-                                    <p class="skill-name">Frontend Dev</p>
-                                    <div class="skill-bar-wrap">
-                                        <div class="skill-bar" style="width:0" data-w="85%"></div>
+                                    <div class="skill-item">
+                                        <p class="skill-name">Design Systems</p>
+                                        <div class="skill-bar-wrap">
+                                            <div class="skill-bar" style="width:0" data-w="90%"></div>
+                                        </div>
+                                        <p class="skill-level">Expert</p>
                                     </div>
-                                    <p class="skill-level">Advanced</p>
-                                </div>
-                                <div class="skill-item">
-                                    <p class="skill-name">Motion Design</p>
-                                    <div class="skill-bar-wrap">
-                                        <div class="skill-bar" style="width:0" data-w="78%"></div>
+                                    <div class="skill-item">
+                                        <p class="skill-name">Backend / APIs</p>
+                                        <div class="skill-bar-wrap">
+                                            <div class="skill-bar" style="width:0" data-w="62%"></div>
+                                        </div>
+                                        <p class="skill-level">Proficient</p>
                                     </div>
-                                    <p class="skill-level">Advanced</p>
-                                </div>
-                                <div class="skill-item">
-                                    <p class="skill-name">Design Systems</p>
-                                    <div class="skill-bar-wrap">
-                                        <div class="skill-bar" style="width:0" data-w="90%"></div>
+                                    <div class="skill-item">
+                                        <p class="skill-name">Brand Identity</p>
+                                        <div class="skill-bar-wrap">
+                                            <div class="skill-bar" style="width:0" data-w="74%"></div>
+                                        </div>
+                                        <p class="skill-level">Advanced</p>
                                     </div>
-                                    <p class="skill-level">Expert</p>
                                 </div>
-                                <div class="skill-item">
-                                    <p class="skill-name">Backend / APIs</p>
-                                    <div class="skill-bar-wrap">
-                                        <div class="skill-bar" style="width:0" data-w="62%"></div>
+
+                                <!-- Contact -->
+                                <div class="contact-strip">
+                                    <p class="contact-cta">Have a project in mind? <strong>Let's build something.</strong></p>
+                                    <button class="cta-btn">Get in touch</button>
+                                </div>
+
+                            </div>
+                            <!-- /main-left -->
+
+                            <!-- RIGHT: stack + links + year -->
+                            <div class="main-right">
+
+                                <div class="widget">
+                                    <p class="widget-title">Current Stack</p>
+                                    <div class="stack-list">
+                                        <div class="stack-row"><span>React / Next.js</span><span class="stack-dot"></span></div>
+                                        <div class="stack-row"><span>TypeScript</span><span class="stack-dot"></span></div>
+                                        <div class="stack-row"><span>Figma</span><span class="stack-dot"></span></div>
+                                        <div class="stack-row"><span>Framer Motion</span><span class="stack-dot"></span></div>
+                                        <div class="stack-row"><span>Node.js</span><span class="stack-dot"></span></div>
                                     </div>
-                                    <p class="skill-level">Proficient</p>
                                 </div>
-                                <div class="skill-item">
-                                    <p class="skill-name">Brand Identity</p>
-                                    <div class="skill-bar-wrap">
-                                        <div class="skill-bar" style="width:0" data-w="74%"></div>
+
+                                <div class="widget">
+                                    <p class="widget-title">Find me on</p>
+                                    <div class="link-list">
+                                        <div class="link-row">Dribbble <span>↗</span></div>
+                                        <div class="link-row">GitHub <span>↗</span></div>
+                                        <div class="link-row">LinkedIn <span>↗</span></div>
+                                        <div class="link-row">Read.cv <span>↗</span></div>
                                     </div>
-                                    <p class="skill-level">Advanced</p>
                                 </div>
-                            </div>
 
-                            <!-- Contact -->
-                            <div class="contact-strip">
-                                <p class="contact-cta">Have a project in mind? <strong>Let's build something.</strong></p>
-                                <button class="cta-btn">Get in touch</button>
-                            </div>
-
-                        </div>
-                        <!-- /main-left -->
-
-                        <!-- RIGHT: stack + links + year (no availability widget) -->
-                        <div class="main-right">
-
-                            <div class="widget">
-                                <p class="widget-title">Current Stack</p>
-                                <div class="stack-list">
-                                    <div class="stack-row"><span>React / Next.js</span><span class="stack-dot"></span></div>
-                                    <div class="stack-row"><span>TypeScript</span><span class="stack-dot"></span></div>
-                                    <div class="stack-row"><span>Figma</span><span class="stack-dot"></span></div>
-                                    <div class="stack-row"><span>Framer Motion</span><span class="stack-dot"></span></div>
-                                    <div class="stack-row"><span>Node.js</span><span class="stack-dot"></span></div>
+                                <div style="text-align:right; padding-right:2px;">
+                                    <span style="font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:var(--text-muted);line-height:1;letter-spacing:-2px;display:block;opacity:0.45;" id="year-display">2025</span>
+                                    <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);">— currently</span>
                                 </div>
-                            </div>
 
-                            <div class="widget">
-                                <p class="widget-title">Find me on</p>
-                                <div class="link-list">
-                                    <div class="link-row">Dribbble <span>↗</span></div>
-                                    <div class="link-row">GitHub <span>↗</span></div>
-                                    <div class="link-row">LinkedIn <span>↗</span></div>
-                                    <div class="link-row">Read.cv <span>↗</span></div>
-                                </div>
                             </div>
-
-                            <div style="text-align:right; padding-right:2px;">
-                                <span style="font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:var(--text-muted);line-height:1;letter-spacing:-2px;display:block;opacity:0.45;" id="year-display">2025</span>
-                                <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);">— currently</span>
-                            </div>
-
                         </div>
                     </div>
+                    <!-- /tab-overview -->
+
+
+                    <!-- ════════════════════════════════════════════
+                         TAB: PROJECTS
+                    ════════════════════════════════════════════ -->
+                    <div class="tab-content" id="tab-projects">
+                        <p class="section-label">Profile · Projects</p>
+
+                        <div class="main-inner">
+
+                            <!-- ─── LEFT COLUMN ─── -->
+                            <div class="main-left">
+
+                                <span class="hero-line" style="animation:none;opacity:0.35;transform:scaleX(1);"></span>
+
+                                <h2 class="proj-page-title">Selected Work <em>&amp; Projects</em></h2>
+
+                                <!-- ── FILTER BAR ── -->
+                                <div class="filter-bar">
+                                    <div class="filter-chips">
+                                        <button class="filter-chip active" data-filter="all">All <span class="chip-count">7</span></button>
+                                        <button class="filter-chip" data-filter="design">Design <span class="chip-count">3</span></button>
+                                        <button class="filter-chip" data-filter="dev">Dev <span class="chip-count">3</span></button>
+                                        <button class="filter-chip" data-filter="oss">Open Source <span class="chip-count">1</span></button>
+                                        <button class="filter-chip" data-filter="branding">Branding <span class="chip-count">1</span></button>
+                                    </div>
+                                    <div class="sort-toggle">
+                                        <button class="sort-btn active" data-sort="newest">Newest</button>
+                                        <button class="sort-btn" data-sort="featured">Featured</button>
+                                    </div>
+                                </div>
+
+                                <!-- ── FEATURED CARD ── -->
+                                <div class="feat-wrap" data-cats="design">
+                                    <p class="feat-eyebrow">Pinned · Featured Work</p>
+                                    <div class="feat-card">
+                                        <!-- Cover -->
+                                        <div class="feat-cover">
+                                            <span class="feat-pin-badge">Pinned</span>
+                                            <div class="feat-cover-art">
+                                                <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" width="88" height="88" fill="none">
+                                                    <rect x="12" y="12" width="28" height="28" rx="4" stroke="rgba(201,185,154,0.28)" stroke-width="0.9"/>
+                                                    <rect x="56" y="12" width="28" height="28" rx="4" stroke="rgba(201,185,154,0.18)" stroke-width="0.9"/>
+                                                    <rect x="12" y="56" width="28" height="28" rx="4" stroke="rgba(201,185,154,0.18)" stroke-width="0.9"/>
+                                                    <rect x="56" y="56" width="28" height="28" rx="4" stroke="rgba(201,185,154,0.11)" stroke-width="0.9"/>
+                                                    <circle cx="48" cy="48" r="4.5" fill="rgba(201,185,154,0.45)"/>
+                                                    <line x1="40" y1="48" x2="26" y2="48" stroke="rgba(201,185,154,0.18)" stroke-width="0.7"/>
+                                                    <line x1="56" y1="48" x2="70" y2="48" stroke="rgba(201,185,154,0.18)" stroke-width="0.7"/>
+                                                    <line x1="48" y1="40" x2="48" y2="26" stroke="rgba(201,185,154,0.18)" stroke-width="0.7"/>
+                                                    <line x1="48" y1="56" x2="48" y2="70" stroke="rgba(201,185,154,0.18)" stroke-width="0.7"/>
+                                                    <circle cx="26" cy="48" r="2" fill="rgba(201,185,154,0.22)"/>
+                                                    <circle cx="70" cy="48" r="2" fill="rgba(201,185,154,0.22)"/>
+                                                    <circle cx="48" cy="26" r="2" fill="rgba(201,185,154,0.22)"/>
+                                                    <circle cx="48" cy="70" r="2" fill="rgba(201,185,154,0.22)"/>
+                                                    <circle cx="48" cy="48" r="42" stroke="rgba(201,185,154,0.04)" stroke-width="0.75"/>
+                                                </svg>
+                                            </div>
+                                            <span class="feat-cover-num">01</span>
+                                        </div>
+
+                                        <div class="feat-sep"></div>
+
+                                        <!-- Body -->
+                                        <div class="feat-body">
+                                            <div>
+                                                <div class="feat-status-row">
+                                                    <span class="status-badge live">Live</span>
+                                                    <span class="feat-year">2025</span>
+                                                </div>
+                                                <p class="feat-title">Lumen Design System</p>
+                                                <p class="feat-desc">A unified component library and token architecture built for enterprise-scale product teams. 60+ components, full Figma + React parity, and a living documentation site used by 3 product teams.</p>
+                                                <div class="tech-tags" style="margin-bottom:18px;">
+                                                    <span class="tech-tag">Figma</span>
+                                                    <span class="tech-tag">React</span>
+                                                    <span class="tech-tag">TypeScript</span>
+                                                    <span class="tech-tag">Storybook</span>
+                                                    <span class="tech-tag">Design Tokens</span>
+                                                </div>
+                                            </div>
+                                            <div class="feat-bottom">
+                                                <button class="view-link">View Project ↗</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ── 2024 GROUP ── -->
+                                <div class="year-group" id="group-2024">
+                                    <div class="year-divider">
+                                        <span class="year-label">2024</span>
+                                        <span class="year-rule"></span>
+                                    </div>
+
+                                    <div class="proj-grid">
+
+                                        <!-- Carta Analytics -->
+                                        <div class="proj-tile" data-cats="dev">
+                                            <div class="proj-tile-cover">
+                                                <div class="tile-top-row">
+                                                    <span class="tile-yr">2024</span>
+                                                    <span class="tile-arrow">↗</span>
+                                                </div>
+                                            </div>
+                                            <div class="proj-tile-body">
+                                                <div class="tile-status-row">
+                                                    <span class="status-badge live">Live</span>
+                                                </div>
+                                                <p class="proj-tile-title">Carta Analytics</p>
+                                                <p class="proj-tile-desc">Real-time financial dashboard for equity management, built for 50k daily active users.</p>
+                                                <div class="tech-tags">
+                                                    <span class="tech-tag">React</span>
+                                                    <span class="tech-tag">D3.js</span>
+                                                    <span class="tech-tag">Node.js</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Noor -->
+                                        <div class="proj-tile" data-cats="design">
+                                            <div class="proj-tile-cover">
+                                                <div class="tile-top-row">
+                                                    <span class="tile-yr">2024</span>
+                                                    <span class="tile-arrow">↗</span>
+                                                </div>
+                                            </div>
+                                            <div class="proj-tile-body">
+                                                <div class="tile-status-row">
+                                                    <span class="status-badge live">Live</span>
+                                                </div>
+                                                <p class="proj-tile-title">Noor — Meditation</p>
+                                                <p class="proj-tile-desc">Motion-first meditation app exploring stillness through micro-interaction and spatial audio.</p>
+                                                <div class="tech-tags">
+                                                    <span class="tech-tag">Figma</span>
+                                                    <span class="tech-tag">Framer Motion</span>
+                                                    <span class="tech-tag">iOS</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Drift CLI -->
+                                        <div class="proj-tile" data-cats="dev,oss">
+                                            <div class="proj-tile-cover">
+                                                <div class="tile-top-row">
+                                                    <span class="tile-yr">2024</span>
+                                                    <span class="tile-arrow">↗</span>
+                                                </div>
+                                            </div>
+                                            <div class="proj-tile-body">
+                                                <div class="tile-status-row">
+                                                    <span class="status-badge oss">Open Source</span>
+                                                </div>
+                                                <p class="proj-tile-title">Drift — OSS CLI</p>
+                                                <p class="proj-tile-desc">A minimal, opinionated git workflow tool for solo developers and small teams. 2.4k stars.</p>
+                                                <div class="tech-tags">
+                                                    <span class="tech-tag">Node.js</span>
+                                                    <span class="tech-tag">CLI</span>
+                                                    <span class="tech-tag">GitHub API</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Forma Brand -->
+                                        <div class="proj-tile" data-cats="branding">
+                                            <div class="proj-tile-cover">
+                                                <div class="tile-top-row">
+                                                    <span class="tile-yr">2024</span>
+                                                    <span class="tile-arrow">↗</span>
+                                                </div>
+                                            </div>
+                                            <div class="proj-tile-body">
+                                                <div class="tile-status-row">
+                                                    <span class="status-badge live">Live</span>
+                                                </div>
+                                                <p class="proj-tile-title">Forma — Brand Identity</p>
+                                                <p class="proj-tile-desc">Full visual identity for a São Paulo architecture studio — logotype, spatial, and print.</p>
+                                                <div class="tech-tags">
+                                                    <span class="tech-tag">Figma</span>
+                                                    <span class="tech-tag">Brand Identity</span>
+                                                    <span class="tech-tag">Type Design</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /proj-grid -->
+                                </div><!-- /group-2024 -->
+
+                                <!-- ── 2023 GROUP ── -->
+                                <div class="year-group" id="group-2023">
+                                    <div class="year-divider">
+                                        <span class="year-label">2023</span>
+                                        <span class="year-rule"></span>
+                                    </div>
+
+                                    <div class="proj-grid">
+
+                                        <!-- Pulse Dashboard -->
+                                        <div class="proj-tile" data-cats="dev">
+                                            <div class="proj-tile-cover">
+                                                <div class="tile-top-row">
+                                                    <span class="tile-yr">2023</span>
+                                                    <span class="tile-arrow">↗</span>
+                                                </div>
+                                            </div>
+                                            <div class="proj-tile-body">
+                                                <div class="tile-status-row">
+                                                    <span class="status-badge archived">Archived</span>
+                                                </div>
+                                                <p class="proj-tile-title">Pulse Dashboard</p>
+                                                <p class="proj-tile-desc">Internal analytics tool built for a seed-stage startup. Sunset after the company pivoted.</p>
+                                                <div class="tech-tags">
+                                                    <span class="tech-tag">React</span>
+                                                    <span class="tech-tag">Firebase</span>
+                                                    <span class="tech-tag">Recharts</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Ember Writing -->
+                                        <div class="proj-tile" data-cats="design">
+                                            <div class="proj-tile-cover">
+                                                <div class="tile-top-row">
+                                                    <span class="tile-yr">2023</span>
+                                                    <span class="tile-arrow">↗</span>
+                                                </div>
+                                            </div>
+                                            <div class="proj-tile-body">
+                                                <div class="tile-status-row">
+                                                    <span class="status-badge wip">In Progress</span>
+                                                </div>
+                                                <p class="proj-tile-title">Ember — Writing App</p>
+                                                <p class="proj-tile-desc">A writing environment designed around flow state — distraction-free, with adaptive typography.</p>
+                                                <div class="tech-tags">
+                                                    <span class="tech-tag">Figma</span>
+                                                    <span class="tech-tag">Motion Design</span>
+                                                    <span class="tech-tag">Electron</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /proj-grid -->
+                                </div><!-- /group-2023 -->
+
+                                <!-- ── CURRENTLY BUILDING ── -->
+                                <div class="building-wrap">
+                                    <div class="building-header">
+                                        <div class="pulse-dot"></div>
+                                        <p class="building-label">Currently Building</p>
+                                    </div>
+
+                                    <div class="building-card">
+                                        <div class="building-icon">V</div>
+                                        <div class="building-info">
+                                            <p class="building-name">Veil — Browser Extension</p>
+                                            <p class="building-sub">Rethinking what a browser extension should feel like. Privacy-first, with zero visual clutter and a focus on calm UX.</p>
+                                            <div class="tech-tags">
+                                                <span class="tech-tag">TypeScript</span>
+                                                <span class="tech-tag">Chrome API</span>
+                                                <span class="tech-tag">Figma</span>
+                                                <span class="tech-tag">Plasmo</span>
+                                            </div>
+                                        </div>
+                                        <span class="status-badge wip" style="flex-shrink:0; align-self:flex-start;">WIP</span>
+                                    </div>
+                                </div>
+
+                                <!-- ── END STATE ── -->
+                                <div class="end-state">
+                                    <p class="end-count">8 projects · 2022 – Present</p>
+                                    <button class="github-link">More on GitHub ↗</button>
+                                </div>
+
+                            </div><!-- /main-left -->
+
+                            <!-- ─── RIGHT COLUMN ─── -->
+                            <div class="main-right" style="animation-delay:0.3s;">
+
+                                <!-- Project Stats -->
+                                <div class="widget">
+                                    <p class="widget-title">Project Stats</p>
+                                    <div class="proj-stat-grid">
+                                        <div class="proj-stat-cell">
+                                            <span class="proj-stat-num">8</span>
+                                            <span class="proj-stat-lbl">Total</span>
+                                        </div>
+                                        <div class="proj-stat-cell">
+                                            <span class="proj-stat-num">5</span>
+                                            <span class="proj-stat-lbl">Shipped</span>
+                                        </div>
+                                        <div class="proj-stat-cell">
+                                            <span class="proj-stat-num">2</span>
+                                            <span class="proj-stat-lbl">OSS</span>
+                                        </div>
+                                        <div class="proj-stat-cell">
+                                            <span class="proj-stat-num">1</span>
+                                            <span class="proj-stat-lbl">In Progress</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Currently Shipping -->
+                                <div class="widget">
+                                    <p class="widget-title">Currently Shipping</p>
+                                    <div class="ship-row">
+                                        <div class="ship-dot-col">
+                                            <div class="pulse-dot"></div>
+                                        </div>
+                                        <div>
+                                            <p class="ship-name">Veil</p>
+                                            <p class="ship-desc">Rethinking the browser extension paradigm. Privacy-first, built for calm.</p>
+                                            <div class="tech-tags">
+                                                <span class="tech-tag">TypeScript</span>
+                                                <span class="tech-tag">Chrome API</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Find me on -->
+                                <div class="widget">
+                                    <p class="widget-title">Find me on</p>
+                                    <div class="link-list">
+                                        <div class="link-row">Dribbble <span>↗</span></div>
+                                        <div class="link-row">GitHub <span>↗</span></div>
+                                        <div class="link-row">LinkedIn <span>↗</span></div>
+                                        <div class="link-row">Read.cv <span>↗</span></div>
+                                    </div>
+                                </div>
+
+                                <!-- Year display -->
+                                <div style="text-align:right; padding-right:2px;">
+                                    <span style="font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:var(--text-muted);line-height:1;letter-spacing:-2px;display:block;opacity:0.45;" class="year-display-proj">2025</span>
+                                    <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);">— currently</span>
+                                </div>
+
+                            </div><!-- /main-right -->
+
+                        </div><!-- /main-inner -->
+                    </div>
+                    <!-- /tab-projects -->
+
+
+                    <!-- ════════════════════════════════════════════
+                         TAB: ARTICLES (placeholder)
+                    ════════════════════════════════════════════ -->
+                    <div class="tab-content" id="tab-articles">
+                        <p class="section-label">Profile · Articles</p>
+                        <div class="tab-placeholder">
+                            <div class="tab-placeholder-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <p class="tab-placeholder-title">Articles coming soon</p>
+                            <p class="tab-placeholder-desc">Thoughts on design systems, developer experience, and building products that feel inevitable.</p>
+                        </div>
+                    </div>
+                    <!-- /tab-articles -->
+
+
+                    <!-- ════════════════════════════════════════════
+                         TAB: CONTACT (placeholder)
+                    ════════════════════════════════════════════ -->
+                    <div class="tab-content" id="tab-contact">
+                        <p class="section-label">Profile · Contact</p>
+                        <div class="tab-placeholder">
+                            <div class="tab-placeholder-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            </div>
+                            <p class="tab-placeholder-title">Let's connect</p>
+                            <p class="tab-placeholder-desc">Contact form coming soon. In the meantime, reach out at upadhyayshourya352@gmail.com</p>
+                        </div>
+                    </div>
+                    <!-- /tab-contact -->
 
                 </main>
             </div>
 
+            <!-- ════════════════════════════════════════════
+                 SCRIPTS
+            ════════════════════════════════════════════ -->
+
+            <!-- Overview: card deck, contribution grid, skills, bio, counters -->
             <script>
+                /* ── CARD DECK ── */
                 const cards = Array.from(document.querySelectorAll('.proj-card'));
                 const dotsWrap = document.getElementById('deck-dots');
                 const N = cards.length;
@@ -1331,6 +2452,7 @@
                     });
                 });
 
+                /* ── CONTRIBUTION GRID ── */
                 const grid = document.getElementById('contrib-grid');
                 const levels = ['', 'l1', 'l2', 'l3', 'l4'];
                 const weights = [0.45, 0.25, 0.15, 0.1, 0.05];
@@ -1350,19 +2472,14 @@
                     grid.appendChild(c);
                 }
 
+                /* ── SKILL BARS ── */
                 setTimeout(() => {
                     document.querySelectorAll('.skill-bar').forEach(b => {
                         b.style.width = b.dataset.w;
                     });
                 }, 500);
 
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                        item.classList.add('active');
-                    });
-                });
-
+                /* ── BIO TYPEWRITER ── */
                 const bioEl = document.getElementById('bio-text');
                 const bioText = "Product designer and front-end developer with 6 years crafting interfaces for startups and studios. I believe great design is invisible — it simply works, beautifully.";
                 const cursor = document.createElement('span');
@@ -1381,6 +2498,7 @@
                 }
                 setTimeout(typeBio, 700);
 
+                /* ── COUNTER ANIMATION ── */
                 function countUp(el, target, duration) {
                     const start = Date.now();
                     const isK = target >= 1000;
@@ -1402,6 +2520,7 @@
                     countUp(document.getElementById('s-following'), 318, 900);
                 }, 350);
 
+                /* ── HERO SHIMMER ── */
                 const heroEl = document.getElementById('hero-text');
                 const plainText = "Designing systems that feel ";
                 const emText = "inevitable.";
@@ -1426,6 +2545,106 @@
                 document.getElementById('year-display').textContent = new Date().getFullYear();
             </script>
 
+            <!-- Tab navigation system -->
+            <script>
+                (function() {
+                    const navItems = document.querySelectorAll('.nav-item[data-tab]');
+                    const tabContents = document.querySelectorAll('.tab-content');
+
+                    // Set year display on projects tab too
+                    const projYearEl = document.querySelector('.year-display-proj');
+                    if (projYearEl) projYearEl.textContent = new Date().getFullYear();
+
+                    navItems.forEach(item => {
+                        item.addEventListener('click', () => {
+                            const targetTab = item.dataset.tab;
+
+                            // Update nav active state
+                            navItems.forEach(n => n.classList.remove('active'));
+                            item.classList.add('active');
+
+                            // Switch tab content
+                            tabContents.forEach(tc => {
+                                tc.classList.remove('active');
+                            });
+
+                            const targetContent = document.getElementById('tab-' + targetTab);
+                            if (targetContent) {
+                                // Small delay for the fade-out to feel natural
+                                requestAnimationFrame(() => {
+                                    targetContent.classList.add('active');
+                                });
+                            }
+
+                            // Scroll main area to top on tab switch
+                            document.querySelector('.main').scrollTop = 0;
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        });
+                    });
+                })();
+            </script>
+
+            <!-- Projects tab: filter & sort logic -->
+            <script>
+                (function() {
+                    const projTab = document.getElementById('tab-projects');
+                    if (!projTab) return;
+
+                    const chips    = projTab.querySelectorAll('.filter-chip');
+                    const tiles    = projTab.querySelectorAll('.proj-tile');
+                    const featWrap = projTab.querySelector('.feat-wrap');
+                    const groups   = projTab.querySelectorAll('.year-group');
+                    const sortBtns = projTab.querySelectorAll('.sort-btn');
+
+                    /* ── FILTER CHIPS ── */
+                    chips.forEach(chip => {
+                        chip.addEventListener('click', () => {
+                            chips.forEach(c => c.classList.remove('active'));
+                            chip.classList.add('active');
+                            const cat = chip.dataset.filter;
+
+                            // Filter featured card
+                            if (featWrap) {
+                                const featCats = (featWrap.dataset.cats || '').split(',');
+                                featWrap.classList.toggle('filtered-out', cat !== 'all' && !featCats.includes(cat));
+                            }
+
+                            // Filter tiles
+                            tiles.forEach(tile => {
+                                const tileCats = (tile.dataset.cats || '').split(',');
+                                const match = cat === 'all' || tileCats.includes(cat);
+                                tile.classList.toggle('filtered-out', !match);
+                            });
+
+                            // Hide year groups where every tile is filtered out
+                            groups.forEach(group => {
+                                const groupTiles = Array.from(group.querySelectorAll('.proj-tile'));
+                                const allHidden = groupTiles.every(t => t.classList.contains('filtered-out'));
+                                group.classList.toggle('hidden', allHidden);
+                            });
+                        });
+                    });
+
+                    /* ── SORT TOGGLE ── */
+                    sortBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            sortBtns.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+
+                            const sort = btn.dataset.sort;
+                            if (sort === 'featured') {
+                                // Show featured card prominently, de-emphasize year groups
+                                if (featWrap) featWrap.style.order = '-1';
+                            } else {
+                                // Default chronological order
+                                if (featWrap) featWrap.style.order = '';
+                            }
+                        });
+                    });
+                })();
+            </script>
+
+            <!-- Cinematic entry overlay -->
             <script>
                 (function() {
                     const overlay = document.getElementById('reveal-overlay');
