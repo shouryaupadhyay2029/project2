@@ -17,6 +17,7 @@
             --bg: #0e0e0e;
             --surface: #141414;
             --surface-2: #1a1a1a;
+            --surface-3: #1f1f1f;
             --border: rgba(255, 255, 255, 0.06);
             --border-hover: rgba(255, 255, 255, 0.12);
             --text-primary: #e8e6e1;
@@ -24,6 +25,14 @@
             --text-muted: #3a3a3a;
             --accent: #c9b99a;
             --accent-dim: rgba(201, 185, 154, 0.10);
+            --accent-glow: rgba(201, 185, 154, 0.04);
+            --green: #4a9e6b;
+            --green-dim: rgba(74, 158, 107, 0.12);
+            --red: #c06060;
+            --blue: #6b8fc9;
+            --blue-dim: rgba(107, 143, 201, 0.12);
+            --orange: #c98a4a;
+            --orange-dim: rgba(201, 138, 74, 0.10);
         }
         
         body {
@@ -297,9 +306,22 @@
             width: 11px;
             height: 11px;
             border-radius: 50%;
-            background: #4a9e6b;
+            background: var(--green);
             border: 2px solid var(--bg);
             z-index: 2;
+        }
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: rgba(74, 158, 107, 0.25);
+            animation: statusPing 2.5s ease-out infinite;
+        }
+        @keyframes statusPing {
+            0%   { transform: scale(0.8); opacity: 0.6; }
+            70%  { transform: scale(1.8); opacity: 0; }
+            100% { opacity: 0; }
         }
         /* name / handle */
         
@@ -1803,6 +1825,1648 @@
             line-height: 1.7;
             max-width: 320px;
         }
+
+        /* ═══════════════════════════════════════════
+           ACTIVITY TAB STYLES
+           ═══════════════════════════════════════════ */
+        #tab-activity .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 52px;
+        }
+        #tab-activity .page-header-left {}
+        #tab-activity .page-label {
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+        #tab-activity .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.3px;
+            color: var(--text-primary);
+        }
+        #tab-activity .page-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        #tab-activity .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--green);
+            opacity: 0.8;
+        }
+        #tab-activity .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: livePulse 2s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        #tab-activity .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        #tab-activity .section-tag {
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        #tab-activity .section-tag::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        #tab-activity .building-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 26px 30px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: riseIn 0.7s 0.3s cubic-bezier(0.22,1,0.36,1) forwards;
+            transition: border-color 0.25s;
+        }
+        #tab-activity .building-card:hover {
+            border-color: var(--border-hover);
+        }
+        #tab-activity .building-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(201,185,154,0.025) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        #tab-activity .building-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201,185,154,0.03), transparent);
+            animation: scanLine 6s ease-in-out infinite;
+        }
+        @keyframes scanLine {
+            0%   { left: -60%; }
+            100% { left: 160%; }
+        }
+        #tab-activity .building-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        #tab-activity .building-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #tab-activity .building-label-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: livePulse 1.8s ease-in-out infinite;
+        }
+        #tab-activity .building-status {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--green);
+            letter-spacing: 0.5px;
+            background: var(--green-dim);
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+        #tab-activity .building-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+        #tab-activity .building-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        #tab-activity .building-meta {
+            display: flex;
+            gap: 24px;
+        }
+        #tab-activity .building-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        #tab-activity .building-meta-key {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        #tab-activity .building-meta-val {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        #tab-activity .progress-bar-wrap {
+            height: 2px;
+            background: var(--border);
+            border-radius: 1px;
+            margin-top: 18px;
+            overflow: hidden;
+        }
+        #tab-activity .progress-bar {
+            height: 100%;
+            border-radius: 1px;
+            background: linear-gradient(90deg, var(--accent), rgba(201,185,154,0.4));
+            width: 0;
+        }
+        #tab-activity.active .progress-bar {
+            animation: progressGrow 2s 1.2s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        @keyframes progressGrow {
+            to { width: 68%; }
+        }
+
+        #tab-activity .timeline-section {
+            opacity: 0;
+            margin-bottom: 36px;
+        }
+        #tab-activity.active .timeline-section {
+            animation: riseIn 0.7s 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        #tab-activity .timeline-group {
+            margin-bottom: 32px;
+        }
+        #tab-activity .timeline-group-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #tab-activity .timeline-group-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: var(--text-muted);
+            opacity: 0.3;
+        }
+
+        #tab-activity .timeline-item {
+            display: flex;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            cursor: default;
+            transition: background 0.15s;
+        }
+        #tab-activity .timeline-item:last-child {
+            border-bottom: none;
+        }
+        #tab-activity .timeline-item:hover {
+            background: var(--accent-glow);
+            margin: 0 -16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            border-radius: 6px;
+        }
+
+        #tab-activity .timeline-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            font-size: 13px;
+        }
+        #tab-activity .timeline-icon.upload   { background: rgba(201,185,154,0.08); color: var(--accent); }
+        #tab-activity .timeline-icon.team     { background: var(--green-dim); color: var(--green); }
+        #tab-activity .timeline-icon.badge    { background: rgba(201,138,74,0.1); color: var(--orange); }
+        #tab-activity .timeline-icon.deploy   { background: var(--green-dim); color: var(--green); }
+        #tab-activity .timeline-icon.view     { background: rgba(107,143,201,0.08); color: var(--blue); }
+        #tab-activity .timeline-icon.follow   { background: rgba(201,185,154,0.08); color: var(--accent); }
+        #tab-activity .timeline-icon.comment  { background: var(--surface-3); color: var(--text-secondary); }
+        #tab-activity .timeline-icon.collab   { background: var(--green-dim); color: var(--green); }
+        #tab-activity .timeline-icon.challenge{ background: rgba(201,138,74,0.1); color: var(--orange); }
+        #tab-activity .timeline-icon.update   { background: rgba(107,143,201,0.08); color: var(--blue); }
+        #tab-activity .timeline-icon.like     { background: rgba(201,96,96,0.08); color: var(--red); }
+
+        #tab-activity .timeline-body {
+            flex: 1;
+            min-width: 0;
+        }
+        #tab-activity .timeline-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+        #tab-activity .timeline-text strong {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+        #tab-activity .timeline-text .t-accent {
+            color: var(--accent);
+        }
+        #tab-activity .timeline-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        #tab-activity .timeline-time {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        #tab-activity .timeline-tag {
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 2px 8px;
+            border-radius: 100px;
+            text-transform: uppercase;
+        }
+
+        #tab-activity .log-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 36px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            opacity: 0;
+        }
+        #tab-activity.active .log-block {
+            animation: riseIn 0.7s 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-activity .log-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        #tab-activity .log-title {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #tab-activity .log-title-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+        #tab-activity .log-pill {
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--green);
+            background: var(--green-dim);
+            padding: 3px 8px;
+            border-radius: 100px;
+        }
+        #tab-activity .log-line {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            gap: 14px;
+            line-height: 1.5;
+        }
+        #tab-activity .log-line:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        #tab-activity .log-time {
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        #tab-activity .log-msg-ok     { color: var(--green); }
+        #tab-activity .log-msg-info   { color: var(--blue); }
+        #tab-activity .log-msg-warn   { color: var(--accent); opacity: 0.7; }
+        #tab-activity .log-msg-muted  { color: var(--text-muted); }
+        #tab-activity .log-type-tag {
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        #tab-activity .heat-section {
+            margin-bottom: 36px;
+            opacity: 0;
+        }
+        #tab-activity.active .heat-section {
+            animation: riseIn 0.7s 0.55s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-activity .heat-graph {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        #tab-activity .heat-row {
+            display: flex;
+            gap: 3px;
+        }
+        #tab-activity .heat-cell {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            background: var(--surface-2);
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+        #tab-activity .heat-cell:hover {
+            transform: scale(1.3);
+        }
+        #tab-activity .heat-cell.l1 { background: rgba(201,185,154,0.15); }
+        #tab-activity .heat-cell.l2 { background: rgba(201,185,154,0.30); }
+        #tab-activity .heat-cell.l3 { background: rgba(201,185,154,0.55); }
+        #tab-activity .heat-cell.l4 { background: rgba(201,185,154,0.85); }
+        #tab-activity .heat-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+        #tab-activity .heat-stat {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        #tab-activity .heat-legend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #tab-activity .heat-legend-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+        #tab-activity .heat-legend-scale {
+            display: flex;
+            gap: 3px;
+        }
+        #tab-activity .heat-scale-cell {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        #tab-activity .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            opacity: 0;
+        }
+        #tab-activity.active .right-col {
+            animation: riseIn 0.7s 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        #tab-activity .widget {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px 24px;
+            transition: border-color 0.2s;
+        }
+        #tab-activity .widget:hover {
+            border-color: var(--border-hover);
+        }
+
+        #tab-activity .widget-title {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        #tab-activity .streak-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px;
+            font-weight: 300;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        #tab-activity .streak-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+        }
+        #tab-activity .streak-days {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+        #tab-activity .streak-day {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            transition: background 0.2s;
+        }
+        #tab-activity .streak-day.done {
+            background: var(--accent);
+        }
+        #tab-activity .streak-day.today {
+            background: var(--green);
+            animation: livePulse 2s ease infinite;
+        }
+        #tab-activity .streak-best {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        #tab-activity .challenge-card {
+            position: relative;
+            overflow: hidden;
+        }
+        #tab-activity .challenge-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(201,138,74,0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        #tab-activity .challenge-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        #tab-activity .challenge-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+        #tab-activity .challenge-prog-wrap {
+            height: 2px;
+            background: var(--border);
+            border-radius: 1px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        #tab-activity .challenge-prog {
+            height: 100%;
+            border-radius: 1px;
+            background: linear-gradient(90deg, var(--orange), rgba(201,138,74,0.4));
+            width: 0;
+        }
+        #tab-activity.active .challenge-prog {
+            animation: challengeGrow 2s 1.5s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        @keyframes challengeGrow {
+            to { width: 74%; }
+        }
+        #tab-activity .challenge-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #tab-activity .challenge-pct {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--orange);
+        }
+        #tab-activity .challenge-time {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        #tab-activity .collab-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        #tab-activity .collab-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: default;
+        }
+        #tab-activity .collab-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+        #tab-activity .collab-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        #tab-activity .collab-role {
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        #tab-activity .mini-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        #tab-activity .mini-stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        #tab-activity .mini-stat:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        #tab-activity .mini-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #tab-activity .mini-stat-label-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.5;
+        }
+        #tab-activity .mini-stat-val {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+        #tab-activity .mini-stat-delta {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--green);
+            margin-left: 4px;
+        }
+
+        #tab-activity .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        #tab-activity .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 12px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            transition: all 0.18s;
+            cursor: default;
+        }
+        #tab-activity .badge-item:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+        #tab-activity .badge-icon {
+            font-size: 12px;
+        }
+
+        #tab-activity .saved-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #tab-activity .saved-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            cursor: default;
+            transition: all 0.18s;
+        }
+        #tab-activity .saved-item:hover {
+            border-color: var(--border-hover);
+            background: var(--surface-3);
+        }
+        #tab-activity .saved-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        #tab-activity .saved-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        #tab-activity .saved-time {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* ═══════════════════════════════════════════
+           CONTACT TAB STYLES
+           ═══════════════════════════════════════════ */
+        #tab-contact .page-header {
+            margin-bottom: 56px;
+            opacity:0;
+            animation: riseIn 0.7s 0.2s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-contact .page-label {
+            font-size:10px;
+            letter-spacing:2.5px;
+            text-transform:uppercase;
+            color:var(--text-muted);
+            margin-bottom:14px;
+        }
+        #tab-contact .page-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size:38px;
+            font-weight:300;
+            line-height:1.15;
+            letter-spacing:-0.3px;
+            color:var(--text-primary);
+            margin-bottom:16px;
+        }
+        #tab-contact .page-title em {
+            font-style:italic;
+            color:var(--accent);
+        }
+        #tab-contact .page-sub {
+            font-size:14px;
+            color:var(--text-secondary);
+            line-height:1.7;
+            max-width:540px;
+        }
+
+        #tab-contact .section-tag {
+            font-size:10px;
+            letter-spacing:2.5px;
+            text-transform:uppercase;
+            color:var(--text-muted);
+            margin-bottom:24px;
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+        #tab-contact .section-tag::after {
+            content:'';
+            flex:1;
+            height:1px;
+            background:var(--border);
+        }
+
+        #tab-contact .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 48px;
+            align-items: start;
+        }
+
+        #tab-contact .status-strip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--green-dim);
+            border: 1px solid rgba(74,158,107,0.2);
+            border-radius: 8px;
+            margin-bottom: 40px;
+            width: fit-content;
+            opacity:0;
+            animation: riseIn 0.6s 0.25s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-contact .status-strip-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: livePulse 2s ease-in-out infinite;
+        }
+        #tab-contact .status-strip-text {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--green);
+            letter-spacing: 0.5px;
+        }
+        #tab-contact .status-strip-sep {
+            color: rgba(74,158,107,0.35);
+            font-size: 11px;
+        }
+        #tab-contact .status-strip-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: rgba(74,158,107,0.55);
+            letter-spacing: 0.5px;
+        }
+
+        #tab-contact .open-for-section {
+            margin-bottom: 44px;
+            opacity:0;
+            animation: riseIn 0.7s 0.32s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-contact .open-for-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        #tab-contact .open-tag {
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: default;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        #tab-contact .open-tag::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent-glow), transparent);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        #tab-contact .open-tag:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-1px);
+        }
+        #tab-contact .open-tag:hover::before {
+            opacity: 1;
+        }
+        #tab-contact .open-tag-icon {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        #tab-contact .open-tag-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: block;
+        }
+        #tab-contact .open-tag.accent .open-tag-label {
+            color: var(--accent);
+        }
+        #tab-contact .open-tag.accent {
+            border-color: rgba(201,185,154,0.15);
+            background: var(--accent-dim);
+        }
+
+        #tab-contact .contact-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+            opacity:0;
+            animation: riseIn 0.7s 0.38s cubic-bezier(0.22,1,0.36,1) forwards;
+            transition: border-color 0.25s;
+        }
+        #tab-contact .contact-card:hover {
+            border-color: var(--border-hover);
+        }
+        #tab-contact .contact-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(201,185,154,0.025) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        #tab-contact .contact-email-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: default;
+        }
+        #tab-contact .contact-email-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        #tab-contact .contact-email-row:first-child {
+            padding-top: 0;
+        }
+        #tab-contact .contact-email-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        #tab-contact .contact-email-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        #tab-contact .contact-email-row:hover .contact-email-icon {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+        #tab-contact .contact-email-icon svg {
+            width: 14px;
+            height: 14px;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+        #tab-contact .contact-email-row:hover .contact-email-icon svg {
+            color: var(--accent);
+        }
+        #tab-contact .contact-email-meta {}
+        #tab-contact .contact-email-type {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+        #tab-contact .contact-email-val {
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.3px;
+        }
+        #tab-contact .contact-email-row:hover .contact-email-val {
+            color: var(--text-primary);
+        }
+
+        #tab-contact .copy-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.18s;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        #tab-contact .copy-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+        #tab-contact .copy-btn.copied {
+            border-color: var(--green);
+            color: var(--green);
+            background: var(--green-dim);
+        }
+        #tab-contact .copy-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        #tab-contact .social-section {
+            margin-bottom: 36px;
+            opacity:0;
+            animation: riseIn 0.7s 0.44s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-contact .social-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        #tab-contact .social-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+        #tab-contact .social-row:hover {
+            background: var(--surface);
+            border-color: var(--border);
+        }
+        #tab-contact .social-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        #tab-contact .social-row:hover .social-icon {
+            border-color: var(--border-hover);
+        }
+        #tab-contact .social-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+        #tab-contact .social-meta {
+            flex: 1;
+        }
+        #tab-contact .social-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: block;
+            transition: color 0.18s;
+        }
+        #tab-contact .social-row:hover .social-name {
+            color: var(--text-primary);
+        }
+        #tab-contact .social-handle {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+        #tab-contact .social-arrow {
+            color: var(--text-muted);
+            font-size: 13px;
+            transition: transform 0.18s, color 0.18s;
+        }
+        #tab-contact .social-row:hover .social-arrow {
+            transform: translate(2px,-2px);
+            color: var(--accent);
+        }
+        #tab-contact .verified-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--blue);
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+
+        #tab-contact .form-section {
+            margin-bottom: 36px;
+            opacity:0;
+            animation: riseIn 0.7s 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        #tab-contact .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 32px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s;
+        }
+        #tab-contact .form-card:hover {
+            border-color: var(--border-hover);
+        }
+        #tab-contact .form-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(201,185,154,0.02) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        #tab-contact .form-row {
+            margin-bottom: 18px;
+        }
+        #tab-contact .form-row:last-of-type {
+            margin-bottom: 0;
+        }
+        #tab-contact .form-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+        }
+        #tab-contact .form-input,
+        #tab-contact .form-select,
+        #tab-contact .form-textarea {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 12px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-appearance: none;
+        }
+        #tab-contact .form-input::placeholder,
+        #tab-contact .form-textarea::placeholder {
+            color: var(--text-muted);
+        }
+        #tab-contact .form-input:focus,
+        #tab-contact .form-select:focus,
+        #tab-contact .form-textarea:focus {
+            border-color: rgba(201,185,154,0.3);
+            background: var(--surface-3);
+        }
+        #tab-contact .form-select option {
+            background: var(--surface-2);
+            color: var(--text-primary);
+        }
+        #tab-contact .form-textarea {
+            resize: none;
+            height: 100px;
+            line-height: 1.7;
+        }
+        #tab-contact .form-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        #tab-contact .form-submit {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px 24px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(201,185,154,0.2);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.22s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+        #tab-contact .form-submit:hover {
+            background: rgba(201,185,154,0.16);
+            border-color: rgba(201,185,154,0.35);
+            transform: translateY(-1px);
+        }
+        #tab-contact .form-submit:active {
+            transform: translateY(0);
+        }
+        #tab-contact .form-submit svg {
+            width: 13px;
+            height: 13px;
+        }
+        #tab-contact .form-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        #tab-contact .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            opacity:0;
+        }
+        #tab-contact.active .right-col {
+            animation: riseIn 0.7s 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        #tab-contact .widget {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px 24px;
+            transition: border-color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        #tab-contact .widget:hover {
+            border-color: var(--border-hover);
+        }
+        #tab-contact .widget-title {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        #tab-contact .profile-preview {
+            text-align: center;
+            padding: 28px 24px;
+        }
+        #tab-contact .preview-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border: 1px solid var(--border-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 300;
+            color: var(--accent);
+            margin: 0 auto 14px;
+        }
+        #tab-contact .preview-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        #tab-contact .preview-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        #tab-contact .preview-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        #tab-contact .preview-tag {
+            padding: 3px 10px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        #tab-contact .preview-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 18px 0;
+        }
+        #tab-contact .preview-stat-row {
+            display: flex;
+            justify-content: space-around;
+        }
+        #tab-contact .preview-stat {
+            text-align: center;
+        }
+        #tab-contact .preview-stat-num {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text-primary);
+            display: block;
+        }
+        #tab-contact .preview-stat-label {
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 3px;
+        }
+
+        #tab-contact .avail-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        #tab-contact .avail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        #tab-contact .avail-row:first-child {
+            padding-top: 0;
+        }
+        #tab-contact .avail-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #tab-contact .avail-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        #tab-contact .avail-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        #tab-contact .avail-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        #tab-contact .response-block {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        #tab-contact .response-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--blue-dim);
+            border: 1px solid rgba(107,143,201,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        #tab-contact .response-icon svg {
+            width: 14px;
+            height: 14px;
+            color: var(--blue);
+        }
+        #tab-contact .response-text {}
+        #tab-contact .response-time {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+        #tab-contact .response-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        #tab-contact .building-mini {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        #tab-contact .building-mini-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-top: 5px;
+            flex-shrink: 0;
+            animation: livePulse 2s ease-in-out infinite;
+        }
+        #tab-contact .building-mini-name {
+            font-size: 13px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        #tab-contact .building-mini-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        #tab-contact .building-mini-tag {
+            display: inline-block;
+            margin-top: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 3px 8px;
+            border-radius: 100px;
+            border: 1px solid rgba(201,185,154,0.15);
+        }
+
+        #tab-contact .teamup-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s;
+        }
+        #tab-contact .teamup-card:hover {
+            border-color: rgba(201,185,154,0.2);
+        }
+        #tab-contact .teamup-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201,185,154,0.04) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        #tab-contact .teamup-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(201,185,154,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+        #tab-contact .teamup-icon svg {
+            width: 16px;
+            height: 16px;
+            color: var(--accent);
+        }
+        #tab-contact .teamup-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        #tab-contact .teamup-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+        #tab-contact .teamup-btn {
+            width: 100%;
+            padding: 11px 20px;
+            background: transparent;
+            border: 1px solid rgba(201,185,154,0.2);
+            border-radius: 7px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        #tab-contact .teamup-btn:hover {
+            background: var(--accent-dim);
+            border-color: rgba(201,185,154,0.35);
+        }
+
+        #tab-contact .resume-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'DM Sans', sans-serif;
+            margin-bottom: 24px;
+        }
+        #tab-contact .resume-row:hover {
+            background: var(--surface);
+            border-color: var(--border-hover);
+        }
+        #tab-contact .resume-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        #tab-contact .resume-row:hover .resume-icon {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+        #tab-contact .resume-icon svg {
+            width: 12px;
+            height: 12px;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+        #tab-contact .resume-row:hover .resume-icon svg {
+            color: var(--accent);
+        }
+        #tab-contact .resume-text {
+            flex: 1;
+        }
+        #tab-contact .resume-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: block;
+            transition: color 0.2s;
+        }
+        #tab-contact .resume-row:hover .resume-title {
+            color: var(--text-primary);
+        }
+        #tab-contact .resume-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 2px;
+        }
+        #tab-contact .resume-arrow {
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: transform 0.18s, color 0.18s;
+        }
+        #tab-contact .resume-row:hover .resume-arrow {
+            transform: translateY(-2px);
+            color: var(--accent);
+        }
+
+        #tab-contact .pref-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #tab-contact .pref-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #tab-contact .pref-dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.5;
+            flex-shrink: 0;
+        }
+        #tab-contact .pref-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        #tab-contact .role-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+        #tab-contact .role-tag {
+            padding: 5px 12px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            transition: all 0.18s;
+            cursor: default;
+        }
+        #tab-contact .role-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        /* Toast notifications */
+        #toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--surface-3);
+            border: 1px solid var(--border-hover);
+            border-radius: 8px;
+            padding: 11px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--green);
+            letter-spacing: 0.5px;
+            z-index: 999;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+        }
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #toast-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        #tab-contact .form-success {
+            text-align: center;
+            padding: 32px 0;
+            display: none;
+        }
+        #tab-contact .form-success-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--green-dim);
+            border: 1px solid rgba(74,158,107,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        #tab-contact .form-success-icon svg {
+            width: 18px;
+            height: 18px;
+            color: var(--green);
+        }
+        #tab-contact .form-success-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        #tab-contact .form-success-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
     </style>
     </head>
 
@@ -1867,8 +3531,8 @@
                         <div class="nav-item" data-tab="projects">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>                            Projects
                         </div>
-                        <div class="nav-item" data-tab="articles">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Articles
+                        <div class="nav-item" data-tab="activity">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Activity
                         </div>
                         <div class="nav-item" data-tab="contact">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Contact
@@ -2412,37 +4076,758 @@
 
 
                     <!-- ════════════════════════════════════════════
-                         TAB: ARTICLES (placeholder)
+                         TAB: ACTIVITY (placeholder)
                     ════════════════════════════════════════════ -->
-                    <div class="tab-content" id="tab-articles">
-                        <p class="section-label">Profile · Articles</p>
-                        <div class="tab-placeholder">
-                            <div class="tab-placeholder-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <!-- ════════════════════════════════════════════
+                         TAB: ACTIVITY
+                    ════════════════════════════════════════════ -->
+                    <div class="tab-content" id="tab-activity">
+                        
+                        <!-- Page Header -->
+                        <div class="page-header">
+                            <div class="page-header-left">
+                                <p class="page-label">Developer Feed</p>
+                                <h1 class="page-title">Live <em>Activity</em></h1>
                             </div>
-                            <p class="tab-placeholder-title">Articles coming soon</p>
-                            <p class="tab-placeholder-desc">Thoughts on design systems, developer experience, and building products that feel inevitable.</p>
+                            <div class="live-badge">
+                                <div class="live-dot"></div>
+                                Ecosystem live
+                            </div>
                         </div>
+
+                        <div class="activity-grid">
+
+                            <!-- LEFT COLUMN -->
+                            <div class="activity-left">
+
+                                <!-- Currently Building -->
+                                <div class="section-tag">Currently Building</div>
+                                <div class="building-card">
+                                    <div class="building-header">
+                                        <span class="building-label"><span class="building-label-dot"></span> Active Build</span>
+                                        <span class="building-status">✓ compiling</span>
+                                    </div>
+                                    <p class="building-name">AstroEngine v2</p>
+                                    <p class="building-desc">Real-time 3D rendering engine with adaptive LOD and shader hot-reload. Built on WebGPU with a custom scene graph traversal.</p>
+                                    <div class="building-meta">
+                                        <div class="building-meta-item">
+                                            <span class="building-meta-key">Stack</span>
+                                            <span class="building-meta-val">WebGPU · Rust · WASM</span>
+                                        </div>
+                                        <div class="building-meta-item">
+                                            <span class="building-meta-key">Started</span>
+                                            <span class="building-meta-val">3 weeks ago</span>
+                                        </div>
+                                        <div class="building-meta-item">
+                                            <span class="building-meta-key">Commits</span>
+                                            <span class="building-meta-val">147</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Build / Deploy Log -->
+                                <div class="section-tag">System Log</div>
+                                <div class="log-block">
+                                    <div class="log-header">
+                                        <span class="log-title"><span class="log-title-dot"></span> devstage / build-runner</span>
+                                        <span class="log-pill">active</span>
+                                    </div>
+                                    <div class="log-line">
+                                        <span class="log-time">14:32:01</span>
+                                        <span class="log-type-tag">[deploy]</span>
+                                        <span class="log-msg-ok">✓ SignalOS v2.1.0 — deployment successful (23s)</span>
+                                    </div>
+                                    <div class="log-line">
+                                        <span class="log-time">14:31:38</span>
+                                        <span class="log-type-tag">[build]</span>
+                                        <span class="log-msg-info">→ production bundle optimized · 98.2kb gzipped</span>
+                                    </div>
+                                    <div class="log-line">
+                                        <span class="log-time">14:30:55</span>
+                                        <span class="log-type-tag">[ci]</span>
+                                        <span class="log-msg-ok">✓ all 48 tests passed · coverage 94%</span>
+                                    </div>
+                                    <div class="log-line">
+                                        <span class="log-time">11:14:20</span>
+                                        <span class="log-type-tag">[collab]</span>
+                                        <span class="log-msg-info">→ @milo_ko joined AstroEngine as contributor</span>
+                                    </div>
+                                    <div class="log-line">
+                                        <span class="log-time">09:02:11</span>
+                                        <span class="log-type-tag">[challenge]</span>
+                                        <span class="log-msg-warn">∿ AI Sprint — 74% complete · 3 days remaining</span>
+                                    </div>
+                                    <div class="log-line">
+                                        <span class="log-time">08:44:05</span>
+                                        <span class="log-type-tag">[streak]</span>
+                                        <span class="log-msg-muted">— day 23 maintained · next milestone at 30</span>
+                                    </div>
+                                </div>
+
+                                <!-- Activity Timeline -->
+                                <div class="section-tag">Timeline</div>
+                                <div class="timeline-section">
+
+                                    <div class="timeline-group">
+                                        <div class="timeline-group-label">Today</div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon deploy">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10l5-5 5 5"/><path d="M8 5v8"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text"><strong>Deployment successful</strong> — SignalOS v2.1.0 pushed to production. Zero downtime rollout.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">2m ago</span>
+                                                    <span class="timeline-tag">Deploy</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon collab">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5"/><circle cx="12" cy="8" r="2"/><path d="M10 14c0-1.66.9-3 2-3s2 1.34 2 3"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">New contributor <strong>@milo_ko</strong> joined <span class="t-accent">AstroEngine</span> — merged first PR within 2 hours.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">1h ago</span>
+                                                    <span class="timeline-tag">Collaborator</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon view">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Reached <strong class="t-accent">1.2k project views</strong> on AstroEngine — milestone hit in 3 weeks.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">3h ago</span>
+                                                    <span class="timeline-tag">Milestone</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-group">
+                                        <div class="timeline-group-label">Yesterday</div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon badge">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.2l-3.7 2.1.7-4.1-3-2.9 4.2-.7z"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Unlocked <strong class="t-accent">Full Stack Builder</strong> badge — awarded after 5 cross-stack projects shipped.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">Yesterday · 6:44 PM</span>
+                                                    <span class="timeline-tag">Achievement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon upload">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10l4-4 4 4"/><path d="M8 6v7"/><rect x="2" y="2" width="12" height="3" rx="1"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Uploaded <strong>AstroEngine v2</strong> — initial public release with docs and 3 example scenes.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">Yesterday · 3:20 PM</span>
+                                                    <span class="timeline-tag">Upload</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon follow">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="5" r="2.5"/><path d="M2 13c0-2.76 2.24-5 5-5"/><path d="M12 9v5M9.5 11.5h5"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Started following <strong>Sarah Chen</strong> and <strong>Aryan Mehta</strong> — both building in the AI tooling space.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">Yesterday · 1:05 PM</span>
+                                                    <span class="timeline-tag">Follow</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-group">
+                                        <div class="timeline-group-label">This Week</div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon challenge">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v3M8 11v3M3 8H1M15 8h-2M4.5 4.5 3.1 3.1M12.9 12.9l-1.4-1.4M12.9 3.1 11.5 4.5M3.1 12.9l1.4-1.4"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Joined the <strong class="t-accent">AI Sprint challenge</strong> — currently ranked #7 globally. 3 days to submission.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">Mon · 10:00 AM</span>
+                                                    <span class="timeline-tag">Challenge</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon team">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/><path d="M1 13c0-2.21 1.79-4 4-4M8 13c0-2.21 1.79-4 4-4"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Joined <strong>NeuralForge</strong> team — 4 members, working on distributed inference infrastructure.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">Sun · 4:30 PM</span>
+                                                    <span class="timeline-tag">Team</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon update">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2l-1.5 1.5A6 6 0 1 0 14 8"/><path d="M13 2v4h-4"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Updated <strong>SignalOS</strong> with async state reconciliation and new plugin API surface.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">Sat · 2h of work</span>
+                                                    <span class="timeline-tag">Update</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item">
+                                            <div class="timeline-icon like">
+                                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 13s-6-3.5-6-7.5a3.5 3.5 0 0 1 6-2.5 3.5 3.5 0 0 1 6 2.5c0 4-6 7.5-6 7.5z"/></svg>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p class="timeline-text">Received <strong>84 new likes</strong> across 3 projects this week — SignalOS leading with 51.</p>
+                                                <div class="timeline-footer">
+                                                    <span class="timeline-time">This week</span>
+                                                    <span class="timeline-tag">Engagement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- Contribution Heat Graph -->
+                                <div class="section-tag">Contribution Graph · 2025</div>
+                                <div class="heat-section">
+                                    <div class="heat-graph" id="heat-graph"></div>
+                                    <div class="heat-footer">
+                                        <span class="heat-stat" id="heat-count">— contributions this year</span>
+                                        <div class="heat-legend">
+                                            <span class="heat-legend-label">Less</span>
+                                            <div class="heat-legend-scale">
+                                                <div class="heat-scale-cell" style="background:var(--surface-2)"></div>
+                                                <div class="heat-scale-cell" style="background:rgba(201,185,154,0.15)"></div>
+                                                <div class="heat-scale-cell" style="background:rgba(201,185,154,0.30)"></div>
+                                                <div class="heat-scale-cell" style="background:rgba(201,185,154,0.55)"></div>
+                                                <div class="heat-scale-cell" style="background:rgba(201,185,154,0.85)"></div>
+                                            </div>
+                                            <span class="heat-legend-label">More</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /activity-left -->
+
+                            <!-- RIGHT COLUMN -->
+                            <div class="right-col">
+
+                                <!-- Streak -->
+                                <div class="widget">
+                                    <p class="widget-title">Activity Streak</p>
+                                    <p class="streak-num">23</p>
+                                    <p class="streak-sub">consecutive days active</p>
+                                    <div class="streak-days" id="streak-days"></div>
+                                    <p class="streak-best">Best streak — 41 days · Feb 2025</p>
+                                </div>
+
+                                <!-- Active Challenge -->
+                                <div class="widget challenge-card">
+                                    <p class="widget-title">Active Challenge</p>
+                                    <p class="challenge-name">AI Sprint</p>
+                                    <p class="challenge-desc">Build a production-ready AI tool in 7 days. Judged on utility, code quality, and UX.</p>
+                                    <div class="challenge-prog-wrap">
+                                        <div class="challenge-prog"></div>
+                                    </div>
+                                    <div class="challenge-meta">
+                                        <span class="challenge-pct">74% complete</span>
+                                        <span class="challenge-time">3d remaining</span>
+                                    </div>
+                                </div>
+
+                                <!-- Community Stats -->
+                                <div class="widget">
+                                    <p class="widget-title">This Week</p>
+                                    <div class="mini-stats">
+                                        <div class="mini-stat">
+                                            <span class="mini-stat-label"><span class="mini-stat-label-dot"></span>Project Views</span>
+                                            <span class="mini-stat-val">1.2k <span class="mini-stat-delta">+14%</span></span>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <span class="mini-stat-label"><span class="mini-stat-label-dot"></span>New Follows</span>
+                                            <span class="mini-stat-val">38 <span class="mini-stat-delta">+6</span></span>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <span class="mini-stat-label"><span class="mini-stat-label-dot"></span>Comments</span>
+                                            <span class="mini-stat-val">21</span>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <span class="mini-stat-label"><span class="mini-stat-label-dot"></span>Commits</span>
+                                            <span class="mini-stat-val">47</span>
+                                        </div>
+                                        <div class="mini-stat">
+                                            <span class="mini-stat-label"><span class="mini-stat-label-dot"></span>Deployments</span>
+                                            <span class="mini-stat-val">3</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recent Collaborators -->
+                                <div class="widget">
+                                    <p class="widget-title">Recent Collaborators</p>
+                                    <div class="collab-list">
+                                        <div class="collab-item">
+                                            <div class="collab-avatar">M</div>
+                                            <span class="collab-name">@milo_ko</span>
+                                            <span class="collab-role">Contributor</span>
+                                        </div>
+                                        <div class="collab-item">
+                                            <div class="collab-avatar">S</div>
+                                            <span class="collab-name">@sarah.chen</span>
+                                            <span class="collab-role">Reviewer</span>
+                                        </div>
+                                        <div class="collab-item">
+                                            <div class="collab-avatar">A</div>
+                                            <span class="collab-name">@aryxn</span>
+                                            <span class="collab-role">Co-author</span>
+                                        </div>
+                                        <div class="collab-item">
+                                            <div class="collab-avatar">R</div>
+                                            <span class="collab-name">@reva.k</span>
+                                            <span class="collab-role">NeuralForge</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Badges -->
+                                <div class="widget">
+                                    <p class="widget-title">Achievements</p>
+                                    <div class="badge-list">
+                                        <div class="badge-item"><span class="badge-icon">⚡</span>Full Stack Builder</div>
+                                        <div class="badge-item"><span class="badge-icon">🔥</span>30-Day Streak</div>
+                                        <div class="badge-item"><span class="badge-icon">🚀</span>Early Deployer</div>
+                                        <div class="badge-item"><span class="badge-icon">🤝</span>Team Player</div>
+                                        <div class="badge-item"><span class="badge-icon">✦</span>Top 1%</div>
+                                    </div>
+                                </div>
+
+                                <!-- Recently Saved -->
+                                <div class="widget">
+                                    <p class="widget-title">Recently Viewed</p>
+                                    <div class="saved-list">
+                                        <div class="saved-item">
+                                            <div class="saved-dot" style="background:var(--blue)"></div>
+                                            <span class="saved-name">Vercel Edge Runtime</span>
+                                            <span class="saved-time">2h ago</span>
+                                        </div>
+                                        <div class="saved-item">
+                                            <div class="saved-dot" style="background:var(--accent)"></div>
+                                            <span class="saved-name">FramerOS Components</span>
+                                            <span class="saved-time">yesterday</span>
+                                        </div>
+                                        <div class="saved-item">
+                                            <div class="saved-dot" style="background:var(--green)"></div>
+                                            <span class="saved-name">ShadowDB OSS</span>
+                                            <span class="saved-time">2 days</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /right-col -->
+                        </div><!-- /activity-grid -->
                     </div>
-                    <!-- /tab-articles -->
+                    <!-- /tab-activity -->
 
 
                     <!-- ════════════════════════════════════════════
                          TAB: CONTACT (placeholder)
                     ════════════════════════════════════════════ -->
+                    <!-- ════════════════════════════════════════════
+                         TAB: CONTACT
+                    ════════════════════════════════════════════ -->
                     <div class="tab-content" id="tab-contact">
-                        <p class="section-label">Profile · Contact</p>
-                        <div class="tab-placeholder">
-                            <div class="tab-placeholder-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            </div>
-                            <p class="tab-placeholder-title">Let's connect</p>
-                            <p class="tab-placeholder-desc">Contact form coming soon. In the meantime, reach out at upadhyayshourya352@gmail.com</p>
+
+                        <!-- Page Header -->
+                        <div class="page-header">
+                            <p class="page-label">Get In Touch</p>
+                            <h1 class="page-title">Let's <em>build</em> something.</h1>
+                            <p class="page-sub">I'm selective about what I take on — but always open to conversations around meaningful work, interesting problems, and people who care about craft.</p>
                         </div>
+
+                        <!-- Live Status Strip -->
+                        <div class="status-strip">
+                            <div class="status-strip-dot"></div>
+                            <span class="status-strip-text">Available for work</span>
+                            <span class="status-strip-sep">·</span>
+                            <span class="status-strip-sub">Responds within 24h · IST timezone</span>
+                        </div>
+
+                        <div class="contact-grid">
+
+                            <!-- LEFT COLUMN -->
+                            <div>
+
+                                <!-- Open For -->
+                                <div class="open-for-section">
+                                    <div class="section-tag">Currently Open For</div>
+                                    <div class="open-for-grid">
+                                        <div class="open-tag accent">
+                                            <span class="open-tag-icon">⚡</span>
+                                            <span class="open-tag-label">Freelance</span>
+                                        </div>
+                                        <div class="open-tag accent">
+                                            <span class="open-tag-icon">🤝</span>
+                                            <span class="open-tag-label">Collaboration</span>
+                                        </div>
+                                        <div class="open-tag">
+                                            <span class="open-tag-icon">🌐</span>
+                                            <span class="open-tag-label">Open Source</span>
+                                        </div>
+                                        <div class="open-tag">
+                                            <span class="open-tag-icon">👥</span>
+                                            <span class="open-tag-label">Team Building</span>
+                                        </div>
+                                        <div class="open-tag">
+                                            <span class="open-tag-icon">🧭</span>
+                                            <span class="open-tag-label">Mentorship</span>
+                                        </div>
+                                        <div class="open-tag">
+                                            <span class="open-tag-icon">🎓</span>
+                                            <span class="open-tag-label">Internships</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contact Card -->
+                                <div class="section-tag">Direct Contact</div>
+                                <div class="contact-card">
+                                    <div class="contact-email-row">
+                                        <div class="contact-email-left">
+                                            <div class="contact-email-icon">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M2 6l6 4 6-4"/></svg>
+                                            </div>
+                                            <div class="contact-email-meta">
+                                                <p class="contact-email-type">Primary Email</p>
+                                                <p class="contact-email-val">upadhyayshourya352@gmail.com</p>
+                                            </div>
+                                        </div>
+                                        <button class="copy-btn" data-copy="upadhyayshourya352@gmail.com" title="Copy email">
+                                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 11V3h8"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="contact-email-row">
+                                        <div class="contact-email-left">
+                                            <div class="contact-email-icon">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M10.5 5.5c-.7-1-1.5-1.5-2.5-1.5-1.93 0-3.5 2-3.5 4s1.57 4 3.5 4c1 0 1.8-.5 2.5-1.5"/></svg>
+                                            </div>
+                                            <div class="contact-email-meta">
+                                                <p class="contact-email-type">Portfolio</p>
+                                                <p class="contact-email-val">shourya.design</p>
+                                            </div>
+                                        </div>
+                                        <button class="copy-btn" data-copy="https://shourya.design" title="Copy URL">
+                                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 11V3h8"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="contact-email-row">
+                                        <div class="contact-email-left">
+                                            <div class="contact-email-icon">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM2 6l6 3.5L14 6"/></svg>
+                                            </div>
+                                            <div class="contact-email-meta">
+                                                <p class="contact-email-type">Preferred Channel</p>
+                                                <p class="contact-email-val">Email → DM on X</p>
+                                            </div>
+                                        </div>
+                                        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:0.5px;">preferred</div>
+                                    </div>
+                                </div>
+
+                                <!-- Social Links -->
+                                <div class="social-section">
+                                    <div class="section-tag">Elsewhere</div>
+                                    <div class="social-grid">
+
+                                        <a class="social-row" href="https://github.com/shouryaupadhyay2029" target="_blank">
+                                            <div class="social-icon">
+                                                <svg viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-secondary)"><path d="M8 1C4.13 1 1 4.13 1 8c0 3.09 2 5.71 4.78 6.63.35.06.48-.15.48-.34v-1.2c-1.95.42-2.36-.94-2.36-.94-.32-.81-.78-1.03-.78-1.03-.64-.44.05-.43.05-.43.7.05 1.07.72 1.07.72.62 1.07 1.63.76 2.03.58.06-.45.24-.76.44-.93-1.56-.18-3.2-.78-3.2-3.47 0-.77.27-1.39.72-1.88-.07-.18-.31-.89.07-1.85 0 0 .59-.19 1.93.72A6.7 6.7 0 0 1 8 4.79c.6 0 1.2.08 1.77.23 1.34-.91 1.93-.72 1.93-.72.38.96.14 1.67.07 1.85.45.49.72 1.11.72 1.88 0 2.7-1.64 3.29-3.2 3.47.25.22.48.65.48 1.31v1.94c0 .19.13.4.48.34A7.003 7.003 0 0 0 15 8c0-3.87-3.13-7-7-7z"/></svg>
+                                            </div>
+                                            <div class="social-meta">
+                                                <span class="social-name">GitHub</span>
+                                                <span class="social-handle">@shouryaupadhyay2029</span>
+                                            </div>
+                                            <div class="verified-dot"></div>
+                                            <span class="social-arrow">↗</span>
+                                        </a>
+
+                                        <a class="social-row" href="https://linkedin.com" target="_blank">
+                                            <div class="social-icon">
+                                                <svg viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-secondary)"><path d="M13.63 2H2.37C1.61 2 1 2.61 1 3.37v9.26C1 13.39 1.61 14 2.37 14h11.26c.76 0 1.37-.61 1.37-1.37V3.37C15 2.61 14.39 2 13.63 2zM5.5 12H3.5V6.5h2V12zm-1-6.25c-.64 0-1.16-.52-1.16-1.16s.52-1.16 1.16-1.16 1.16.52 1.16 1.16-.52 1.16-1.16 1.16zM12.5 12h-2V9.1c0-.72-.26-1.21-.89-1.21-.49 0-.77.33-.9.64-.05.11-.06.27-.06.43V12h-2V6.5h2v.74c.28-.43.76-1.04 1.85-1.04 1.35 0 2 .88 2 2.77V12z"/></svg>
+                                            </div>
+                                            <div class="social-meta">
+                                                <span class="social-name">LinkedIn</span>
+                                                <span class="social-handle">linkedin.com/in/shourya</span>
+                                            </div>
+                                            <div class="verified-dot"></div>
+                                            <span class="social-arrow">↗</span>
+                                        </a>
+
+                                        <a class="social-row" href="https://x.com" target="_blank">
+                                            <div class="social-icon">
+                                                <svg viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-secondary)"><path d="M12.6 2h2.45l-5.35 6.12L16 14h-4.93l-3.86-5.05L2.9 14H.44l5.72-6.54L0 2h5.06l3.49 4.62L12.6 2zm-.86 10.8h1.36L4.3 3.37H2.84l8.9 9.43z"/></svg>
+                                            </div>
+                                            <div class="social-meta">
+                                                <span class="social-name">X / Twitter</span>
+                                                <span class="social-handle">@shourya_builds</span>
+                                            </div>
+                                            <span class="social-arrow">↗</span>
+                                        </a>
+
+                                        <a class="social-row" href="https://dribbble.com" target="_blank">
+                                            <div class="social-icon">
+                                                <svg viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-secondary)"><path d="M8 1C4.13 1 1 4.13 1 8c0 2.67 1.44 5 3.59 6.29.22-.19.36-.48.36-.81V12.1A2.1 2.1 0 0 1 5 12c0-1.13.81-2.06 1.87-2.24C5.63 9.39 4.7 8.26 4.7 6.9c0-1.7 1.23-3.15 2.93-3.46-.18-.28-.28-.61-.28-.94 0-.98.8-1.78 1.78-1.78s1.78.8 1.78 1.78c0 .34-.1.66-.28.94 1.7.31 2.93 1.76 2.93 3.46 0 1.36-.93 2.49-2.17 2.86C12.19 9.94 13 10.87 13 12c0 .04 0 .07-.01.1v1.48c0 .33.14.62.36.81C15.56 13 17 10.67 17 8c0-3.87-3.13-7-7-7L8 1z"/></svg>
+                                            </div>
+                                            <div class="social-meta">
+                                                <span class="social-name">Dribbble</span>
+                                                <span class="social-handle">dribbble.com/shourya</span>
+                                            </div>
+                                            <span class="social-arrow">↗</span>
+                                        </a>
+
+                                        <a class="social-row" href="https://behance.net" target="_blank">
+                                            <div class="social-icon">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--text-secondary)"><rect x="2" y="2" width="12" height="12" rx="2"/><circle cx="8" cy="8" r="3"/><circle cx="11.5" cy="4.5" r="0.5" fill="currentColor"/></svg>
+                                            </div>
+                                            <div class="social-meta">
+                                                <span class="social-name">Behance</span>
+                                                <span class="social-handle">behance.net/shourya</span>
+                                            </div>
+                                            <span class="social-arrow">↗</span>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Contact Form -->
+                                <div class="form-section">
+                                    <div class="section-tag">Send a Message</div>
+                                    <div class="form-card">
+                                        <div id="form-body">
+                                            <div class="form-2col">
+                                                <div class="form-row">
+                                                    <label class="form-label">Name</label>
+                                                    <input class="form-input" type="text" placeholder="Your name" />
+                                                </div>
+                                                <div class="form-row">
+                                                    <label class="form-label">Email</label>
+                                                    <input class="form-input" type="email" placeholder="your@email.com" />
+                                                </div>
+                                            </div>
+                                            <div class="form-row" style="margin-top:18px;">
+                                                <label class="form-label">Regarding</label>
+                                                <select class="form-select">
+                                                    <option value="" disabled selected>Select a topic</option>
+                                                    <option>Freelance Inquiry</option>
+                                                    <option>Collaboration Proposal</option>
+                                                    <option>Open Source Contribution</option>
+                                                    <option>Team / Hiring</option>
+                                                    <option>Mentorship</option>
+                                                    <option>Project Feedback</option>
+                                                    <option>Just saying hi</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-row" style="margin-top:18px;">
+                                                <label class="form-label">Message</label>
+                                                <textarea class="form-textarea" placeholder="What's on your mind? Be specific — I appreciate directness."></textarea>
+                                            </div>
+                                            <button class="form-submit" id="form-send">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2L2 6.5l5 2L14 2z"/><path d="M7 8.5l2 5.5L14 2"/></svg>
+                                                Send Message
+                                            </button>
+                                            <p class="form-note">No spam. No newsletters. Just a direct line.</p>
+                                        </div>
+                                        <div class="form-success" id="form-success">
+                                            <div class="form-success-icon">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l3.5 3.5L13 4"/></svg>
+                                            </div>
+                                            <p class="form-success-title">Message received.</p>
+                                            <p class="form-success-sub">I'll get back to you within 24 hours.<br>Thanks for reaching out.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /left col -->
+
+                            <!-- RIGHT COLUMN -->
+                            <div class="right-col">
+
+                                <!-- Profile Preview -->
+                                <div class="widget profile-preview">
+                                    <div class="preview-avatar">SU</div>
+                                    <p class="preview-name">Shourya Upadhyay</p>
+                                    <p class="preview-role">Designer & Developer · DevStage</p>
+                                    <div class="preview-tags">
+                                        <span class="preview-tag">UI/UX</span>
+                                        <span class="preview-tag">Frontend</span>
+                                        <span class="preview-tag">Systems</span>
+                                        <span class="preview-tag">Motion</span>
+                                    </div>
+                                    <div class="preview-divider"></div>
+                                    <div class="preview-stat-row">
+                                        <div class="preview-stat">
+                                            <span class="preview-stat-num">4.2k</span>
+                                            <span class="preview-stat-label">Followers</span>
+                                        </div>
+                                        <div class="preview-stat">
+                                            <span class="preview-stat-num">23</span>
+                                            <span class="preview-stat-label">Projects</span>
+                                        </div>
+                                        <div class="preview-stat">
+                                            <span class="preview-stat-num">6yr</span>
+                                            <span class="preview-stat-label">Experience</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Availability -->
+                                <div class="widget">
+                                    <p class="widget-title">Availability</p>
+                                    <div>
+                                        <div class="avail-row">
+                                            <div class="avail-left">
+                                                <div class="avail-dot" style="background:var(--green)"></div>
+                                                <span class="avail-label">Status</span>
+                                            </div>
+                                            <span class="avail-val">Available</span>
+                                        </div>
+                                        <div class="avail-row">
+                                            <div class="avail-left">
+                                                <div class="avail-dot" style="background:var(--accent)"></div>
+                                                <span class="avail-label">Timezone</span>
+                                            </div>
+                                            <span class="avail-val">IST · UTC+5:30</span>
+                                        </div>
+                                        <div class="avail-row">
+                                            <div class="avail-left">
+                                                <div class="avail-dot" style="background:var(--blue)"></div>
+                                                <span class="avail-label">Working hrs</span>
+                                            </div>
+                                            <span class="avail-val">10am – 8pm</span>
+                                        </div>
+                                        <div class="avail-row">
+                                            <div class="avail-left">
+                                                <div class="avail-dot" style="background:var(--text-muted)"></div>
+                                                <span class="avail-label">Capacity</span>
+                                            </div>
+                                            <span class="avail-val">1–2 projects</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Response time -->
+                                <div class="widget">
+                                    <p class="widget-title">Response Time</p>
+                                    <div class="response-block">
+                                        <div class="response-icon">
+                                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5"/></svg>
+                                        </div>
+                                        <div class="response-text">
+                                            <p class="response-time">Within 24h</p>
+                                            <p class="response-sub">Email preferred · also active on X</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Currently Building -->
+                                <div class="widget">
+                                    <p class="widget-title">Currently Building</p>
+                                    <div class="building-mini">
+                                        <div class="building-mini-dot"></div>
+                                        <div>
+                                            <p class="building-mini-name">AstroEngine v2</p>
+                                            <p class="building-mini-desc">WebGPU rendering engine with adaptive LOD and hot-reload shaders. Looking for contributors.</p>
+                                            <span class="building-mini-tag">Active Build</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Resume -->
+                                <div class="section-tag" style="margin-bottom:12px;">Resources</div>
+                                <button class="resume-row">
+                                    <div class="resume-icon">
+                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 2h6l4 4v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M9 2v4h4"/><path d="M5 9h6M5 11h4"/></svg>
+                                    </div>
+                                    <div class="resume-text">
+                                        <span class="resume-title">Download CV / Résumé</span>
+                                        <span class="resume-sub">PDF · Updated May 2025 · 2 pages</span>
+                                    </div>
+                                    <span class="resume-arrow">↓</span>
+                                </button>
+
+                                <!-- Collab prefs -->
+                                <div class="widget">
+                                    <p class="widget-title">Collab Preferences</p>
+                                    <div class="pref-list">
+                                        <div class="pref-item"><div class="pref-dot"></div><p class="pref-text">Async-first — deep work over meetings</p></div>
+                                        <div class="pref-item"><div class="pref-dot"></div><p class="pref-text">Remote & distributed teams</p></div>
+                                        <div class="pref-item"><div class="pref-dot"></div><p class="pref-text">Prefer well-scoped, high-craft work</p></div>
+                                        <div class="pref-item"><div class="pref-dot"></div><p class="pref-text">Equity considered for early-stage</p></div>
+                                    </div>
+                                </div>
+
+                                <!-- Open roles -->
+                                <div class="widget">
+                                    <p class="widget-title">Skills I Need</p>
+                                    <div class="role-tags">
+                                        <span class="role-tag">Rust</span>
+                                        <span class="role-tag">WebGPU</span>
+                                        <span class="role-tag">3D Art</span>
+                                        <span class="role-tag">Technical Writing</span>
+                                        <span class="role-tag">DevRel</span>
+                                    </div>
+                                </div>
+
+                                <!-- Team-up CTA -->
+                                <div class="teamup-card">
+                                    <div class="teamup-icon">
+                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/><path d="M1 13c0-2.21 1.79-4 4-4M8 13c0-2.21 1.79-4 4-4M8 9v4M6 11h4"/></svg>
+                                    </div>
+                                    <p class="teamup-title">Team Up</p>
+                                    <p class="teamup-desc">Got a project that needs a design-engineer? I'm open to joining early-stage teams who ship with intention.</p>
+                                    <button class="teamup-btn">Propose a Collab →</button>
+                                </div>
+
+                            </div><!-- /right-col -->
+
+                        </div><!-- /contact-grid -->
                     </div>
                     <!-- /tab-contact -->
 
                 </main>
+            </div>
+
+            <!-- Toast alert -->
+            <div id="toast">
+                <div id="toast-dot"></div>
+                <span id="toast-msg">Copied to clipboard</span>
             </div>
 
             <!-- ════════════════════════════════════════════
@@ -2597,7 +4982,7 @@
                     const tabNames = {
                         overview: 'Overview',
                         projects: 'Projects',
-                        articles: 'Articles',
+                        activity: 'Activity',
                         contact: 'Contact'
                     };
 
@@ -2767,6 +5152,143 @@
                         seq();
                     } else {
                         document.addEventListener('DOMContentLoaded', seq);
+                    }
+                })();
+            </script>
+
+            <!-- Activity tab: dynamic rendering and simulation -->
+            <script>
+                (function() {
+                    const activityTab = document.getElementById('tab-activity');
+                    if (!activityTab) return;
+
+                    /* ── CONTRIBUTION HEAT GRAPH ── */
+                    const heatEl = document.getElementById('heat-graph');
+                    if (heatEl) {
+                        const weeks = 52;
+                        const days  = 7;
+                        const weights = [0.42, 0.25, 0.17, 0.11, 0.05];
+                        const levels  = ['', 'l1', 'l2', 'l3', 'l4'];
+                        function weightedRand() {
+                            const r = Math.random(); 
+                            let sum = 0;
+                            for (let i = 0; i < weights.length; i++) { 
+                                sum += weights[i]; 
+                                if (r < sum) return i; 
+                            }
+                            return 0;
+                        }
+                        let totalContribs = 0;
+                        for (let d = 0; d < days; d++) {
+                            const row = document.createElement('div');
+                            row.className = 'heat-row';
+                            for (let w = 0; w < weeks; w++) {
+                                const cell = document.createElement('div');
+                                const lvl = weightedRand();
+                                totalContribs += lvl;
+                                cell.className = 'heat-cell' + (lvl ? ' ' + levels[lvl] : '');
+                                row.appendChild(cell);
+                            }
+                            heatEl.appendChild(row);
+                        }
+                        const countEl = document.getElementById('heat-count');
+                        if (countEl) {
+                            countEl.textContent = (totalContribs * 3 + 412) + ' contributions this year';
+                        }
+                    }
+
+                    /* ── STREAK DAYS ── */
+                    const streakEl = document.getElementById('streak-days');
+                    if (streakEl) {
+                        for (let i = 0; i < 7; i++) {
+                            const d = document.createElement('div');
+                            if (i < 6) d.className = 'streak-day done';
+                            else       d.className = 'streak-day today';
+                            streakEl.appendChild(d);
+                        }
+                    }
+
+                    /* ── LIVE TIMESTAMP SIMULATION ── */
+                    let secs = 120;
+                    setInterval(() => {
+                        secs += Math.floor(Math.random() * 30) + 15;
+                        const mins = Math.floor(secs / 60);
+                        const el = activityTab.querySelector('.timeline-time');
+                        if (el && mins < 60) el.textContent = mins + 'm ago';
+                    }, 30000);
+                })();
+            </script>
+
+            <!-- Contact tab: copy/clipboard & form validation -->
+            <script>
+                (function() {
+                    const contactTab = document.getElementById('tab-contact');
+                    if (!contactTab) return;
+
+                    /* ── COPY EMAIL / PORTFOLIO ── */
+                    contactTab.querySelectorAll('.copy-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const text = btn.dataset.copy;
+                            navigator.clipboard.writeText(text).then(() => {
+                                btn.classList.add('copied');
+                                const toast = document.getElementById('toast');
+                                const toastMsg = document.getElementById('toast-msg');
+                                if (toast && toastMsg) {
+                                    toastMsg.textContent = text.startsWith('http') ? 'URL copied to clipboard' : 'Email copied to clipboard';
+                                    toast.classList.add('show');
+                                    setTimeout(() => {
+                                        btn.classList.remove('copied');
+                                        toast.classList.remove('show');
+                                    }, 2000);
+                                }
+                            });
+                        });
+                    });
+
+                    /* ── CONTACT FORM SUBMISSION ── */
+                    const sendBtn = document.getElementById('form-send');
+                    const formBody = document.getElementById('form-body');
+                    const formSuccess = document.getElementById('form-success');
+                    if (sendBtn && formBody && formSuccess) {
+                        sendBtn.addEventListener('click', () => {
+                            // Validate inputs
+                            const inputs = formBody.querySelectorAll('.form-input');
+                            const select = formBody.querySelector('.form-select');
+                            const textarea = formBody.querySelector('.form-textarea');
+                            let valid = true;
+                            inputs.forEach(input => {
+                                if (!input.value.trim()) {
+                                    input.style.borderColor = 'var(--red)';
+                                    valid = false;
+                                } else {
+                                    input.style.borderColor = '';
+                                }
+                            });
+                            if (select && !select.value) {
+                                select.style.borderColor = 'var(--red)';
+                                valid = false;
+                            } else if (select) {
+                                select.style.borderColor = '';
+                            }
+                            if (textarea && !textarea.value.trim()) {
+                                textarea.style.borderColor = 'var(--red)';
+                                valid = false;
+                            } else if (textarea) {
+                                textarea.style.borderColor = '';
+                            }
+
+                            if (!valid) return;
+
+                            // Disable inputs during pseudo-send
+                            sendBtn.disabled = true;
+                            sendBtn.textContent = 'Sending...';
+                            setTimeout(() => {
+                                formBody.style.display = 'none';
+                                formSuccess.style.display = 'block';
+                                sendBtn.disabled = false;
+                                sendBtn.textContent = 'Send Message';
+                            }, 1200);
+                        });
                     }
                 })();
             </script>
