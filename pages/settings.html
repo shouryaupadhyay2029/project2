@@ -2,775 +2,773 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings — DevStage</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="../styles/global.css">
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #0e0e0e;
-      --surface: #141414;
-      --surface-2: #1a1a1a;
-      --surface-3: #1f1f1f;
-      --border: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(255, 255, 255, 0.12);
-      --text-primary: #e8e6e1;
-      --text-secondary: #6b6b6b;
-      --text-muted: #3a3a3a;
-      --accent: #c9b99a;
-      --accent-dim: rgba(201, 185, 154, 0.10);
-      --accent-glow: rgba(201, 185, 154, 0.04);
-      --green: #4a9e6b;
-      --green-dim: rgba(74, 158, 107, 0.12);
-      --red: #c06060;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text-primary);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      min-height: 100vh;
-      position: relative;
-      z-index: 1;
-    }
-
-    .page-content {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0s, transform 0s;
-    }
-
-    .page-content.revealed {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 32px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-    }
-
-    .sidebar-header {
-      margin-bottom: 32px;
-    }
-
-    .sidebar-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 300;
-      color: var(--text-primary);
-    }
-
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    .nav-item:hover {
-      background: var(--surface-2);
-      color: var(--text-primary);
-    }
-
-    .nav-item.active {
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
-
-    .nav-item i {
-      width: 20px;
-      height: 20px;
-    }
-
-    /* Main Content */
-    .main-content {
-      padding: 48px 64px;
-      overflow-y: auto;
-    }
-
-    .content-header {
-      margin-bottom: 48px;
-    }
-
-    .content-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 42px;
-      font-weight: 300;
-      margin-bottom: 12px;
-    }
-
-    .content-subtitle {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /* Settings Sections */
-    .settings-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 32px;
-      margin-bottom: 24px;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .section-title i {
-      color: var(--accent);
-    }
-
-    /* Form Groups */
-    .form-group {
-      margin-bottom: 24px;
-    }
-
-    .form-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 300;
-      transition: all 0.2s ease;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-dim);
-    }
-
-    .form-input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .form-textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    /* Toggle Switch */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .toggle-row:last-child {
-      border-bottom: none;
-    }
-
-    .toggle-info {
-      flex: 1;
-    }
-
-    .toggle-label {
-      font-size: 14px;
-      font-weight: 400;
-      margin-bottom: 4px;
-    }
-
-    .toggle-description {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    .toggle-switch {
-      position: relative;
-      width: 48px;
-      height: 26px;
-      background: var(--surface-3);
-      border-radius: 13px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .toggle-switch.active {
-      background: var(--accent);
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.2s ease;
-    }
-
-    .toggle-switch.active::after {
-      transform: translateX(22px);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 400;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-    }
-
-    .btn-primary:hover {
-      opacity: 0.9;
-    }
-
-    .btn-secondary {
-      background: var(--surface-2);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      background: var(--surface-3);
-      border-color: var(--border-hover);
-    }
-
-    .btn-danger {
-      background: var(--red);
-      color: white;
-    }
-
-    .btn-danger:hover {
-      opacity: 0.9;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    /* Avatar Upload */
-    .avatar-section {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .avatar-preview {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: var(--surface-2);
-      border: 2px solid var(--border);
-      overflow: hidden;
-    }
-
-    .avatar-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .avatar-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    /* Danger Zone */
-    .danger-zone {
-      border-color: rgba(192, 96, 96, 0.3);
-    }
-
-    .danger-zone .section-title {
-      color: var(--red);
-    }
-
-    .danger-zone .section-title i {
-      color: var(--red);
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        display: none;
-      }
-
-      .main-content {
-        padding: 32px 24px;
-      }
-
-      .content-title {
-        font-size: 32px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — DevStage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../styles/global.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+         :root {
+            --bg: #0e0e0e;
+            --surface: #141414;
+            --surface-2: #1a1a1a;
+            --surface-3: #1f1f1f;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text-primary: #e8e6e1;
+            --text-secondary: #6b6b6b;
+            --text-muted: #3a3a3a;
+            --accent: #c9b99a;
+            --accent-dim: rgba(201, 185, 154, 0.10);
+            --accent-glow: rgba(201, 185, 154, 0.04);
+            --green: #4a9e6b;
+            --green-dim: rgba(74, 158, 107, 0.12);
+            --red: #c06060;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+        
+        .layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .page-content {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0s, transform 0s;
+        }
+        
+        .page-content.revealed {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            margin-bottom: 32px;
+        }
+        
+        .sidebar-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--text-primary);
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .nav-item:hover {
+            background: var(--surface-2);
+            color: var(--text-primary);
+        }
+        
+        .nav-item.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+        
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+        }
+        /* Main Content */
+        
+        .main-content {
+            padding: 48px 64px;
+            overflow-y: auto;
+        }
+        
+        .content-header {
+            margin-bottom: 48px;
+        }
+        
+        .content-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            font-weight: 300;
+            margin-bottom: 12px;
+        }
+        
+        .content-subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        /* Settings Sections */
+        
+        .settings-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: var(--accent);
+        }
+        /* Form Groups */
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 300;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        /* Toggle Switch */
+        
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-info {
+            flex: 1;
+        }
+        
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        
+        .toggle-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: var(--surface-3);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(22px);
+        }
+        /* Buttons */
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--surface-3);
+            border-color: var(--border-hover);
+        }
+        
+        .btn-danger {
+            background: var(--red);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        /* Avatar Upload */
+        
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            overflow: hidden;
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        /* Danger Zone */
+        
+        .danger-zone {
+            border-color: rgba(192, 96, 96, 0.3);
+        }
+        
+        .danger-zone .section-title {
+            color: var(--red);
+        }
+        
+        .danger-zone .section-title i {
+            color: var(--red);
+        }
+        /* Responsive */
+        
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                padding: 32px 24px;
+            }
+            .content-title {
+                font-size: 32px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h1 class="sidebar-title">Settings</h1>
-      </div>
-      <nav class="sidebar-nav">
-        <a href="#profile" class="nav-item active" data-section="profile">
-          <i data-lucide="user"></i>
-          <span>Profile</span>
-        </a>
-        <a href="#account" class="nav-item" data-section="account">
-          <i data-lucide="shield"></i>
-          <span>Account</span>
-        </a>
-        <a href="#notifications" class="nav-item" data-section="notifications">
-          <i data-lucide="bell"></i>
-          <span>Notifications</span>
-        </a>
-        <a href="#privacy" class="nav-item" data-section="privacy">
-          <i data-lucide="lock"></i>
-          <span>Privacy</span>
-        </a>
-        <a href="#appearance" class="nav-item" data-section="appearance">
-          <i data-lucide="palette"></i>
-          <span>Appearance</span>
-        </a>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <div class="page-content" id="page-content">
-        <div class="content-header">
-          <h1 class="content-title">Profile Settings</h1>
-          <p class="content-subtitle">Manage your profile information and preferences</p>
-        </div>
-
-        <!-- Profile Section -->
-        <section class="settings-section" id="profile-section">
-          <h2 class="section-title">
-            <i data-lucide="user"></i>
-            Profile Information
-          </h2>
-
-          <div class="avatar-section">
-            <div class="avatar-preview">
-              <img id="settings-avatar" src="https://ui-avatars.com/api/?name=Guest&background=c8b89a&color=0b0b0b"
-                alt="Avatar">
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">Settings</h1>
             </div>
-            <div class="avatar-actions">
-              <button class="btn btn-secondary" onclick="document.getElementById('avatar-upload').click()">
+            <nav class="sidebar-nav">
+                <a href="#profile" class="nav-item active" data-section="profile">
+                    <i data-lucide="user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#account" class="nav-item" data-section="account">
+                    <i data-lucide="shield"></i>
+                    <span>Account</span>
+                </a>
+                <a href="#notifications" class="nav-item" data-section="notifications">
+                    <i data-lucide="bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#privacy" class="nav-item" data-section="privacy">
+                    <i data-lucide="lock"></i>
+                    <span>Privacy</span>
+                </a>
+                <a href="#appearance" class="nav-item" data-section="appearance">
+                    <i data-lucide="palette"></i>
+                    <span>Appearance</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content" id="page-content">
+                <div class="content-header">
+                    <h1 class="content-title">Profile Settings</h1>
+                    <p class="content-subtitle">Manage your profile information and preferences</p>
+                </div>
+
+                <!-- Profile Section -->
+                <section class="settings-section" id="profile-section">
+                    <h2 class="section-title">
+                        <i data-lucide="user"></i> Profile Information
+                    </h2>
+
+                    <div class="avatar-section">
+                        <div class="avatar-preview">
+                            <img id="settings-avatar" src="https://ui-avatars.com/api/?name=Guest&background=c8b89a&color=0b0b0b" alt="Avatar">
+                        </div>
+                        <div class="avatar-actions">
+                            <button class="btn btn-secondary" onclick="document.getElementById('avatar-upload').click()">
                 <i data-lucide="upload"></i>
                 Upload new avatar
               </button>
-              <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-              <span style="font-size: 12px; color: var(--text-secondary);">Recommended: 400x400px, max 2MB</span>
-            </div>
-          </div>
+                            <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                            <span style="font-size: 12px; color: var(--text-secondary);">Recommended: 400x400px, max 2MB</span>
+                        </div>
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="full-name">Full Name</label>
-            <input type="text" id="full-name" class="form-input" placeholder="Enter your full name">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="full-name">Full Name</label>
+                        <input type="text" id="full-name" class="form-input" placeholder="Enter your full name">
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="username">Username</label>
-            <input type="text" id="username" class="form-input" placeholder="Choose a username">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <input type="text" id="username" class="form-input" placeholder="Choose a username">
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="bio">Bio</label>
-            <textarea id="bio" class="form-input form-textarea" placeholder="Tell us about yourself..."></textarea>
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bio">Bio</label>
+                        <textarea id="bio" class="form-input form-textarea" placeholder="Tell us about yourself..."></textarea>
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="website">Website</label>
-            <input type="url" id="website" class="form-input" placeholder="https://yourwebsite.com">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="website">Website</label>
+                        <input type="url" id="website" class="form-input" placeholder="https://yourwebsite.com">
+                    </div>
 
-          <div class="btn-group">
-            <button class="btn btn-primary" id="save-profile">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="save-profile">
               <i data-lucide="save"></i>
               Save Changes
             </button>
-            <button class="btn btn-secondary">
+                        <button class="btn btn-secondary">
               Cancel
             </button>
-          </div>
-        </section>
+                    </div>
+                </section>
 
-        <!-- Account Section -->
-        <section class="settings-section" id="account-section" style="display: none;">
-          <h2 class="section-title">
-            <i data-lucide="shield"></i>
-            Account Security
-          </h2>
+                <!-- Account Section -->
+                <section class="settings-section" id="account-section" style="display: none;">
+                    <h2 class="section-title">
+                        <i data-lucide="shield"></i> Account Security
+                    </h2>
 
-          <div class="form-group">
-            <label class="form-label" for="email">Email Address</label>
-            <input type="email" id="email" class="form-input" placeholder="your@email.com">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="your@email.com">
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="current-password">Current Password</label>
-            <input type="password" id="current-password" class="form-input" placeholder="Enter current password">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="current-password">Current Password</label>
+                        <input type="password" id="current-password" class="form-input" placeholder="Enter current password">
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="new-password">New Password</label>
-            <input type="password" id="new-password" class="form-input" placeholder="Enter new password">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="new-password">New Password</label>
+                        <input type="password" id="new-password" class="form-input" placeholder="Enter new password">
+                    </div>
 
-          <div class="form-group">
-            <label class="form-label" for="confirm-password">Confirm New Password</label>
-            <input type="password" id="confirm-password" class="form-input" placeholder="Confirm new password">
-          </div>
+                    <div class="form-group">
+                        <label class="form-label" for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm new password">
+                    </div>
 
-          <div class="btn-group">
-            <button class="btn btn-primary">
+                    <div class="btn-group">
+                        <button class="btn btn-primary">
               <i data-lucide="save"></i>
               Update Password
             </button>
-          </div>
-        </section>
+                    </div>
+                </section>
 
-        <!-- Notifications Section -->
-        <section class="settings-section" id="notifications-section" style="display: none;">
-          <h2 class="section-title">
-            <i data-lucide="bell"></i>
-            Notification Preferences
-          </h2>
+                <!-- Notifications Section -->
+                <section class="settings-section" id="notifications-section" style="display: none;">
+                    <h2 class="section-title">
+                        <i data-lucide="bell"></i> Notification Preferences
+                    </h2>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Email Notifications</div>
-              <div class="toggle-description">Receive email updates about your account activity</div>
-            </div>
-            <div class="toggle-switch active" data-toggle="email-notifications"></div>
-          </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Email Notifications</div>
+                            <div class="toggle-description">Receive email updates about your account activity</div>
+                        </div>
+                        <div class="toggle-switch active" data-toggle="email-notifications"></div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Project Comments</div>
-              <div class="toggle-description">Get notified when someone comments on your projects</div>
-            </div>
-            <div class="toggle-switch active" data-toggle="project-comments"></div>
-          </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Project Comments</div>
+                            <div class="toggle-description">Get notified when someone comments on your projects</div>
+                        </div>
+                        <div class="toggle-switch active" data-toggle="project-comments"></div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Team Invitations</div>
-              <div class="toggle-description">Receive notifications for team collaboration requests</div>
-            </div>
-            <div class="toggle-switch active" data-toggle="team-invitations"></div>
-          </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Team Invitations</div>
+                            <div class="toggle-description">Receive notifications for team collaboration requests</div>
+                        </div>
+                        <div class="toggle-switch active" data-toggle="team-invitations"></div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Challenge Updates</div>
-              <div class="toggle-description">Get updates about new challenges and competitions</div>
-            </div>
-            <div class="toggle-switch" data-toggle="challenge-updates"></div>
-          </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Challenge Updates</div>
+                            <div class="toggle-description">Get updates about new challenges and competitions</div>
+                        </div>
+                        <div class="toggle-switch" data-toggle="challenge-updates"></div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Marketing Emails</div>
-              <div class="toggle-description">Receive promotional content and feature announcements</div>
-            </div>
-            <div class="toggle-switch" data-toggle="marketing-emails"></div>
-          </div>
-        </section>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Marketing Emails</div>
+                            <div class="toggle-description">Receive promotional content and feature announcements</div>
+                        </div>
+                        <div class="toggle-switch" data-toggle="marketing-emails"></div>
+                    </div>
+                </section>
 
-        <!-- Privacy Section -->
-        <section class="settings-section" id="privacy-section" style="display: none;">
-          <h2 class="section-title">
-            <i data-lucide="lock"></i>
-            Privacy Settings
-          </h2>
+                <!-- Privacy Section -->
+                <section class="settings-section" id="privacy-section" style="display: none;">
+                    <h2 class="section-title">
+                        <i data-lucide="lock"></i> Privacy Settings
+                    </h2>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Public Profile</div>
-              <div class="toggle-description">Make your profile visible to other users</div>
-            </div>
-            <div class="toggle-switch active" data-toggle="public-profile"></div>
-          </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Public Profile</div>
+                            <div class="toggle-description">Make your profile visible to other users</div>
+                        </div>
+                        <div class="toggle-switch active" data-toggle="public-profile"></div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Show Email</div>
-              <div class="toggle-description">Display your email address on your profile</div>
-            </div>
-            <div class="toggle-switch" data-toggle="show-email"></div>
-          </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Show Email</div>
+                            <div class="toggle-description">Display your email address on your profile</div>
+                        </div>
+                        <div class="toggle-switch" data-toggle="show-email"></div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Allow Messages</div>
-              <div class="toggle-description">Let other users send you direct messages</div>
-            </div>
-            <div class="toggle-switch active" data-toggle="allow-messages"></div>
-          </div>
-        </section>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Allow Messages</div>
+                            <div class="toggle-description">Let other users send you direct messages</div>
+                        </div>
+                        <div class="toggle-switch active" data-toggle="allow-messages"></div>
+                    </div>
+                </section>
 
-        <!-- Appearance Section -->
-        <section class="settings-section" id="appearance-section" style="display: none;">
-          <h2 class="section-title">
-            <i data-lucide="palette"></i>
-            Appearance
-          </h2>
+                <!-- Appearance Section -->
+                <section class="settings-section" id="appearance-section" style="display: none;">
+                    <h2 class="section-title">
+                        <i data-lucide="palette"></i> Appearance
+                    </h2>
 
-          <div class="form-group">
-            <label class="form-label">Theme</label>
-            <div style="display: flex; gap: 12px; margin-top: 12px;">
-              <div class="theme-option"
-                style="padding: 16px 24px; background: var(--surface-2); border: 1px solid var(--accent); border-radius: 8px; cursor: pointer;">
-                <div style="font-size: 14px; margin-bottom: 4px;">Dark</div>
-                <div style="font-size: 12px; color: var(--text-secondary);">Default theme</div>
-              </div>
-              <div class="theme-option"
-                style="padding: 16px 24px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
-                <div style="font-size: 14px; margin-bottom: 4px;">Light</div>
-                <div style="font-size: 12px; color: var(--text-secondary);">Coming soon</div>
-              </div>
-            </div>
-          </div>
+                    <div class="form-group">
+                        <label class="form-label">Theme</label>
+                        <div style="display: flex; gap: 12px; margin-top: 12px;">
+                            <div class="theme-option" style="padding: 16px 24px; background: var(--surface-2); border: 1px solid var(--accent); border-radius: 8px; cursor: pointer;">
+                                <div style="font-size: 14px; margin-bottom: 4px;">Dark</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Default theme</div>
+                            </div>
+                            <div class="theme-option" style="padding: 16px 24px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+                                <div style="font-size: 14px; margin-bottom: 4px;">Light</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Coming soon</div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Reduce Motion</div>
-              <div class="toggle-description">Minimize animations and transitions</div>
-            </div>
-            <div class="toggle-switch" data-toggle="reduce-motion"></div>
-          </div>
-        </section>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Reduce Motion</div>
+                            <div class="toggle-description">Minimize animations and transitions</div>
+                        </div>
+                        <div class="toggle-switch" data-toggle="reduce-motion"></div>
+                    </div>
+                </section>
 
-        <!-- Danger Zone -->
-        <section class="settings-section danger-zone">
-          <h2 class="section-title">
-            <i data-lucide="alert-triangle"></i>
-            Danger Zone
-          </h2>
+                <!-- Danger Zone -->
+                <section class="settings-section danger-zone">
+                    <h2 class="section-title">
+                        <i data-lucide="alert-triangle"></i> Danger Zone
+                    </h2>
 
-          <div class="toggle-row">
-            <div class="toggle-info">
-              <div class="toggle-label">Delete Account</div>
-              <div class="toggle-description">Permanently delete your account and all associated data</div>
-            </div>
-            <button class="btn btn-danger">
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Delete Account</div>
+                            <div class="toggle-description">Permanently delete your account and all associated data</div>
+                        </div>
+                        <button class="btn btn-danger">
               Delete Account
             </button>
-          </div>
-        </section>
-      </div>
-    </main>
-  </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
-  <script src="../scripts/firebase-config.js" defer></script>
-  <script src="../scripts/auth.js" type="module" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
+    <script src="../scripts/firebase-config.js" defer></script>
+    <script src="../scripts/auth.js" type="module" defer></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize Lucide icons
-      if (window.lucide) {
-        lucide.createIcons();
-      }
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-      // Reveal page content
-      setTimeout(() => {
-        document.getElementById('page-content').classList.add('revealed');
-      }, 100);
+    <!-- Lenis Smooth Scrolling -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
 
-      // Navigation
-      const navItems = document.querySelectorAll('.nav-item');
-      const sections = {
-        'profile': document.getElementById('profile-section'),
-        'account': document.getElementById('account-section'),
-        'notifications': document.getElementById('notifications-section'),
-        'privacy': document.getElementById('privacy-section'),
-        'appearance': document.getElementById('appearance-section')
-      };
+    <!-- Motion Engine -->
+    <script src="../js/motion/gsap-init.js" defer></script>
+    <script src="../js/motion/scroll-engine.js" defer></script>
+    <script src="../js/motion/motion-core.js" defer></script>
 
-      const sectionTitles = {
-        'profile': 'Profile Settings',
-        'account': 'Account Security',
-        'notifications': 'Notification Preferences',
-        'privacy': 'Privacy Settings',
-        'appearance': 'Appearance'
-      };
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
 
-      const sectionSubtitles = {
-        'profile': 'Manage your profile information and preferences',
-        'account': 'Update your password and security settings',
-        'notifications': 'Control how you receive notifications',
-        'privacy': 'Manage your privacy and visibility settings',
-        'appearance': 'Customize your viewing experience'
-      };
+            // Reveal page content
+            setTimeout(() => {
+                document.getElementById('page-content').classList.add('revealed');
+            }, 100);
 
-      navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-          e.preventDefault();
-          const section = item.dataset.section;
+            // Navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = {
+                'profile': document.getElementById('profile-section'),
+                'account': document.getElementById('account-section'),
+                'notifications': document.getElementById('notifications-section'),
+                'privacy': document.getElementById('privacy-section'),
+                'appearance': document.getElementById('appearance-section')
+            };
 
-          // Update active nav item
-          navItems.forEach(nav => nav.classList.remove('active'));
-          item.classList.add('active');
+            const sectionTitles = {
+                'profile': 'Profile Settings',
+                'account': 'Account Security',
+                'notifications': 'Notification Preferences',
+                'privacy': 'Privacy Settings',
+                'appearance': 'Appearance'
+            };
 
-          // Show corresponding section
-          Object.keys(sections).forEach(key => {
-            sections[key].style.display = key === section ? 'block' : 'none';
-          });
+            const sectionSubtitles = {
+                'profile': 'Manage your profile information and preferences',
+                'account': 'Update your password and security settings',
+                'notifications': 'Control how you receive notifications',
+                'privacy': 'Manage your privacy and visibility settings',
+                'appearance': 'Customize your viewing experience'
+            };
 
-          // Update header
-          document.querySelector('.content-title').textContent = sectionTitles[section];
-          document.querySelector('.content-subtitle').textContent = sectionSubtitles[section];
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = item.dataset.section;
+
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // Show corresponding section
+                    Object.keys(sections).forEach(key => {
+                        sections[key].style.display = key === section ? 'block' : 'none';
+                    });
+
+                    // Update header
+                    document.querySelector('.content-title').textContent = sectionTitles[section];
+                    document.querySelector('.content-subtitle').textContent = sectionSubtitles[section];
+                });
+            });
+
+            // Toggle switches
+            document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    toggle.classList.toggle('active');
+                });
+            });
+
+            // Load user data
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                document.getElementById('full-name').value = user.fullName || '';
+                document.getElementById('username').value = user.username || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('settings-avatar').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'Guest')}&background=c8b89a&color=0b0b0b`;
+            }
+
+            // Save profile
+            document.getElementById('save-profile').addEventListener('click', async() => {
+                const fullName = document.getElementById('full-name').value;
+                const username = document.getElementById('username').value;
+                const bio = document.getElementById('bio').value;
+                const website = document.getElementById('website').value;
+
+                // Show save confirmation
+                const btn = document.getElementById('save-profile');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check"></i> Saved!';
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    lucide.createIcons();
+                }, 2000);
+            });
+
+            // Avatar upload
+            document.getElementById('avatar-upload').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.getElementById('settings-avatar').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         });
-      });
-
-      // Toggle switches
-      document.querySelectorAll('.toggle-switch').forEach(toggle => {
-        toggle.addEventListener('click', () => {
-          toggle.classList.toggle('active');
-        });
-      });
-
-      // Load user data
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user) {
-        document.getElementById('full-name').value = user.fullName || '';
-        document.getElementById('username').value = user.username || '';
-        document.getElementById('email').value = user.email || '';
-        document.getElementById('settings-avatar').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'Guest')}&background=c8b89a&color=0b0b0b`;
-      }
-
-      // Save profile
-      document.getElementById('save-profile').addEventListener('click', async () => {
-        const fullName = document.getElementById('full-name').value;
-        const username = document.getElementById('username').value;
-        const bio = document.getElementById('bio').value;
-        const website = document.getElementById('website').value;
-
-        // Show save confirmation
-        const btn = document.getElementById('save-profile');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i data-lucide="check"></i> Saved!';
-        lucide.createIcons();
-
-        setTimeout(() => {
-          btn.innerHTML = originalText;
-          lucide.createIcons();
-        }, 2000);
-      });
-
-      // Avatar upload
-      document.getElementById('avatar-upload').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            document.getElementById('settings-avatar').src = e.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-    });
-  </script>
+    </script>
 </body>
 
 </html>
