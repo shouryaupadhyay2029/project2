@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shourya Upadhyay — Designer & Developer</title>
+    <title>Profile — Designer & Developer</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         *,
@@ -3872,7 +3872,7 @@
         <div id="reveal-panel-top"></div>
         <div id="reveal-panel-bot"></div>
         <div id="reveal-line"></div>
-        <div id="reveal-wordmark">Shourya Upadhyay</div>
+        <div id="reveal-wordmark"></div>
         <div id="reveal-subtitle"></div>
     </div>
 
@@ -3890,8 +3890,8 @@
                     <span class="status-dot"></span>
                 </div>
 
-                <h1 class="name">Shourya Upadhyay</h1>
-                <p class="handle">@shouryaupadhya</p>
+                <h1 class="name">Loading...</h1>
+                <p class="handle">@user</p>
 
                 <div class="meta-list">
                     <div class="meta-item">
@@ -3904,7 +3904,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <rect x="2" y="7" width="20" height="14" rx="2" />
                             <path d="M16 3H8L2 7h20l-6-4z" />
-                        </svg> upadhyayshourya352@gmail.com
+                        </svg> <span id="profile-email-sidebar">Loading...</span>
                     </div>
                     <div class="meta-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -5032,10 +5032,10 @@
                                         </div>
                                         <div class="contact-email-meta">
                                             <p class="contact-email-type">Primary Email</p>
-                                            <p class="contact-email-val">upadhyayshourya352@gmail.com</p>
+                                            <p class="contact-email-val">Loading...</p>
                                         </div>
                                     </div>
-                                    <button class="copy-btn" data-copy="upadhyayshourya352@gmail.com" title="Copy email">
+                                    <button class="copy-btn" data-copy="" title="Copy email">
                                         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
                                             <rect x="5" y="5" width="8" height="8" rx="1.5" />
                                             <path d="M3 11V3h8" />
@@ -5224,8 +5224,8 @@
 
                             <!-- Profile Preview -->
                             <div class="widget profile-preview">
-                                <div class="preview-avatar">SU</div>
-                                <p class="preview-name">Shourya Upadhyay</p>
+                                <div class="preview-avatar">U</div>
+                                <p class="preview-name">Loading...</p>
                                 <p class="preview-role">Designer & Developer · DevStage</p>
                                 <div class="preview-tags">
                                     <span class="preview-tag">UI/UX</span>
@@ -5582,7 +5582,7 @@
                     isTransitioning = true;
 
                     // Set wordmark and subtitle text
-                    wordmark.textContent = 'Shourya Upadhyay';
+                    wordmark.textContent = document.querySelector(".sidebar .name")?.textContent || '';
                     subtitle.textContent = tabNames[targetTab] || targetTab;
 
                     // Reset overlay to clean state
@@ -5695,7 +5695,7 @@
                 const subtitle = document.getElementById('reveal-subtitle');
 
                 // Set initial text
-                wordmark.textContent = 'Shourya Upadhyay';
+                wordmark.textContent = document.querySelector(".sidebar .name")?.textContent || '';
                 subtitle.textContent = 'Overview';
 
                 function seq() {

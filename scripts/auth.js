@@ -21,7 +21,7 @@ if (!window.db) {
 }
 
 // ─── GLOBAL USER UI LOADER ───
-window.loadUserUI = function () {
+window.loadUserUI = function() {
     const cachedUser = JSON.parse(localStorage.getItem("devstageUser"));
 
     const guestSection = document.getElementById("guestSection");
@@ -54,17 +54,138 @@ window.loadUserUI = function () {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('[DevStage Auth] Initializing authentication module...');
 
+    function handleInvalidToken() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("devstageUser");
+        localStorage.removeItem("devstageMockAccount");
+        const isInsidePages = window.location.pathname.includes('/pages/');
+        const redirectUrl = isInsidePages ? "login.html" : "pages/login.html";
+        window.location.href = redirectUrl;
+    }
+
+    function injectProfileUI(user) {
+        // 1. Sidebar name
+        const nameEl = document.querySelector(".sidebar .name");
+        if (nameEl) nameEl.textContent = user.username;
+
+        // 2. Sidebar handle
+        const handleEl = document.querySelector(".sidebar .handle");
+        if (handleEl) {
+            handleEl.textContent = "@" + user.username.toLowerCase().replace(/\s+/g, '');
+        }
+
+        // 3. Sidebar email
+        const emailMetaItem = document.querySelector("#profile-email-sidebar");
+        if (emailMetaItem) {
+            emailMetaItem.textContent = user.email;
+        }
+
+        // 4. Contact email values (under Contact tab)
+        const contactEmailVal = document.querySelector(".contact-email-val");
+        if (contactEmailVal) contactEmailVal.textContent = user.email;
+
+        // 5. Contact copy button data-copy
+        document.querySelectorAll(".copy-btn").forEach(btn => {
+            if (btn.dataset.copy && (btn.dataset.copy.includes("@") || btn.dataset.copy === "")) {
+                btn.dataset.copy = user.email;
+                btn.setAttribute("data-copy", user.email);
+            }
+        });
+
+        // 6. Sidebar avatar initials
+        const avatarEl = document.querySelector(".sidebar .avatar");
+        const initials = user.username ? user.username.trim().split(/\s+/).map(n => n[0]).join("").toUpperCase().slice(0, 2) : "U";
+        if (avatarEl) avatarEl.textContent = initials;
+
+        // 7. Preview card avatar initials
+        const previewAvatar = document.querySelector(".preview-avatar");
+        if (previewAvatar) previewAvatar.textContent = initials;
+
+        // 8. Preview card name
+        const previewName = document.querySelector(".preview-name");
+        if (previewName) previewName.textContent = user.username;
+
+        // 9. Document title
+        document.title = `${user.username} — Designer & Developer`;
+
+        // 10. Update reveal-wordmark text content if exists
+        const wordmarkEl = document.getElementById("reveal-wordmark");
+        if (wordmarkEl) wordmarkEl.textContent = user.username;
+    }
+
     // Protected page authentication check
-    const protectedPages = ["profile.html", "settings.html"];
+    const protectedPages = ["profile.html", "dashboard.html", "settings.html"];
     const currentPage = window.location.pathname.split("/").pop();
 
     if (protectedPages.includes(currentPage)) {
         const token = localStorage.getItem("token");
+
         if (!token) {
-            window.location.href = "../pages/login.html";
+            console.log("[DevStage Auth] Access denied — missing token. Redirecting to login.");
+            handleInvalidToken();
             return;
-        } else {
-            console.log("User authenticated");
+        }
+
+        // Send authenticated request to backend API
+        fetch("http://localhost:5000/api/auth/me", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Invalid token or server error");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.success || !data.user) {
+                throw new Error("User authentication failed");
+            }
+
+            const backendUser = data.user;
+            console.log("[DevStage Auth] User authenticated via backend:", backendUser.username);
+
+            // Sync user data to local storage
+            localStorage.setItem("user", JSON.stringify(backendUser));
+            localStorage.setItem("isLoggedIn", "true");
+
+            const devstageUserData = {
+                displayName: backendUser.username,
+                email: backendUser.email,
+                uid: backendUser.id,
+                photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(backendUser.username)}&background=c8b89a&color=0b0b0b`
+            };
+            localStorage.setItem("devstageUser", JSON.stringify(devstageUserData));
+            window.currentUser = devstageUserData;
+
+            // Load global user UI elements (nav avatar, names, dropdown)
+            window.loadUserUI();
+
+            // Inject dynamically into profile UI if current page is profile.html
+            if (currentPage === "profile.html") {
+                injectProfileUI(backendUser);
+            }
+        })
+        .catch(error => {
+            console.error("[DevStage Auth] Backend verification failed:", error);
+            handleInvalidToken();
+        });
+    }
+
+    // Prevent logged-in users from visiting auth pages
+    const authPages = ["login.html", "register.html"];
+    if (authPages.includes(currentPage)) {
+        const token = localStorage.getItem("token");
+        if (token) {
+            console.log("User already logged in, redirecting to profile...");
+            const isInsidePages = window.location.pathname.includes('/pages/');
+            const redirectUrl = isInsidePages ? "profile.html" : "pages/profile.html";
+            window.location.href = redirectUrl;
+            return;
         }
     }
 
@@ -88,9 +209,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─── 2. AUTH STATE CHANGE LISTENER ───
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async(user) => {
         if (user) {
             console.log("[DevStage] Global Auth: User Found", user.email);
+
+            // Get token and save to localStorage for unified auth persistence
+            try {
+                const token = await user.getIdToken();
+                localStorage.setItem("token", token);
+                localStorage.setItem("isLoggedIn", "true");
+
+                const userDataForLocalStorage = {
+                    id: user.uid,
+                    username: user.displayName || user.email.split('@')[0],
+                    email: user.email,
+                    fullName: user.displayName || '',
+                    photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=c8b89a&color=0b0b0b`,
+                    profileImage: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=c8b89a&color=0b0b0b`
+                };
+                localStorage.setItem("user", JSON.stringify(userDataForLocalStorage));
+            } catch (e) {
+                console.error("Error retrieving Firebase ID token:", e);
+            }
+
             const userData = {
                 displayName: user.displayName,
                 email: user.email,
@@ -110,6 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             console.log("[DevStage] Global Auth: No Session");
             localStorage.removeItem("devstageUser");
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("isLoggedIn");
             window.currentUser = null;
             window.loadUserUI();
         }
@@ -117,14 +261,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const provider = new GoogleAuthProvider();
 
-    window.loginWithGoogle = function () {
+    window.loginWithGoogle = function() {
         signInWithPopup(auth, provider)
-            .then((result) => {
-                saveUserToFirestore(result.user);
-                if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-                    const isRoot = window.location.pathname.includes("index.html") || window.location.pathname.endsWith("/") || window.location.pathname.endsWith("/project2") || window.location.pathname.endsWith("/project2/");
-                    window.location.href = isRoot ? "pages/profile.html" : "profile.html";
-                }
+            .then(async(result) => {
+                const user = result.user;
+                console.log("Google login success");
+
+                const token = await user.getIdToken();
+                localStorage.setItem("token", token);
+                localStorage.setItem("isLoggedIn", "true");
+
+                const userData = {
+                    id: user.uid,
+                    username: user.displayName || user.email.split('@')[0],
+                    email: user.email,
+                    fullName: user.displayName || '',
+                    photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=c8b89a&color=0b0b0b`,
+                    profileImage: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=c8b89a&color=0b0b0b`
+                };
+                localStorage.setItem("user", JSON.stringify(userData));
+                console.log("User stored:", userData);
+
+                saveUserToFirestore(user);
+
+                // Sync devstageUser with the newly logged in user details to populate global UI
+                const devstageUserData = {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    uid: user.uid,
+                    joined: user.metadata.creationTime
+                };
+                localStorage.setItem("devstageUser", JSON.stringify(devstageUserData));
+                window.currentUser = devstageUserData;
+
+                console.log("Redirecting to profile page");
+                const isInsidePages = window.location.pathname.includes('/pages/');
+                const redirectUrl = isInsidePages ? "profile.html" : "pages/profile.html";
+                window.location.href = redirectUrl;
             })
             .catch((error) => {
                 console.error("Login error:", error);
@@ -235,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── FORM SUBMISSION HANDLER (demo / mock when email auth backend unavailable) ───
     if (authForm) {
-        authForm.addEventListener('submit', async (e) => {
+        authForm.addEventListener('submit', async(e) => {
             e.preventDefault();
 
             const email = document.getElementById('auth-email')?.value.trim();
@@ -379,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const logoutBtns = document.querySelectorAll('.logout-btn');
     logoutBtns.forEach(btn => {
-        btn.addEventListener('click', async (e) => {
+        btn.addEventListener('click', async(e) => {
             e.preventDefault();
             try {
                 localStorage.removeItem("devstageUser");
@@ -472,7 +646,7 @@ const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
 
-    registerForm.addEventListener("submit", async (e) => {
+    registerForm.addEventListener("submit", async(e) => {
 
         e.preventDefault();
 
@@ -531,7 +705,7 @@ if (registerForm) {
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
+    loginForm.addEventListener("submit", async(e) => {
         e.preventDefault();
 
         const email = document.getElementById("email").value;
@@ -558,6 +732,7 @@ if (loginForm) {
 
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
+                localStorage.setItem("isLoggedIn", "true");
 
                 // Sync devstageUser with the newly logged in user details to populate global UI
                 const userData = {
