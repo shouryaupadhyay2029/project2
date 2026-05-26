@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem("devstageMockAccount");
         const isInsidePages = window.location.pathname.includes('/pages/');
         const redirectUrl = isInsidePages ? "login.html" : "pages/login.html";
-        window.location.href = redirectUrl;
+        window.location.replace(redirectUrl);
     }
 
     function injectProfileUI(user) {
@@ -119,16 +119,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const protectedPages = ["profile.html", "dashboard.html", "settings.html"];
     const currentPage = window.location.pathname.split("/").pop();
 
-    if (protectedPages.includes(currentPage)) {
-        const token = localStorage.getItem("token");
+    function checkAuth() {
+        console.log("DEBUG - checkAuth called. currentPage:", currentPage);
+        console.log("DEBUG - token:", localStorage.getItem("token"));
+        console.log("DEBUG - user:", localStorage.getItem("user"));
+        console.log("DEBUG - devstageUser:", localStorage.getItem("devstageUser"));
 
-        if (!token) {
-            console.log("[DevStage Auth] Access denied — missing token. Redirecting to login.");
+        if (!protectedPages.includes(currentPage)) return;
+
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        const cachedDevstageUser = JSON.parse(localStorage.getItem("devstageUser") || "null");
+
+        // Google / Firebase session
+        const isFirebaseSession = cachedDevstageUser && cachedDevstageUser.uid && !cachedDevstageUser.uid.startsWith("mock-");
+        if (isFirebaseSession) {
+            console.log("[DevStage Auth] Firebase session detected. Deferring to onAuthStateChanged.");
+            return;
+        }
+
+        // Mock session
+        if (cachedDevstageUser && cachedDevstageUser.uid && cachedDevstageUser.uid.startsWith("mock-")) {
+            console.log("[DevStage Auth] Mock session active. Skipping backend check.");
+            injectProfileUI({
+                username: cachedDevstageUser.displayName || "Mock User",
+                email: cachedDevstageUser.email || "mock@example.com"
+            });
+            return;
+        }
+
+        // Backend JWT session
+        if (!token || !user) {
+            console.log("[DevStage Auth] No auth found. Redirecting to login.");
             handleInvalidToken();
             return;
         }
 
-        // Send authenticated request to backend API
+        console.log("[DevStage Auth] Verifying backend JWT token...");
         fetch("http://localhost:5000/api/auth/me", {
             method: "GET",
             headers: {
@@ -162,10 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("devstageUser", JSON.stringify(devstageUserData));
             window.currentUser = devstageUserData;
 
-            // Load global user UI elements (nav avatar, names, dropdown)
             window.loadUserUI();
 
-            // Inject dynamically into profile UI if current page is profile.html
             if (currentPage === "profile.html") {
                 injectProfileUI(backendUser);
             }
@@ -175,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
             handleInvalidToken();
         });
     }
+
+    checkAuth();
 
     // Prevent logged-in users from visiting auth pages
     const authPages = ["login.html", "register.html"];
@@ -242,6 +269,13 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("devstageUser", JSON.stringify(userData));
             window.currentUser = userData;
             window.loadUserUI();
+
+            if (protectedPages.includes(currentPage) && currentPage === "profile.html") {
+                injectProfileUI({
+                    username: user.displayName || user.email.split('@')[0],
+                    email: user.email
+                });
+            }
         } else {
             const cached = JSON.parse(localStorage.getItem("devstageUser") || 'null');
             if (cached && (isMockSession(cached) || localStorage.getItem("token"))) {
@@ -250,12 +284,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             console.log("[DevStage] Global Auth: No Session");
-            localStorage.removeItem("devstageUser");
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            localStorage.removeItem("isLoggedIn");
-            window.currentUser = null;
-            window.loadUserUI();
+            if (protectedPages.includes(currentPage)) {
+                handleInvalidToken();
+            } else {
+                localStorage.removeItem("devstageUser");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                localStorage.removeItem("isLoggedIn");
+                window.currentUser = null;
+                window.loadUserUI();
+            }
         }
     });
 
@@ -556,15 +594,20 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', async(e) => {
             e.preventDefault();
             try {
-                localStorage.removeItem("devstageUser");
-                localStorage.removeItem("devstageMockAccount");
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
-                await signOut(auth);
-                const isRoot = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/project2') || window.location.pathname.endsWith('/project2/');
-                window.location.href = isRoot ? 'index.html' : '../index.html';
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("devstageUser");
+                localStorage.removeItem("devstageMockAccount");
+                if (auth) {
+                    await signOut(auth);
+                }
             } catch (error) {
                 console.error("Logout failed:", error);
+            } finally {
+                const isInsidePages = window.location.pathname.includes('/pages/');
+                const redirectUrl = isInsidePages ? "login.html" : "pages/login.html";
+                window.location.replace(redirectUrl);
             }
         });
     });

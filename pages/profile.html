@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile — Designer & Developer</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../styles/global.css">
     <style>
         *,
         *::before,
@@ -62,6 +64,7 @@
             min-height: 100vh;
             position: relative;
             z-index: 1;
+            margin-top: 72px;
         }
         
         .page-content {
@@ -207,8 +210,8 @@
             display: flex;
             flex-direction: column;
             position: sticky;
-            top: 0;
-            height: 100vh;
+            top: 72px;
+            height: calc(100vh - 72px);
             overflow-y: auto;
         }
         /* ── AVATAR: floating bob animation ── */
@@ -3877,6 +3880,63 @@
     </div>
 
     <div class="page-content">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="breadcrumb-header">
+                    <a href="../index.html" class="logo-bloom-wrapper" id="devstage-logo">
+                        <div class="logo-chars">
+                            <span class="char" style="--i:0">D</span>
+                            <span class="char" style="--i:1">e</span>
+                            <span class="char" style="--i:2">v</span>
+                            <div class="logo-separator"></div>
+                            <span class="char outline" style="--i:3">S</span>
+                            <span class="char outline" style="--i:4">t</span>
+                            <span class="char outline" style="--i:5">a</span>
+                            <span class="char outline" style="--i:6">g</span>
+                            <span class="char outline" style="--i:7">e</span>
+                            <div class="logo-dot"></div>
+                        </div>
+                        <div class="logo-underline"></div>
+                    </a>
+                    <div class="breadcrumb-trail">
+                        <span class="breadcrumb-slash">/</span>
+                        <span class="breadcrumb-current">Profile</span>
+                    </div>
+                </div>
+                <!-- Right side: Animated Hamburger Menu -->
+                <div class="nav-actions">
+                    <label class="uiverse-hamburger" id="hamburger-menu-label">
+                        <input type="checkbox" id="hamburger-checkbox">
+                        <svg viewBox="0 0 32 32">
+                            <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                            </path>
+                            <path class="line" d="M7 16 27 16"></path>
+                        </svg>
+
+                        <div class="premium-dropdown" id="hamburger-dropdown" role="menu" aria-label="Main navigation">
+                            <div class="dropdown-inner">
+                                <div class="dropdown-group primary-nav">
+                                    <a href="../index.html" class="dropdown-item nav-item-anim"><i data-lucide="home" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Home</span></a>
+                                    <a href="explore.html" class="dropdown-item nav-item-anim"><i data-lucide="compass" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Explore</span></a>
+                                    <a href="feed.html" class="dropdown-item nav-item-anim"><i data-lucide="rss" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Feed</span></a>
+                                    <a href="challenges.html" class="dropdown-item nav-item-anim"><i data-lucide="trophy" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Challenges</span></a>
+                                    <a href="beginner.html" class="dropdown-item nav-item-anim"><i data-lucide="graduation-cap" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Beginner Zone</span></a>
+                                    <a href="teams.html" class="dropdown-item nav-item-anim"><i data-lucide="users" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Teams</span></a>
+                                    <a href="upload.html" class="dropdown-item nav-item-anim"><i data-lucide="upload" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Upload Project</span></a>
+                                </div>
+                                <div class="dropdown-divider" role="separator"></div>
+                                <div class="dropdown-group secondary-nav">
+                                    <a href="profile.html" class="dropdown-item nav-item-anim active-page"><i data-lucide="user" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Profile</span></a>
+                                    <a href="settings.html" class="dropdown-item nav-item-anim"><i data-lucide="settings" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Settings</span></a>
+                                    <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn" role="menuitem"><i data-lucide="log-out" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Logout</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </nav>
+
         <div class="layout">
 
             <!-- SIDEBAR -->
