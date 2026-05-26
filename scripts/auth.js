@@ -53,6 +53,21 @@ window.loadUserUI = function () {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('[DevStage Auth] Initializing authentication module...');
+
+    // Protected page authentication check
+    const protectedPages = ["profile.html", "settings.html"];
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (protectedPages.includes(currentPage)) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "../pages/login.html";
+            return;
+        } else {
+            console.log("User authenticated");
+        }
+    }
+
     window.loadUserUI();
 
     const authForm = document.getElementById('auth-form');
@@ -88,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.loadUserUI();
         } else {
             const cached = JSON.parse(localStorage.getItem("devstageUser") || 'null');
-            if (cached && isMockSession(cached)) {
+            if (cached && (isMockSession(cached) || localStorage.getItem("token"))) {
                 window.currentUser = cached;
                 window.loadUserUI();
                 return;
@@ -369,6 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 localStorage.removeItem("devstageUser");
                 localStorage.removeItem("devstageMockAccount");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
                 await signOut(auth);
                 const isRoot = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/project2') || window.location.pathname.endsWith('/project2/');
                 window.location.href = isRoot ? 'index.html' : '../index.html';
@@ -509,4 +526,57 @@ if (registerForm) {
 
     });
 
+}
+
+const loginForm = document.getElementById("loginForm");
+
+if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            if (data.success === true) {
+                console.log("Login Success");
+                console.log(data);
+
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+
+                // Sync devstageUser with the newly logged in user details to populate global UI
+                const userData = {
+                    displayName: data.user.username,
+                    email: data.user.email,
+                    uid: data.user.id,
+                    photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.user.username)}&background=c8b89a&color=0b0b0b`
+                };
+                localStorage.setItem("devstageUser", JSON.stringify(userData));
+                window.currentUser = userData;
+
+                alert("Login successful! Redirecting to your profile...");
+                window.location.href = "../pages/profile.html";
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Something went wrong");
+        }
+    });
 }
