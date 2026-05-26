@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ─── 0. LOGO BLOOM ANIMATION ─────────────────────────────
+    const logoWrapper = document.querySelector('.logo-bloom-wrapper');
+    if (logoWrapper) {
+        setTimeout(() => {
+            logoWrapper.classList.add('bloom');
+        }, 500);
+    }
+
     const auth = firebase.auth();
     const db = firebase.firestore();
 
@@ -28,8 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchUserActivity(user.uid);
             checkGitHubConnection(user.uid);
         } else {
-            // Public view logic could go here, but for now we redirect
-            window.location.href = '../index.html?action=login';
+            // Auth guard handles redirect for protected pages — do nothing here
+            console.log('[DevStage Profile] No Firebase user session.');
         }
     });
 
@@ -193,5 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         grid.innerHTML = cells.join('');
+    }
+
+    // Initialize Lucide icons on load
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 });

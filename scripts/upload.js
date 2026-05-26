@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             fetchPreviousUploads(user.uid);
         } else {
-            window.location.href = '../index.html?action=login';
+            // No auto-redirect — upload form already validates auth on submit
+            console.log('[DevStage Upload] No Firebase user session.');
         }
     });
 

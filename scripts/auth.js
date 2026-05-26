@@ -55,13 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('[DevStage Auth] Initializing authentication module...');
 
     function handleInvalidToken() {
+        localStorage.removeItem("currentUser");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("devstageUser");
         localStorage.removeItem("devstageMockAccount");
         const isInsidePages = window.location.pathname.includes('/pages/');
-        const redirectUrl = isInsidePages ? "login.html" : "pages/login.html";
+        const redirectUrl = isInsidePages ? "../index.html" : "index.html";
         window.location.replace(redirectUrl);
     }
 
@@ -203,18 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkAuth();
 
-    // Prevent logged-in users from visiting auth pages
-    const authPages = ["login.html", "register.html"];
-    if (authPages.includes(currentPage)) {
-        const token = localStorage.getItem("token");
-        if (token) {
-            console.log("User already logged in, redirecting to profile...");
-            const isInsidePages = window.location.pathname.includes('/pages/');
-            const redirectUrl = isInsidePages ? "profile.html" : "pages/profile.html";
-            window.location.href = redirectUrl;
-            return;
-        }
-    }
+    // Auth page redirect removed — do NOT auto-redirect logged-in users away from auth pages.
 
     window.loadUserUI();
 
@@ -285,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             console.log("[DevStage] Global Auth: No Session");
             if (protectedPages.includes(currentPage)) {
+                // Redirect to homepage, not login page
                 handleInvalidToken();
             } else {
                 localStorage.removeItem("devstageUser");
@@ -594,6 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', async(e) => {
             e.preventDefault();
             try {
+                localStorage.removeItem("currentUser");
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 localStorage.removeItem("isLoggedIn");
@@ -606,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Logout failed:", error);
             } finally {
                 const isInsidePages = window.location.pathname.includes('/pages/');
-                const redirectUrl = isInsidePages ? "login.html" : "pages/login.html";
+                const redirectUrl = isInsidePages ? "../index.html" : "index.html";
                 window.location.replace(redirectUrl);
             }
         });

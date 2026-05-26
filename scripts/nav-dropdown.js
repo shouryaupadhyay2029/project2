@@ -105,15 +105,30 @@ function initPremiumNavDropdown() {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             closeMenu();
+
+            // Clear all auth state
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("devstageUser");
+            localStorage.removeItem("devstageMockAccount");
+
             if (typeof firebase !== 'undefined' && firebase.auth) {
                 firebase
                     .auth()
                     .signOut()
                     .then(() => {
                         const inPages = /\/pages\//i.test(window.location.pathname);
-                        window.location.href = inPages ? '../index.html' : 'index.html';
+                        window.location.replace(inPages ? '../index.html' : 'index.html');
                     })
-                    .catch(() => {});
+                    .catch(() => {
+                        const inPages = /\/pages\//i.test(window.location.pathname);
+                        window.location.replace(inPages ? '../index.html' : 'index.html');
+                    });
+            } else {
+                const inPages = /\/pages\//i.test(window.location.pathname);
+                window.location.replace(inPages ? '../index.html' : 'index.html');
             }
         });
     }
