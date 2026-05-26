@@ -21,7 +21,7 @@ if (!window.db) {
 }
 
 // ─── GLOBAL USER UI LOADER ───
-window.loadUserUI = function() {
+window.loadUserUI = function () {
     const cachedUser = JSON.parse(localStorage.getItem("devstageUser"));
 
     const guestSection = document.getElementById("guestSection");
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const provider = new GoogleAuthProvider();
 
-    window.loginWithGoogle = function() {
+    window.loginWithGoogle = function () {
         signInWithPopup(auth, provider)
             .then((result) => {
                 saveUserToFirestore(result.user);
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── FORM SUBMISSION HANDLER (demo / mock when email auth backend unavailable) ───
     if (authForm) {
-        authForm.addEventListener('submit', async(e) => {
+        authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const email = document.getElementById('auth-email')?.value.trim();
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const logoutBtns = document.querySelectorAll('.logout-btn');
     logoutBtns.forEach(btn => {
-        btn.addEventListener('click', async(e) => {
+        btn.addEventListener('click', async (e) => {
             e.preventDefault();
             try {
                 localStorage.removeItem("devstageUser");
@@ -450,3 +450,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+const registerForm = document.getElementById("registerForm");
+
+if (registerForm) {
+
+    registerForm.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+
+            const response = await fetch("http://localhost:5000/api/auth/register", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password
+                })
+
+            });
+
+            const data = await response.json();
+
+            console.log(data);
+
+            if (data.success) {
+
+                localStorage.setItem("token", data.token);
+
+                alert("Registration Successful");
+
+                window.location.href = "../pages/dashboard.html";
+
+            } else {
+
+                alert(data.message);
+
+            }
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Something went wrong");
+
+        }
+
+    });
+
+}
