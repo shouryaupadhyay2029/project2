@@ -1,13 +1,10 @@
 const express = require("express");
-
 const router = express.Router();
 
 const {
     registerUser
-} = require("./api/authController");
+} = require("../api/authcontroller");
 
-
-// REGISTER ROUTE
 router.post("/register", registerUser);
 
 
