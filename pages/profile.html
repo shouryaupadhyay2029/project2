@@ -5639,7 +5639,7 @@
                     isTransitioning = true;
 
                     // Set wordmark and subtitle text
-                    wordmark.textContent = document.querySelector(".sidebar .name") ? .textContent || '';
+                    wordmark.textContent = document.querySelector(".sidebar .name")?.textContent || '';
                     subtitle.textContent = tabNames[targetTab] || targetTab;
 
                     // Reset overlay to clean state
@@ -5752,7 +5752,7 @@
                 const subtitle = document.getElementById('reveal-subtitle');
 
                 // Set initial text
-                wordmark.textContent = document.querySelector(".sidebar .name") ? .textContent || '';
+                wordmark.textContent = document.querySelector(".sidebar .name")?.textContent || '';
                 subtitle.textContent = 'Overview';
 
                 function seq() {
