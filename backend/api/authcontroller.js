@@ -50,7 +50,9 @@ const registerUser = async(req, res) => {
         const user = await User.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            isOnline: true,
+            lastSeen: new Date()
         });
 
 
@@ -116,6 +118,10 @@ const loginUser = async(req, res) => {
         const token = jwt.sign({ id: user._id },
             process.env.JWT_SECRET, { expiresIn: "7d" }
         );
+
+        user.isOnline = true;
+        user.lastSeen = new Date();
+        await user.save();
 
         // RESPONSE
         res.status(200).json({

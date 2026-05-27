@@ -2408,6 +2408,301 @@
                 saveToast.classList.remove('show');
             }
 
+            const SETTINGS_CACHE_KEY = 'devstage_settings_cache';
+            const THEME_CACHE_KEY = 'devstage_theme';
+            let persistedSettings = null;
+
+            function getAuthHeaders() {
+                const token = localStorage.getItem('token');
+                if (!token) return null;
+                return {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+            }
+
+            function isToggleOn(id) {
+                const el = document.getElementById(id);
+                return el ? el.classList.contains('on') : false;
+            }
+
+            function setToggle(id, value) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('on', Boolean(value));
+                const label = el.nextElementSibling;
+                if (label && label.classList.contains('toggle-label')) {
+                    label.textContent = el.classList.contains('on') ? 'On' : 'Off';
+                }
+            }
+
+            function apiThemeFromUi(theme) {
+                return theme === 'cyberpunk' ? 'system' : theme;
+            }
+
+            function uiThemeFromApi(theme) {
+                return theme === 'system' ? 'cyberpunk' : theme;
+            }
+
+            function applyTheme(theme) {
+                const apiTheme = apiThemeFromUi(theme || 'dark');
+                localStorage.setItem(THEME_CACHE_KEY, apiTheme);
+                document.documentElement.setAttribute('data-theme', apiTheme);
+            }
+
+            function selectTheme(theme) {
+                const uiTheme = uiThemeFromApi(theme || 'dark');
+                document.querySelectorAll('.theme-opt').forEach(opt => {
+                    opt.classList.toggle('selected', opt.dataset.theme === uiTheme);
+                });
+                applyTheme(uiTheme);
+            }
+
+            function selectDensity(compactMode) {
+                document.querySelectorAll('.density-opt').forEach(opt => {
+                    opt.classList.toggle('selected', compactMode ? opt.dataset.density === 'compact' : opt.dataset.density === 'comfortable');
+                });
+            }
+
+            function settingsFromUI() {
+                const selectedTheme = document.querySelector('.theme-opt.selected')?.dataset.theme || 'dark';
+                const selectedDensity = document.querySelector('.density-opt.selected')?.dataset.density || 'comfortable';
+
+                return {
+                    notifications: {
+                        emailUpdates: isToggleOn('email-digest'),
+                        projectComments: isToggleOn('notif-comments'),
+                        collaborationRequests: isToggleOn('notif-teams'),
+                        productAnnouncements: isToggleOn('email-updates'),
+                        securityAlerts: isToggleOn('email-security')
+                    },
+                    appearance: {
+                        theme: apiThemeFromUi(selectedTheme),
+                        reducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+                        compactMode: selectedDensity === 'compact'
+                    },
+                    projectSettings: {
+                        autoPublish: isToggleOn('projects-auto-import'),
+                        allowForks: isToggleOn('projects-auto-clean'),
+                        showProjectStats: true
+                    },
+                    ecosystem: {
+                        githubConnected: Boolean(activeSocialLinks.github) || isToggleOn('eco-cli'),
+                        twitterConnected: Boolean(activeSocialLinks.twitter) || isToggleOn('eco-sandbox'),
+                        linkedinConnected: Boolean(activeSocialLinks.linkedin) || isToggleOn('eco-telemetry')
+                    },
+                    security: {
+                        twoFactorEnabled: document.querySelector('#panel-security .setting-badge')?.textContent.trim().toLowerCase() === 'enabled',
+                        profileVisibility: isToggleOn('toggle-public-profile') ? 'public' : 'private',
+                        searchableProfile: isToggleOn('toggle-contribution-graph')
+                    },
+                    advanced: {
+                        developerMode: document.querySelector('#panel-advanced [data-advanced-key="developerMode"]')?.dataset.enabled === 'true',
+                        betaFeatures: document.querySelector('#panel-advanced [data-advanced-key="betaFeatures"]')?.dataset.enabled === 'true',
+                        analyticsSharing: document.querySelector('#panel-advanced [data-advanced-key="analyticsSharing"]')?.dataset.enabled !== 'false'
+                    }
+                };
+            }
+
+            function applySettingsToUI(settings) {
+                if (!settings) return;
+
+                if (settings.notifications) {
+                    setToggle('email-digest', settings.notifications.emailUpdates);
+                    setToggle('notif-comments', settings.notifications.projectComments);
+                    setToggle('notif-teams', settings.notifications.collaborationRequests);
+                    setToggle('email-updates', settings.notifications.productAnnouncements);
+                    setToggle('email-security', settings.notifications.securityAlerts);
+                }
+
+                if (settings.appearance) {
+                    selectTheme(settings.appearance.theme);
+                    selectDensity(settings.appearance.compactMode);
+                }
+
+                if (settings.projectSettings) {
+                    setToggle('projects-auto-import', settings.projectSettings.autoPublish);
+                    setToggle('projects-auto-clean', settings.projectSettings.allowForks);
+                }
+
+                if (settings.ecosystem) {
+                    setToggle('eco-cli', settings.ecosystem.githubConnected);
+                    setToggle('eco-sandbox', settings.ecosystem.twitterConnected);
+                    setToggle('eco-telemetry', settings.ecosystem.linkedinConnected);
+                }
+
+                if (settings.security) {
+                    setToggle('toggle-public-profile', settings.security.profileVisibility !== 'private');
+                    setToggle('toggle-contribution-graph', settings.security.searchableProfile);
+                    const twoFactorBadge = document.querySelector('#panel-security .setting-badge');
+                    if (twoFactorBadge) {
+                        twoFactorBadge.textContent = settings.security.twoFactorEnabled ? 'Enabled' : 'Disabled';
+                    }
+                }
+
+                if (settings.advanced) {
+                    const developerBtn = document.querySelector('#panel-advanced [data-advanced-key="developerMode"]');
+                    const betaBtn = document.querySelector('#panel-advanced [data-advanced-key="betaFeatures"]');
+                    const analyticsBtn = document.querySelector('#panel-advanced [data-advanced-key="analyticsSharing"]');
+                    if (developerBtn) developerBtn.dataset.enabled = settings.advanced.developerMode ? 'true' : 'false';
+                    if (betaBtn) betaBtn.dataset.enabled = settings.advanced.betaFeatures ? 'true' : 'false';
+                    if (analyticsBtn) analyticsBtn.dataset.enabled = settings.advanced.analyticsSharing ? 'true' : 'false';
+                }
+            }
+
+            function cacheSettings(settings) {
+                persistedSettings = settings;
+                localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(settings));
+                window.dispatchEvent(new CustomEvent('devstage:settings-updated', { detail: settings }));
+            }
+
+            async function requestSettings(endpoint, payload) {
+                const headers = getAuthHeaders();
+                if (!headers) {
+                    const localSettings = settingsFromUI();
+                    cacheSettings(localSettings);
+                    return localSettings;
+                }
+
+                const response = await fetch(`http://localhost:5000/api/settings/${endpoint}`, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Unable to save settings');
+                }
+                cacheSettings(data.settings);
+                return data.settings;
+            }
+
+            async function saveSettingsSection(endpoint, sectionKey, payload) {
+                const previous = persistedSettings || JSON.parse(localStorage.getItem(SETTINGS_CACHE_KEY) || 'null');
+                const optimistic = {
+                    ...(previous || settingsFromUI()),
+                    [sectionKey]: {
+                        ...((previous && previous[sectionKey]) || {}),
+                        ...payload
+                    }
+                };
+                cacheSettings(optimistic);
+
+                try {
+                    const saved = await requestSettings(endpoint, payload);
+                    applySettingsToUI(saved);
+                    return saved;
+                } catch (error) {
+                    console.error(error);
+                    if (previous) {
+                        cacheSettings(previous);
+                        applySettingsToUI(previous);
+                    }
+                    alert(error.message || 'Unable to save settings');
+                    throw error;
+                }
+            }
+
+            async function loadSettingsData() {
+                const cached = JSON.parse(localStorage.getItem(SETTINGS_CACHE_KEY) || 'null');
+                if (cached) {
+                    cacheSettings(cached);
+                    applySettingsToUI(cached);
+                }
+
+                const headers = getAuthHeaders();
+                if (!headers) return;
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/settings/me', {
+                        method: 'GET',
+                        headers
+                    });
+                    const data = await response.json();
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || 'Unable to load settings');
+                    }
+                    cacheSettings(data.settings);
+                    applySettingsToUI(data.settings);
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                }
+            }
+
+            function bindSettingsPersistence() {
+                ['email-digest', 'notif-comments', 'notif-teams', 'email-updates', 'email-security'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener('click', () => {
+                        saveSettingsSection('notifications', 'notifications', settingsFromUI().notifications).catch(() => {});
+                    });
+                });
+
+                document.querySelectorAll('.theme-opt, .density-opt').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const appearance = settingsFromUI().appearance;
+                        applyTheme(appearance.theme);
+                        saveSettingsSection('appearance', 'appearance', appearance).catch(() => {});
+                    });
+                });
+
+                ['projects-auto-import', 'projects-auto-clean'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener('click', () => {
+                        saveSettingsSection('projects', 'projectSettings', settingsFromUI().projectSettings).catch(() => {});
+                    });
+                });
+
+                ['eco-cli', 'eco-sandbox', 'eco-telemetry'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener('click', () => {
+                        saveSettingsSection('ecosystem', 'ecosystem', settingsFromUI().ecosystem).catch(() => {});
+                    });
+                });
+
+                ['toggle-public-profile', 'toggle-contribution-graph'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener('click', () => {
+                        saveSettingsSection('security', 'security', settingsFromUI().security).catch(() => {});
+                    });
+                });
+
+                const twoFactorCard = document.querySelector('#panel-security .twofa-card');
+                const twoFactorBadge = document.querySelector('#panel-security .setting-badge');
+                if (twoFactorCard && twoFactorBadge) {
+                    twoFactorCard.addEventListener('click', () => {
+                        twoFactorBadge.textContent = twoFactorBadge.textContent.trim().toLowerCase() === 'enabled' ? 'Disabled' : 'Enabled';
+                        showSaveToast();
+                        saveSettingsSection('security', 'security', settingsFromUI().security).catch(() => {});
+                    });
+                }
+
+                const advancedButtons = document.querySelectorAll('#panel-advanced .action-btn');
+                if (advancedButtons[0]) {
+                    advancedButtons[0].dataset.advancedKey = 'developerMode';
+                    advancedButtons[0].dataset.enabled = 'false';
+                }
+                if (advancedButtons[1]) {
+                    advancedButtons[1].dataset.advancedKey = 'betaFeatures';
+                    advancedButtons[1].dataset.enabled = 'false';
+                }
+                if (advancedButtons[2]) {
+                    advancedButtons[2].dataset.advancedKey = 'analyticsSharing';
+                    advancedButtons[2].dataset.enabled = 'true';
+                }
+                advancedButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        if (!button.dataset.advancedKey) return;
+                        button.dataset.enabled = button.dataset.enabled === 'true' ? 'false' : 'true';
+                        showSaveToast();
+                        saveSettingsSection('advanced', 'advanced', settingsFromUI().advanced).catch(() => {});
+                    });
+                });
+            }
+
             // Load initial user details from LocalStorage or use defaults
             let activeDeveloperTags = [];
             let activeSocialLinks = { github: '', twitter: '', linkedin: '' };
@@ -2550,6 +2845,7 @@
                                     activeSocialLinks[platform] = '';
                                     renderSocialLinks();
                                     showSaveToast();
+                                    saveSettingsSection('ecosystem', 'ecosystem', settingsFromUI().ecosystem).catch(() => {});
                                 }
                             } else {
                                 const val = prompt(`Enter your ${platform === 'twitter' ? 'X / Twitter' : platform.charAt(0).toUpperCase() + platform.slice(1)} handle:`);
@@ -2557,6 +2853,7 @@
                                     activeSocialLinks[platform] = val.trim();
                                     renderSocialLinks();
                                     showSaveToast();
+                                    saveSettingsSection('ecosystem', 'ecosystem', settingsFromUI().ecosystem).catch(() => {});
                                 }
                             }
                         });
@@ -2670,6 +2967,8 @@
             }
 
             loadUserData();
+            bindSettingsPersistence();
+            loadSettingsData();
 
             // Trigger local and remote saving
             saveBtn.addEventListener('click', () => {
@@ -2793,6 +3092,47 @@
                     triggerSaveSuccessAnimation();
                 }
             });
+
+            const deleteAccountBtn = document.getElementById('btn-delete-account');
+            if (deleteAccountBtn) {
+                deleteAccountBtn.addEventListener('click', async() => {
+                    const password = prompt('Confirm your password to permanently delete your account:');
+                    if (password === null) return;
+
+                    const headers = getAuthHeaders();
+                    if (!headers) {
+                        alert('You must be logged in to delete your account.');
+                        return;
+                    }
+
+                    if (!confirm('This permanently deletes your account, projects, activity, and contact messages. Continue?')) {
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('http://localhost:5000/api/settings/delete-account', {
+                            method: 'DELETE',
+                            headers,
+                            body: JSON.stringify({ password })
+                        });
+                        const data = await response.json();
+                        if (!response.ok || !data.success) {
+                            throw new Error(data.message || 'Unable to delete account');
+                        }
+
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('devstageUser');
+                        localStorage.removeItem(SETTINGS_CACHE_KEY);
+                        localStorage.removeItem(THEME_CACHE_KEY);
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Delete account error:', error);
+                        alert(error.message || 'Unable to delete account');
+                    }
+                });
+            }
 
             function triggerSaveSuccessAnimation() {
                 const originalText = saveBtn.textContent;

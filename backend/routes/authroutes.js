@@ -36,8 +36,8 @@ router.get("/me", authMiddleware, async (req, res) => {
                 timezone: user.timezone,
                 portfolioWebsite: user.portfolioWebsite,
                 profilePhoto: user.profilePhoto,
-                followers: user.followers,
-                following: user.following,
+                followers: Array.isArray(user.followers) ? user.followers.length : 0,
+                following: Array.isArray(user.following) ? user.following.length : 0,
                 skills: user.skills,
                 techStack: user.techStack,
                 socialLinks: user.socialLinks,
@@ -48,11 +48,17 @@ router.get("/me", authMiddleware, async (req, res) => {
                 currentStatus: user.currentStatus,
                 developerTags: user.developerTags,
                 featuredProject: user.featuredProject,
-                notifications: user.notifications,
+                notifications: user.notificationSettings,
+                unreadNotifications: Array.isArray(user.notifications) ? user.notifications.filter(notification => !notification.read).length : 0,
                 appearance: user.appearance,
+                projectSettings: user.projectSettings,
                 projectPreferences: user.projectPreferences,
                 ecosystem: user.ecosystem,
-                privacy: user.privacy
+                security: user.security,
+                advanced: user.advanced,
+                privacy: user.privacy,
+                isOnline: user.isOnline,
+                lastSeen: user.lastSeen
             }
         });
 
@@ -107,8 +113,8 @@ router.put("/update", authMiddleware, async (req, res) => {
                 timezone: user.timezone,
                 portfolioWebsite: user.portfolioWebsite,
                 profilePhoto: user.profilePhoto,
-                followers: user.followers,
-                following: user.following,
+                followers: Array.isArray(user.followers) ? user.followers.length : 0,
+                following: Array.isArray(user.following) ? user.following.length : 0,
                 skills: user.skills,
                 techStack: user.techStack,
                 socialLinks: user.socialLinks,

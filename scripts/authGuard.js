@@ -28,12 +28,14 @@
         // Try all possible user session sources
         const currentUser = getCurrentUser();
         const token = localStorage.getItem("token");
+        const devstageAuth = localStorage.getItem("devstage_auth");
+        const devstageUserCache = localStorage.getItem("devstage_user_cache");
         const devstageUser = localStorage.getItem("devstageUser");
         const user = localStorage.getItem("user");
         const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
         // Allow access if ANY valid session exists
-        const hasSession = currentUser || (token && isLoggedIn) || devstageUser || user;
+        const hasSession = currentUser || (token && isLoggedIn) || devstageAuth || devstageUserCache || devstageUser || user;
 
         if (!hasSession) {
             // Redirect to homepage, NOT login page

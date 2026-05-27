@@ -1,7 +1,79 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const { protect } = require("../middleware/auth");
 const User = require("../models/user");
+const Project = require("../models/Project");
+const Activity = require("../models/Activity");
+const { createActivity } = require("../api/activityController");
+
+function publicProfileResponse(user, featuredProject, heatmap) {
+    return {
+        id: user._id,
+        profilePhoto: user.profilePhoto,
+        username: user.username,
+        displayName: user.displayName,
+        bio: user.bio,
+        followers: Array.isArray(user.followers) ? user.followers.length : 0,
+        following: Array.isArray(user.following) ? user.following.length : 0,
+        followersCount: Array.isArray(user.followers) ? user.followers.length : 0,
+        followingCount: Array.isArray(user.following) ? user.following.length : 0,
+        featuredProject,
+        skills: user.skills || [],
+        developerTags: user.developerTags || [],
+        activityHeatmap: heatmap,
+        currentStatus: user.currentStatus,
+        isOnline: user.isOnline,
+        lastSeen: user.lastSeen
+    };
+}
+
+function buildHeatmap(activities) {
+    return activities.reduce((heatmap, activity) => {
+        const date = activity.createdAt.toISOString().split("T")[0];
+        heatmap[date] = (heatmap[date] || 0) + 1;
+        return heatmap;
+    }, {});
+}
+
+// GET /api/users/profile/:username - Public profile lookup
+router.get("/profile/:username", async(req, res) => {
+    try {
+        const username = String(req.params.username || "").trim().toLowerCase();
+        const user = await User.findOne({
+            username,
+            isBanned: { $ne: true },
+            $and: [
+                { $or: [{ profileVisibility: { $ne: false } }, { profileVisibility: { $exists: false } }] },
+                { $or: [{ "security.profileVisibility": "public" }, { "security.profileVisibility": { $exists: false } }] }
+            ]
+        })
+            .select("username displayName bio profilePhoto followers following featuredProject skills developerTags currentStatus isOnline lastSeen")
+            .lean();
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Profile not found" });
+        }
+
+        const hasFeaturedProjectId = user.featuredProject && mongoose.Types.ObjectId.isValid(user.featuredProject);
+        const [featuredProject, activities] = await Promise.all([
+            hasFeaturedProjectId ?
+                Project.findOne({ _id: user.featuredProject, owner: user._id }).select("title description techStack githubUrl liveUrl thumbnail status views likes").lean() :
+                Project.findOne({ owner: user._id, featured: true }).select("title description techStack githubUrl liveUrl thumbnail status views likes").lean(),
+            Activity.find({ user: user._id, visibility: "public" }).select("createdAt").sort({ createdAt: -1 }).limit(365).lean()
+        ]);
+
+        await createActivity(user._id, "profile_visit", "Profile visit", "Someone viewed your public profile", {}, "private");
+
+        return res.status(200).json({
+            success: true,
+            profile: publicProfileResponse(user, featuredProject, buildHeatmap(activities))
+        });
+    } catch (error) {
+        console.error("Public profile lookup error:", error);
+        return res.status(500).json({ success: false, message: "Unable to load profile" });
+    }
+});
 
 // POST /api/users/view-profile/:username - Increment profile view count
 router.post("/view-profile/:username", async(req, res) => {
@@ -162,9 +234,20 @@ router.put("/update-profile", protect, async(req, res) => {
         }
 
         const updatedUser = await user.save();
+        await createActivity(
+            user._id,
+            "profile_updated",
+            "Profile updated",
+            "Updated profile details",
+            { featuredProjectChanged: featuredProject !== undefined },
+            "private"
+        );
 
         const safeUser = updatedUser.toObject();
         delete safeUser.password;
+        safeUser.followers = Array.isArray(updatedUser.followers) ? updatedUser.followers.length : 0;
+        safeUser.following = Array.isArray(updatedUser.following) ? updatedUser.following.length : 0;
+        safeUser.notifications = updatedUser.notificationSettings;
 
         return res.status(200).json({
             success: true,
@@ -195,11 +278,11 @@ router.put("/platform-settings", protect, async(req, res) => {
         const { notifications, appearance, projectPreferences, ecosystem } = req.body;
 
         if (notifications) {
-            if (!user.notifications) user.notifications = {};
-            if (typeof notifications.emailNotifications === "boolean") user.notifications.emailNotifications = notifications.emailNotifications;
-            if (typeof notifications.projectUpdates === "boolean") user.notifications.projectUpdates = notifications.projectUpdates;
-            if (typeof notifications.marketingEmails === "boolean") user.notifications.marketingEmails = notifications.marketingEmails;
-            if (typeof notifications.collaborationInvites === "boolean") user.notifications.collaborationInvites = notifications.collaborationInvites;
+            if (!user.notificationSettings) user.notificationSettings = {};
+            if (typeof notifications.emailNotifications === "boolean") user.notificationSettings.emailNotifications = notifications.emailNotifications;
+            if (typeof notifications.projectUpdates === "boolean") user.notificationSettings.projectUpdates = notifications.projectUpdates;
+            if (typeof notifications.marketingEmails === "boolean") user.notificationSettings.marketingEmails = notifications.marketingEmails;
+            if (typeof notifications.collaborationInvites === "boolean") user.notificationSettings.collaborationInvites = notifications.collaborationInvites;
         }
 
         if (appearance) {
@@ -226,6 +309,9 @@ router.put("/platform-settings", protect, async(req, res) => {
         const updatedUser = await user.save();
         const safeUser = updatedUser.toObject();
         delete safeUser.password;
+        safeUser.followers = Array.isArray(updatedUser.followers) ? updatedUser.followers.length : 0;
+        safeUser.following = Array.isArray(updatedUser.following) ? updatedUser.following.length : 0;
+        safeUser.notifications = updatedUser.notificationSettings;
 
         return res.status(200).json({
             success: true,
@@ -269,6 +355,9 @@ router.put("/privacy-settings", protect, async(req, res) => {
         const updatedUser = await user.save();
         const safeUser = updatedUser.toObject();
         delete safeUser.password;
+        safeUser.followers = Array.isArray(updatedUser.followers) ? updatedUser.followers.length : 0;
+        safeUser.following = Array.isArray(updatedUser.following) ? updatedUser.following.length : 0;
+        safeUser.notifications = updatedUser.notificationSettings;
 
         return res.status(200).json({
             success: true,

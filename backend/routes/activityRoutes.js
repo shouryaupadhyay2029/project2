@@ -1,19 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { protect } = require('../middleware/auth');
+const authMiddleware = require("../middleware/authmiddleware");
 const {
-    getMyActivity,
-    getUserActivity,
-    getActivityHeatmap
-} = require('../api/activityController');
+  getMyActivity,
+  getUserActivity,
+  getActivityHeatmap,
+  getContributions,
+} = require("../api/activityController");
 
 // GET /api/activity/me - Get current user's activity (protected)
-router.get('/me', protect, getMyActivity);
+router.get("/me", authMiddleware, getMyActivity);
 
 // GET /api/activity/user/:username - Get public user activity
-router.get('/user/:username', getUserActivity);
+router.get("/user/:username", getUserActivity);
 
 // GET /api/activity/heatmap/:username - Get activity heatmap data
-router.get('/heatmap/:username', getActivityHeatmap);
+router.get("/heatmap/:username", getActivityHeatmap);
+
+// GET /api/activity/contributions/:username - GitHub-style contribution graph
+router.get("/contributions/:username", getContributions);
 
 module.exports = router;

@@ -23,9 +23,9 @@ const authMiddleware = async (req, res, next) => {
       } catch (err) {
          // Attempt to decode as Firebase / Google token
          const decodedFirebase = jwt.decode(token);
-         if (decodedFirebase && decodedFirebase.email) {
-            let user = await User.findOne({ email: decodedFirebase.email });
-            if (!user) {
+            if (decodedFirebase && decodedFirebase.email) {
+                let user = await User.findOne({ email: decodedFirebase.email });
+                if (!user) {
                const generatedUsername = (decodedFirebase.name || decodedFirebase.email.split('@')[0])
                   .toLowerCase()
                   .replace(/[^a-z0-9]/g, '') + Math.floor(100 + Math.random() * 900);
@@ -34,12 +34,15 @@ const authMiddleware = async (req, res, next) => {
                   email: decodedFirebase.email,
                   password: "google_auth_placeholder_password",
                   displayName: decodedFirebase.name || "",
-                  profilePhoto: decodedFirebase.picture || ""
-               });
+                        profilePhoto: decodedFirebase.picture || ""
+                   });
+                }
+                user.isOnline = true;
+                user.lastSeen = new Date();
+                await user.save();
+                req.user = { id: user._id, isGoogleUser: true };
+                return next();
             }
-            req.user = { id: user._id, isGoogleUser: true };
-            return next();
-         }
          return res.status(401).json({
             success: false,
             message: "Invalid token"
