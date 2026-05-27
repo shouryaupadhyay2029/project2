@@ -116,6 +116,90 @@ const userSchema = new mongoose.Schema({
     featuredProject: {
         type: String,
         default: ""
+    },
+
+    profileViews: {
+        type: Number,
+        default: 0
+    },
+
+    notifications: {
+        emailNotifications: {
+            type: Boolean,
+            default: true
+        },
+        projectUpdates: {
+            type: Boolean,
+            default: true
+        },
+        marketingEmails: {
+            type: Boolean,
+            default: false
+        },
+        collaborationInvites: {
+            type: Boolean,
+            default: true
+        }
+    },
+
+    appearance: {
+        theme: {
+            type: String,
+            default: "dark"
+        },
+        reducedMotion: {
+            type: Boolean,
+            default: false
+        },
+        compactMode: {
+            type: Boolean,
+            default: false
+        }
+    },
+
+    projectPreferences: {
+        autoSaveDrafts: {
+            type: Boolean,
+            default: true
+        },
+        showProjectAnalytics: {
+            type: Boolean,
+            default: true
+        },
+        enablePublicProjects: {
+            type: Boolean,
+            default: false
+        }
+    },
+
+    ecosystem: {
+        enableCommunityProfile: {
+            type: Boolean,
+            default: true
+        },
+        showOnlineStatus: {
+            type: Boolean,
+            default: true
+        },
+        allowTeamInvites: {
+            type: Boolean,
+            default: true
+        }
+    },
+
+    privacy: {
+        twoFactorEnabled: {
+            type: Boolean,
+            default: false
+        },
+        profileIndexed: {
+            type: Boolean,
+            default: true
+        },
+        activityVisible: {
+            type: Boolean,
+            default: true
+        }
     }
 }, {
     timestamps: true

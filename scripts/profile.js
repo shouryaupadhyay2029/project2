@@ -35,11 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchUserProjects(user.uid);
             fetchUserActivity(user.uid);
             checkGitHubConnection(user.uid);
+
+            // Track profile view
+            const username = user.displayName || user.email.split('@')[0];
+            trackProfileView(username);
         } else {
             // Auth guard handles redirect for protected pages — do nothing here
             console.log('[DevStage Profile] No Firebase user session.');
         }
     });
+
+    // Track profile view
+    async function trackProfileView(username) {
+        try {
+            const cleanUsername = String(username).toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '').slice(0, 14);
+            await fetch(`http://localhost:5000/api/users/view-profile/${cleanUsername}`, {
+                method: 'POST'
+            });
+        } catch (error) {
+            console.error('[DevStage Profile] Error tracking profile view:', error);
+        }
+    }
 
     async function updateProfileUI(user) {
         document.getElementById('profile-avatar').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=2a2a2a&color=fff`;
@@ -70,15 +86,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── 3. PROJECTS FEED ───────────────────────────────────
     async function fetchUserProjects(uid) {
         const grid = document.getElementById('user-projects-grid');
-        const projectsSnap = await db.collection('projects').where('userId', '==', uid).get();
+        const token = localStorage.getItem('token');
 
-        if (projectsSnap.empty) return;
+        if (!token) {
+            console.log('[DevStage Profile] No auth token found');
+            return;
+        }
 
-        grid.innerHTML = '';
-        projectsSnap.forEach((doc, index) => {
-            renderProjectCard(doc.data(), doc.id, grid, index);
-        });
-        lucide.createIcons();
+        try {
+            const response = await fetch('http://localhost:5000/api/projects/my-projects', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.projects.length > 0) {
+                grid.innerHTML = '';
+                data.projects.forEach((project, index) => {
+                    // Map MongoDB project structure to Firebase-like structure for UI compatibility
+                    const firebaseStyleProject = {
+                        title: project.title,
+                        description: project.description,
+                        category: project.status || 'Project',
+                        techStack: project.techStack || [],
+                        githubUrl: project.githubUrl,
+                        liveUrl: project.liveUrl,
+                        thumbnail: project.thumbnail,
+                        featured: project.featured,
+                        likes: project.likes,
+                        views: project.views,
+                        createdAt: project.createdAt
+                    };
+                    renderProjectCard(firebaseStyleProject, project._id, grid, index);
+                });
+                lucide.createIcons();
+            }
+        } catch (error) {
+            console.error('[DevStage Profile] Error fetching projects:', error);
+        }
     }
 
     function renderProjectCard(p, id, container, index) {
@@ -100,7 +149,17 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        item.onclick = () => window.location.href = `explore.html?id=${id}`;
+        item.onclick = async() => {
+            // Track project view
+            try {
+                await fetch(`http://localhost:5000/api/projects/view/${id}`, {
+                    method: 'POST'
+                });
+            } catch (error) {
+                console.error('[DevStage Profile] Error tracking project view:', error);
+            }
+            window.location.href = `explore.html?id=${id}`;
+        };
         container.appendChild(item);
         requestAnimationFrame(() => {
             item.style.opacity = '1';
@@ -170,37 +229,54 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── 5. ACTIVITY FEED ────────────────────────────────────
     async function fetchUserActivity(uid) {
         const grid = document.getElementById('contrib-grid');
+        const token = localStorage.getItem('token');
+
         if (!grid) return;
 
-        const actSnap = await db.collection('activity')
-            .where('userId', '==', uid)
-            .orderBy('timestamp', 'desc')
-            .limit(52)
-            .get();
-
-        if (actSnap.empty) {
-            grid.innerHTML = '<p class="empty-msg">No recent activity found.</p>';
+        if (!token) {
+            console.log('[DevStage Profile] No auth token found');
             return;
         }
 
-        const classMap = {
-            upload: 'l4',
-            comment: 'l2',
-            like: 'l3',
-            update: 'l1'
-        };
+        try {
+            const response = await fetch('http://localhost:5000/api/activity/me', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-        const cells = actSnap.docs.map(doc => {
-            const a = doc.data();
-            const cellClass = classMap[a.type] || 'l2';
-            return `<div class="contrib-cell ${cellClass}" title="${a.type || 'activity'}"></div>`;
-        });
+            const data = await response.json();
 
-        while (cells.length < 52) {
-            cells.push('<div class="contrib-cell"></div>');
+            if (data.success && data.activities.length > 0) {
+                const classMap = {
+                    project_created: 'l4',
+                    project_updated: 'l2',
+                    project_deleted: 'l3',
+                    featured_project_changed: 'l1',
+                    profile_updated: 'l2',
+                    settings_updated: 'l2',
+                    profile_customized: 'l1'
+                };
+
+                const cells = data.activities.slice(0, 52).map(activity => {
+                    const cellClass = classMap[activity.type] || 'l2';
+                    return `<div class="contrib-cell ${cellClass}" title="${activity.title || 'activity'}"></div>`;
+                });
+
+                while (cells.length < 52) {
+                    cells.push('<div class="contrib-cell"></div>');
+                }
+
+                grid.innerHTML = cells.join('');
+            } else {
+                grid.innerHTML = '<p class="empty-msg">No recent activity found.</p>';
+            }
+        } catch (error) {
+            console.error('[DevStage Profile] Error fetching activity:', error);
+            grid.innerHTML = '<p class="empty-msg">No recent activity found.</p>';
         }
-
-        grid.innerHTML = cells.join('');
     }
 
     // Initialize Lucide icons on load

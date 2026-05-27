@@ -1700,29 +1700,38 @@
 
                         <div class="section-block">
                             <div class="section-label">Linked Accounts</div>
-                            <div class="integration-card">
+                            <div class="integration-card" id="card-github">
                                 <div class="integration-icon"><svg viewBox="0 0 16 16" fill="currentColor" style="color:#6b6b6b"><path d="M8 1C4.13 1 1 4.13 1 8c0 3.09 2 5.71 4.78 6.63.35.06.48-.15.48-.34v-1.2c-1.95.42-2.36-.94-2.36-.94-.32-.81-.78-1.03-.78-1.03-.64-.44.05-.43.05-.43.7.05 1.07.72 1.07.72.62 1.07 1.63.76 2.03.58.06-.45.24-.76.44-.93-1.56-.18-3.2-.78-3.2-3.47 0-.77.27-1.39.72-1.88-.07-.18-.31-.89.07-1.85 0 0 .59-.19 1.93.72A6.7 6.7 0 0 1 8 4.79c.6 0 1.2.08 1.77.23 1.34-.91 1.93-.72 1.93-.72.38.96.14 1.67.07 1.85.45.49.72 1.11.72 1.88 0 2.7-1.64 3.29-3.2 3.47.25.22.48.65.48 1.31v1.94c0 .19.13.4.48.34A7.003 7.003 0 0 0 15 8c0-3.87-3.13-7-7-7z"/></svg></div>
                                 <div class="integration-meta">
                                     <p class="integration-name">GitHub</p>
-                                    <p class="integration-info">@shourya-dev · connected</p>
+                                    <p class="integration-info" id="github-info">Not connected</p>
                                 </div>
-                                <span class="setting-badge badge-green">Connected</span>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    <span class="setting-badge badge-green" id="github-status" style="display:none;">Connected</span>
+                                    <button class="action-btn accent-btn" id="github-btn">Connect</button>
+                                </div>
                             </div>
-                            <div class="integration-card">
+                            <div class="integration-card" id="card-twitter">
                                 <div class="integration-icon"><svg viewBox="0 0 16 16" fill="currentColor" style="color:#6b6b6b"><path d="M12.6 2h2.45l-5.35 6.12L16 14h-4.93l-3.86-5.05L2.9 14H.44l5.72-6.54L0 2h5.06l3.49 4.62L12.6 2z"/></svg></div>
                                 <div class="integration-meta">
                                     <p class="integration-name">X / Twitter</p>
-                                    <p class="integration-info">@shourya_builds · connected</p>
+                                    <p class="integration-info" id="twitter-info">Not connected</p>
                                 </div>
-                                <span class="setting-badge badge-green">Connected</span>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    <span class="setting-badge badge-green" id="twitter-status" style="display:none;">Connected</span>
+                                    <button class="action-btn accent-btn" id="twitter-btn">Connect</button>
+                                </div>
                             </div>
-                            <div class="integration-card">
+                            <div class="integration-card" id="card-linkedin">
                                 <div class="integration-icon"><svg viewBox="0 0 16 16" fill="currentColor" style="color:#6b6b6b"><path d="M13 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM2 6l6 3.5L14 6"/></svg></div>
                                 <div class="integration-meta">
                                     <p class="integration-name">LinkedIn</p>
-                                    <p class="integration-info">Not connected</p>
+                                    <p class="integration-info" id="linkedin-info">Not connected</p>
                                 </div>
-                                <button class="action-btn accent-btn">Connect</button>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    <span class="setting-badge badge-green" id="linkedin-status" style="display:none;">Connected</span>
+                                    <button class="action-btn accent-btn" id="linkedin-btn">Connect</button>
+                                </div>
                             </div>
                         </div>
 
@@ -2400,6 +2409,9 @@
             }
 
             // Load initial user details from LocalStorage or use defaults
+            let activeDeveloperTags = [];
+            let activeSocialLinks = { github: '', twitter: '', linkedin: '' };
+
             function loadUserData() {
                 const token = localStorage.getItem('token');
                 if (token) {
@@ -2430,7 +2442,7 @@
             }
 
             function loadLocalFallback() {
-                const user = JSON.parse(localStorage.getItem('user'));
+                const user = JSON.parse(localStorage.getItem('user')) || JSON.parse(localStorage.getItem('currentUser'));
                 if (user) {
                     populateUI({
                         displayName: user.fullName || user.displayName || '',
@@ -2447,9 +2459,109 @@
                         currentStatus: user.currentStatus || 'Available',
                         featuredProject: user.featuredProject || '',
                         followers: user.followers || 128,
-                        following: user.following || 94
+                        following: user.following || 94,
+                        developerTags: user.developerTags || ['UI/UX Design', 'Frontend', 'Systems', 'WebGPU'],
+                        socialLinks: user.socialLinks || { github: '', twitter: '', linkedin: '' }
                     });
                 }
+            }
+
+            function renderTags() {
+                const listEl = document.getElementById('developer-tags-list');
+                if (!listEl) return;
+                
+                // Clear existing dev-tags but preserve add-tag-trigger
+                const tags = listEl.querySelectorAll('.dev-tag');
+                tags.forEach(t => t.remove());
+
+                const addTrigger = document.getElementById('add-tag-trigger');
+
+                activeDeveloperTags.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'dev-tag';
+                    span.style.cssText = 'padding:5px 14px;border:1px solid rgba(201,185,154,0.25);border-radius:100px;font-size:12px;color:var(--accent);background:var(--accent-dim);cursor:pointer;';
+                    span.textContent = tag;
+                    span.addEventListener('click', () => {
+                        activeDeveloperTags = activeDeveloperTags.filter(t => t !== tag);
+                        renderTags();
+                        showSaveToast();
+                    });
+                    listEl.insertBefore(span, addTrigger);
+                });
+            }
+
+            function setupTagTrigger() {
+                const addTrigger = document.getElementById('add-tag-trigger');
+                if (addTrigger) {
+                    const newAddTrigger = addTrigger.cloneNode(true);
+                    addTrigger.parentNode.replaceChild(newAddTrigger, addTrigger);
+                    newAddTrigger.addEventListener('click', () => {
+                        if (activeDeveloperTags.length >= 8) {
+                            alert("Maximum 8 tags allowed");
+                            return;
+                        }
+                        const newTag = prompt("Enter a new developer tag (e.g. Node.js, WebGL):");
+                        if (newTag && newTag.trim()) {
+                            const trimmed = newTag.trim();
+                            if (activeDeveloperTags.includes(trimmed)) {
+                                alert("Tag already exists");
+                                return;
+                            }
+                            activeDeveloperTags.push(trimmed);
+                            renderTags();
+                            showSaveToast();
+                        }
+                    });
+                }
+            }
+
+            function renderSocialLinks() {
+                ['github', 'twitter', 'linkedin'].forEach(platform => {
+                    const infoEl = document.getElementById(`${platform}-info`);
+                    const btnEl = document.getElementById(`${platform}-btn`);
+                    const statusEl = document.getElementById(`${platform}-status`);
+                    if (!infoEl || !btnEl || !statusEl) return;
+
+                    const val = activeSocialLinks[platform];
+                    if (val) {
+                        infoEl.textContent = `@${val} · connected`;
+                        statusEl.style.display = 'inline-block';
+                        btnEl.textContent = 'Disconnect';
+                        btnEl.classList.remove('accent-btn');
+                    } else {
+                        infoEl.textContent = 'Not connected';
+                        statusEl.style.display = 'none';
+                        btnEl.textContent = 'Connect';
+                        btnEl.classList.add('accent-btn');
+                    }
+                });
+            }
+
+            function setupSocialButtons() {
+                ['github', 'twitter', 'linkedin'].forEach(platform => {
+                    const btnEl = document.getElementById(`${platform}-btn`);
+                    if (btnEl) {
+                        const newBtn = btnEl.cloneNode(true);
+                        btnEl.parentNode.replaceChild(newBtn, btnEl);
+                        newBtn.addEventListener('click', () => {
+                            const currentVal = activeSocialLinks[platform];
+                            if (currentVal) {
+                                if (confirm(`Disconnect ${platform === 'twitter' ? 'X / Twitter' : platform.charAt(0).toUpperCase() + platform.slice(1)}?`)) {
+                                    activeSocialLinks[platform] = '';
+                                    renderSocialLinks();
+                                    showSaveToast();
+                                }
+                            } else {
+                                const val = prompt(`Enter your ${platform === 'twitter' ? 'X / Twitter' : platform.charAt(0).toUpperCase() + platform.slice(1)} handle:`);
+                                if (val && val.trim()) {
+                                    activeSocialLinks[platform] = val.trim();
+                                    renderSocialLinks();
+                                    showSaveToast();
+                                }
+                            }
+                        });
+                    }
+                });
             }
 
             function populateUI(user) {
@@ -2495,6 +2607,16 @@
                     }
                 });
 
+                // Sync tags
+                activeDeveloperTags = user.developerTags || [];
+                renderTags();
+                setupTagTrigger();
+
+                // Sync social links
+                activeSocialLinks = user.socialLinks || { github: '', twitter: '', linkedin: '' };
+                renderSocialLinks();
+                setupSocialButtons();
+
                 // Sync sidebar and identity upload photos
                 const userPhoto = user.profilePhoto || user.photoURL || '';
                 if (userPhoto) {
@@ -2527,10 +2649,10 @@
                     const sidebarAv = document.getElementById('sidebar-avatar-img');
                     const identAv = document.getElementById('identity-avatar-img');
                     if (sidebarAv) {
-                        sidebarAv.innerHTML = initials;
+                        sidebarAv.textContent = initials;
                     }
                     if (identAv) {
-                        identAv.innerHTML = initials;
+                        identAv.textContent = initials;
                     }
                 }
 
@@ -2573,7 +2695,6 @@
 
                 // Check if there is an image inside identity photo block and sync it
                 const identAv = document.getElementById('identity-avatar-img');
-                const sidebarAv = document.getElementById('sidebar-avatar-img');
                 const imgEl = identAv ? identAv.querySelector('img') : null;
                 const profilePhoto = (imgEl && imgEl.style.display === 'block') ? imgEl.src : '';
 
@@ -2589,12 +2710,14 @@
                     showContributionGraph,
                     showAchievements,
                     currentStatus,
-                    profilePhoto
+                    profilePhoto,
+                    developerTags: activeDeveloperTags,
+                    socialLinks: activeSocialLinks
                 };
 
                 const token = localStorage.getItem('token');
                 if (token) {
-                    fetch("http://localhost:5000/api/auth/update", {
+                    fetch("http://localhost:5000/api/users/update-profile", {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
@@ -2605,15 +2728,9 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Update localStorage
-                            let storedUser = JSON.parse(localStorage.getItem('user')) || {};
-                            storedUser.fullName = data.user.displayName;
-                            storedUser.username = data.user.username;
-                            storedUser.bio = data.user.bio;
-                            storedUser.location = data.user.location;
-                            storedUser.website = data.user.portfolioWebsite;
-                            storedUser.photoURL = data.user.profilePhoto || data.user.photoURL;
-                            localStorage.setItem('user', JSON.stringify(storedUser));
+                            // Update localStorage user and currentUser objects
+                            localStorage.setItem('user', JSON.stringify(data.user));
+                            localStorage.setItem('currentUser', JSON.stringify(data.user));
 
                             // Sync global devstageUser for header/nav
                             let devstageUser = JSON.parse(localStorage.getItem('devstageUser')) || {};
@@ -2656,9 +2773,12 @@
                     user.showContributionGraph = showContributionGraph;
                     user.showAchievements = showAchievements;
                     user.currentStatus = currentStatus;
+                    user.developerTags = activeDeveloperTags;
+                    user.socialLinks = activeSocialLinks;
                     if (profilePhoto) user.photoURL = profilePhoto;
 
                     localStorage.setItem('user', JSON.stringify(user));
+                    localStorage.setItem('currentUser', JSON.stringify(user));
 
                     // Update UI instantly
                     if (document.getElementById('sidebar-name')) document.getElementById('sidebar-name').textContent = displayName;
@@ -2738,7 +2858,9 @@
                     // Remove from storage too
                     let user = JSON.parse(localStorage.getItem('user')) || {};
                     delete user.photoURL;
+                    delete user.profilePhoto;
                     localStorage.setItem('user', JSON.stringify(user));
+                    localStorage.setItem('currentUser', JSON.stringify(user));
 
                     showSaveToast();
                 });

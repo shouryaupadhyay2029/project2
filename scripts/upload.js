@@ -35,32 +35,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function fetchPreviousUploads(uid) {
-        const snap = await db.collection('projects')
-            .where('userId', '==', uid)
-            .orderBy('createdAt', 'desc')
-            .limit(5)
-            .get();
+        const token = localStorage.getItem('token');
 
-        previousList.innerHTML = '';
-        if (snap.empty) {
-            previousList.innerHTML = '<p class="empty-msg">No projects shared yet.</p>';
+        if (!token) {
+            console.log('[DevStage Upload] No auth token found');
             return;
         }
 
-        snap.forEach(doc => {
-            const p = doc.data();
-            const date = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString() : 'Just now';
-            const item = document.createElement('div');
-            item.className = 'mini-upload-item';
-            item.innerHTML = `
-                <img src="${p.fileURL}" class="mini-thumb" alt="${p.title}">
-                <div class="mini-info">
-                    <h5>${p.title}</h5>
-                    <p>Shared on ${date}</p>
-                </div>
-            `;
-            previousList.appendChild(item);
-        });
+        try {
+            const response = await fetch('http://localhost:5000/api/projects/my-projects', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+
+            previousList.innerHTML = '';
+            if (data.success && data.projects.length > 0) {
+                data.projects.slice(0, 5).forEach(project => {
+                    const date = project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'Just now';
+                    const item = document.createElement('div');
+                    item.className = 'mini-upload-item';
+                    item.innerHTML = `
+                        <img src="${project.thumbnail || 'https://via.placeholder.com/50'}" class="mini-thumb" alt="${project.title}">
+                        <div class="mini-info">
+                            <h5>${project.title}</h5>
+                            <p>Shared on ${date}</p>
+                        </div>
+                    `;
+                    previousList.appendChild(item);
+                });
+            } else {
+                previousList.innerHTML = '<p class="empty-msg">No projects shared yet.</p>';
+            }
+        } catch (error) {
+            console.error('[DevStage Upload] Error fetching previous uploads:', error);
+            previousList.innerHTML = '<p class="empty-msg">No projects shared yet.</p>';
+        }
     }
 
     // ─── 2. DRAG & DROP LOGIC ────────────────────────────────
@@ -236,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     // ─── 3. UPLOAD HANDLER ───────────────────────────────────
-    uploadForm.addEventListener('submit', async (e) => {
+    uploadForm.addEventListener('submit', async(e) => {
         e.preventDefault();
         const user = auth.currentUser;
         const file = fileInput.files[0];
@@ -244,9 +258,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const desc = document.getElementById('project-desc').value;
         const tech = document.getElementById('project-tech').value;
         const category = categoryInput.value;
+        const token = localStorage.getItem('token');
 
-        if (!file || !user) {
-            updateTerminalStatus("error: missing payload or authentication");
+        if (!token) {
+            updateTerminalStatus("error: missing authentication token");
+            return;
+        }
+
+        if (!title || !desc) {
+            updateTerminalStatus("error: title and description are required");
             return;
         }
 
@@ -270,62 +290,69 @@ document.addEventListener('DOMContentLoaded', () => {
         progressContainer.style.display = 'block';
 
         try {
-            // A. Upload to Storage
-            updateTerminalStatus("optimizing assets & pushing to storage...");
-            const storageRef = storage.ref(`projects/${user.uid}/${Date.now()}_${file.name}`);
-            const uploadTask = storageRef.put(file);
+            let thumbnail = '';
 
-            uploadTask.on('state_changed',
-                (snap) => {
-                    const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
-                    progressBar.style.width = progress + '%';
-                    progressText.innerText = `${Math.round(progress)}% Transferred`;
-                    if (progress > 90) updateTerminalStatus("finalizing cloud handshake...");
+            // A. Upload to Storage if file exists
+            if (file) {
+                updateTerminalStatus("optimizing assets & pushing to storage...");
+                const storageRef = storage.ref(`projects/${user.uid}/${Date.now()}_${file.name}`);
+                const uploadTask = storageRef.put(file);
+
+                await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed',
+                        (snap) => {
+                            const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
+                            progressBar.style.width = progress + '%';
+                            progressText.innerText = `${Math.round(progress)}% Transferred`;
+                            if (progress > 90) updateTerminalStatus("finalizing cloud handshake...");
+                        },
+                        (err) => reject(err),
+                        async() => {
+                            thumbnail = await uploadTask.snapshot.ref.getDownloadURL();
+                            resolve();
+                        }
+                    );
+                });
+            }
+
+            // B. Save to MongoDB Backend
+            updateTerminalStatus("writing to decentralized ledger...");
+            const techStackArray = tech.split(',').map(s => s.trim()).filter(s => s);
+
+            const response = await fetch('http://localhost:5000/api/projects/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                (err) => { throw err; },
-                async () => {
-                    // B. Save to Firestore
-                    updateTerminalStatus("writing to decentralized ledger...");
-                    const fileURL = await uploadTask.snapshot.ref.getDownloadURL();
-                    const projectDoc = await db.collection('projects').add({
-                        title,
-                        description: desc,
-                        category,
-                        techStack: tech.split(',').map(s => s.trim()).filter(s => s),
-                        userId: user.uid,
-                        userName: user.displayName || 'Developer',
-                        userAvatar: user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`,
-                        fileURL,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        likesCount: 0,
-                        viewCount: 0
-                    });
+                body: JSON.stringify({
+                    title,
+                    description: desc,
+                    techStack: techStackArray,
+                    status: category || 'Planning',
+                    thumbnail,
+                    githubUrl: '',
+                    liveUrl: ''
+                })
+            });
 
-                    // C. Log Activity
-                    updateTerminalStatus("logging event to activity stream...");
-                    await db.collection('activity').add({
-                        type: 'upload',
-                        userId: user.uid,
-                        userName: user.displayName || 'Developer',
-                        userAvatar: user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`,
-                        projectId: projectDoc.id,
-                        projectTitle: title,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+            const data = await response.json();
 
-                    // D. Finalize
-                    updateTerminalStatus("deployment successful. system nominal.");
-                    statusMsg.innerText = "Project shared successfully!";
-                    statusMsg.className = "auth-message success";
-                    const badge = document.querySelector('.status-badge');
-                    if (badge) {
-                        badge.innerText = "DONE";
-                        badge.style.borderColor = "#00ff88";
-                        badge.style.color = "#00ff88";
-                    }
-                    setTimeout(() => window.location.href = 'explore.html', 1500);
-                }
-            );
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to create project');
+            }
+
+            // C. Finalize
+            updateTerminalStatus("deployment successful. system nominal.");
+            statusMsg.innerText = "Project shared successfully!";
+            statusMsg.className = "auth-message success";
+            const badge = document.querySelector('.status-badge');
+            if (badge) {
+                badge.innerText = "DONE";
+                badge.style.borderColor = "#00ff88";
+                badge.style.color = "#00ff88";
+            }
+            setTimeout(() => window.location.href = 'explore.html', 1500);
         } catch (err) {
             console.error(err);
             updateTerminalStatus("critical error: upload execution failed");

@@ -3951,27 +3951,27 @@
                     <span class="status-dot"></span>
                 </div>
 
-                <h1 class="name">Loading...</h1>
-                <p class="handle">@user</p>
+                <h1 class="name" id="profile-name-sidebar">Loading...</h1>
+                <p class="handle" id="profile-handle-sidebar">@user</p>
 
                 <div class="meta-list">
-                    <div class="meta-item">
+                    <div class="meta-item" id="profile-location-sidebar-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                             <circle cx="12" cy="9" r="2.5" />
-                        </svg> Mumbai, India
+                        </svg> <span id="profile-location-sidebar">Mumbai, India</span>
                     </div>
-                    <div class="meta-item">
+                    <div class="meta-item" id="profile-email-sidebar-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <rect x="2" y="7" width="20" height="14" rx="2" />
                             <path d="M16 3H8L2 7h20l-6-4z" />
                         </svg> <span id="profile-email-sidebar">Loading...</span>
                     </div>
-                    <div class="meta-item">
+                    <div class="meta-item" id="profile-website-sidebar-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                        </svg> aryan.design
+                        </svg> <span id="profile-website-sidebar">aryan.design</span>
                     </div>
                 </div>
 
@@ -5147,7 +5147,7 @@
                                 <div class="section-tag">Elsewhere</div>
                                 <div class="social-grid">
 
-                                    <a class="social-row" href="https://github.com/shouryaupadhyay2029" target="_blank">
+                                    <a class="social-row" href="https://github.com/shouryaupadhyay2029" target="_blank" id="profile-github-link">
                                         <div class="social-icon">
                                             <svg viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-secondary)">
                                                 <path
@@ -5156,23 +5156,13 @@
                                         </div>
                                         <div class="social-meta">
                                             <span class="social-name">GitHub</span>
-                                            <span class="social-handle">@shouryaupadhyay2029</span>
+                                            <span class="social-handle" id="profile-github-handle">@shouryaupadhyay2029</span>
                                         </div>
                                         <div class="verified-dot"></div>
                                         <span class="social-arrow">↗</span>
                                     </a>
 
-                                    <a class="social-row" href="https://linkedin.com" target="_blank">
-                                        <div class="social-icon">
-                                            <svg viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-secondary)">
-                                                <path
-                                                    d="M13.63 2H2.37C1.61 2 1 2.61 1 3.37v9.26C1 13.39 1.61 14 2.37 14h11.26c.76 0 1.37-.61 1.37-1.37V3.37C15 2.61 14.39 2 13.63 2zM5.5 12H3.5V6.5h2V12zm-1-6.25c-.64 0-1.16-.52-1.16-1.16s.52-1.16 1.16-1.16 1.16.52 1.16 1.16-.52 1.16-1.16 1.16zM12.5 12h-2V9.1c0-.72-.26-1.21-.89-1.21-.49 0-.77.33-.9.64-.05.11-.06.27-.06.43V12h-2V6.5h2v.74c.28-.43.76-1.04 1.85-1.04 1.35 0 2 .88 2 2.77V12z" />
-                                            </svg>
-                                        </div>
-                                        <div class="social-meta">
-                                            <span class="social-name">LinkedIn</span>
-                                            <span class="social-handle">linkedin.com/in/shourya</span>
-                                        </div>
+                                    <a class="social-row" href="https://linkedin.com" target="_blank" id="profile-linkedin-link">
                                         <div class="verified-dot"></div>
                                         <span class="social-arrow">↗</span>
                                     </a>
@@ -5531,23 +5521,29 @@
             }, 500);
 
             /* ── BIO TYPEWRITER ── */
-            const bioEl = document.getElementById('bio-text');
-            const bioText = "Product designer and front-end developer with 6 years crafting interfaces for startups and studios. I believe great design is invisible — it simply works, beautifully.";
-            const cursor = document.createElement('span');
-            cursor.className = 'cursor-blink';
-            let ti = 0;
+            let bioTyped = false;
 
-            function typeBio() {
-                if (ti <= bioText.length) {
-                    bioEl.textContent = bioText.slice(0, ti);
-                    bioEl.appendChild(cursor);
-                    ti++;
-                    setTimeout(typeBio, ti === 1 ? 600 : 22);
-                } else {
-                    setTimeout(() => cursor.remove(), 1800);
+            function triggerBioTypewriter(bioText) {
+                if (bioTyped) return;
+                bioTyped = true;
+                const bioEl = document.getElementById('bio-text');
+                if (!bioEl) return;
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor-blink';
+                let ti = 0;
+
+                function typeBio() {
+                    if (ti <= bioText.length) {
+                        bioEl.textContent = bioText.slice(0, ti);
+                        bioEl.appendChild(cursor);
+                        ti++;
+                        setTimeout(typeBio, ti === 1 ? 600 : 22);
+                    } else {
+                        setTimeout(() => cursor.remove(), 1800);
+                    }
                 }
+                setTimeout(typeBio, 300);
             }
-            setTimeout(typeBio, 700);
 
             /* ── COUNTER ANIMATION ── */
             function countUp(el, target, duration) {
@@ -5643,7 +5639,7 @@
                     isTransitioning = true;
 
                     // Set wordmark and subtitle text
-                    wordmark.textContent = document.querySelector(".sidebar .name")?.textContent || '';
+                    wordmark.textContent = document.querySelector(".sidebar .name") ? .textContent || '';
                     subtitle.textContent = tabNames[targetTab] || targetTab;
 
                     // Reset overlay to clean state
@@ -5756,7 +5752,7 @@
                 const subtitle = document.getElementById('reveal-subtitle');
 
                 // Set initial text
-                wordmark.textContent = document.querySelector(".sidebar .name")?.textContent || '';
+                wordmark.textContent = document.querySelector(".sidebar .name") ? .textContent || '';
                 subtitle.textContent = 'Overview';
 
                 function seq() {
@@ -5882,44 +5878,79 @@
                 const formBody = document.getElementById('form-body');
                 const formSuccess = document.getElementById('form-success');
                 if (sendBtn && formBody && formSuccess) {
-                    sendBtn.addEventListener('click', () => {
-                        // Validate inputs
-                        const inputs = formBody.querySelectorAll('.form-input');
+                    sendBtn.addEventListener('click', async() => {
+                        // Get form values
+                        const nameInput = formBody.querySelector('.form-input[type="text"]');
+                        const emailInput = formBody.querySelector('.form-input[type="email"]');
                         const select = formBody.querySelector('.form-select');
                         const textarea = formBody.querySelector('.form-textarea');
+
+                        const senderName = nameInput ? nameInput.value.trim() : '';
+                        const senderEmail = emailInput ? emailInput.value.trim() : '';
+                        const subject = select ? select.value : '';
+                        const message = textarea ? textarea.value.trim() : '';
+
+                        // Validate inputs
                         let valid = true;
-                        inputs.forEach(input => {
-                            if (!input.value.trim()) {
-                                input.style.borderColor = 'var(--red)';
-                                valid = false;
-                            } else {
-                                input.style.borderColor = '';
-                            }
-                        });
-                        if (select && !select.value) {
-                            select.style.borderColor = 'var(--red)';
+                        if (!senderName) {
+                            nameInput.style.borderColor = 'var(--red)';
                             valid = false;
-                        } else if (select) {
-                            select.style.borderColor = '';
+                        } else {
+                            nameInput.style.borderColor = '';
                         }
-                        if (textarea && !textarea.value.trim()) {
+                        if (!senderEmail) {
+                            emailInput.style.borderColor = 'var(--red)';
+                            valid = false;
+                        } else {
+                            emailInput.style.borderColor = '';
+                        }
+                        if (!message) {
                             textarea.style.borderColor = 'var(--red)';
                             valid = false;
-                        } else if (textarea) {
+                        } else {
                             textarea.style.borderColor = '';
                         }
 
                         if (!valid) return;
 
-                        // Disable inputs during pseudo-send
+                        // Disable inputs during send
                         sendBtn.disabled = true;
                         sendBtn.textContent = 'Sending...';
-                        setTimeout(() => {
-                            formBody.style.display = 'none';
-                            formSuccess.style.display = 'block';
+
+                        try {
+                            // Get profile owner username from URL or localStorage
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const username = urlParams.get('username') || localStorage.getItem('devstage_username');
+
+                            const response = await fetch('http://localhost:5000/api/contact/send', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    senderName,
+                                    senderEmail,
+                                    subject,
+                                    message,
+                                    receiverUsername: username
+                                })
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                                formBody.style.display = 'none';
+                                formSuccess.style.display = 'block';
+                            } else {
+                                alert(data.message || 'Failed to send message');
+                            }
+                        } catch (error) {
+                            console.error('Contact form error:', error);
+                            alert('Failed to send message. Please try again.');
+                        } finally {
                             sendBtn.disabled = false;
-                            sendBtn.textContent = 'Send Message';
-                        }, 1200);
+                            sendBtn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2L2 6.5l5 2L14 2z" /><path d="M7 8.5l2 5.5L14 2" /></svg> Send Message`;
+                        }
                     });
                 }
             })();
@@ -5940,6 +5971,188 @@
         <script src="../scripts/nav-dropdown.js" defer></script>
         <script src="../scripts/firebase-config.js" defer></script>
         <script src="../scripts/auth.js" type="module" defer></script>
+        <script>
+            function reflectSettingsData() {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    fetch("http://localhost:5000/api/auth/me", {
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success && data.user) {
+                                applyProfileData(data.user);
+                            } else {
+                                applyLocalProfileData();
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            applyLocalProfileData();
+                        });
+                } else {
+                    applyLocalProfileData();
+                }
+            }
+
+            function applyLocalProfileData() {
+                const user = JSON.parse(localStorage.getItem('currentUser')) || JSON.parse(localStorage.getItem('user'));
+                if (user) {
+                    applyProfileData(user);
+                } else {
+                    triggerBioTypewriter("Product designer and front-end developer with 6 years crafting interfaces for startups and studios. I believe great design is invisible — it simply works, beautifully.");
+                }
+            }
+
+            function applyProfileData(user) {
+                // 1. Profile image
+                const photo = user.profilePhoto || user.photoURL || '';
+                const avatarEl = document.querySelector('.sidebar .avatar');
+                if (avatarEl) {
+                    if (photo) {
+                        avatarEl.textContent = '';
+                        let img = avatarEl.querySelector('img');
+                        if (!img) {
+                            img = document.createElement('img');
+                            avatarEl.appendChild(img);
+                        }
+                        img.src = photo;
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.borderRadius = '50%';
+                        img.style.objectFit = 'cover';
+                        img.style.display = 'block';
+                    } else {
+                        avatarEl.textContent = (user.displayName || user.username || 'S').charAt(0).toUpperCase();
+                    }
+                }
+
+                // 2. Display Name
+                const nameEl = document.getElementById('profile-name-sidebar');
+                if (nameEl) nameEl.textContent = user.displayName || 'Anonymous';
+
+                // 3. Username
+                const handleEl = document.getElementById('profile-handle-sidebar');
+                if (handleEl) handleEl.textContent = `@${user.username || 'user'}`;
+
+                // 4. Location
+                const locationEl = document.getElementById('profile-location-sidebar');
+                if (locationEl) {
+                    locationEl.textContent = user.location || '';
+                    const item = document.getElementById('profile-location-sidebar-item');
+                    if (item) item.style.display = user.location ? '' : 'none';
+                }
+
+                // 5. Email
+                const emailEl = document.getElementById('profile-email-sidebar');
+                if (emailEl) emailEl.textContent = user.email || '';
+
+                // 6. Website
+                const websiteEl = document.getElementById('profile-website-sidebar');
+                if (websiteEl) {
+                    websiteEl.textContent = user.portfolioWebsite || '';
+                    const item = document.getElementById('profile-website-sidebar-item');
+                    if (item) item.style.display = user.portfolioWebsite ? '' : 'none';
+                    if (websiteEl.closest('a')) {
+                        websiteEl.closest('a').href = user.portfolioWebsite && !user.portfolioWebsite.startsWith('http') ?
+                            'http://' + user.portfolioWebsite :
+                            user.portfolioWebsite || '#';
+                    }
+                }
+
+                // 7. Status dot color
+                const statusDot = document.querySelector('.sidebar .status-dot');
+                if (statusDot) {
+                    let color = 'var(--green)'; // Available
+                    if (user.currentStatus === 'Building') color = 'var(--accent)';
+                    if (user.currentStatus === 'Busy Shipping') color = 'var(--orange)';
+                    if (user.currentStatus === 'Open to Collaborate') color = 'var(--blue)';
+                    statusDot.style.background = color;
+                }
+
+                // 8. Typewriter Bio override
+                const bioStr = user.bio || "Product designer and front-end developer with 6 years crafting interfaces for startups and studios. I believe great design is invisible — it simply works, beautifully.";
+                triggerBioTypewriter(bioStr);
+
+                // 9. Developer Tags
+                const tagRow = document.querySelector('.tag-row');
+                if (tagRow && user.developerTags && user.developerTags.length > 0) {
+                    tagRow.innerHTML = '';
+                    user.developerTags.forEach(tag => {
+                        const span = document.createElement('span');
+                        span.className = 'tag';
+                        span.textContent = tag;
+                        tagRow.appendChild(span);
+                    });
+                }
+
+                // 10. Contribution graph visibility
+                const showGraph = user.showContributionGraph !== false;
+                document.querySelectorAll('.contrib-wrap').forEach(el => el.style.display = showGraph ? '' : 'none');
+                const heatSection = document.querySelector('.heat-section');
+                if (heatSection) {
+                    heatSection.style.display = showGraph ? '' : 'none';
+                    const label = heatSection.previousElementSibling;
+                    if (label && (label.classList.contains('section-tag') || label.textContent.includes('Contribution Graph'))) {
+                        label.style.display = showGraph ? '' : 'none';
+                    }
+                }
+
+                // 11. Achievements visibility
+                const showAch = user.showAchievements !== false;
+                const widgets = document.querySelectorAll('.widget');
+                widgets.forEach(w => {
+                    const title = w.querySelector('.widget-title');
+                    if (title && title.textContent.trim() === 'Achievements') {
+                        w.style.display = showAch ? '' : 'none';
+                    }
+                });
+
+                // 12. Social Links
+                const githubLink = document.getElementById('profile-github-link') || document.querySelector('a.social-row[href*="github.com"]');
+                if (githubLink) {
+                    if (user.socialLinks && user.socialLinks.github) {
+                        githubLink.href = `https://github.com/${user.socialLinks.github}`;
+                        const h = githubLink.querySelector('.social-handle');
+                        if (h) h.textContent = `@${user.socialLinks.github}`;
+                        githubLink.style.display = '';
+                    } else {
+                        githubLink.style.display = 'none';
+                    }
+                }
+
+                const twitterLink = document.getElementById('profile-twitter-link') || document.querySelector('a.social-row[href*="x.com"]') || document.querySelector('a.social-row[href*="twitter.com"]');
+                if (twitterLink) {
+                    if (user.socialLinks && user.socialLinks.twitter) {
+                        twitterLink.href = `https://x.com/${user.socialLinks.twitter}`;
+                        const h = twitterLink.querySelector('.social-handle');
+                        if (h) h.textContent = `@${user.socialLinks.twitter}`;
+                        twitterLink.style.display = '';
+                    } else {
+                        twitterLink.style.display = 'none';
+                    }
+                }
+
+                const linkedinLink = document.getElementById('profile-linkedin-link') || document.querySelector('a.social-row[href*="linkedin.com"]');
+                if (linkedinLink) {
+                    if (user.socialLinks && user.socialLinks.linkedin) {
+                        const path = user.socialLinks.linkedin;
+                        linkedinLink.href = path.startsWith('http') ? path : `https://linkedin.com/in/${path}`;
+                        const h = linkedinLink.querySelector('.social-handle');
+                        if (h) h.textContent = path.startsWith('http') ? path.replace(/https?:\/\/(www\.)?/, '') : `linkedin.com/in/${path}`;
+                        linkedinLink.style.display = '';
+                    } else {
+                        linkedinLink.style.display = 'none';
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                reflectSettingsData();
+            });
+        </script>
 </body>
 
 </html>

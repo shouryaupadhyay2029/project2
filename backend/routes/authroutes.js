@@ -47,7 +47,12 @@ router.get("/me", authMiddleware, async (req, res) => {
                 showAchievements: user.showAchievements,
                 currentStatus: user.currentStatus,
                 developerTags: user.developerTags,
-                featuredProject: user.featuredProject
+                featuredProject: user.featuredProject,
+                notifications: user.notifications,
+                appearance: user.appearance,
+                projectPreferences: user.projectPreferences,
+                ecosystem: user.ecosystem,
+                privacy: user.privacy
             }
         });
 
