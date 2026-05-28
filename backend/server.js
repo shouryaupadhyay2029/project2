@@ -5,7 +5,6 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
-const mongoSanitize = require("express-mongo-sanitize");
 const { metricsMiddleware } = require("./utils/metrics");
 const {
   fingerprintMiddleware,
@@ -77,12 +76,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // ─── Mongo injection protection ───────────────────────────────
-// express-mongo-sanitize strips $ and . from req.body/params/query
-try {
-  app.use(mongoSanitize());
-} catch (e) {
-  // If not installed, skip gracefully
-}
+// Custom sanitizer is mounted below after validation import.
+// It mutates body/params/query in-place and does not reassign req.query,
+// which keeps it compatible with Express 5's getter-only req.query.
 
 // ─── Request logging (Morgan) ─────────────────────────────────
 try {
@@ -106,8 +102,8 @@ const {
 app.use(generalLimiter);
 
 // ─── Sanitize middleware ──────────────────────────────────────
-const { sanitizeBody } = require("./middleware/validation");
-app.use(sanitizeBody);
+const { sanitizeRequest } = require("./middleware/validation");
+app.use(sanitizeRequest);
 
 // ─── Route imports ────────────────────────────────────────────
 const authRoutes = require("./routes/authroutes");

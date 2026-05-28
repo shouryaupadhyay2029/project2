@@ -26,15 +26,13 @@ const fail = (res, message, statusCode = 400) =>
 const validateMessage = (req, res, next) => {
   const { content, attachments, conversationId, recipientId } = req.body;
 
-  const hasContent =
-    typeof content === "string" && content.trim().length > 0;
-  const hasAttachments =
-    Array.isArray(attachments) && attachments.length > 0;
+  const hasContent = typeof content === "string" && content.trim().length > 0;
+  const hasAttachments = Array.isArray(attachments) && attachments.length > 0;
 
   if (!hasContent && !hasAttachments) {
     return fail(
       res,
-      "A message must contain either text content or at least one attachment."
+      "A message must contain either text content or at least one attachment.",
     );
   }
 
@@ -75,7 +73,7 @@ const validateObjectId = (param) => (req, res, next) => {
   if (!isValidObjectId(value)) {
     return fail(
       res,
-      `Route parameter '${param}' must be a valid MongoDB ObjectId.`
+      `Route parameter '${param}' must be a valid MongoDB ObjectId.`,
     );
   }
 
@@ -142,7 +140,7 @@ const validateUsername = (req, res, next) => {
   if (!USERNAME_RE.test(username)) {
     return fail(
       res,
-      "Username must be 3–20 characters and may only contain letters, digits, and underscores."
+      "Username must be 3–20 characters and may only contain letters, digits, and underscores.",
     );
   }
 
@@ -187,29 +185,39 @@ const validatePagination = (req, res, next) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// sanitizeBody
+// Request sanitization
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Recursively sanitises a plain object or array:
+ * Recursively sanitises a plain object or array in-place where possible:
  *   1. Trims leading/trailing whitespace from all string values.
- *   2. Deletes any key that starts with '$' (MongoDB operator injection guard).
+ *   2. Deletes keys that can trigger Mongo/operator/prototype injection.
+ *   3. Deletes dotted keys to prevent path injection (`profile.$where`, etc.).
+ *
+ * Important Express 5 compatibility note:
+ * Never assign to `req.query` directly. In Express 5 it is getter-only.
+ * Instead, mutate the returned query object in-place.
  *
  * @param {unknown} value
  * @returns {unknown}
  */
+const unsafeKeyPattern = /(^\$|\.|__proto__|prototype|constructor)/i;
+
 const sanitize = (value) => {
   if (typeof value === "string") {
     return value.trim();
   }
 
   if (Array.isArray(value)) {
-    return value.map(sanitize);
+    for (let index = 0; index < value.length; index += 1) {
+      value[index] = sanitize(value[index]);
+    }
+    return value;
   }
 
   if (value !== null && typeof value === "object") {
     for (const key of Object.keys(value)) {
-      if (key.startsWith("$")) {
+      if (unsafeKeyPattern.test(key)) {
         delete value[key];
       } else {
         value[key] = sanitize(value[key]);
@@ -221,16 +229,27 @@ const sanitize = (value) => {
   return value;
 };
 
-/**
- * Express middleware that sanitises `req.body` in-place before passing
- * the request to the next handler.
- */
-const sanitizeBody = (req, res, next) => {
-  if (req.body && typeof req.body === "object") {
-    req.body = sanitize(req.body);
+const sanitizeObject = (target) => {
+  if (target && typeof target === "object") {
+    sanitize(target);
   }
+};
+
+/**
+ * Express middleware that sanitises body, params and query safely.
+ * It intentionally mutates `req.query` in-place and never reassigns it.
+ */
+const sanitizeRequest = (req, res, next) => {
+  sanitizeObject(req.body);
+  sanitizeObject(req.params);
+  sanitizeObject(req.query);
   next();
 };
+
+/**
+ * Backwards-compatible alias used by existing server setup.
+ */
+const sanitizeBody = sanitizeRequest;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Exports
@@ -242,5 +261,7 @@ module.exports = {
   validateSearch,
   validateUsername,
   validatePagination,
+  sanitizeRequest,
   sanitizeBody,
+  sanitize,
 };
