@@ -54,7 +54,7 @@ function getStoredToken() {
     return "";
 }
 
-function cacheAuthSession(token, user) {
+function cacheAuthSession(token, user, provider) {
     if (token) {
         localStorage.setItem("token", token);
         localStorage.setItem(
@@ -68,6 +68,9 @@ function cacheAuthSession(token, user) {
         localStorage.setItem(DEVSTAGE_USER_CACHE_KEY, JSON.stringify(user));
     }
     localStorage.setItem("isLoggedIn", "true");
+    if (provider) {
+        localStorage.setItem("authProvider", provider);
+    }
     try {
         window.dispatchEvent(
             new CustomEvent("devstage:auth_changed", {
@@ -92,6 +95,7 @@ function clearAuthSession() {
     localStorage.removeItem(DEVSTAGE_MESSAGES_KEY);
     localStorage.removeItem(DEVSTAGE_WORKSPACE_KEY);
     localStorage.removeItem(DEVSTAGE_COLLABORATION_KEY);
+    localStorage.removeItem("authProvider");
     try {
         window.dispatchEvent(
             new CustomEvent("devstage:auth_changed", { detail: { loggedIn: false } }),
@@ -686,10 +690,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Google / Firebase session
+        const authProvider = localStorage.getItem("authProvider");
         const isFirebaseSession =
-            cachedDevstageUser &&
-            cachedDevstageUser.uid &&
-            !cachedDevstageUser.uid.startsWith("mock-");
+            authProvider === "google" ||
+            (!authProvider &&
+             cachedDevstageUser &&
+             cachedDevstageUser.uid &&
+             !cachedDevstageUser.uid.startsWith("mock-") &&
+             !/^[0-9a-fA-F]{24}$/.test(cachedDevstageUser.uid));
+
         if (isFirebaseSession) {
             console.log(
                 "[DevStage Auth] Firebase session detected. Deferring to onAuthStateChanged.",
@@ -745,7 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
                 // Sync user data to local storage
-                cacheAuthSession(token, backendUser);
+                cacheAuthSession(token, backendUser, "local");
 
                 const devstageUserData = {
                     displayName: backendUser.username,
@@ -829,7 +838,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     profileImage: user.photoURL ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
                 };
-                cacheAuthSession(token, userDataForLocalStorage);
+                cacheAuthSession(token, userDataForLocalStorage, "google");
             } catch (e) {
                 console.error("Error retrieving Firebase ID token:", e);
             }
@@ -864,14 +873,35 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (e) {
                 console.warn("[DevStage Auth] Failed to parse devstageUser:", e);
             }
-            if (cached && (isMockSession(cached) || localStorage.getItem("token"))) {
+
+            const authProvider = localStorage.getItem("authProvider");
+            const wasFirebaseSession =
+                authProvider === "google" ||
+                (!authProvider &&
+                 cached &&
+                 cached.uid &&
+                 !cached.uid.startsWith("mock-") &&
+                 !/^[0-9a-fA-F]{24}$/.test(cached.uid));
+
+            if (wasFirebaseSession) {
+                console.log("[DevStage Auth] Firebase session expired or user logged out.");
+                if (protectedPages.includes(currentPage)) {
+                    handleInvalidToken();
+                } else {
+                    clearAuthSession();
+                    window.currentUser = null;
+                    window.loadUserUI();
+                }
+                return;
+            }
+
+            if (cached && (isMockSession(cached) || (authProvider === "local" && localStorage.getItem("token")))) {
                 window.currentUser = cached;
                 window.loadUserUI();
                 return;
             }
             console.log("[DevStage] Global Auth: No Session");
             if (protectedPages.includes(currentPage)) {
-                // Redirect to homepage, not login page
                 handleInvalidToken();
             } else {
                 clearAuthSession();
@@ -901,7 +931,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     profileImage: user.photoURL ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
                 };
-                cacheAuthSession(token, userData);
+                cacheAuthSession(token, userData, "google");
                 console.log("User stored:", userData);
 
                 saveUserToFirestore(user);
@@ -1033,6 +1063,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function completeMockAuth(userData, successText) {
+        localStorage.setItem("authProvider", "mock");
         saveMockSession(userData);
         showMessage(successText, "success");
         setTimeout(() => closeModal(), 600);
@@ -1343,7 +1374,7 @@ if (registerForm) {
             console.log(data);
 
             if (data.success) {
-                cacheAuthSession(data.token, data.user);
+                cacheAuthSession(data.token, data.user, "local");
 
                 alert("Registration Successful");
 
@@ -1387,7 +1418,7 @@ if (loginForm) {
                 console.log("Login Success");
                 console.log(data);
 
-                cacheAuthSession(data.token, data.user);
+                cacheAuthSession(data.token, data.user, "local");
 
                 // Sync devstageUser with the newly logged in user details to populate global UI
                 const userData = {

@@ -14,15 +14,20 @@ const authMiddleware = async (req, res, next) => {
       }
 
       const token = authHeader.split(" ")[1];
+      console.log("[DEBUG AUTH] Token received:", token);
+      console.log("[DEBUG AUTH] Secret used for verification:", process.env.JWT_SECRET);
 
       try {
          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+         console.log("[DEBUG AUTH] Verification successful. Decoded:", decoded);
          req.user = decoded;
          req.user.isGoogleUser = false;
          next();
       } catch (err) {
+         console.log("[DEBUG AUTH] Verification failed. Error:", err.message);
          // Attempt to decode as Firebase / Google token
          const decodedFirebase = jwt.decode(token);
+         console.log("[DEBUG AUTH] Decoded as Firebase/Google token:", decodedFirebase);
             if (decodedFirebase && decodedFirebase.email) {
                 let user = await User.findOne({ email: decodedFirebase.email });
                 if (!user) {
@@ -50,6 +55,7 @@ const authMiddleware = async (req, res, next) => {
       }
 
    } catch (error) {
+      console.error("[DEBUG AUTH] Outer catch error:", error);
       return res.status(401).json({
          success: false,
          message: "Invalid token"
@@ -58,3 +64,4 @@ const authMiddleware = async (req, res, next) => {
 };
 
 module.exports = authMiddleware;
+
