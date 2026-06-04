@@ -1,6 +1,31 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { signAuthToken } = require("../utils/jwtTokens");
+const { verifyFirebaseIdToken } = require("../utils/firebaseTokens");
+
+function toAuthUser(user) {
+    return {
+        id: user._id,
+        username: user.username,
+        email: user.email
+    };
+}
+
+async function createUniqueGoogleUsername(decodedToken) {
+    const base = (decodedToken.name || decodedToken.email.split("@")[0])
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "")
+        .slice(0, 24) || "googleuser";
+
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+        const suffix = Math.floor(100 + Math.random() * 900);
+        const username = `${base}${suffix}`;
+        const existing = await User.findOne({ username }).select("_id").lean();
+        if (!existing) return username;
+    }
+
+    return `${base}${Date.now()}`;
+}
 
 
 // ==========================
@@ -57,23 +82,13 @@ const registerUser = async(req, res) => {
 
 
         // GENERATE TOKEN
-        const token = jwt.sign({
-                id: user._id
-            },
-            process.env.JWT_SECRET, {
-                expiresIn: "30d"
-            }
-        );
+        const token = signAuthToken({ id: user._id }, { expiresIn: "30d" });
 
 
         res.status(201).json({
             success: true,
             token,
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email
-            }
+            user: toAuthUser(user)
         });
 
     } catch (error) {
@@ -115,9 +130,7 @@ const loginUser = async(req, res) => {
         }
 
         // GENERATE TOKEN
-        const token = jwt.sign({ id: user._id },
-            process.env.JWT_SECRET, { expiresIn: "7d" }
-        );
+        const token = signAuthToken({ id: user._id }, { expiresIn: "7d" });
 
         user.isOnline = true;
         user.lastSeen = new Date();
@@ -128,11 +141,7 @@ const loginUser = async(req, res) => {
             success: true,
             message: "Login successful",
             token,
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email
-            }
+            user: toAuthUser(user)
         });
 
     } catch (error) {
@@ -147,7 +156,68 @@ const loginUser = async(req, res) => {
     }
 };
 
+const googleLogin = async(req, res) => {
+    try {
+        const { token: firebaseToken } = req.body;
+
+        if (!firebaseToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Google token is required"
+            });
+        }
+
+        const decodedGoogleToken = await verifyFirebaseIdToken(firebaseToken);
+
+        if (!decodedGoogleToken || !decodedGoogleToken.email) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Google token"
+            });
+        }
+
+        let user = await User.findOne({ email: decodedGoogleToken.email });
+
+        if (!user) {
+            user = await User.create({
+                username: await createUniqueGoogleUsername(decodedGoogleToken),
+                email: decodedGoogleToken.email,
+                password: "google_auth_placeholder_password",
+                displayName: decodedGoogleToken.name || "",
+                profilePhoto: decodedGoogleToken.picture || ""
+            });
+        }
+
+        user.isOnline = true;
+        user.lastSeen = new Date();
+        if (decodedGoogleToken.name && !user.displayName) {
+            user.displayName = decodedGoogleToken.name;
+        }
+        if (decodedGoogleToken.picture && !user.profilePhoto) {
+            user.profilePhoto = decodedGoogleToken.picture;
+        }
+        await user.save();
+
+        const token = signAuthToken({ id: user._id, provider: "google" }, { expiresIn: "7d" });
+
+        return res.status(200).json({
+            success: true,
+            message: "Google login successful",
+            token,
+            user: toAuthUser(user)
+        });
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+};
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    googleLogin
 };

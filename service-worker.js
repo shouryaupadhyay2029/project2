@@ -1,4 +1,4 @@
-const CACHE_NAME = "devstage-v1";
+const CACHE_NAME = "devstage-v2";
 
 const STATIC_ASSETS = [
   "/",
@@ -6,7 +6,6 @@ const STATIC_ASSETS = [
   "/offline.html",
   "/styles/global.css",
   "/scripts/script.js",
-  "/scripts/auth.js",
   "/scripts/authGuard.js",
   "/scripts/nav-dropdown.js",
   "/scripts/realtime.js",
@@ -50,6 +49,11 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (url.pathname === "/scripts/auth.js" || url.pathname === "/scripts/firebase-config.js") {
+    event.respondWith(networkFirstStatic(request));
+    return;
+  }
+
   if (isStaticRequest(request, url)) {
     event.respondWith(cacheFirst(request));
     return;
@@ -76,6 +80,23 @@ function isStaticRequest(request, url) {
       url.pathname.endsWith(extension),
     )
   );
+}
+
+async function networkFirstStatic(request) {
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (response && response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+    if (cached) {
+      return cached;
+    }
+    throw error;
+  }
 }
 
 async function cacheFirst(request) {

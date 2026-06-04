@@ -1,7 +1,6 @@
 "use strict";
 
 const { Server } = require("socket.io");
-const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = require("../models/user");
 const Conversation = require("../models/Conversation");
@@ -9,6 +8,7 @@ const Message = require("../models/Message");
 const CollaborationRequest = require("../models/CollaborationRequest");
 const Workspace = require("../models/Workspace");
 const { recordSocketConnection } = require("../utils/metrics");
+const { verifyAuthToken } = require("../utils/jwtTokens");
 
 // Holds the active Socket.IO server instance — populated by initializeSocket()
 let io;
@@ -94,28 +94,10 @@ function initializeSocket(httpServer) {
 
       // Attempt standard JWT verification first
       try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-          return next(new Error("Authentication failed"));
-        }
+        const decoded = verifyAuthToken(token);
         socket.user = { id: decoded.id, username: decoded.username };
         return next();
       } catch (jwtErr) {
-        // Verification failed — decode without verifying to inspect payload
-        const decoded = jwt.decode(token);
-
-        // Presence of an email field signals a Google / Firebase ID token
-        if (decoded && decoded.email) {
-          const user = await User.findOne({ email: decoded.email })
-            .select("_id username")
-            .lean();
-          if (!user) {
-            return next(new Error("Authentication failed"));
-          }
-          socket.user = { id: user._id, username: user.username };
-          return next();
-        }
-
         return next(new Error("Authentication failed"));
       }
     } catch (err) {

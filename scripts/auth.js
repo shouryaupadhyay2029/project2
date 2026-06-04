@@ -54,6 +54,22 @@ function getStoredToken() {
     return "";
 }
 
+function getJwtHeader(token) {
+    try {
+        const [header] = String(token || "").split(".");
+        if (!header) return null;
+        const normalized = header.replace(/-/g, "+").replace(/_/g, "/");
+        const padded = normalized.padEnd(normalized.length + ((4 - (normalized.length % 4)) % 4), "=");
+        return JSON.parse(atob(padded));
+    } catch (error) {
+        return null;
+    }
+}
+
+function isBackendJwt(token) {
+    return getJwtHeader(token)?.alg === "HS256";
+}
+
 function cacheAuthSession(token, user, provider) {
     if (token) {
         localStorage.setItem("token", token);
@@ -105,8 +121,58 @@ function clearAuthSession() {
     }
 }
 
-async function devstageApi(path, options = {}) {
+async function refreshBackendTokenFromFirebase(forceRefresh = false) {
+    const user = auth.currentUser || await waitForFirebaseUser();
+    if (!user) return "";
+    const firebaseToken = await user.getIdToken(forceRefresh);
+    const backendSession = await exchangeGoogleToken(firebaseToken);
+    cacheAuthSession(backendSession.token, backendSession.user, "google");
+    return backendSession.token;
+}
+
+function waitForFirebaseUser(timeoutMs = 2500) {
+    return new Promise((resolve) => {
+        let settled = false;
+        let unsubscribe = () => {};
+        const timeout = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            unsubscribe();
+            resolve(null);
+        }, timeoutMs);
+
+        unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeout);
+            unsubscribe();
+            resolve(user || null);
+        });
+    });
+}
+
+async function getValidBackendToken() {
     const token = getStoredToken();
+    if (token && isBackendJwt(token)) return token;
+
+    if (token) {
+        console.warn("[DevStage Auth] Replacing non-backend token before API request.");
+    }
+
+    try {
+        return await refreshBackendTokenFromFirebase(Boolean(token));
+    } catch (error) {
+        console.warn("[DevStage Auth] Backend token refresh failed:", error);
+        return "";
+    }
+}
+
+window.devstageGetAuthToken = getValidBackendToken;
+window.devstageRefreshBackendToken = refreshBackendTokenFromFirebase;
+window.devstageIsBackendJwt = isBackendJwt;
+
+async function devstageApi(path, options = {}) {
+    const token = await getValidBackendToken();
     const headers = {
         ...(options.body ? { "Content-Type": "application/json" } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -123,8 +189,21 @@ async function devstageApi(path, options = {}) {
     return data;
 }
 
+async function exchangeGoogleToken(firebaseToken) {
+    const response = await fetch("http://localhost:5000/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: firebaseToken }),
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+        throw new Error(data.message || "Google authentication failed");
+    }
+    return data;
+}
+
 async function presenceRequest(endpoint) {
-    const token = getStoredToken();
+    const token = await getValidBackendToken();
     if (!token) return;
     try {
         await fetch(`http://localhost:5000/api/presence/${endpoint}`, {
@@ -198,7 +277,7 @@ function renderNotificationList(notifications) {
 }
 
 async function loadNotifications() {
-    const token = getStoredToken();
+    const token = await getValidBackendToken();
     if (!token) return;
     try {
         const response = await fetch(
@@ -221,7 +300,7 @@ async function loadNotifications() {
 }
 
 async function markNotificationRead(id) {
-    const token = getStoredToken();
+    const token = await getValidBackendToken();
     if (!token || !id) return;
     try {
         const response = await fetch(
@@ -241,7 +320,7 @@ async function markNotificationRead(id) {
 }
 
 async function deleteNotification(id) {
-    const token = getStoredToken();
+    const token = await getValidBackendToken();
     if (!token || !id) return;
     try {
         const response = await fetch(
@@ -261,7 +340,7 @@ async function deleteNotification(id) {
 }
 
 async function markAllNotificationsRead() {
-    const token = getStoredToken();
+    const token = await getValidBackendToken();
     if (!token) return;
     try {
         const response = await fetch(
@@ -287,7 +366,7 @@ window.devstageDeleteNotification = deleteNotification;
 window.devstageMarkAllNotificationsRead = markAllNotificationsRead;
 
 async function toggleFollow(userId, button) {
-    const token = getStoredToken();
+    const token = await getValidBackendToken();
     if (!token || !userId) return;
     const isFollowing = button?.classList.contains("following");
     const endpoint = isFollowing ?
@@ -667,7 +746,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const protectedPages = ["profile.html", "dashboard.html", "settings.html"];
     const currentPage = window.location.pathname.split("/").pop();
 
-    function checkAuth() {
+    async function checkAuth() {
         console.log("DEBUG - checkAuth called. currentPage:", currentPage);
         console.log("DEBUG - token:", localStorage.getItem("token"));
         console.log("DEBUG - user:", localStorage.getItem("user"));
@@ -675,7 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!protectedPages.includes(currentPage)) return;
 
-        const token = getStoredToken();
+        const token = await getValidBackendToken();
         const user =
             localStorage.getItem("user") ||
             localStorage.getItem(DEVSTAGE_USER_CACHE_KEY);
@@ -797,10 +876,12 @@ document.addEventListener("DOMContentLoaded", () => {
     bindNotificationControls();
     bindCollaborationControls();
     bindMessageControls();
-    if (getStoredToken()) {
-        presenceRequest("online");
-        setInterval(() => presenceRequest("heartbeat"), 60000);
-    }
+    getValidBackendToken().then((token) => {
+        if (token) {
+            presenceRequest("online");
+            setInterval(() => presenceRequest("heartbeat"), 60000);
+        }
+    });
 
     const authForm = document.getElementById("auth-form");
     const authSubmitBtn = document.getElementById("auth-submit-btn");
@@ -826,21 +907,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Get token and save to localStorage for unified auth persistence
             try {
-                const token = await user.getIdToken();
+                const firebaseToken = await user.getIdToken();
+                const backendSession = await exchangeGoogleToken(firebaseToken);
 
                 const userDataForLocalStorage = {
-                    id: user.uid,
-                    username: user.displayName || user.email.split("@")[0],
-                    email: user.email,
+                    id: backendSession.user.id,
+                    username: backendSession.user.username,
+                    email: backendSession.user.email,
                     fullName: user.displayName || "",
                     photoURL: user.photoURL ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
                     profileImage: user.photoURL ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
                 };
-                cacheAuthSession(token, userDataForLocalStorage, "google");
+                cacheAuthSession(backendSession.token, userDataForLocalStorage, "google");
             } catch (e) {
-                console.error("Error retrieving Firebase ID token:", e);
+                console.error("Error exchanging Firebase ID token:", e);
             }
 
             const userData = {
@@ -919,19 +1001,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 const user = result.user;
                 console.log("Google login success");
 
-                const token = await user.getIdToken();
+                const firebaseToken = await user.getIdToken();
+                const backendSession = await exchangeGoogleToken(firebaseToken);
 
                 const userData = {
-                    id: user.uid,
-                    username: user.displayName || user.email.split("@")[0],
-                    email: user.email,
+                    id: backendSession.user.id,
+                    username: backendSession.user.username,
+                    email: backendSession.user.email,
                     fullName: user.displayName || "",
                     photoURL: user.photoURL ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
                     profileImage: user.photoURL ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
                 };
-                cacheAuthSession(token, userData, "google");
+                cacheAuthSession(backendSession.token, userData, "google");
                 console.log("User stored:", userData);
 
                 saveUserToFirestore(user);
