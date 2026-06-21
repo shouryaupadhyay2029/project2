@@ -24,7 +24,7 @@ Content-Type: application/json
 | --- | --- | --- | --- |
 | Public | `/`, `/health` | Service metadata and health checks | Public |
 | Auth | `/api/auth` | `POST /register`, `POST /login`, `GET /me`, `PUT /update` | Mixed |
-| Users | `/api/users` | `GET /profile/:username`, `POST /view-profile/:username`, `PUT /update-profile`, `PUT /platform-settings`, `PUT /privacy-settings`, `DELETE /delete-account` | Mixed |
+| Users | `/api/users` | `GET /profile/:username`, `POST /view-profile/:username`, `PUT /update-profile`, `DELETE /delete-account` | Mixed |
 | Projects | `/api/projects` | `POST /view/:id`, `POST /create`, `GET /my-projects`, `PUT /update/:id`, `DELETE /delete/:id`, `PUT /feature/:id`, `POST /like/:id`, `GET /all` | Mixed |
 | Activity | `/api/activity` | `GET /me`, `GET /user/:username`, `GET /heatmap/:username`, `GET /contributions/:username` | Mixed |
 | Messages | `/api/messages` | `POST /start`, `POST /send`, `GET /conversations`, `GET /conversation/:id`, `PUT /read/:id` | Protected |

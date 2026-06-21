@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await db.collection('activity').add({
                     type: 'like',
                     userId,
-                    userName: user.displayName || user.username || 'Anonymous',
+                    userName: user.username || 'Anonymous',
                     userAvatar: user.profilePhoto || `https://ui-avatars.com/api/?name=User`,
                     projectId,
                     projectTitle: pTitle,

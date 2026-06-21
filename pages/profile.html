@@ -5975,8 +5975,18 @@
         <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
         <script src="../scripts/auth.js?v=1782017749025" type="module" defer></script>
         <script>
-            function reflectSettingsData() {
-                const token = localStorage.getItem('token');
+            async function reflectSettingsData() {
+                let token = '';
+                if (window.devstageGetAuthToken) {
+                    token = await window.devstageGetAuthToken();
+                } else {
+                    try {
+                        token = JSON.parse(localStorage.getItem('devstage_auth') || 'null')?.token || '';
+                    } catch (error) {
+                        console.warn('[DevStage Profile] Failed to parse stored auth session:', error);
+                    }
+                }
+
                 if (token) {
                     fetch("http://localhost:5000/api/auth/me", {
                             headers: {

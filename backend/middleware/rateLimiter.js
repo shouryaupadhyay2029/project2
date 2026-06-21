@@ -21,13 +21,43 @@ const sharedOptions = {
 };
 
 // ── Auth limiter ──────────────────────────────────────────────────────────────
-// Protects /auth/login, /auth/register, etc.
-const authLimiter = rateLimit({
+// Protects /auth/login
+const loginLimiter = rateLimit({
   ...sharedOptions,
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000,
+  max: 10,
   handler: jsonHandler(
-    "Too many auth attempts. Try again in 15 minutes."
+    "Too many login attempts. Try again in 15 minutes."
+  ),
+});
+
+// Protects /auth/register
+const registerLimiter = rateLimit({
+  ...sharedOptions,
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  handler: jsonHandler(
+    "Too many accounts created from this IP. Please try again after an hour."
+  ),
+});
+
+// Protects /auth/refresh
+const refreshLimiter = rateLimit({
+  ...sharedOptions,
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 60,
+  handler: jsonHandler(
+    "Too many token refresh requests. Please slow down."
+  ),
+});
+
+// Protects /auth/reset-password
+const passwordResetLimiter = rateLimit({
+  ...sharedOptions,
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  handler: jsonHandler(
+    "Too many password reset attempts. Please try again after an hour."
   ),
 });
 
@@ -87,7 +117,10 @@ const presenceLimiter = rateLimit({
 });
 
 module.exports = {
-  authLimiter,
+  loginLimiter,
+  registerLimiter,
+  refreshLimiter,
+  passwordResetLimiter,
   messageLimiter,
   contactLimiter,
   searchLimiter,

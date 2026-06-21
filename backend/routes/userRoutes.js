@@ -6,6 +6,12 @@ const User = require("../models/user");
 const Project = require("../models/Project");
 const Activity = require("../models/Activity");
 const { createActivity } = require("../api/activityController");
+const { createAuditLog } = require("../api/auditController");
+const {
+    validateUpdateProfile,
+    validateUpload,
+    handleValidationErrors
+} = require("../middleware/validation");
 
 function publicProfileResponse(user, featuredProject, heatmap) {
     return {
@@ -43,10 +49,7 @@ router.get("/profile/:username", async(req, res) => {
         const user = await User.findOne({
             username,
             isBanned: { $ne: true },
-            $and: [
-                { $or: [{ profileVisibility: { $ne: false } }, { profileVisibility: { $exists: false } }] },
-                { $or: [{ "security.profileVisibility": "public" }, { "security.profileVisibility": { $exists: false } }] }
-            ]
+            $or: [{ "security.profileVisibility": "public" }, { "security.profileVisibility": { $exists: false } }]
         })
             .select("username displayName bio profilePhoto followers following featuredProject skills developerTags currentStatus isOnline lastSeen")
             .lean();
@@ -124,7 +127,7 @@ router.post("/view-profile/:username", async(req, res) => {
 });
 
 // PUT /api/users/update-profile
-router.put("/update-profile", protect, async(req, res) => {
+router.put("/update-profile", protect, validateUpdateProfile, validateUpload, handleValidationErrors, async(req, res) => {
     try {
         const user = await User.findById(req.user.id);
 
@@ -146,7 +149,7 @@ router.put("/update-profile", protect, async(req, res) => {
             currentStatus,
             developerTags,
             featuredProject,
-            profileVisibility,
+
             showContributionGraph,
             showAchievements,
             profilePhoto
@@ -221,9 +224,7 @@ router.put("/update-profile", protect, async(req, res) => {
             user.developerTags = Array.isArray(developerTags) ? developerTags : [];
         }
 
-        if (typeof profileVisibility === "boolean") {
-            user.profileVisibility = profileVisibility;
-        }
+
 
         if (typeof showContributionGraph === "boolean") {
             user.showContributionGraph = showContributionGraph;
@@ -242,6 +243,34 @@ router.put("/update-profile", protect, async(req, res) => {
             { featuredProjectChanged: featuredProject !== undefined },
             "private"
         );
+
+        // ── Audit logging ──────────────────────────────────────────────────────
+        const auditPromises = [
+            createAuditLog(user._id, "profile_update", req, {
+                resource: "user",
+                resourceId: user._id,
+                metadata: { section: "profile" }
+            })
+        ];
+        if (username) {
+            auditPromises.push(
+                createAuditLog(user._id, "username_change", req, {
+                    resource: "user",
+                    resourceId: user._id,
+                    metadata: { newUsername: user.username }
+                })
+            );
+        }
+        if (profilePhoto !== undefined) {
+            auditPromises.push(
+                createAuditLog(user._id, "avatar_change", req, {
+                    resource: "user",
+                    resourceId: user._id,
+                    metadata: { hasPhoto: !!profilePhoto }
+                })
+            );
+        }
+        await Promise.all(auditPromises);
 
         const safeUser = updatedUser.toObject();
         delete safeUser.password;
@@ -264,118 +293,6 @@ router.put("/update-profile", protect, async(req, res) => {
     }
 });
 
-// PUT /api/users/platform-settings
-router.put("/platform-settings", protect, async(req, res) => {
-    try {
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
-        }
 
-        const { notifications, appearance, projectPreferences, ecosystem } = req.body;
-
-        if (notifications) {
-            if (!user.notificationSettings) user.notificationSettings = {};
-            if (typeof notifications.emailNotifications === "boolean") user.notificationSettings.emailNotifications = notifications.emailNotifications;
-            if (typeof notifications.projectUpdates === "boolean") user.notificationSettings.projectUpdates = notifications.projectUpdates;
-            if (typeof notifications.marketingEmails === "boolean") user.notificationSettings.marketingEmails = notifications.marketingEmails;
-            if (typeof notifications.collaborationInvites === "boolean") user.notificationSettings.collaborationInvites = notifications.collaborationInvites;
-        }
-
-        if (appearance) {
-            if (!user.appearance) user.appearance = {};
-            if (appearance.theme) user.appearance.theme = appearance.theme;
-            if (typeof appearance.reducedMotion === "boolean") user.appearance.reducedMotion = appearance.reducedMotion;
-            if (typeof appearance.compactMode === "boolean") user.appearance.compactMode = appearance.compactMode;
-        }
-
-        if (projectPreferences) {
-            if (!user.projectPreferences) user.projectPreferences = {};
-            if (typeof projectPreferences.autoSaveDrafts === "boolean") user.projectPreferences.autoSaveDrafts = projectPreferences.autoSaveDrafts;
-            if (typeof projectPreferences.showProjectAnalytics === "boolean") user.projectPreferences.showProjectAnalytics = projectPreferences.showProjectAnalytics;
-            if (typeof projectPreferences.enablePublicProjects === "boolean") user.projectPreferences.enablePublicProjects = projectPreferences.enablePublicProjects;
-        }
-
-        if (ecosystem) {
-            if (!user.ecosystem) user.ecosystem = {};
-            if (typeof ecosystem.enableCommunityProfile === "boolean") user.ecosystem.enableCommunityProfile = ecosystem.enableCommunityProfile;
-            if (typeof ecosystem.showOnlineStatus === "boolean") user.ecosystem.showOnlineStatus = ecosystem.showOnlineStatus;
-            if (typeof ecosystem.allowTeamInvites === "boolean") user.ecosystem.allowTeamInvites = ecosystem.allowTeamInvites;
-        }
-
-        const updatedUser = await user.save();
-        const safeUser = updatedUser.toObject();
-        delete safeUser.password;
-        safeUser.followers = Array.isArray(updatedUser.followers) ? updatedUser.followers.length : 0;
-        safeUser.following = Array.isArray(updatedUser.following) ? updatedUser.following.length : 0;
-        safeUser.notifications = updatedUser.notificationSettings;
-
-        return res.status(200).json({
-            success: true,
-            message: "Platform settings updated successfully",
-            user: safeUser
-        });
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
-    }
-});
-
-// PUT /api/users/privacy-settings
-router.put("/privacy-settings", protect, async(req, res) => {
-    try {
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
-        }
-
-        const { twoFactorEnabled, profileIndexed, activityVisible } = req.body;
-
-        if (!user.privacy) user.privacy = {};
-        if (typeof twoFactorEnabled === "boolean") {
-            user.privacy.twoFactorEnabled = twoFactorEnabled;
-        }
-        if (typeof profileIndexed === "boolean") {
-            user.privacy.profileIndexed = profileIndexed;
-        }
-        if (typeof activityVisible === "boolean") {
-            user.privacy.activityVisible = activityVisible;
-        }
-
-        const updatedUser = await user.save();
-        const safeUser = updatedUser.toObject();
-        delete safeUser.password;
-        safeUser.followers = Array.isArray(updatedUser.followers) ? updatedUser.followers.length : 0;
-        safeUser.following = Array.isArray(updatedUser.following) ? updatedUser.following.length : 0;
-        safeUser.notifications = updatedUser.notificationSettings;
-
-        return res.status(200).json({
-            success: true,
-            message: "Privacy settings updated successfully",
-            user: safeUser
-        });
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
-    }
-});
-
-// DELETE /api/users/delete-account
-const { deleteAccount } = require("../api/settingsController");
-router.delete("/delete-account", protect, deleteAccount);
 
 module.exports = router;

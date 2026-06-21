@@ -29,7 +29,7 @@ const getMyFeed = async (req, res) => {
         }
 
         const currentUser = await User.findById(req.user.id)
-            .select("following savedProjects skills developerTags techStack feedPreferences")
+            .select("following savedProjects skills developerTags techStack")
             .lean();
 
         if (!currentUser) return res.status(404).json({ success: false, message: "User not found" });

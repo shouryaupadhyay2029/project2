@@ -19,9 +19,8 @@ async function generateSitemap(baseUrl = "") {
     User.find({
       isBanned: { $ne: true },
       $or: [
-        { profileVisibility: true },
         { "security.profileVisibility": "public" },
-        { profileVisibility: { $exists: false } },
+        { "security.profileVisibility": { $exists: false } },
       ],
     })
       .select("_id username updatedAt createdAt")

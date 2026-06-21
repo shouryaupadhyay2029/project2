@@ -65,6 +65,16 @@ window.getDevstageUser = function() {
     return null;
 };
 
+function getStoredAuthSession() {
+    try {
+        const stored = localStorage.getItem(DEVSTAGE_AUTH_KEY);
+        return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+        console.warn("[DevStage Auth] Failed to parse stored auth session:", e);
+        return null;
+    }
+}
+
 function getJwtHeader(token) {
     try {
         const [header] = String(token || "").split(".");
@@ -99,9 +109,8 @@ function cacheAuthSession(token, refreshToken, user, provider) {
     // Unify to a canonical format
     const canonicalUser = {
         id: user.id || user._id || user.uid,
-        username: user.username || user.displayName || "Unknown User",
+        username: user.username || "Unknown User",
         email: user.email,
-        displayName: user.displayName || user.username || "Unknown User",
         profilePhoto: user.profilePhoto || user.photoURL || ""
     };
 
@@ -295,18 +304,17 @@ async function presenceRequest(endpoint) {
 
 function syncNavbarUser(user) {
     if (!user) return;
-    const displayName =
-        user.displayName || user.username || user.fullName || "User";
+    const username = user.username || user.displayName || "Unknown User";
     const avatarUrl =
         user.profilePhoto ||
         user.photoURL ||
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=c8b89a&color=0b0b0b`;
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=c8b89a&color=0b0b0b`;
 
     localStorage.setItem(DEVSTAGE_USER_CACHE_KEY, JSON.stringify(user));
     localStorage.setItem(
         "devstageUser",
         JSON.stringify({
-            displayName,
+            username,
             email: user.email,
             uid: user.id || user._id || user.uid,
             photoURL: avatarUrl,
@@ -319,7 +327,7 @@ function syncNavbarUser(user) {
         if (img.tagName === "IMG") img.src = avatarUrl;
     });
     document.querySelectorAll("#navName, #dropdown-user-name").forEach((el) => {
-        el.textContent = displayName;
+        el.textContent = username;
     });
     document.querySelectorAll("#dropdown-user-email").forEach((el) => {
         el.textContent = user.email || "";
@@ -739,11 +747,11 @@ window.loadUserUI = function() {
 
     const avatarUrl =
         cachedUser.photoURL ||
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(cachedUser.displayName || "User")}&background=c8b89a&color=0b0b0b`;
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(cachedUser.username || "User")}&background=c8b89a&color=0b0b0b`;
 
     if (navAvatar) navAvatar.src = avatarUrl;
-    if (navName) navName.textContent = cachedUser.displayName || "User";
-    if (dropdownName) dropdownName.textContent = cachedUser.displayName || "User";
+    if (navName) navName.textContent = cachedUser.username || "User";
+    if (dropdownName) dropdownName.textContent = cachedUser.username || "User";
     if (dropdownEmail) dropdownEmail.textContent = cachedUser.email || "";
     if (dropdownAvatar) dropdownAvatar.src = avatarUrl;
 };
@@ -861,8 +869,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     backendUser.username,
                 );
 
-                // Sync user data to local storage
-                cacheAuthSession(token, authObj?.refreshToken || "", backendUser, "local");
+                // Sync verified user data without losing the persisted refresh token/provider.
+                const authSession = getStoredAuthSession();
+                cacheAuthSession(
+                    token,
+                    authSession?.refreshToken || "",
+                    backendUser,
+                    authSession?.provider || "local",
+                );
                 const canonicalUser = window.getDevstageUser();
 
                 syncNavbarUser(canonicalUser);
@@ -1133,8 +1147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         body: JSON.stringify({ 
                             email, 
                             password, 
-                            username, 
-                            displayName: fullname 
+                            username
                         })
                     });
                     const data = await response.json();
@@ -1399,14 +1412,14 @@ if (loginForm) {
 
                 // Sync devstageUser with the newly logged in user details to populate global UI
                 const userData = {
-                    displayName: data.user.username,
+                    username: data.user.username,
                     email: data.user.email,
                     uid: data.user.id,
                     photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.user.username)}&background=c8b89a&color=0b0b0b`,
                 };
                 localStorage.setItem("devstageUser", JSON.stringify(userData));
                 window.currentUser = userData;
-                syncNavbarUser({...data.user, displayName: data.user.username });
+                syncNavbarUser(data.user);
                 presenceRequest("online");
                 loadNotifications();
 

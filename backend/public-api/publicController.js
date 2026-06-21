@@ -54,8 +54,10 @@ const getPublicUser = async (req, res) => {
     const user = await User.findOne({
       username: req.params.username,
       isBanned: { $ne: true },
-      profileVisibility: { $ne: false },
-      "security.profileVisibility": { $ne: "private" },
+      $or: [
+        { "security.profileVisibility": "public" },
+        { "security.profileVisibility": { $exists: false } }
+      ]
     })
       .select(USER_PUBLIC_FIELDS)
       .lean();

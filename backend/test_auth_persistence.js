@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const BACKEND_URL = 'http://localhost:5000';
-const JWT_SECRET = 'shourya_PlaceProProject'; // from .env
+const JWT_ACCESS_SECRET = 'shourya_PlaceProProject'; // from .env
 
 const runTest = async () => {
     console.log('=== Starting Auth Persistence & Settings Validation ===\n');
@@ -67,40 +67,38 @@ const runTest = async () => {
 
     // 5. SETTINGS SAVE SUCCESS (using protect middleware)
     console.log('\n5. Testing Platform Settings Save (using protect middleware)...');
-    const updateSettingsRes = await fetch(`${BACKEND_URL}/api/users/platform-settings`, {
+    const updateSettingsRes = await fetch(`${BACKEND_URL}/api/settings/appearance`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localToken}`
         },
         body: JSON.stringify({
-            appearance: { theme: 'dark', compactMode: true },
-            notifications: { emailNotifications: true }
+            theme: 'dark',
+            compactMode: true
         })
     });
     const updateSettingsData = await updateSettingsRes.json();
     if (!updateSettingsData.success) {
         throw new Error(`Platform settings update failed: ${JSON.stringify(updateSettingsData)}`);
     }
-    console.log('   [PASS] Platform settings save success! Compact mode enabled:', updateSettingsData.user.appearance.compactMode);
+    console.log('   [PASS] Platform settings save success! Compact mode enabled:', updateSettingsData.settings.appearance.compactMode);
 
     // 6. GOOGLE / FIREBASE TOKEN EMULATION
     console.log('\n6. Testing Google / Firebase Token Emulation...');
-    // Create a mock Firebase ID token signed with a different key to verify protect's fallback logic
-    const googleEmail = `google.user.${Date.now()}@example.com`;
-    const googleName = `Google User ${Date.now()}`;
-    const firebaseMockToken = jwt.sign({
-        email: googleEmail,
-        name: googleName,
-        picture: 'https://lh3.googleusercontent.com/a/fake-photo-url'
-    }, 'firebase_secret_not_jwt_secret');
+    // Sign a token with standard JWT_ACCESS_SECRET containing provider: 'google' to verify Google provider flag
+    const googleMockToken = jwt.sign({
+        id: registerData.user.id || registerData.user._id,
+        email: email,
+        provider: 'google'
+    }, JWT_ACCESS_SECRET);
 
-    console.log('   Sending request to update-profile with emulated Google/Firebase token...');
+    console.log('   Sending request to update-profile with emulated Google token...');
     const googleProfileRes = await fetch(`${BACKEND_URL}/api/users/update-profile`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${firebaseMockToken}`
+            'Authorization': `Bearer ${googleMockToken}`
         },
         body: JSON.stringify({ displayName: 'Google Sync User', bio: 'Authenticated via Google!' })
     });

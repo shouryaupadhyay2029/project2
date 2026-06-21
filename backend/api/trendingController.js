@@ -70,8 +70,8 @@ const getTrendingUsers = async (req, res) => {
         const users = await User.find({
             isBanned: { $ne: true },
             $or: [
-                { profileVisibility: { $ne: false } },
-                { profileVisibility: { $exists: false } }
+                { "security.profileVisibility": "public" },
+                { "security.profileVisibility": { $exists: false } }
             ]
         })
             .select("username displayName bio profilePhoto skills developerTags followers following isOnline lastSeen currentStatus createdAt")

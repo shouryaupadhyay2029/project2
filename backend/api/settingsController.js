@@ -1,9 +1,42 @@
 const bcrypt = require("bcryptjs");
+const https = require("https");
 const User = require("../models/user");
 const Project = require("../models/Project");
 const Activity = require("../models/Activity");
 const ContactMessage = require("../models/ContactMessage");
 const { createActivity } = require("./activityController");
+const { createAuditLog } = require("./auditController");
+
+/**
+ * Delete a Firebase Auth user using the Firebase Auth REST API.
+ * Requires the user's current ID token (from Firebase client).
+ * Fails silently if no token provided — local users don't have one.
+ */
+async function deleteFirebaseAuthUser(firebaseIdToken) {
+    if (!firebaseIdToken) return;
+    const apiKey = process.env.FIREBASE_API_KEY || "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg";
+    const body = JSON.stringify({ idToken: firebaseIdToken });
+    return new Promise((resolve) => {
+        const req = https.request({
+            hostname: "identitytoolkit.googleapis.com",
+            path: `/v1/accounts:delete?key=${apiKey}`,
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) }
+        }, (res) => {
+            res.resume(); // drain response
+            if (res.statusCode !== 200) {
+                console.warn(`[deleteAccount] Firebase Auth deletion responded ${res.statusCode}`);
+            }
+            resolve();
+        });
+        req.on("error", (err) => {
+            console.warn("[deleteAccount] Firebase Auth REST deletion failed:", err.message);
+            resolve(); // non-fatal — MongoDB deletion continues
+        });
+        req.write(body);
+        req.end();
+    });
+}
 
 const DEFAULT_SETTINGS = {
     notifications: {
@@ -30,7 +63,7 @@ const DEFAULT_SETTINGS = {
     },
     security: {
         twoFactorEnabled: false,
-        profileVisibility: "public",
+
         searchableProfile: true
     },
     advanced: {
@@ -168,6 +201,10 @@ const updateNotifications = async(req, res) => {
         updateSection(user, "notificationSettings", req.body);
         await user.save();
         await logSettingsActivity(user._id, "Updated notification settings", { section: "notifications" });
+        await createAuditLog(user._id, "settings_update", req, {
+            resource: "user", resourceId: user._id,
+            metadata: { section: "notifications" }
+        });
 
         return res.status(200).json({
             success: true,
@@ -202,6 +239,10 @@ const updateAppearance = async(req, res) => {
         updateSection(user, "appearance", req.body);
         await user.save();
         await logSettingsActivity(user._id, "Updated appearance settings", { section: "appearance", theme: user.appearance.theme });
+        await createAuditLog(user._id, "settings_update", req, {
+            resource: "user", resourceId: user._id,
+            metadata: { section: "appearance", theme: user.appearance?.theme }
+        });
 
         return res.status(200).json({
             success: true,
@@ -232,6 +273,10 @@ const updateProjects = async(req, res) => {
         updateSection(user, "projectSettings", req.body);
         await user.save();
         await logSettingsActivity(user._id, "Updated project settings", { section: "projects" });
+        await createAuditLog(user._id, "settings_update", req, {
+            resource: "user", resourceId: user._id,
+            metadata: { section: "projects" }
+        });
 
         return res.status(200).json({
             success: true,
@@ -262,6 +307,10 @@ const updateEcosystem = async(req, res) => {
         updateSection(user, "ecosystem", req.body);
         await user.save();
         await logSettingsActivity(user._id, "Updated ecosystem settings", { section: "ecosystem" });
+        await createAuditLog(user._id, "settings_update", req, {
+            resource: "user", resourceId: user._id,
+            metadata: { section: "ecosystem" }
+        });
 
         return res.status(200).json({
             success: true,
@@ -295,13 +344,13 @@ const updateSecurity = async(req, res) => {
 
         updateSection(user, "security", req.body);
         const securitySettings = sectionWithDefaults(user, "security");
-        user.profileVisibility = securitySettings.profileVisibility === "public";
-        if (!user.privacy) user.privacy = {};
-        user.privacy.twoFactorEnabled = securitySettings.twoFactorEnabled;
-        user.privacy.profileIndexed = securitySettings.searchableProfile;
 
         await user.save();
         await logSettingsActivity(user._id, "Changed profile privacy", { section: "security", profileVisibility: securitySettings.profileVisibility });
+        await createAuditLog(user._id, "settings_update", req, {
+            resource: "user", resourceId: user._id,
+            metadata: { section: "security", profileVisibility: securitySettings.profileVisibility }
+        });
 
         return res.status(200).json({
             success: true,
@@ -334,6 +383,10 @@ const updateAdvanced = async(req, res) => {
 
         const title = req.body.developerMode === true ? "Enabled developer mode" : "Updated advanced settings";
         await logSettingsActivity(user._id, title, { section: "advanced" });
+        await createAuditLog(user._id, "settings_update", req, {
+            resource: "user", resourceId: user._id,
+            metadata: { section: "advanced", developerMode: req.body.developerMode }
+        });
 
         return res.status(200).json({
             success: true,
@@ -351,16 +404,17 @@ const deleteAccount = async(req, res) => {
         const user = await getAuthenticatedUser(req, res);
         if (!user) return;
 
+        const { password, firebaseToken } = req.body;
+
+        // ── 1. Password confirmation for non-Google users ─────────────────────
         const requiresPassword = !req.user.isGoogleUser && user.password !== "google_auth_placeholder_password";
         if (requiresPassword) {
-            const { password } = req.body;
             if (!password || typeof password !== "string") {
                 return res.status(400).json({
                     success: false,
                     message: "Password confirmation is required"
                 });
             }
-
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return res.status(403).json({
@@ -370,42 +424,116 @@ const deleteAccount = async(req, res) => {
             }
         }
 
+        // ── 2. Remove user from all followers/following/savedProfiles lists ───
+        await User.updateMany(
+            {
+                $or: [
+                    { followers: user._id },
+                    { following: user._id },
+                    { savedProfiles: user._id }
+                ]
+            },
+            {
+                $pull: {
+                    followers: user._id,
+                    following: user._id,
+                    savedProfiles: user._id
+                }
+            }
+        );
+
+        // ── 3. Core cascade deletions ─────────────────────────────────────────
+        const userProjectIds = await Project.find({ owner: user._id }).distinct("_id");
+
+        // Project analytics keyed to the user's projects
+        try {
+            const ProjectAnalytics = require("../models/ProjectAnalytics");
+            if (userProjectIds.length > 0) {
+                await ProjectAnalytics.deleteMany({ projectId: { $in: userProjectIds } });
+            }
+        } catch (e) { console.error("Cascade delete ProjectAnalytics error:", e.message); }
+
         await Project.deleteMany({ owner: user._id });
         await Activity.deleteMany({ user: user._id });
         await ContactMessage.deleteMany({
-            $or: [
-                { receiver: user._id },
-                { senderEmail: user.email }
-            ]
+            $or: [{ receiver: user._id }, { senderEmail: user.email }]
         });
 
-        // Extended cascade deletion cleanups
+        // Messages & Conversations
         try {
-            const ApiKey = require("../models/ApiKey");
-            await ApiKey.deleteMany({ owner: user._id });
-        } catch (e) {
-            console.error("Cascade delete API Key error:", e.message);
-        }
+            const Message = require("../models/Message");
+            const Conversation = require("../models/Conversation");
+            // Find conversations the user participated in
+            const convIds = await Conversation.find({ participants: user._id }).distinct("_id");
+            if (convIds.length > 0) {
+                await Message.deleteMany({ conversationId: { $in: convIds } });
+                await Conversation.deleteMany({ _id: { $in: convIds } });
+            }
+            // Also remove any messages sent by the user in other conversations
+            await Message.deleteMany({ sender: user._id });
+        } catch (e) { console.error("Cascade delete Message/Conversation error:", e.message); }
 
+        // Reports submitted by or targeting the user
+        try {
+            const Report = require("../models/Report");
+            await Report.deleteMany({
+                $or: [
+                    { reporter: user._id },
+                    { targetType: "user", targetId: user._id }
+                ]
+            });
+        } catch (e) { console.error("Cascade delete Report error:", e.message); }
+
+        // Workspaces: delete owned workspaces, remove from member lists
+        try {
+            const Workspace = require("../models/Workspace");
+            await Workspace.deleteMany({ owner: user._id });
+            await Workspace.updateMany(
+                { "members.user": user._id },
+                { $pull: { members: { user: user._id } } }
+            );
+        } catch (e) { console.error("Cascade delete Workspace error:", e.message); }
+
+        // Achievements
         try {
             const Achievement = require("../models/Achievement");
             await Achievement.deleteMany({ userId: user._id });
-        } catch (e) {
-            console.error("Cascade delete Achievement error:", e.message);
-        }
+        } catch (e) { console.error("Cascade delete Achievement error:", e.message); }
 
+        // Collaboration Requests
         try {
             const CollaborationRequest = require("../models/CollaborationRequest");
             await CollaborationRequest.deleteMany({
-                $or: [
-                    { sender: user._id },
-                    { receiver: user._id }
-                ]
+                $or: [{ sender: user._id }, { receiver: user._id }]
             });
-        } catch (e) {
-            console.error("Cascade delete CollaborationRequest error:", e.message);
+        } catch (e) { console.error("Cascade delete CollaborationRequest error:", e.message); }
+
+        // API Keys
+        try {
+            const ApiKey = require("../models/ApiKey");
+            await ApiKey.deleteMany({ owner: user._id });
+        } catch (e) { console.error("Cascade delete API Key error:", e.message); }
+
+        // Audit Logs
+        try {
+            const AuditLog = require("../models/AuditLog");
+            await AuditLog.deleteMany({ actor: user._id });
+        } catch (e) { console.error("Cascade delete AuditLog error:", e.message); }
+
+        // ── 4. Firebase Auth user deletion ───────────────────────────────────
+        if (firebaseToken) {
+            await deleteFirebaseAuthUser(firebaseToken);
         }
 
+        // ── 5. Write audit log before the user document is destroyed ─────────
+        // (Actor must still exist in DB when AuditLog.create runs)
+        await createAuditLog(user._id, "account_delete", req, {
+            resource: "user",
+            resourceId: user._id,
+            metadata: { username: user.username, email: user.email }
+        });
+
+        // ── 6. Finally: remove the User document ─────────────────────────────
         await User.findByIdAndDelete(user._id);
 
         return res.status(200).json({

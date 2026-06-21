@@ -17,19 +17,9 @@ function publicUserFilter(extra = {}) {
   return {
     ...extra,
     isBanned: { $ne: true },
-    $and: [
-      {
-        $or: [
-          { profileVisibility: { $ne: false } },
-          { profileVisibility: { $exists: false } },
-        ],
-      },
-      {
-        $or: [
-          { "security.profileVisibility": "public" },
-          { "security.profileVisibility": { $exists: false } },
-        ],
-      },
+    $or: [
+      { "security.profileVisibility": "public" },
+      { "security.profileVisibility": { $exists: false } },
     ],
   };
 }

@@ -13,7 +13,8 @@ const auditLogSchema = new mongoose.Schema({
         required: true,
         enum: [
             "auth_register", "auth_login", "auth_logout",
-            "profile_update", "settings_update", "password_change",
+            "profile_update", "avatar_change", "username_change",
+            "settings_update", "account_delete",
             "project_create", "project_update", "project_delete", "project_feature",
             "follow_user", "unfollow_user",
             "collaboration_request", "collaboration_accept", "collaboration_reject",

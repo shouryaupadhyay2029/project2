@@ -98,10 +98,6 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    profileVisibility: {
-      type: Boolean,
-      default: true,
-    },
 
     showContributionGraph: {
       type: Boolean,
@@ -257,21 +253,6 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    projectPreferences: {
-      autoSaveDrafts: {
-        type: Boolean,
-        default: true,
-      },
-      showProjectAnalytics: {
-        type: Boolean,
-        default: true,
-      },
-      enablePublicProjects: {
-        type: Boolean,
-        default: false,
-      },
-    },
-
     ecosystem: {
       githubConnected: {
         type: Boolean,
@@ -330,20 +311,6 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    privacy: {
-      twoFactorEnabled: {
-        type: Boolean,
-        default: false,
-      },
-      profileIndexed: {
-        type: Boolean,
-        default: true,
-      },
-      activityVisible: {
-        type: Boolean,
-        default: true,
-      },
-    },
 
     // ─── Bookmarks ───────────────────────────────────────────
     savedProjects: [
@@ -376,12 +343,6 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    // ─── Feed preferences ─────────────────────────────────────
-    feedPreferences: {
-      showTrending: { type: Boolean, default: true },
-      showFollowing: { type: Boolean, default: true },
-      showRecommended: { type: Boolean, default: true },
-    },
 
     // ─── Moderation ───────────────────────────────────────────
     warningCount: {

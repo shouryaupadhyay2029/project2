@@ -1,4 +1,4 @@
-const { JWT_SECRET_ENV_NAME, verifyAuthToken } = require("../utils/jwtTokens");
+const { JWT_ACCESS_SECRET_ENV_NAME, verifyAuthToken } = require("../utils/jwtTokens");
 
 function extractBearerToken(authHeader) {
     const match = /^Bearer\s+(.+)$/i.exec(authHeader || "");
@@ -18,26 +18,19 @@ const protect = async (req, res, next) => {
             });
         }
 
-        console.log("[DEBUG PROTECT] Token received:", token);
-        console.log("[DEBUG PROTECT] Secret variable used for verification:", JWT_SECRET_ENV_NAME);
 
         const jwt = require("jsonwebtoken");
         try {
             const decoded = verifyAuthToken(token);
-            console.log("[DEBUG PROTECT] Verification successful. Decoded:", decoded);
             req.user = decoded;
             req.user.isGoogleUser = decoded.provider === "google";
             next();
         } catch (err) {
-            console.log("[DEBUG PROTECT] JWT verification failed. Attempting Firebase fallback. Error:", err.message);
-            
             let decodedGoogleToken = null;
             try {
                 const { verifyFirebaseIdToken } = require("../utils/firebaseTokens");
                 decodedGoogleToken = await verifyFirebaseIdToken(token);
-                console.log("[DEBUG PROTECT] Real Firebase token verified.");
             } catch (fbErr) {
-                console.log("[DEBUG PROTECT] Firebase token fallback verification failed:", fbErr.message);
                 return res.status(401).json({
                     success: false,
                     message: "Not authorized, token failed"
@@ -79,7 +72,6 @@ const protect = async (req, res, next) => {
                     isOnline: true,
                     lastSeen: new Date()
                 });
-                console.log("[DEBUG PROTECT] Created new synced Google user:", user.username);
                 user.isOnline = true;
                 user.lastSeen = new Date();
                 let updatePayload = {
@@ -106,7 +98,6 @@ const protect = async (req, res, next) => {
             next();
         }
     } catch (error) {
-        console.error("[DEBUG PROTECT] Outer catch error:", error);
         return res.status(401).json({
             success: false,
             message: "Not authorized, token failed"

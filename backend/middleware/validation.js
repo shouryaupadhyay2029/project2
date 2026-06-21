@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { body, validationResult } = require("express-validator");
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -10,6 +11,182 @@ const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 /** Sends a uniform 400 validation-failure response. */
 const fail = (res, message, statusCode = 400) =>
   res.status(statusCode).json({ success: false, message });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// handleValidationErrors
+// Reads express-validator errors from `validationResult(req)` and returns
+// a 400 response listing all field errors. Must be placed after validator chains.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const messages = errors.array().map((e) => e.msg);
+        return res.status(400).json({
+            success: false,
+            message: messages[0],   // first error for UX simplicity
+            errors: messages
+        });
+    }
+    next();
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// validateRegister — POST /api/auth/register
+// ─────────────────────────────────────────────────────────────────────────────
+
+const validateRegister = [
+    body("username")
+        .trim()
+        .toLowerCase()
+        .notEmpty().withMessage("Username is required")
+        .isLength({ min: 3, max: 30 }).withMessage("Username must be 3–30 characters")
+        .matches(/^[a-z0-9_]+$/).withMessage("Username may only contain lowercase letters, digits, and underscores"),
+
+    body("email")
+        .trim()
+        .notEmpty().withMessage("Email is required")
+        .isEmail().withMessage("Invalid email address")
+        .normalizeEmail(),
+
+    body("password")
+        .notEmpty().withMessage("Password is required")
+        .isLength({ min: 8 }).withMessage("Password must be at least 8 characters")
+        .isLength({ max: 128 }).withMessage("Password must not exceed 128 characters")
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// validateLogin — POST /api/auth/login
+// ─────────────────────────────────────────────────────────────────────────────
+
+const validateLogin = [
+    body("email")
+        .trim()
+        .notEmpty().withMessage("Email is required")
+        .isEmail().withMessage("Invalid email address")
+        .normalizeEmail(),
+
+    body("password")
+        .notEmpty().withMessage("Password is required")
+        .isLength({ max: 128 }).withMessage("Password is too long")
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// validateUpdateProfile — PUT /api/users/update-profile
+// ─────────────────────────────────────────────────────────────────────────────
+
+const URL_PATTERN = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w .-]*)*\/?$/i;
+
+const validateUpdateProfile = [
+    body("username")
+        .optional()
+        .trim()
+        .toLowerCase()
+        .isLength({ min: 3, max: 30 }).withMessage("Username must be 3–30 characters")
+        .matches(/^[a-z0-9_]+$/).withMessage("Username may only contain lowercase letters, digits, and underscores"),
+
+    body("displayName")
+        .optional()
+        .trim()
+        .isLength({ max: 50 }).withMessage("Display name must not exceed 50 characters"),
+
+    body("bio")
+        .optional()
+        .trim()
+        .isLength({ max: 160 }).withMessage("Bio must not exceed 160 characters"),
+
+    body("location")
+        .optional()
+        .trim()
+        .isLength({ max: 100 }).withMessage("Location must not exceed 100 characters"),
+
+    body("portfolioWebsite")
+        .optional({ checkFalsy: true })
+        .trim()
+        .custom((value) => {
+            if (value && !URL_PATTERN.test(value)) {
+                throw new Error("Invalid portfolio website URL");
+            }
+            return true;
+        }),
+
+    body("socialLinks.github")
+        .optional({ checkFalsy: true })
+        .trim()
+        .custom((value) => {
+            if (value && !URL_PATTERN.test(value)) throw new Error("Invalid GitHub URL");
+            return true;
+        }),
+
+    body("socialLinks.twitter")
+        .optional({ checkFalsy: true })
+        .trim()
+        .custom((value) => {
+            if (value && !URL_PATTERN.test(value)) throw new Error("Invalid Twitter URL");
+            return true;
+        }),
+
+    body("socialLinks.linkedin")
+        .optional({ checkFalsy: true })
+        .trim()
+        .custom((value) => {
+            if (value && !URL_PATTERN.test(value)) throw new Error("Invalid LinkedIn URL");
+            return true;
+        }),
+
+    body("developerTags")
+        .optional()
+        .isArray({ max: 8 }).withMessage("Maximum 8 developer tags allowed"),
+
+    body("developerTags.*")
+        .optional()
+        .trim()
+        .isLength({ max: 30 }).withMessage("Each developer tag must be 30 characters or fewer"),
+
+    body("currentStatus")
+        .optional()
+        .trim()
+        .isLength({ max: 100 }).withMessage("Status must not exceed 100 characters")
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// validateUpload
+// Validates base64-encoded profile photo uploads sent in the request body.
+// Blocks non-image MIME types (e.g. SVG, HTML) and files over 2 MB.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const ALLOWED_IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+// 2 MB decoded  →  ceil(2 * 1024 * 1024 / 3) * 4 ≈ 2,796,203 base64 chars
+const MAX_BASE64_CHARS = 2_796_203;
+
+const validateUpload = (req, res, next) => {
+    const { profilePhoto } = req.body;
+    if (!profilePhoto || typeof profilePhoto !== "string") {
+        return next();
+    }
+
+    // Only validate data URIs (skip plain URLs like https://...)
+    if (!profilePhoto.startsWith("data:")) {
+        return next();
+    }
+
+    // Extract MIME type from data URI  (data:<mime>;base64,<data>)
+    const mimeMatch = profilePhoto.match(/^data:([^;]+);base64,/);
+    if (!mimeMatch) {
+        return fail(res, "Invalid profile photo data URI format");
+    }
+
+    const mime = mimeMatch[1].toLowerCase();
+    if (!ALLOWED_IMAGE_MIMES.includes(mime)) {
+        return fail(res, `Unsupported image type '${mime}'. Allowed: JPEG, PNG, WebP, GIF`);
+    }
+
+    if (profilePhoto.length > MAX_BASE64_CHARS) {
+        return fail(res, "Profile photo must not exceed 2 MB");
+    }
+
+    next();
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // validateMessage
@@ -205,7 +382,14 @@ const unsafeKeyPattern = /(^\$|\.|__proto__|prototype|constructor)/i;
 
 const sanitize = (value) => {
   if (typeof value === "string") {
-    return value.trim();
+    let result = value.trim();
+    // Remove HTML/XML tags (neutralises <script>, <iframe>, <svg>)
+    result = result.replace(/<[^>]*>/g, "");
+    // Remove inline event handlers (onerror=, onload=, onclick=)
+    result = result.replace(/on\w+\s*=/gi, "");
+    // Remove javascript: pseudo-protocol
+    result = result.replace(/javascript:/gi, "");
+    return result;
   }
 
   if (Array.isArray(value)) {
@@ -256,12 +440,20 @@ const sanitizeBody = sanitizeRequest;
 // ─────────────────────────────────────────────────────────────────────────────
 
 module.exports = {
-  validateMessage,
-  validateObjectId,
-  validateSearch,
-  validateUsername,
-  validatePagination,
-  sanitizeRequest,
-  sanitizeBody,
-  sanitize,
+    // express-validator chains
+    validateRegister,
+    validateLogin,
+    validateUpdateProfile,
+    handleValidationErrors,
+    // upload security
+    validateUpload,
+    // legacy / hand-rolled validators
+    validateMessage,
+    validateObjectId,
+    validateSearch,
+    validateUsername,
+    validatePagination,
+    sanitizeRequest,
+    sanitizeBody,
+    sanitize,
 };

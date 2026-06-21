@@ -20,9 +20,9 @@ async function findVisibleUserByUsername(username) {
     return User.findOne({
         username,
         isBanned: { $ne: true },
-        $and: [
-            { $or: [{ profileVisibility: { $ne: false } }, { profileVisibility: { $exists: false } }] },
-            { $or: [{ "security.profileVisibility": "public" }, { "security.profileVisibility": { $exists: false } }] }
+        $or: [
+            { "security.profileVisibility": "public" },
+            { "security.profileVisibility": { $exists: false } }
         ]
     })
         .select("username displayName profilePhoto followers following isOnline lastSeen")

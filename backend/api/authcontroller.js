@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const { signAuthToken, signRefreshToken, verifyAuthToken } = require("../utils/jwtTokens");
+const { signAuthToken, signRefreshToken, verifyAuthToken, verifyRefreshToken } = require("../utils/jwtTokens");
 const { verifyFirebaseIdToken } = require("../utils/firebaseTokens");
 
 function toAuthUser(user) {
@@ -8,7 +8,6 @@ function toAuthUser(user) {
         id: user._id,
         username: user.username,
         email: user.email,
-        displayName: user.displayName,
         bio: user.bio,
         location: user.location,
         timezone: user.timezone,
@@ -20,7 +19,6 @@ function toAuthUser(user) {
         techStack: user.techStack,
         socialLinks: user.socialLinks,
         resumeUrl: user.resumeUrl,
-        profileVisibility: user.profileVisibility,
         showContributionGraph: user.showContributionGraph,
         showAchievements: user.showAchievements,
         currentStatus: user.currentStatus,
@@ -29,31 +27,44 @@ function toAuthUser(user) {
         notifications: user.notificationSettings,
         appearance: user.appearance,
         projectSettings: user.projectSettings,
-        projectPreferences: user.projectPreferences,
         ecosystem: user.ecosystem,
         security: user.security,
         advanced: user.advanced,
-        privacy: user.privacy,
         isOnline: user.isOnline,
         lastSeen: user.lastSeen
     };
 }
 
+const RESERVED_USERNAMES = [
+    "admin", "support", "root", "api", "system", "devstage", 
+    "null", "undefined", "profile", "settings", "login", 
+    "register", "auth", "home"
+];
+
 async function createUniqueGoogleUsername(decodedToken) {
     const base = (decodedToken.name || decodedToken.email.split("@")[0])
         .toLowerCase()
-        .replace(/[^a-z0-9]/g, "")
-        .slice(0, 24) || "googleuser";
+        .replace(/[^a-z0-9_]/g, "")
+        .slice(0, 25) || "googleuser";
+        
+    const validBase = base.padEnd(3, "0");
 
     for (let attempt = 0; attempt < 10; attempt += 1) {
-        const suffix = Math.floor(100 + Math.random() * 900);
-        const username = `${base}${suffix}`;
+        const suffix = attempt === 0 ? "" : Math.floor(100 + Math.random() * 900);
+        const username = `${validBase}${suffix}`.slice(0, 30);
+        
+        if (RESERVED_USERNAMES.includes(username)) continue;
+        
         const existing = await User.findOne({ username }).select("_id").lean();
         if (!existing) return username;
     }
 
-    return `${base}${Date.now()}`;
+    return `${validBase}${Date.now()}`.slice(0, 30);
 }
+
+
+// ==========================
+// REGISTER USER
 
 
 // ==========================
@@ -70,7 +81,6 @@ const registerUser = async(req, res) => {
             password
         } = req.body;
 
-
         // CHECK EMPTY FIELDS
         if (!username || !email || !password) {
             return res.status(400).json({
@@ -79,25 +89,43 @@ const registerUser = async(req, res) => {
             });
         }
 
+        // VALIDATE USERNAME
+        const usernameRegex = /^[a-z0-9_]{3,30}$/;
+        if (!usernameRegex.test(username)) {
+            return res.status(400).json({
+                success: false,
+                message: "Username must be 3-30 characters long and contain only lowercase letters, numbers, and underscores"
+            });
+        }
+        
+        if (RESERVED_USERNAMES.includes(username.toLowerCase())) {
+            return res.status(400).json({
+                success: false,
+                message: "This username is reserved and cannot be used"
+            });
+        }
 
-        // CHECK EXISTING USER
-        const existingUser = await User.findOne({
-            email
-        });
-
-        if (existingUser) {
+        // CHECK EXISTING USER (Email)
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
             return res.status(400).json({
                 success: false,
                 message: "User already exists"
             });
         }
 
+        // CHECK EXISTING USER (Username)
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+            return res.status(400).json({
+                success: false,
+                message: "Username is already taken"
+            });
+        }
 
         // HASH PASSWORD
         const salt = await bcrypt.genSalt(10);
-
         const hashedPassword = await bcrypt.hash(password, salt);
-
 
         // CREATE USER
         const user = await User.create({
@@ -278,7 +306,7 @@ const refreshTokenHandler = async (req, res) => {
 
         let decoded;
         try {
-            decoded = verifyAuthToken(refreshToken);
+            decoded = verifyRefreshToken(refreshToken);
         } catch (error) {
             return res.status(403).json({
                 success: false,

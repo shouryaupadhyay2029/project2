@@ -1613,7 +1613,7 @@
                                 <div class="upload-btns">
                                     <button class="action-btn accent-btn" id="upload-avatar-trigger">Upload</button>
                                     <button class="action-btn" id="remove-avatar-trigger">Remove</button>
-                                    <input type="file" id="settings-avatar-file" accept="image/*" style="display: none;">
+                                    <input type="file" id="settings-avatar-file" accept="image/jpeg,image/png,image/webp" style="display: none;">
                                 </div>
                             </div>
                             <div class="setting-row">
@@ -2138,7 +2138,7 @@
                             <p class="panel-sub">Manage your security credentials, active sessions, and 2FA parameters.</p>
                         </div>
 
-                        <div class="section-block">
+                        <div class="section-block" style="display: none;">
                             <div class="section-label">Two-Factor Authentication</div>
                             <div class="twofa-card">
                                 <div class="twofa-icon">
@@ -2268,6 +2268,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js" defer></script>
     <script src="../scripts/auth.js?v=1782017749028" type="module" defer></script>
 
     <script>
@@ -2412,9 +2413,16 @@
             let persistedSettings = null;
 
             async function getAuthHeaders() {
-                const token = window.devstageGetAuthToken ?
-                    await window.devstageGetAuthToken() :
-                    localStorage.getItem('token');
+                let token = '';
+                if (window.devstageGetAuthToken) {
+                    token = await window.devstageGetAuthToken();
+                } else {
+                    try {
+                        token = JSON.parse(localStorage.getItem('devstage_auth') || 'null')?.token || '';
+                    } catch (error) {
+                        console.warn('[DevStage Settings] Failed to parse stored auth session:', error);
+                    }
+                }
                 if (!token) return null;
                 return {
                     'Content-Type': 'application/json',
@@ -2494,7 +2502,7 @@
                     },
                     security: {
                         twoFactorEnabled: document.querySelector('#panel-security .setting-badge')?.textContent.trim().toLowerCase() === 'enabled',
-                        profileVisibility: isToggleOn('toggle-public-profile') ? 'public' : 'private',
+
                         searchableProfile: isToggleOn('toggle-contribution-graph')
                     },
                     advanced: {
@@ -2707,6 +2715,104 @@
             // Load initial user details from LocalStorage or use defaults
             let activeDeveloperTags = [];
             let activeSocialLinks = { github: '', twitter: '', linkedin: '' };
+            let pendingAvatarFile = null;
+            let persistedProfilePhotoUrl = '';
+            let avatarMarkedForRemoval = false;
+
+            const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
+            const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+            const firebaseConfig = {
+                apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
+                authDomain: "devstage-872b1.firebaseapp.com",
+                projectId: "devstage-872b1",
+                storageBucket: "devstage-872b1.firebasestorage.app",
+                messagingSenderId: "993834630425",
+                appId: "1:993834630425:web:b063407a7d47a0830d5988",
+            };
+
+            function getInitials(user = {}) {
+                return (user.displayName || user.username || 'S').charAt(0).toUpperCase();
+            }
+
+            function setAvatarPreview(src, initials = 'S') {
+                ['identity-avatar-img', 'sidebar-avatar-img'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+
+                    el.textContent = '';
+                    const existingImg = el.querySelector('img');
+                    if (existingImg) existingImg.remove();
+
+                    if (!src) {
+                        el.textContent = initials;
+                        return;
+                    }
+
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    img.style.display = 'block';
+                    el.appendChild(img);
+                });
+            }
+
+            function getFirebaseStorage() {
+                if (!window.firebase || !firebase.storage) {
+                    throw new Error('Avatar storage is still loading. Please try again in a moment.');
+                }
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                return firebase.storage();
+            }
+
+            async function uploadAvatarToStorage(file) {
+                if (!file) return persistedProfilePhotoUrl || '';
+                if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+                    throw new Error('Avatar must be a JPG, PNG, or WebP image.');
+                }
+                if (file.size > MAX_AVATAR_BYTES) {
+                    throw new Error('Avatar must be 2MB or smaller.');
+                }
+
+                const authUser = window.getDevstageUser ? window.getDevstageUser() : null;
+                const userId = authUser?.id || authUser?.uid || 'current';
+                const extension = file.type.split('/')[1].replace('jpeg', 'jpg');
+                const storageRef = getFirebaseStorage().ref(`avatars/${userId}/profile.${extension}`);
+                const snapshot = await storageRef.put(file, { contentType: file.type });
+                return snapshot.ref.getDownloadURL();
+            }
+
+            async function deleteAvatarFromStorage(url) {
+                if (!url || !url.includes('firebasestorage.googleapis.com')) return;
+                try {
+                    await getFirebaseStorage().refFromURL(url).delete();
+                } catch (error) {
+                    if (error?.code !== 'storage/object-not-found') {
+                        console.warn('[DevStage Settings] Avatar storage delete failed:', error);
+                    }
+                }
+            }
+
+            function syncAvatarCache(profilePhoto, user = {}) {
+                const cachedUser = {
+                    ...(JSON.parse(localStorage.getItem('user') || 'null') || {}),
+                    ...user,
+                    profilePhoto
+                };
+                if (!profilePhoto) {
+                    delete cachedUser.photoURL;
+                }
+                localStorage.setItem('user', JSON.stringify(cachedUser));
+                localStorage.setItem('currentUser', JSON.stringify(cachedUser));
+
+                const devstageUser = JSON.parse(localStorage.getItem('devstageUser') || 'null') || {};
+                devstageUser.displayName = user.displayName || user.username || devstageUser.displayName;
+                devstageUser.photoURL = profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(devstageUser.displayName || 'User')}&background=c8b89a&color=0b0b0b`;
+                localStorage.setItem('devstageUser', JSON.stringify(devstageUser));
+            }
 
             async function loadUserData() {
                 const headers = await getAuthHeaders();
@@ -2747,7 +2853,7 @@
                         email: user.email || 'shourya@devstage.io',
                         profilePhoto: user.photoURL || user.profilePhoto || '',
                         timezone: user.timezone || 'IST — UTC +5:30',
-                        profileVisibility: user.profileVisibility !== false,
+
                         showContributionGraph: user.showContributionGraph !== false,
                         showAchievements: user.showAchievements !== false,
                         currentStatus: user.currentStatus || 'Available',
@@ -2881,7 +2987,7 @@
                 // Sync toggles
                 const togglePublic = document.getElementById('toggle-public-profile');
                 if (togglePublic) {
-                    togglePublic.classList.toggle('on', user.profileVisibility !== false);
+                    togglePublic.classList.toggle('on', settingsData.security?.profileVisibility === 'public');
                 }
                 const toggleContrib = document.getElementById('toggle-contribution-graph');
                 if (toggleContrib) {
@@ -2915,42 +3021,10 @@
 
                 // Sync sidebar and identity upload photos
                 const userPhoto = user.profilePhoto || user.photoURL || '';
-                if (userPhoto) {
-                    const sidebarAv = document.getElementById('sidebar-avatar-img');
-                    const identAv = document.getElementById('identity-avatar-img');
-
-                    if (sidebarAv) {
-                        sidebarAv.textContent = '';
-                        let img = sidebarAv.querySelector('img');
-                        if (!img) {
-                            img = document.createElement('img');
-                            sidebarAv.appendChild(img);
-                        }
-                        img.src = userPhoto;
-                        img.style.display = 'block';
-                    }
-
-                    if (identAv) {
-                        identAv.textContent = '';
-                        let img = identAv.querySelector('img');
-                        if (!img) {
-                            img = document.createElement('img');
-                            identAv.appendChild(img);
-                        }
-                        img.src = userPhoto;
-                        img.style.display = 'block';
-                    }
-                } else {
-                    const initials = (user.displayName || user.username || 'S').charAt(0).toUpperCase();
-                    const sidebarAv = document.getElementById('sidebar-avatar-img');
-                    const identAv = document.getElementById('identity-avatar-img');
-                    if (sidebarAv) {
-                        sidebarAv.textContent = initials;
-                    }
-                    if (identAv) {
-                        identAv.textContent = initials;
-                    }
-                }
+                persistedProfilePhotoUrl = userPhoto;
+                pendingAvatarFile = null;
+                avatarMarkedForRemoval = false;
+                setAvatarPreview(userPhoto, getInitials(user));
 
                 // Update sidebar labels directly
                 if (document.getElementById('sidebar-name')) document.getElementById('sidebar-name').textContent = user.displayName || 'Shourya Upadhyay';
@@ -2980,7 +3054,7 @@
                 const featuredProject = document.getElementById('input-pinned-project')?.value || '';
 
                 const togglePublic = document.getElementById('toggle-public-profile');
-                const profileVisibility = togglePublic ? togglePublic.classList.contains('on') : true;
+                const profileVisibility = togglePublic ? (togglePublic.classList.contains('on') ? 'public' : 'private') : 'public';
 
                 const toggleContrib = document.getElementById('toggle-contribution-graph');
                 const showContributionGraph = toggleContrib ? toggleContrib.classList.contains('on') : true;
@@ -2991,10 +3065,23 @@
                 const selectedStatusEl = document.querySelector('.status-opt.selected');
                 const currentStatus = selectedStatusEl ? selectedStatusEl.getAttribute('data-status') : 'Available';
 
-                // Check if there is an image inside identity photo block and sync it
-                const identAv = document.getElementById('identity-avatar-img');
-                const imgEl = identAv ? identAv.querySelector('img') : null;
-                const profilePhoto = (imgEl && imgEl.style.display === 'block') ? imgEl.src : '';
+                const headers = await getAuthHeaders();
+                const previousProfilePhotoUrl = persistedProfilePhotoUrl;
+                let uploadedProfilePhotoUrl = '';
+                let profilePhoto = avatarMarkedForRemoval ? '' : persistedProfilePhotoUrl;
+                try {
+                    if (pendingAvatarFile) {
+                        if (!headers) {
+                            alert('You must be logged in to upload an avatar.');
+                            return;
+                        }
+                        profilePhoto = await uploadAvatarToStorage(pendingAvatarFile);
+                        uploadedProfilePhotoUrl = profilePhoto;
+                    }
+                } catch (error) {
+                    alert(error.message || 'Unable to upload avatar.');
+                    return;
+                }
 
                 const updatedData = {
                     displayName,
@@ -3004,7 +3091,7 @@
                     portfolioWebsite: website,
                     timezone,
                     featuredProject,
-                    profileVisibility,
+
                     showContributionGraph,
                     showAchievements,
                     currentStatus,
@@ -3013,7 +3100,6 @@
                     socialLinks: activeSocialLinks
                 };
 
-                const headers = await getAuthHeaders();
                 if (headers) {
                     fetch("http://localhost:5000/api/users/update-profile", {
                         method: "PUT",
@@ -3027,11 +3113,14 @@
                             localStorage.setItem('user', JSON.stringify(data.user));
                             localStorage.setItem('currentUser', JSON.stringify(data.user));
 
-                            // Sync global devstageUser for header/nav
-                            let devstageUser = JSON.parse(localStorage.getItem('devstageUser')) || {};
-                            devstageUser.displayName = data.user.displayName || data.user.username;
-                            if (data.user.profilePhoto) devstageUser.photoURL = data.user.profilePhoto;
-                            localStorage.setItem('devstageUser', JSON.stringify(devstageUser));
+                            syncAvatarCache(data.user.profilePhoto || '', data.user);
+                            persistedProfilePhotoUrl = data.user.profilePhoto || '';
+                            pendingAvatarFile = null;
+                            avatarMarkedForRemoval = false;
+                            setAvatarPreview(persistedProfilePhotoUrl, getInitials(data.user));
+                            if (previousProfilePhotoUrl && previousProfilePhotoUrl !== persistedProfilePhotoUrl) {
+                                deleteAvatarFromStorage(previousProfilePhotoUrl).catch(() => {});
+                            }
 
                             if (window.loadUserUI) window.loadUserUI();
 
@@ -3047,10 +3136,16 @@
 
                             triggerSaveSuccessAnimation();
                         } else {
+                            if (uploadedProfilePhotoUrl) {
+                                deleteAvatarFromStorage(uploadedProfilePhotoUrl).catch(() => {});
+                            }
                             alert(data.message || "Failed to update profile settings.");
                         }
                     })
                     .catch(error => {
+                        if (uploadedProfilePhotoUrl) {
+                            deleteAvatarFromStorage(uploadedProfilePhotoUrl).catch(() => {});
+                        }
                         console.error("Error updating profile in DB:", error);
                         alert("Error updating profile settings.");
                     });
@@ -3064,13 +3159,20 @@
                     user.website = website;
                     user.timezone = timezone;
                     user.featuredProject = featuredProject;
-                    user.profileVisibility = profileVisibility;
+                    user.security = user.security || {};
+                    user.security.profileVisibility = profileVisibility;
                     user.showContributionGraph = showContributionGraph;
                     user.showAchievements = showAchievements;
                     user.currentStatus = currentStatus;
                     user.developerTags = activeDeveloperTags;
                     user.socialLinks = activeSocialLinks;
-                    if (profilePhoto) user.photoURL = profilePhoto;
+                    if (profilePhoto) {
+                        user.photoURL = profilePhoto;
+                        user.profilePhoto = profilePhoto;
+                    } else {
+                        delete user.photoURL;
+                        delete user.profilePhoto;
+                    }
 
                     localStorage.setItem('user', JSON.stringify(user));
                     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -3092,36 +3194,66 @@
             const deleteAccountBtn = document.getElementById('btn-delete-account');
             if (deleteAccountBtn) {
                 deleteAccountBtn.addEventListener('click', async() => {
-                    const password = prompt('Confirm your password to permanently delete your account:');
-                    if (password === null) return;
-
                     const headers = await getAuthHeaders();
                     if (!headers) {
                         alert('You must be logged in to delete your account.');
                         return;
                     }
 
-                    if (!confirm('This permanently deletes your account, projects, activity, and contact messages. Continue?')) {
+                    // Determine if this is a Google / Firebase user
+                    const isGoogleUser = (() => {
+                        try {
+                            const session = JSON.parse(localStorage.getItem('devstage_auth') || 'null');
+                            return session?.provider === 'google';
+                        } catch (e) { return false; }
+                    })();
+
+                    let password = null;
+                    if (!isGoogleUser) {
+                        password = prompt('Confirm your password to permanently delete your account:');
+                        if (password === null) return; // cancelled
+                    }
+
+                    if (!confirm('This permanently deletes your account, all projects, messages, activity, and cannot be undone. Continue?')) {
                         return;
                     }
 
                     try {
+                        // For Firebase / Google users: get a fresh ID token and delete client-side first
+                        let firebaseToken = null;
+                        if (isGoogleUser && window.firebase && firebase.auth) {
+                            try {
+                                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                                const fbUser = firebase.auth().currentUser;
+                                if (fbUser) {
+                                    firebaseToken = await fbUser.getIdToken(true);
+                                    await fbUser.delete();
+                                }
+                            } catch (fbErr) {
+                                console.warn('[DevStage Settings] Firebase Auth client delete failed:', fbErr.message);
+                                // Continue with backend deletion even if client-side Firebase delete fails
+                            }
+                        }
+
+                        const requestBody = { password, firebaseToken };
+
                         const response = await fetch('http://localhost:5000/api/settings/delete-account', {
                             method: 'DELETE',
                             headers,
-                            body: JSON.stringify({ password })
+                            body: JSON.stringify(requestBody)
                         });
                         const data = await response.json();
                         if (!response.ok || !data.success) {
                             throw new Error(data.message || 'Unable to delete account');
                         }
 
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('user');
-                        localStorage.removeItem('currentUser');
-                        localStorage.removeItem('devstageUser');
-                        localStorage.removeItem(SETTINGS_CACHE_KEY);
-                        localStorage.removeItem(THEME_CACHE_KEY);
+                        // Clear all local session data
+                        const keysToRemove = [
+                            'token', 'user', 'currentUser', 'devstageUser',
+                            'devstage_auth', 'devstage_user_cache', 'isLoggedIn', 'authProvider',
+                            SETTINGS_CACHE_KEY, THEME_CACHE_KEY
+                        ];
+                        keysToRemove.forEach(k => localStorage.removeItem(k));
                         window.location.href = '../index.html';
                     } catch (error) {
                         console.error('Delete account error:', error);
@@ -3160,45 +3292,64 @@
             if (fileInput) {
                 fileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (readerEvent) => {
-                            const base64Img = readerEvent.target.result;
-                            const identAv = document.getElementById('identity-avatar-img');
-
-                            identAv.textContent = '';
-                            let img = document.createElement('img');
-                            img.src = base64Img;
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.objectFit = 'cover';
-                            img.style.display = 'block';
-                            identAv.appendChild(img);
-
-                            showSaveToast();
-                        };
-                        reader.readAsDataURL(file);
+                    if (!file) return;
+                    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+                        alert('Avatar must be a JPG, PNG, or WebP image.');
+                        fileInput.value = '';
+                        return;
                     }
+                    if (file.size > MAX_AVATAR_BYTES) {
+                        alert('Avatar must be 2MB or smaller.');
+                        fileInput.value = '';
+                        return;
+                    }
+
+                    pendingAvatarFile = file;
+                    avatarMarkedForRemoval = false;
+                    setAvatarPreview(URL.createObjectURL(file), getInitials(window.getDevstageUser?.() || {}));
+                    showSaveToast();
                 });
             }
 
             if (removeTrigger) {
-                removeTrigger.addEventListener('click', () => {
-                    const identAv = document.getElementById('identity-avatar-img');
-                    const sidebarAv = document.getElementById('sidebar-avatar-img');
-                    const initials = 'S';
+                removeTrigger.addEventListener('click', async() => {
+                    const currentUser = window.getDevstageUser?.() || JSON.parse(localStorage.getItem('user') || 'null') || {};
+                    pendingAvatarFile = null;
+                    avatarMarkedForRemoval = true;
+                    if (fileInput) fileInput.value = '';
+                    setAvatarPreview('', getInitials(currentUser));
 
-                    identAv.textContent = initials;
-                    if (sidebarAv) sidebarAv.textContent = initials;
+                    const headers = await getAuthHeaders();
+                    if (!headers) {
+                        syncAvatarCache('', currentUser);
+                        showSaveToast();
+                        return;
+                    }
 
-                    // Remove from storage too
-                    let user = JSON.parse(localStorage.getItem('user')) || {};
-                    delete user.photoURL;
-                    delete user.profilePhoto;
-                    localStorage.setItem('user', JSON.stringify(user));
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    try {
+                        const previousProfilePhotoUrl = persistedProfilePhotoUrl;
+                        const response = await fetch("http://localhost:5000/api/users/update-profile", {
+                            method: "PUT",
+                            headers,
+                            body: JSON.stringify({ profilePhoto: '' })
+                        });
+                        const data = await response.json();
+                        if (!response.ok || !data.success) {
+                            throw new Error(data.message || 'Unable to remove avatar.');
+                        }
 
-                    showSaveToast();
+                        persistedProfilePhotoUrl = '';
+                        avatarMarkedForRemoval = false;
+                        syncAvatarCache('', data.user || currentUser);
+                        deleteAvatarFromStorage(previousProfilePhotoUrl).catch(() => {});
+                        if (window.loadUserUI) window.loadUserUI();
+                        triggerSaveSuccessAnimation();
+                    } catch (error) {
+                        console.error('Avatar removal failed:', error);
+                        alert(error.message || 'Unable to remove avatar.');
+                        setAvatarPreview(persistedProfilePhotoUrl, getInitials(currentUser));
+                        avatarMarkedForRemoval = false;
+                    }
                 });
             }
         });

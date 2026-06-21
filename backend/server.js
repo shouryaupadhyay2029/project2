@@ -75,6 +75,8 @@ app.use(compression());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
+
+
 // ─── Mongo injection protection ───────────────────────────────
 // Custom sanitizer is mounted below after validation import.
 // It mutates body/params/query in-place and does not reassign req.query,
@@ -93,7 +95,7 @@ try {
 // ─── Rate limiting ────────────────────────────────────────────
 const {
   generalLimiter,
-  authLimiter,
+
   messageLimiter,
   searchLimiter,
   presenceLimiter,
@@ -133,7 +135,7 @@ const authMiddleware = require("./middleware/auth").protect;
 const { unfollowUser } = require("./api/followController");
 
 // ─── Routes with specific rate limits ────────────────────────
-app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/activity", activityRoutes);
