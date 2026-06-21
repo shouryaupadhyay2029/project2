@@ -5,7 +5,7 @@ function getSocketEmitter() {
   try {
     return require("../socket/socketServer");
   } catch (e) {
-    return { emitToUser: () => {} };
+    return { emitToUser: () => { } };
   }
 }
 

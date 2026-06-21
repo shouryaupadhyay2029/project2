@@ -1,13 +1,41 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const { signAuthToken } = require("../utils/jwtTokens");
+const { signAuthToken, signRefreshToken, verifyAuthToken } = require("../utils/jwtTokens");
 const { verifyFirebaseIdToken } = require("../utils/firebaseTokens");
 
 function toAuthUser(user) {
     return {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        displayName: user.displayName,
+        bio: user.bio,
+        location: user.location,
+        timezone: user.timezone,
+        portfolioWebsite: user.portfolioWebsite,
+        profilePhoto: user.profilePhoto,
+        followers: Array.isArray(user.followers) ? user.followers.length : 0,
+        following: Array.isArray(user.following) ? user.following.length : 0,
+        skills: user.skills,
+        techStack: user.techStack,
+        socialLinks: user.socialLinks,
+        resumeUrl: user.resumeUrl,
+        profileVisibility: user.profileVisibility,
+        showContributionGraph: user.showContributionGraph,
+        showAchievements: user.showAchievements,
+        currentStatus: user.currentStatus,
+        developerTags: user.developerTags,
+        featuredProject: user.featuredProject,
+        notifications: user.notificationSettings,
+        appearance: user.appearance,
+        projectSettings: user.projectSettings,
+        projectPreferences: user.projectPreferences,
+        ecosystem: user.ecosystem,
+        security: user.security,
+        advanced: user.advanced,
+        privacy: user.privacy,
+        isOnline: user.isOnline,
+        lastSeen: user.lastSeen
     };
 }
 
@@ -80,29 +108,27 @@ const registerUser = async(req, res) => {
             lastSeen: new Date()
         });
 
+        const token = signAuthToken({ id: user._id }, { expiresIn: "15m" });
+        const refreshToken = signRefreshToken({ id: user._id });
 
-        // GENERATE TOKEN
-        const token = signAuthToken({ id: user._id }, { expiresIn: "30d" });
-
+        user.refreshToken = refreshToken;
+        await User.updateOne({ _id: user._id }, { $set: { refreshToken } });
 
         res.status(201).json({
             success: true,
             token,
+            refreshToken,
             user: toAuthUser(user)
         });
 
     } catch (error) {
-
         console.log(error);
-
         res.status(500).json({
             success: false,
             message: "Server Error"
         });
     }
 };
-
-
 
 const loginUser = async(req, res) => {
     try {
@@ -130,17 +156,27 @@ const loginUser = async(req, res) => {
         }
 
         // GENERATE TOKEN
-        const token = signAuthToken({ id: user._id }, { expiresIn: "7d" });
+        const token = signAuthToken({ id: user._id }, { expiresIn: "15m" });
+        const refreshToken = signRefreshToken({ id: user._id });
 
         user.isOnline = true;
         user.lastSeen = new Date();
-        await user.save();
+        user.refreshToken = refreshToken;
+
+        await User.updateOne({ _id: user._id }, {
+            $set: {
+                isOnline: true,
+                lastSeen: user.lastSeen,
+                refreshToken: refreshToken
+            }
+        });
 
         // RESPONSE
         res.status(200).json({
             success: true,
             message: "Login successful",
             token,
+            refreshToken,
             user: toAuthUser(user)
         });
 
@@ -196,14 +232,27 @@ const googleLogin = async(req, res) => {
         if (decodedGoogleToken.picture && !user.profilePhoto) {
             user.profilePhoto = decodedGoogleToken.picture;
         }
-        await user.save();
 
-        const token = signAuthToken({ id: user._id, provider: "google" }, { expiresIn: "7d" });
+        const token = signAuthToken({ id: user._id, provider: "google" }, { expiresIn: "15m" });
+        const refreshToken = signRefreshToken({ id: user._id, provider: "google" });
+
+        user.refreshToken = refreshToken;
+
+        await User.updateOne({ _id: user._id }, {
+            $set: {
+                isOnline: true,
+                lastSeen: user.lastSeen,
+                displayName: user.displayName,
+                profilePhoto: user.profilePhoto,
+                refreshToken: refreshToken
+            }
+        });
 
         return res.status(200).json({
             success: true,
             message: "Google login successful",
             token,
+            refreshToken,
             user: toAuthUser(user)
         });
     } catch (error) {
@@ -216,8 +265,59 @@ const googleLogin = async(req, res) => {
     }
 };
 
+const refreshTokenHandler = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: "No refresh token provided"
+            });
+        }
+
+        let decoded;
+        try {
+            decoded = verifyAuthToken(refreshToken);
+        } catch (error) {
+            return res.status(403).json({
+                success: false,
+                message: "Invalid refresh token"
+            });
+        }
+
+        const user = await User.findById(decoded.id);
+
+        if (!user || user.refreshToken !== refreshToken) {
+            return res.status(403).json({
+                success: false,
+                message: "Invalid refresh token"
+            });
+        }
+
+        const token = signAuthToken({ id: user._id, provider: decoded.provider }, { expiresIn: "15m" });
+        const newRefreshToken = signRefreshToken({ id: user._id, provider: decoded.provider });
+
+        user.refreshToken = newRefreshToken;
+        await User.updateOne({ _id: user._id }, { $set: { refreshToken: newRefreshToken } });
+
+        return res.status(200).json({
+            success: true,
+            token,
+            refreshToken: newRefreshToken
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
-    googleLogin
+    googleLogin,
+    refreshTokenHandler
 };

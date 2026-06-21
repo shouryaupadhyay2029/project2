@@ -7,9 +7,6 @@
 
   function getStoredToken() {
     try {
-      var token = localStorage.getItem("token");
-      if (token) return token;
-
       var authRaw = localStorage.getItem("devstage_auth");
       if (authRaw) {
         var auth = JSON.parse(authRaw);

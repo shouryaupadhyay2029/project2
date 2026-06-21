@@ -31,9 +31,6 @@
   /** Read the auth token from every known localStorage location. */
   function getStoredToken() {
     try {
-      var direct = localStorage.getItem("token");
-      if (direct) return direct;
-
       var authRaw = localStorage.getItem("devstage_auth");
       if (authRaw) {
         var authObj = JSON.parse(authRaw);

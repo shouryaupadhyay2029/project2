@@ -378,6 +378,34 @@ const deleteAccount = async(req, res) => {
                 { senderEmail: user.email }
             ]
         });
+
+        // Extended cascade deletion cleanups
+        try {
+            const ApiKey = require("../models/ApiKey");
+            await ApiKey.deleteMany({ owner: user._id });
+        } catch (e) {
+            console.error("Cascade delete API Key error:", e.message);
+        }
+
+        try {
+            const Achievement = require("../models/Achievement");
+            await Achievement.deleteMany({ userId: user._id });
+        } catch (e) {
+            console.error("Cascade delete Achievement error:", e.message);
+        }
+
+        try {
+            const CollaborationRequest = require("../models/CollaborationRequest");
+            await CollaborationRequest.deleteMany({
+                $or: [
+                    { sender: user._id },
+                    { receiver: user._id }
+                ]
+            });
+        } catch (e) {
+            console.error("Cascade delete CollaborationRequest error:", e.message);
+        }
+
         await User.findByIdAndDelete(user._id);
 
         return res.status(200).json({

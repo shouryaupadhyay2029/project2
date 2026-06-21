@@ -408,14 +408,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── Engagement Logic ───
     const handleLikeToggle = async(projectId, btn) => {
-        if (!window.auth.currentUser) {
+        const user = window.getDevstageUser();
+        if (!user) {
             if (window.showGlobalAuthMessage) {
                 window.showGlobalAuthMessage("Please login to like projects", "info");
             }
             return;
         }
 
-        const userId = window.auth.currentUser.uid;
+        const userId = user.id;
         const likeId = `${userId}_${projectId}`;
         const likeRef = db.collection('likes').doc(likeId);
         const projectRef = db.collection('projects').doc(projectId);
@@ -445,8 +446,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 await db.collection('activity').add({
                     type: 'like',
                     userId,
-                    userName: window.auth.currentUser.displayName || 'Anonymous',
-                    userAvatar: window.auth.currentUser.photoURL || `https://ui-avatars.com/api/?name=User`,
+                    userName: user.displayName || user.username || 'Anonymous',
+                    userAvatar: user.profilePhoto || `https://ui-avatars.com/api/?name=User`,
                     projectId,
                     projectTitle: pTitle,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -462,8 +463,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const checkIfLiked = async(projectId, btn) => {
-        if (!window.auth.currentUser) return;
-        const userId = window.auth.currentUser.uid;
+        const user = window.getDevstageUser();
+        if (!user) return;
+        const userId = user.id;
         const likeId = `${userId}_${projectId}`;
         const likeDoc = await db.collection('likes').doc(likeId).get();
         if (likeDoc.exists) {

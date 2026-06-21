@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+
 
   // ─── 1. TAB SYSTEM ───────────────────────────────────────
   const tabs = document.querySelectorAll(".tab-btn");
@@ -29,21 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ─── 2. PROFILE DATA ENGINE ─────────────────────────────
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      updateProfileUI(user);
-      fetchUserProjects(user.uid);
-      fetchUserActivity(user.uid);
-      checkGitHubConnection(user.uid);
+  const user = window.getDevstageUser();
+  if (user) {
+    fetchUserProjects(user.id);
+    fetchUserActivity(user.id);
+    checkGitHubConnection(user.id);
 
-      // Track profile view
-      const username = user.displayName || user.email.split("@")[0];
-      trackProfileView(username);
-    } else {
-      // Auth guard handles redirect for protected pages — do nothing here
-      console.log("[DevStage Profile] No Firebase user session.");
-    }
-  });
+    // Track profile view
+    const username = user.username || user.email.split("@")[0];
+    trackProfileView(username);
+  } else {
+    // Auth guard handles redirect for protected pages — do nothing here
+    console.log("[DevStage Profile] No canonical user session.");
+  }
 
   // Track profile view
   async function trackProfileView(username) {
@@ -64,43 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function updateProfileUI(user) {
-    document.getElementById("profile-avatar").src =
-      user.photoURL ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=2a2a2a&color=fff`;
-    document.getElementById("profile-name").innerText =
-      user.displayName || "Developer";
-    document.getElementById("profile-email").innerText = user.email;
 
-    const handleSource = user.displayName || user.email || "developer";
-    const safeHandle = `@${String(handleSource)
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(/[^a-z0-9]/g, "")
-      .slice(0, 14)}`;
-    const handleEl = document.getElementById("profile-handle");
-    if (handleEl) handleEl.innerText = safeHandle;
-
-    // Fetch bio and social links from Firestore
-    const userDoc = await db.collection("users").doc(user.uid).get();
-    if (userDoc.exists) {
-      const data = userDoc.data();
-      if (data.bio) document.getElementById("profile-bio").innerText = data.bio;
-      if (data.linkedin) {
-        const linkedinLink = document.getElementById("link-linkedin");
-        if (linkedinLink) linkedinLink.href = data.linkedin;
-      }
-      if (data.location) {
-        const locationItem = document.querySelector("#profile-location");
-        if (locationItem) locationItem.textContent = data.location;
-      }
-    }
-  }
 
   // ─── 3. PROJECTS FEED ───────────────────────────────────
   async function fetchUserProjects(uid) {
     const grid = document.getElementById("user-projects-grid");
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     if (!token) {
       console.log("[DevStage Profile] No auth token found");
@@ -209,15 +175,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const username = ghUsernameInput.value.trim();
       if (!username) return;
 
-      const user = auth.currentUser;
-      await db.collection("users").doc(user.uid).set(
+      const user = window.getDevstageUser();
+      if (!user) return;
+      await db.collection("users").doc(user.id).set(
         {
           githubUsername: username,
         },
         { merge: true },
       );
 
-      checkGitHubConnection(user.uid);
+      checkGitHubConnection(user.id);
     });
   }
 
@@ -258,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ─── 5. ACTIVITY FEED ────────────────────────────────────
   async function fetchUserActivity(uid) {
     const grid = document.getElementById("contrib-grid");
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     if (!grid) return;
 
@@ -319,11 +286,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getToken() {
     try {
-      return (
-        localStorage.getItem("token") ||
-        JSON.parse(localStorage.getItem("devstage_auth") || "null")?.token ||
-        ""
-      );
+      const stored = localStorage.getItem("devstage_auth");
+      return stored ? JSON.parse(stored).token : "";
     } catch (error) {
       return "";
     }
@@ -333,12 +297,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const handle = document
       .getElementById("profile-handle")
       ?.textContent?.replace("@", "");
-    const cached = JSON.parse(
-      localStorage.getItem("devstage_user_cache") ||
-        localStorage.getItem("user") ||
-        "null",
-    );
-    return handle || cached?.username || cached?.displayName || "";
+    const user = window.getDevstageUser ? window.getDevstageUser() : null;
+    return handle || user?.username || user?.displayName || "";
   }
 
   async function loadAchievements() {

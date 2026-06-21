@@ -14,6 +14,14 @@ function getJwtSecret() {
 function signAuthToken(payload, options = {}) {
   return jwt.sign(payload, getJwtSecret(), {
     algorithm: JWT_ALGORITHM,
+    expiresIn: "15m",
+    ...options,
+  });
+}
+
+function signRefreshToken(payload, options = {}) {
+  return jwt.sign(payload, getJwtSecret(), {
+    algorithm: JWT_ALGORITHM,
     expiresIn: "7d",
     ...options,
   });
@@ -29,5 +37,6 @@ module.exports = {
   JWT_SECRET_ENV_NAME,
   JWT_ALGORITHM,
   signAuthToken,
+  signRefreshToken,
   verifyAuthToken,
 };

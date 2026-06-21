@@ -25,17 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─── 1. AUTH CHECK & INITIAL FETCH ────────────────────────
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            fetchPreviousUploads(user.uid);
-        } else {
-            // No auto-redirect — upload form already validates auth on submit
-            console.log('[DevStage Upload] No Firebase user session.');
-        }
-    });
+    const user = window.getDevstageUser ? window.getDevstageUser() : null;
+    if (user) {
+        fetchPreviousUploads(user.id);
+    } else {
+        // No auto-redirect — upload form already validates auth on submit
+        console.log('[DevStage Upload] No canonical user session.');
+    }
 
     async function fetchPreviousUploads(uid) {
-        const token = localStorage.getItem('token');
+        const authSession = JSON.parse(localStorage.getItem('devstage_auth') || '{}');
+        const token = authSession.token;
 
         if (!token) {
             console.log('[DevStage Upload] No auth token found');
@@ -252,13 +252,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── 3. UPLOAD HANDLER ───────────────────────────────────
     uploadForm.addEventListener('submit', async(e) => {
         e.preventDefault();
-        const user = auth.currentUser;
+        const user = window.getDevstageUser ? window.getDevstageUser() : null;
         const file = fileInput.files[0];
         const title = document.getElementById('project-title').value;
         const desc = document.getElementById('project-desc').value;
         const tech = document.getElementById('project-tech').value;
         const category = categoryInput.value;
-        const token = localStorage.getItem('token');
+        
+        const authSession = JSON.parse(localStorage.getItem('devstage_auth') || '{}');
+        const token = authSession.token;
 
         if (!token) {
             updateTerminalStatus("error: missing authentication token");
@@ -295,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // A. Upload to Storage if file exists
             if (file) {
                 updateTerminalStatus("optimizing assets & pushing to storage...");
-                const storageRef = storage.ref(`projects/${user.uid}/${Date.now()}_${file.name}`);
+                const storageRef = storage.ref(`projects/${user.id}/${Date.now()}_${file.name}`);
                 const uploadTask = storageRef.put(file);
 
                 await new Promise((resolve, reject) => {

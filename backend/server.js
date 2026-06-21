@@ -129,7 +129,7 @@ const reportRoutes = require("./routes/reportRoutes");
 const publicRoutes = require("./routes/publicRoutes");
 const metricsRoutes = require("./routes/metricsRoutes");
 const seoRoutes = require("./routes/seoRoutes");
-const authMiddleware = require("./middleware/authmiddleware");
+const authMiddleware = require("./middleware/auth").protect;
 const { unfollowUser } = require("./api/followController");
 
 // ─── Routes with specific rate limits ────────────────────────

@@ -4,15 +4,17 @@ const router = express.Router();
 const {
     registerUser,
     loginUser,
-    googleLogin
+    googleLogin,
+    refreshTokenHandler
 } = require("../api/authcontroller");
 
-const authMiddleware = require("../middleware/authmiddleware");
+const authMiddleware = require("../middleware/auth").protect;
 const User = require("../models/user");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/google", googleLogin);
+router.post("/refresh", refreshTokenHandler);
 
 // Protected route — get current logged-in user
 router.get("/me", authMiddleware, async (req, res) => {

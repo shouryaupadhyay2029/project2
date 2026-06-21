@@ -49,7 +49,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (url.pathname === "/scripts/auth.js" || url.pathname === "/scripts/firebase-config.js") {
+  if (url.pathname === "/scripts/auth.js" || url.pathname === ) {
     event.respondWith(networkFirstStatic(request));
     return;
   }

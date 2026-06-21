@@ -25,7 +25,7 @@ const sharedOptions = {
 const authLimiter = rateLimit({
   ...sharedOptions,
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,
+  max: 1000,
   handler: jsonHandler(
     "Too many auth attempts. Try again in 15 minutes."
   ),

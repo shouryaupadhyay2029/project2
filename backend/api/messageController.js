@@ -9,7 +9,7 @@ function getSocketEmitter() {
   try {
     return require("../socket/socketServer");
   } catch (e) {
-    return { emitToUser: () => {}, emitToConversation: () => {} };
+    return { emitToUser: () => { }, emitToConversation: () => { } };
   }
 }
 
@@ -188,11 +188,11 @@ const sendMessage = async (req, res) => {
       ...messageResponse(message),
       senderInfo: sender
         ? {
-            id: sender._id,
-            username: sender.username,
-            displayName: sender.displayName,
-            profilePhoto: sender.profilePhoto,
-          }
+          id: sender._id,
+          username: sender.username,
+          displayName: sender.displayName,
+          profilePhoto: sender.profilePhoto,
+        }
         : null,
     };
 

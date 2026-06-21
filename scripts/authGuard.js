@@ -1,13 +1,15 @@
 // Central Auth Guard Utility for DevStage
 (function() {
     // ─── SAFE AUTH STATE CHECK ───
-    function getCurrentUser() {
-        const user = localStorage.getItem("currentUser");
-
-        if (!user) return null;
-
+    function getDevstageAuth() {
+        const stored = localStorage.getItem("devstage_auth");
+        if (!stored) return null;
         try {
-            return JSON.parse(user);
+            const parsed = JSON.parse(stored);
+            if (parsed && parsed.token && parsed.user && parsed.user.id) {
+                return parsed;
+            }
+            return null;
         } catch {
             return null;
         }
@@ -25,20 +27,18 @@
 
     // Check if current page is protected
     if (protectedPages.includes(currentPage)) {
-        // Try all possible user session sources
-        const currentUser = getCurrentUser();
-        const token = localStorage.getItem("token");
-        const devstageAuth = localStorage.getItem("devstage_auth");
-        const devstageUserCache = localStorage.getItem("devstage_user_cache");
-        const devstageUser = localStorage.getItem("devstageUser");
-        const user = localStorage.getItem("user");
-        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        const authSession = getDevstageAuth();
+        
+        // Block mock sessions natively if they somehow get into devstage_auth
+        let isMock = false;
+        if (authSession && authSession.user && authSession.user.id && String(authSession.user.id).startsWith("mock-")) {
+            isMock = true;
+        }
 
-        // Allow access if ANY valid session exists
-        const hasSession = currentUser || (token && isLoggedIn) || devstageAuth || devstageUserCache || devstageUser || user;
+        const hasSession = authSession && !isMock;
 
         if (!hasSession) {
-            // Redirect to homepage, NOT login page
+            // Redirect to homepage
             const isInsidePages = path.includes("/pages/");
             const redirectUrl = isInsidePages ? "../index.html" : "index.html";
             window.location.replace(redirectUrl);

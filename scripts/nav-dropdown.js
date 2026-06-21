@@ -107,12 +107,17 @@ function initPremiumNavDropdown() {
             closeMenu();
 
             // Clear all auth state
+            localStorage.removeItem("devstage_auth");
+            
+            // Legacy cleanup
             localStorage.removeItem("currentUser");
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("devstageUser");
             localStorage.removeItem("devstageMockAccount");
+            localStorage.removeItem("devstage_user_cache");
+            localStorage.removeItem("authProvider");
 
             if (typeof firebase !== 'undefined' && firebase.auth) {
                 firebase

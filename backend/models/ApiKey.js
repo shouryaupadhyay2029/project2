@@ -48,8 +48,6 @@ const apiKeySchema = new mongoose.Schema(
   },
 );
 
-apiKeySchema.index({ keyHash: 1 }, { unique: true });
-apiKeySchema.index({ isActive: 1 });
 apiKeySchema.index({ owner: 1 });
 
 module.exports = mongoose.model("ApiKey", apiKeySchema);

@@ -9,9 +9,7 @@ const STATIC_ROUTES = [
   "/pages/profile.html",
   "/pages/teams.html",
   "/pages/challenges.html",
-  "/pages/beginner.html",
-  "/pages/login.html",
-  "/pages/register.html",
+  "/pages/beginner.html"
 ];
 
 async function generateSitemap(baseUrl = "") {

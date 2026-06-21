@@ -41,8 +41,6 @@ const DEVSTAGE_COLLABORATION_KEY = "devstage_collaboration_cache";
 
 function getStoredToken() {
     try {
-        const token = localStorage.getItem("token");
-        if (token) return token;
         const stored = localStorage.getItem(DEVSTAGE_AUTH_KEY);
         if (stored) {
             const parsed = JSON.parse(stored);
@@ -53,6 +51,19 @@ function getStoredToken() {
     }
     return "";
 }
+
+window.getDevstageUser = function() {
+    try {
+        const stored = localStorage.getItem(DEVSTAGE_AUTH_KEY);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            return parsed.user || null;
+        }
+    } catch (e) {
+        console.warn("[DevStage Auth] Failed to parse stored user:", e);
+    }
+    return null;
+};
 
 function getJwtHeader(token) {
     try {
@@ -66,27 +77,53 @@ function getJwtHeader(token) {
     }
 }
 
+function getJwtPayload(token) {
+    try {
+        const payload = String(token || "").split(".")[1];
+        if (!payload) return null;
+        const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+        const padded = normalized.padEnd(normalized.length + ((4 - (normalized.length % 4)) % 4), "=");
+        return JSON.parse(atob(padded));
+    } catch (error) {
+        return null;
+    }
+}
+
 function isBackendJwt(token) {
     return getJwtHeader(token)?.alg === "HS256";
 }
 
-function cacheAuthSession(token, user, provider) {
-    if (token) {
-        localStorage.setItem("token", token);
-        localStorage.setItem(
-            DEVSTAGE_AUTH_KEY,
-            JSON.stringify({ token, savedAt: Date.now() }),
-        );
-    }
-    if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        localStorage.setItem(DEVSTAGE_USER_CACHE_KEY, JSON.stringify(user));
-    }
-    localStorage.setItem("isLoggedIn", "true");
-    if (provider) {
-        localStorage.setItem("authProvider", provider);
-    }
+function cacheAuthSession(token, refreshToken, user, provider) {
+    if (!token || !user) return;
+    
+    // Unify to a canonical format
+    const canonicalUser = {
+        id: user.id || user._id || user.uid,
+        username: user.username || user.displayName || "Unknown User",
+        email: user.email,
+        displayName: user.displayName || user.username || "Unknown User",
+        profilePhoto: user.profilePhoto || user.photoURL || ""
+    };
+
+    const sessionData = {
+        token,
+        refreshToken,
+        user: canonicalUser,
+        provider: provider || "local",
+        savedAt: Date.now()
+    };
+    
+    localStorage.setItem(DEVSTAGE_AUTH_KEY, JSON.stringify(sessionData));
+    
+    // Remove legacy artifacts if they exist
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("devstage_user_cache");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("devstageUser");
+    localStorage.removeItem("authProvider");
+
     try {
         window.dispatchEvent(
             new CustomEvent("devstage:auth_changed", {
@@ -99,19 +136,22 @@ function cacheAuthSession(token, user, provider) {
 }
 
 function clearAuthSession() {
+    localStorage.removeItem(DEVSTAGE_AUTH_KEY);
+    
+    // Legacy cleanup just in case
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("devstageUser");
     localStorage.removeItem("devstageMockAccount");
-    localStorage.removeItem(DEVSTAGE_AUTH_KEY);
     localStorage.removeItem(DEVSTAGE_USER_CACHE_KEY);
+    localStorage.removeItem("authProvider");
+    
     localStorage.removeItem(DEVSTAGE_NOTIFICATIONS_KEY);
     localStorage.removeItem(DEVSTAGE_MESSAGES_KEY);
     localStorage.removeItem(DEVSTAGE_WORKSPACE_KEY);
     localStorage.removeItem(DEVSTAGE_COLLABORATION_KEY);
-    localStorage.removeItem("authProvider");
     try {
         window.dispatchEvent(
             new CustomEvent("devstage:auth_changed", { detail: { loggedIn: false } }),
@@ -126,7 +166,7 @@ async function refreshBackendTokenFromFirebase(forceRefresh = false) {
     if (!user) return "";
     const firebaseToken = await user.getIdToken(forceRefresh);
     const backendSession = await exchangeGoogleToken(firebaseToken);
-    cacheAuthSession(backendSession.token, backendSession.user, "google");
+    cacheAuthSession(backendSession.token, backendSession.refreshToken, backendSession.user, "google");
     return backendSession.token;
 }
 
@@ -152,8 +192,46 @@ function waitForFirebaseUser(timeoutMs = 2500) {
 }
 
 async function getValidBackendToken() {
-    const token = getStoredToken();
-    if (token && isBackendJwt(token)) return token;
+    let authObj = null;
+    try {
+        const stored = localStorage.getItem(DEVSTAGE_AUTH_KEY);
+        if (stored) authObj = JSON.parse(stored);
+    } catch(e) {}
+
+    let token = authObj?.token;
+    const refreshToken = authObj?.refreshToken;
+
+    if (token && isBackendJwt(token)) {
+        const payload = getJwtPayload(token);
+        if (payload && payload.exp) {
+            const timeRemainingSec = payload.exp - Math.floor(Date.now() / 1000);
+            if (timeRemainingSec < 60 && refreshToken) {
+                // Token expired or about to expire, refresh it
+                try {
+                    const response = await fetch("http://localhost:5000/api/auth/refresh", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ refreshToken })
+                    });
+                    const data = await response.json();
+                    if (data.success && data.token) {
+                        token = data.token;
+                        const newRefreshToken = data.refreshToken || refreshToken;
+                        cacheAuthSession(token, newRefreshToken, authObj.user, authObj.provider);
+                        return token;
+                    } else {
+                        // Invalid refresh token
+                        clearAuthSession();
+                        return "";
+                    }
+                } catch(err) {
+                    console.error("Refresh token failed:", err);
+                    return token; // Fallback, let the API request fail naturally
+                }
+            }
+        }
+        return token;
+    }
 
     if (token) {
         console.warn("[DevStage Auth] Replacing non-backend token before API request.");
@@ -747,60 +825,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentPage = window.location.pathname.split("/").pop();
 
     async function checkAuth() {
-        console.log("DEBUG - checkAuth called. currentPage:", currentPage);
-        console.log("DEBUG - token:", localStorage.getItem("token"));
-        console.log("DEBUG - user:", localStorage.getItem("user"));
-        console.log("DEBUG - devstageUser:", localStorage.getItem("devstageUser"));
-
         if (!protectedPages.includes(currentPage)) return;
 
         const token = await getValidBackendToken();
-        const user =
-            localStorage.getItem("user") ||
-            localStorage.getItem(DEVSTAGE_USER_CACHE_KEY);
+        const user = window.getDevstageUser();
         
-        let cachedDevstageUser = null;
-        try {
-            cachedDevstageUser = JSON.parse(
-                localStorage.getItem("devstageUser") || "null",
-            );
-        } catch (e) {
-            console.warn("[DevStage Auth] Failed to parse devstageUser:", e);
-        }
-
-        // Google / Firebase session
-        const authProvider = localStorage.getItem("authProvider");
-        const isFirebaseSession =
-            authProvider === "google" ||
-            (!authProvider &&
-             cachedDevstageUser &&
-             cachedDevstageUser.uid &&
-             !cachedDevstageUser.uid.startsWith("mock-") &&
-             !/^[0-9a-fA-F]{24}$/.test(cachedDevstageUser.uid));
-
-        if (isFirebaseSession) {
-            console.log(
-                "[DevStage Auth] Firebase session detected. Deferring to onAuthStateChanged.",
-            );
-            return;
-        }
-
-        // Mock session
-        if (
-            cachedDevstageUser &&
-            cachedDevstageUser.uid &&
-            cachedDevstageUser.uid.startsWith("mock-")
-        ) {
-            console.log(
-                "[DevStage Auth] Mock session active. Skipping backend check.",
-            );
-            injectProfileUI({
-                username: cachedDevstageUser.displayName || "Mock User",
-                email: cachedDevstageUser.email || "mock@example.com",
-            });
-            return;
-        }
-
         // Backend JWT session
         if (!token || !user) {
             console.log("[DevStage Auth] No auth found. Redirecting to login.");
@@ -833,20 +862,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
                 // Sync user data to local storage
-                cacheAuthSession(token, backendUser, "local");
+                cacheAuthSession(token, authObj?.refreshToken || "", backendUser, "local");
+                const canonicalUser = window.getDevstageUser();
 
-                const devstageUserData = {
-                    displayName: backendUser.username,
-                    email: backendUser.email,
-                    uid: backendUser.id,
-                    photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(backendUser.username)}&background=c8b89a&color=0b0b0b`,
-                };
-                window.currentUser = devstageUserData;
-                syncNavbarUser({
-                    ...backendUser,
-                    displayName: backendUser.displayName || backendUser.username,
-                    photoURL: devstageUserData.photoURL,
-                });
+                syncNavbarUser(canonicalUser);
 
                 window.loadUserUI();
                 presenceRequest("online");
@@ -897,7 +916,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isLoginMode = true;
 
     function isMockSession(userData) {
-        return userData?.uid && String(userData.uid).startsWith("mock-");
+        return userData?.id && String(userData.id).startsWith("mock-");
     }
 
     // ─── 2. AUTH STATE CHANGE LISTENER ───
@@ -910,31 +929,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const firebaseToken = await user.getIdToken();
                 const backendSession = await exchangeGoogleToken(firebaseToken);
 
-                const userDataForLocalStorage = {
-                    id: backendSession.user.id,
-                    username: backendSession.user.username,
-                    email: backendSession.user.email,
-                    fullName: user.displayName || "",
-                    photoURL: user.photoURL ||
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
-                    profileImage: user.photoURL ||
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
-                };
-                cacheAuthSession(backendSession.token, userDataForLocalStorage, "google");
+                cacheAuthSession(backendSession.token, backendSession.refreshToken, backendSession.user, "google");
             } catch (e) {
                 console.error("Error exchanging Firebase ID token:", e);
             }
 
-            const userData = {
-                displayName: user.displayName,
-                email: user.email,
-                photoURL: user.photoURL,
-                uid: user.uid,
-                joined: user.metadata.creationTime,
-            };
-            localStorage.setItem("devstageUser", JSON.stringify(userData));
-            window.currentUser = userData;
-            syncNavbarUser(userData);
+            const canonicalUser = window.getDevstageUser();
+            syncNavbarUser(canonicalUser);
             window.loadUserUI();
             presenceRequest("online");
             loadNotifications();
@@ -943,51 +944,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 protectedPages.includes(currentPage) &&
                 currentPage === "profile.html"
             ) {
-                injectProfileUI({
-                    username: user.displayName || user.email.split("@")[0],
-                    email: user.email,
-                });
+                injectProfileUI(canonicalUser);
             }
         } else {
-            let cached = null;
-            try {
-                cached = JSON.parse(localStorage.getItem("devstageUser") || "null");
-            } catch (e) {
-                console.warn("[DevStage Auth] Failed to parse devstageUser:", e);
-            }
+            const canonicalUser = window.getDevstageUser();
 
-            const authProvider = localStorage.getItem("authProvider");
-            const wasFirebaseSession =
-                authProvider === "google" ||
-                (!authProvider &&
-                 cached &&
-                 cached.uid &&
-                 !cached.uid.startsWith("mock-") &&
-                 !/^[0-9a-fA-F]{24}$/.test(cached.uid));
-
-            if (wasFirebaseSession) {
-                console.log("[DevStage Auth] Firebase session expired or user logged out.");
-                if (protectedPages.includes(currentPage)) {
-                    handleInvalidToken();
-                } else {
-                    clearAuthSession();
-                    window.currentUser = null;
-                    window.loadUserUI();
-                }
-                return;
-            }
-
-            if (cached && (isMockSession(cached) || (authProvider === "local" && localStorage.getItem("token")))) {
-                window.currentUser = cached;
+            if (canonicalUser && !isMockSession(canonicalUser)) {
                 window.loadUserUI();
                 return;
             }
+            
             console.log("[DevStage] Global Auth: No Session");
             if (protectedPages.includes(currentPage)) {
                 handleInvalidToken();
             } else {
                 clearAuthSession();
-                window.currentUser = null;
                 window.loadUserUI();
             }
         }
@@ -1004,32 +975,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const firebaseToken = await user.getIdToken();
                 const backendSession = await exchangeGoogleToken(firebaseToken);
 
-                const userData = {
-                    id: backendSession.user.id,
-                    username: backendSession.user.username,
-                    email: backendSession.user.email,
-                    fullName: user.displayName || "",
-                    photoURL: user.photoURL ||
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
-                    profileImage: user.photoURL ||
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=c8b89a&color=0b0b0b`,
-                };
-                cacheAuthSession(backendSession.token, userData, "google");
-                console.log("User stored:", userData);
-
-                saveUserToFirestore(user);
+                cacheAuthSession(backendSession.token, backendSession.refreshToken, backendSession.user, "google");
+                console.log("User stored:", backendSession.user);
 
                 // Sync devstageUser with the newly logged in user details to populate global UI
-                const devstageUserData = {
-                    displayName: user.displayName,
-                    email: user.email,
-                    photoURL: user.photoURL,
-                    uid: user.uid,
-                    joined: user.metadata.creationTime,
-                };
-                localStorage.setItem("devstageUser", JSON.stringify(devstageUserData));
-                window.currentUser = devstageUserData;
-                syncNavbarUser(devstageUserData);
+                const canonicalUser = window.getDevstageUser();
+                syncNavbarUser(canonicalUser);
                 presenceRequest("online");
 
                 console.log("Redirecting to profile page");
@@ -1045,26 +996,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     };
 
-    async function saveUserToFirestore(user) {
-        const userRef = doc(db, "users", user.uid);
-        try {
-            const docSnap = await getDoc(userRef);
-            if (!docSnap.exists()) {
-                await setDoc(
-                    userRef, {
-                        uid: user.uid,
-                        name: user.displayName || "Anonymous",
-                        email: user.email,
-                        avatar: user.photoURL ||
-                            `https://ui-avatars.com/api/?name=${user.displayName}`,
-                        createdAt: serverTimestamp(),
-                    }, { merge: true },
-                );
-            }
-        } catch (error) {
-            console.error("Firestore Sync Error:", error);
-        }
-    }
+
 
     window.openLoginModal = (mode = "login") => {
         if (!authModal) return;
@@ -1139,20 +1071,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     closeAuthModal?.addEventListener("click", closeModal);
 
-    function saveMockSession(userData) {
-        localStorage.setItem("devstageUser", JSON.stringify(userData));
-        window.currentUser = userData;
-        window.loadUserUI();
-    }
 
-    function completeMockAuth(userData, successText) {
-        localStorage.setItem("authProvider", "mock");
-        saveMockSession(userData);
-        showMessage(successText, "success");
-        setTimeout(() => closeModal(), 600);
-    }
 
-    // ─── FORM SUBMISSION HANDLER (demo / mock when email auth backend unavailable) ───
+    // ─── FORM SUBMISSION HANDLER ───
     if (authForm) {
         authForm.addEventListener("submit", async(e) => {
             e.preventDefault();
@@ -1167,44 +1088,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 if (isLoginMode) {
-                    let stored = null;
-                    try {
-                        stored = JSON.parse(
-                            localStorage.getItem("devstageMockAccount") || "null",
-                        );
-                    } catch (e) {
-                        console.warn("[DevStage Auth] Failed to parse mock account:", e);
-                    }
-                    if (
-                        stored &&
-                        stored.email === email &&
-                        stored.password !== password
-                    ) {
-                        showMessage("Incorrect password", "error");
+                    const response = await fetch("http://localhost:5000/api/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await response.json();
+                    
+                    if (!response.ok || !data.success) {
+                        showMessage(data.message || "Invalid credentials", "error");
                         return;
                     }
-
-                    const displayName = stored?.displayName || email.split("@")[0];
-                    completeMockAuth({
-                            displayName,
-                            email,
-                            photoURL: stored?.photoURL ||
-                                `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=c8b89a&color=0b0b0b`,
-                            uid: stored?.uid || `mock-${email}`,
-                            joined: stored?.joined || new Date().toISOString(),
-                        },
-                        "Welcome back!",
-                    );
+                    
+                    cacheAuthSession(data.token, data.refreshToken, data.user, "local");
+                    
+                    showMessage("Welcome back!", "success");
+                    setTimeout(() => {
+                        closeModal();
+                        window.location.reload();
+                    }, 600);
                 } else {
-                    const fullname = document
-                        .getElementById("auth-fullname")
-                        ?.value.trim();
-                    const username = document
-                        .getElementById("auth-username")
-                        ?.value.trim();
-                    const confirmPassword = document.getElementById(
-                        "auth-confirm-password",
-                    )?.value;
+                    const fullname = document.getElementById("auth-fullname")?.value.trim();
+                    const username = document.getElementById("auth-username")?.value.trim();
+                    const confirmPassword = document.getElementById("auth-confirm-password")?.value;
 
                     if (!fullname || !username || !confirmPassword) {
                         showMessage("Please fill in all required fields", "error");
@@ -1221,29 +1127,30 @@ document.addEventListener("DOMContentLoaded", () => {
                         return;
                     }
 
-                    const photoURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullname)}&background=c8b89a&color=0b0b0b`;
-                    const mockAccount = {
-                        displayName: fullname,
-                        username,
-                        email,
-                        password,
-                        photoURL,
-                        uid: `mock-${Date.now()}`,
-                        joined: new Date().toISOString(),
-                    };
-                    localStorage.setItem(
-                        "devstageMockAccount",
-                        JSON.stringify(mockAccount),
-                    );
-                    completeMockAuth({
-                            displayName: fullname,
-                            email,
-                            photoURL,
-                            uid: mockAccount.uid,
-                            joined: mockAccount.joined,
-                        },
-                        "Account created successfully!",
-                    );
+                    const response = await fetch("http://localhost:5000/api/auth/register", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ 
+                            email, 
+                            password, 
+                            username, 
+                            displayName: fullname 
+                        })
+                    });
+                    const data = await response.json();
+                    
+                    if (!response.ok || !data.success) {
+                        showMessage(data.message || "Registration failed", "error");
+                        return;
+                    }
+                    
+                    cacheAuthSession(data.token, data.refreshToken, data.user, "local");
+                    
+                    showMessage("Account created successfully!", "success");
+                    setTimeout(() => {
+                        closeModal();
+                        window.location.reload();
+                    }, 600);
                 }
             } catch (error) {
                 showMessage("An error occurred: " + error.message, "error");
@@ -1312,18 +1219,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.loginWithGoogle();
     });
 
-    document.getElementById("github-login-btn")?.addEventListener("click", () => {
-        const name = isLoginMode ? "GitHub User" : "New GitHub User";
-        completeMockAuth({
-                displayName: name,
-                email: "github.user@devstage.demo",
-                photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0b0b0b&color=f5f2ec`,
-                uid: `mock-github-${Date.now()}`,
-                joined: new Date().toISOString(),
-            },
-            "Signed in with GitHub",
-        );
-    });
+
 
     function showMessage(text, type) {
         if (authMessage) {
@@ -1453,11 +1349,9 @@ if (registerForm) {
             });
 
             const data = await response.json();
-
-            console.log(data);
-
-            if (data.success) {
-                cacheAuthSession(data.token, data.user, "local");
+            
+            if (response.ok && data.success) {
+                cacheAuthSession(data.token, data.refreshToken, data.user, "local");
 
                 alert("Registration Successful");
 
@@ -1501,7 +1395,7 @@ if (loginForm) {
                 console.log("Login Success");
                 console.log(data);
 
-                cacheAuthSession(data.token, data.user, "local");
+                cacheAuthSession(data.token, data.refreshToken, data.user, "local");
 
                 // Sync devstageUser with the newly logged in user details to populate global UI
                 const userData = {

@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    refreshToken: {
+      type: String,
+      default: "",
+    },
+
     displayName: {
       type: String,
       default: "",
@@ -394,8 +399,6 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
 userSchema.index({ displayName: 1 });
 userSchema.index({ skills: 1 });
 userSchema.index({ developerTags: 1 });
