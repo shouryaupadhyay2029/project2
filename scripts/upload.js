@@ -331,7 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     title,
                     description: desc,
                     techStack: techStackArray,
-                    status: category || 'Planning',
+                    status: 'Planning',
+                    category: category || 'Web App',
                     thumbnail,
                     githubUrl: '',
                     liveUrl: ''

@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let discoveryUnsubscribe = null;
 
-    const initDiscoveryFeed = () => {
+    const initDiscoveryFeed = async () => {
         if (!discoveryGrid) return;
 
         // Skeletons while connecting
@@ -290,45 +290,39 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="skeleton-card"></div>
     `;
 
-        // Unsubscribe from existing listener if filters change
-        if (discoveryUnsubscribe) discoveryUnsubscribe();
-
-        const domain = getFilterValue('domain-dropdown');
-        const tech = getFilterValue('tech-dropdown');
-        const diff = getFilterValue('difficulty-dropdown');
-        const sortBy = getFilterValue('sort-dropdown');
-
-        let query = db.collection('projects');
-
-        // Apply Client-side filtering if needed or order by
-        if (sortBy === 'newest') query = query.orderBy('createdAt', 'desc');
-        else if (sortBy === 'likes') query = query.orderBy('likesCount', 'desc');
-        else if (sortBy === 'views') query = query.orderBy('viewCount', 'desc');
-
-        // Real-time Listener
-        discoveryUnsubscribe = query.limit(12).onSnapshot((snapshot) => {
+        try {
+            const res = await fetch('http://localhost:5000/api/projects/all');
+            const data = await res.json();
+            
             discoveryGrid.innerHTML = '';
-
-            if (snapshot.empty) {
-                discoveryGrid.innerHTML = `
+            if (!data.success || data.projects.length === 0) {
+                 discoveryGrid.innerHTML = `
           <div style="grid-column: 1/-1; text-align: center; padding: 60px 0; opacity: 0.5;">
             <i data-lucide="compass" style="width: 40px; height: 40px; margin-bottom: 15px;"></i>
             <p>No projects found. Be the first to share!</p>
           </div>
         `;
-                lucide.createIcons();
-                return;
+                 lucide.createIcons();
+                 return;
             }
-
-            snapshot.forEach((doc, index) => {
-                renderDiscoveryCard(doc.data(), doc.id, index);
+            data.projects.slice(0, 12).forEach((p, index) => {
+                const mapped = {
+                    title: p.title,
+                    description: p.description,
+                    userName: p.owner?.displayName || p.owner?.username || 'DevStage Developer',
+                    userAvatar: p.owner?.profilePhoto || \`https://ui-avatars.com/api/?name=\${p.owner?.displayName || 'User'}\`,
+                    likesCount: p.likes,
+                    viewCount: p.views,
+                    fileURL: p.thumbnail,
+                    category: p.category
+                };
+                renderDiscoveryCard(mapped, p._id || p.id, index);
             });
-
             lucide.createIcons();
-        }, (error) => {
+        } catch (error) {
             console.error("[DevStage] Discovery Engine Error:", error);
-            discoveryGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff4b4b;">Sync failed. Please check your connection.</p>`;
-        });
+            discoveryGrid.innerHTML = \`<p style="grid-column: 1/-1; text-align: center; color: #ff4b4b;">Sync failed. Please check your connection.</p>\`;
+        }
     };
 
     const renderDiscoveryCard = (p, id, index) => {
@@ -372,11 +366,21 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
+        // Analytics: Fire impression
+        if (id) {
+            fetch(\`http://localhost:5000/api/analytics/impression/\${id}\`, { method: 'POST' }).catch(() => {});
+        }
+
         // Click Card to View
         card.addEventListener('click', (e) => {
             if (!e.target.closest('.stat-btn')) {
+                // Analytics: Fire click
+                if (id) {
+                    fetch(\`http://localhost:5000/api/analytics/click/\${id}\`, { method: 'POST' }).catch(() => {});
+                }
+                
                 const isRoot = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/project2') || window.location.pathname.endsWith('/project2/');
-                window.location.href = (isRoot ? 'pages/' : '') + `explore.html?id=${id}`;
+                window.location.href = (isRoot ? 'pages/' : '') + \`explore.html?id=\${id}\`;
             }
         });
 
@@ -408,70 +412,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── Engagement Logic ───
     const handleLikeToggle = async(projectId, btn) => {
-        const user = window.getDevstageUser();
-        if (!user) {
-            if (window.showGlobalAuthMessage) {
-                window.showGlobalAuthMessage("Please login to like projects", "info");
-            }
-            return;
-        }
-
-        const userId = user.id;
-        const likeId = `${userId}_${projectId}`;
-        const likeRef = db.collection('likes').doc(likeId);
-        const projectRef = db.collection('projects').doc(projectId);
-
-        try {
-            const likeDoc = await likeRef.get();
-            const icon = btn.querySelector('i');
-            const countSpan = btn.querySelector('.count');
-            let currentCount = parseInt(countSpan.textContent);
-
-            if (likeDoc.exists) {
-                // Unlike
-                await likeRef.delete();
-                await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(-1) });
-                btn.classList.remove('active');
-                countSpan.textContent = Math.max(0, currentCount - 1);
-            } else {
-                // Like
-                await likeRef.set({ userId, projectId, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                const pDoc = await projectRef.get();
-                const pData = (pDoc && typeof pDoc.data === 'function') ? pDoc.data() : null;
-                const pTitle = (pData && pData.title) ? pData.title : "a project";
-
-                await projectRef.update({ likesCount: firebase.firestore.FieldValue.increment(1) });
-
-                // Log Activity
-                await db.collection('activity').add({
-                    type: 'like',
-                    userId,
-                    userName: user.username || 'Anonymous',
-                    userAvatar: user.profilePhoto || `https://ui-avatars.com/api/?name=User`,
-                    projectId,
-                    projectTitle: pTitle,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                btn.classList.add('active');
-                countSpan.textContent = currentCount + 1;
-            }
-            lucide.createIcons();
-        } catch (error) {
-            console.error("[DevStage] Like Error:", error);
-        }
+        // Disabled for now, handled via backend API in explore.html
+        console.log("Like toggled on landing page", projectId);
     };
 
     const checkIfLiked = async(projectId, btn) => {
-        const user = window.getDevstageUser();
-        if (!user) return;
-        const userId = user.id;
-        const likeId = `${userId}_${projectId}`;
-        const likeDoc = await db.collection('likes').doc(likeId).get();
-        if (likeDoc.exists) {
-            btn.classList.add('active');
-            lucide.createIcons();
-        }
+        // Disabled
     };
 
     // Bind Filters
@@ -485,28 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initActivityPulse = () => {
         if (!activityList) return;
-
-        db.collection('activity')
-            .orderBy('timestamp', 'desc')
-            .limit(8)
-            .onSnapshot((snapshot) => {
-                activityList.innerHTML = '';
-
-                if (snapshot.empty) {
-                    activityList.innerHTML = '<p class="loading-text">Quiet for now...</p>';
-                    return;
-                }
-
-                snapshot.forEach((doc) => {
-                    const act = doc.data();
-                    const item = document.createElement('div');
-                    item.className = 'activity-item';
-
-                    const time = act.timestamp ? formatTimeAgo(act.timestamp.toDate()) : 'Just now';
-                    const icon = act.type === 'upload' ? 'rocket' : 'heart';
-                    const actionText = act.type === 'upload' ? 'uploaded' : 'liked';
-
-                    item.innerHTML = `
             <img src="${act.userAvatar}" class="activity-avatar" alt="${act.userName}">
             <div class="activity-content">
               <b>${act.userName}</b> ${actionText} 
@@ -575,6 +499,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     };
+
+    const initActivityPulse = () => {};
 
     // Initial Boot
     setupFilterDropdowns();

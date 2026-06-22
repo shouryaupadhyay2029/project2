@@ -13,6 +13,7 @@ const createProject = async (req, res) => {
       githubUrl,
       liveUrl,
       status,
+      category,
       thumbnail,
     } = req.body;
 
@@ -70,6 +71,7 @@ const createProject = async (req, res) => {
       githubUrl: githubUrl || "",
       liveUrl: liveUrl || "",
       status: status || "Planning",
+      category: category || "Web App",
       thumbnail: thumbnail || "",
       owner: req.user.id,
     });
@@ -133,6 +135,7 @@ const updateProject = async (req, res) => {
       githubUrl,
       liveUrl,
       status,
+      category,
       thumbnail,
     } = req.body;
 
@@ -209,6 +212,7 @@ const updateProject = async (req, res) => {
         ...(githubUrl !== undefined && { githubUrl }),
         ...(liveUrl !== undefined && { liveUrl }),
         ...(status && { status }),
+        ...(category && { category }),
         ...(thumbnail !== undefined && { thumbnail }),
       },
       { new: true, runValidators: true },
@@ -265,6 +269,14 @@ const deleteProject = async (req, res) => {
 
     // Delete project
     await Project.findByIdAndDelete(id);
+
+    // Cascade delete analytics
+    try {
+      const ProjectAnalytics = require("../models/ProjectAnalytics");
+      await ProjectAnalytics.deleteMany({ projectId: id });
+    } catch (e) {
+      console.error("Cascade delete analytics error:", e);
+    }
 
     // Create activity log
     await createActivity(
@@ -397,7 +409,7 @@ const getAllProjects = async (req, res) => {
     const [projects, total] = await Promise.all([
       Project.find(filter)
         .select(
-          "title description techStack status featured thumbnail likes views owner createdAt",
+          "title description techStack status category featured thumbnail likes views owner createdAt",
         )
         .populate("owner", "username displayName profilePhoto")
         .sort({ featured: -1, likes: -1, createdAt: -1 })

@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lucide.createIcons();
       }
     } catch (error) {
-      console.error("[DevStage Profile] Error fetching projects:", error);
+      console.error("[DevStage Profile] Error checking GitHub connection:", error);
     }
   }
 
@@ -125,12 +125,52 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="project-info">
                 <p class="project-name">${p.title}</p>
                 <p class="project-desc">${p.description || "No description available."}</p>
+                <div class="project-actions" style="margin-top: 12px; display: flex; gap: 8px;">
+                    <button class="analytics-btn" style="padding: 4px 10px; font-size: 11px; background: transparent; border: 1px solid var(--border); color: #fff; cursor: pointer; border-radius: 4px; transition: 0.2s;">Analytics</button>
+                    <button class="edit-btn" style="padding: 4px 10px; font-size: 11px; background: transparent; border: 1px solid var(--border); color: #fff; cursor: pointer; border-radius: 4px; transition: 0.2s;">Edit</button>
+                    <button class="delete-btn" style="padding: 4px 10px; font-size: 11px; background: transparent; border: 1px solid #c06060; color: #c06060; cursor: pointer; border-radius: 4px; transition: 0.2s;">Delete</button>
+                </div>
             </div>
             <div class="project-meta">
                 <span class="project-tag">${(p.category || "Project").toUpperCase()}</span>
                 <span class="project-arrow">→</span>
             </div>
         `;
+
+    const analyticsBtn = item.querySelector('.analytics-btn');
+    const editBtn = item.querySelector('.edit-btn');
+    const deleteBtn = item.querySelector('.delete-btn');
+
+    analyticsBtn.onclick = (e) => {
+        e.stopPropagation();
+        openAnalyticsModal(id, p.title);
+    };
+
+    editBtn.onclick = (e) => {
+        e.stopPropagation();
+        window.location.href = `upload.html?edit=${id}`;
+    };
+
+    deleteBtn.onclick = async (e) => {
+        e.stopPropagation();
+        if (confirm(`Are you sure you want to delete "${p.title}"?`)) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/projects/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': \`Bearer \${getToken()}\` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    item.style.opacity = '0';
+                    setTimeout(() => item.remove(), 300);
+                } else {
+                    alert('Failed to delete project.');
+                }
+            } catch (err) {
+                console.error('Delete error', err);
+            }
+        }
+    };
 
     item.onclick = async () => {
       // Track project view
@@ -279,6 +319,70 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
+
+  // ─── 7. ANALYTICS MODAL ─────────────────────────────
+  window.openAnalyticsModal = async function(projectId, projectTitle) {
+      let modal = document.getElementById('analytics-modal');
+      if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'analytics-modal';
+          modal.style.cssText = `
+              position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+              background: rgba(0,0,0,0.8); z-index: 10000; display: flex;
+              align-items: center; justify-content: center; backdrop-filter: blur(5px);
+          `;
+          modal.innerHTML = \`
+              <div style="background: var(--surface); padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; border: 1px solid var(--border);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                      <h3 id="analytics-title" style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--accent);">Project Analytics</h3>
+                      <button id="close-analytics" style="background: transparent; border: none; color: #fff; cursor: pointer; font-size: 18px;">✕</button>
+                  </div>
+                  <div id="analytics-content" style="color: var(--text-secondary);">Loading...</div>
+              </div>
+          \`;
+          document.body.appendChild(modal);
+          document.getElementById('close-analytics').onclick = () => modal.style.display = 'none';
+      }
+      
+      document.getElementById('analytics-title').innerText = \`Analytics: \${projectTitle}\`;
+      document.getElementById('analytics-content').innerHTML = 'Loading...';
+      modal.style.display = 'flex';
+
+      try {
+          const res = await fetch(\`http://localhost:5000/api/projects/analytics/\${projectId}\`, {
+              headers: { 'Authorization': \`Bearer \${getToken()}\` }
+          });
+          const data = await res.json();
+          if (data.success && data.analytics) {
+              const { views, impressions, clicks, saves } = data.analytics;
+              document.getElementById('analytics-content').innerHTML = \`
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                      <div style="background: var(--bg); padding: 15px; border-radius: 8px; text-align: center;">
+                          <div style="font-size: 24px; color: #fff;">\${views || 0}</div>
+                          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;">Total Views</div>
+                      </div>
+                      <div style="background: var(--bg); padding: 15px; border-radius: 8px; text-align: center;">
+                          <div style="font-size: 24px; color: #fff;">\${impressions || 0}</div>
+                          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;">Impressions</div>
+                      </div>
+                      <div style="background: var(--bg); padding: 15px; border-radius: 8px; text-align: center;">
+                          <div style="font-size: 24px; color: #fff;">\${clicks || 0}</div>
+                          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;">Clicks</div>
+                      </div>
+                      <div style="background: var(--bg); padding: 15px; border-radius: 8px; text-align: center;">
+                          <div style="font-size: 24px; color: #fff;">\${saves || 0}</div>
+                          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;">Saves</div>
+                      </div>
+                  </div>
+              \`;
+          } else {
+              document.getElementById('analytics-content').innerHTML = 'No analytics data available yet.';
+          }
+      } catch (err) {
+          console.error('Analytics error:', err);
+          document.getElementById('analytics-content').innerHTML = 'Failed to load analytics.';
+      }
+  };
 });
 
 (function () {

@@ -48,6 +48,7 @@ function projectResult(project) {
     description: project.description,
     techStack: project.techStack || [],
     status: project.status,
+    category: project.category,
     featured: project.featured,
     thumbnail: project.thumbnail,
     likes: project.likes || 0,
@@ -101,13 +102,14 @@ const searchProjects = async (req, res) => {
   try {
     const q = sanitizeQuery(req.query.q);
     const techFilter = req.query.tech ? sanitizeQuery(req.query.tech) : null;
+    const categoryFilter = req.query.category ? sanitizeQuery(req.query.category) : null;
     const statusFilter = req.query.status || null;
     const featuredOnly = req.query.featured === "true";
 
-    if (!q && !techFilter)
+    if (!q && !techFilter && !categoryFilter)
       return res.status(200).json({ success: true, projects: [] });
 
-    const cacheKey = `search:projects:${q}:${techFilter}:${statusFilter}:${featuredOnly}`;
+    const cacheKey = \`search:projects:\${q}:\${techFilter}:\${categoryFilter}:\${statusFilter}:\${featuredOnly}\`;
     const cached = getCache(cacheKey);
     if (cached)
       return res
@@ -136,13 +138,17 @@ const searchProjects = async (req, res) => {
       filter.status = statusFilter;
     }
 
+    if (categoryFilter) {
+      filter.category = { $regex: new RegExp(escapeRegex(categoryFilter), "i") };
+    }
+
     if (featuredOnly) {
       filter.featured = true;
     }
 
     const projects = await Project.find(filter)
       .select(
-        "title description techStack status featured thumbnail likes views owner createdAt",
+        "title description techStack status category featured thumbnail likes views owner createdAt",
       )
       .populate("owner", "username displayName profilePhoto")
       .sort({ featured: -1, likes: -1, views: -1 })

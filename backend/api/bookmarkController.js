@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const Project = require("../models/Project");
 const { delCache } = require("../utils/cache");
+const { recordAnalyticsEvent } = require("./analyticsController");
 
 function isObjectId(id) {
     return mongoose.Types.ObjectId.isValid(id);
@@ -35,6 +36,13 @@ const saveProject = async (req, res) => {
                 title: project.title
             });
         } catch (e) {}
+
+        // Analytics tracking for Save
+        try {
+            await recordAnalyticsEvent(id, "save", req);
+        } catch (e) {
+            console.error("Save analytics error:", e);
+        }
 
         return res.status(200).json({
             success: true,

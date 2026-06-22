@@ -10,7 +10,8 @@
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@800&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Global Styles -->
@@ -22,35 +23,36 @@
         .explore-page {
             background: #0f0f0f;
         }
-        
+
         #particle-wave-canvas {
             position: fixed;
             inset: 0;
             z-index: -1;
             pointer-events: none;
         }
-        
+
         body.explore-page .logo-chars {
             font-size: 1.1rem;
         }
-        
+
         body.explore-page .char.outline {
             -webkit-text-stroke-width: 1.1px;
         }
-        
+
         body.explore-page .logo-dot {
             width: 6px;
             height: 6px;
             right: -8px;
             top: -1px;
         }
-        
+
         body.explore-page .breadcrumb-slash,
         body.explore-page .breadcrumb-current {
             font-size: 1.05rem;
         }
+
         /* ─── Uiverse Hamburger Menu ─── */
-        
+
         .uiverse-hamburger {
             cursor: pointer;
             display: flex;
@@ -60,14 +62,15 @@
             height: 40px;
             position: relative;
         }
-        
+
         .uiverse-hamburger svg {
             height: 38px;
             width: 38px;
             transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         /* ─── Command Palette ─── */
-        
+
         .palette-backdrop {
             position: fixed;
             inset: 0;
@@ -79,12 +82,12 @@
             display: flex;
             justify-content: center;
         }
-        
+
         .palette-backdrop.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .palette-container {
             position: relative;
             top: 80px;
@@ -98,11 +101,11 @@
             transition: transform 180ms ease-out;
             overflow: hidden;
         }
-        
+
         .palette-backdrop.active .palette-container {
             transform: translateY(0);
         }
-        
+
         .palette-header {
             padding: 0 16px;
             height: 52px;
@@ -110,7 +113,7 @@
             align-items: center;
             gap: 12px;
         }
-        
+
         .palette-input {
             flex: 1;
             background: none;
@@ -119,7 +122,7 @@
             font-size: 16px;
             outline: none;
         }
-        
+
         .palette-shortcut {
             background: rgba(255, 255, 255, 0.08);
             padding: 4px 8px;
@@ -128,7 +131,7 @@
             font-size: 11px;
             font-weight: 600;
         }
-        
+
         .palette-results {
             padding: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -138,7 +141,7 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        
+
         .palette-category label {
             display: block;
             font-size: 10px;
@@ -148,13 +151,13 @@
             color: #666;
             margin-bottom: 8px;
         }
-        
+
         .palette-chips {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        
+
         .palette-chip {
             padding: 5px 12px;
             border-radius: 100px;
@@ -164,19 +167,20 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .palette-chip:hover {
             background: rgba(232, 129, 58, 0.15);
             border-color: #E8813A;
             color: #E8813A;
         }
-        
+
         .palette-chip.hidden {
             display: none;
         }
+
         /* ─── Premium Dropdown Menu ─── */
         /* ─── Explore Platform Layout ─── */
-        
+
         .explore-layout {
             max-width: 1520px;
             margin: 100px auto 72px;
@@ -185,14 +189,15 @@
             gap: 26px;
             padding: 0 18px;
         }
+
         /* Sidebar Styles */
-        
+
         .sidebar-sticky {
             position: sticky;
             top: 100px;
             height: fit-content;
         }
-        
+
         .sidebar-card {
             background: linear-gradient(180deg, rgba(10, 10, 12, 0.96), rgba(14, 14, 16, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -204,8 +209,9 @@
             will-change: transform;
             box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
         }
+
         /* Terminal Header System */
-        
+
         .card-terminal-header {
             background: rgba(255, 255, 255, 0.02);
             padding: 10px 16px;
@@ -214,25 +220,25 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .terminal-header-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .terminal-dots {
             display: flex;
             gap: 5px;
         }
-        
+
         .terminal-dot {
             width: 4px;
             height: 4px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
         }
-        
+
         .terminal-filename {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.62rem;
@@ -241,7 +247,7 @@
             text-transform: uppercase;
             font-weight: 600;
         }
-        
+
         .terminal-status {
             display: flex;
             align-items: center;
@@ -253,7 +259,7 @@
             font-weight: 700;
             letter-spacing: 0.05em;
         }
-        
+
         .status-pulse {
             width: 5px;
             height: 5px;
@@ -262,26 +268,28 @@
             box-shadow: 0 0 8px #ff8c42;
             animation: pulse-amber 2.5s infinite ease-in-out;
         }
-        
+
         @keyframes pulse-amber {
             0% {
                 opacity: 0.4;
                 transform: scale(0.9);
             }
+
             50% {
                 opacity: 1;
                 transform: scale(1.15);
             }
+
             100% {
                 opacity: 0.4;
                 transform: scale(0.9);
             }
         }
-        
+
         .sidebar-card-content {
             padding: 16px 14px 18px;
         }
-        
+
         .sidebar-title {
             color: rgba(255, 255, 255, 0.55);
             font-size: 0.78rem;
@@ -294,13 +302,13 @@
             text-transform: uppercase;
             opacity: 1;
         }
-        
+
         .segmented-control {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-        
+
         .segment-chip {
             background: transparent;
             border: none;
@@ -320,41 +328,42 @@
             text-align: left;
             position: relative;
         }
-        
+
         .segment-chip:not(:last-child) {
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-        
+
         .segment-chip:hover {
             background: rgba(255, 140, 40, 0.04);
             border-left-color: rgba(255, 140, 40, 0.25);
             color: rgba(255, 255, 255, 0.9);
         }
-        
+
         .segment-chip.active {
             background: rgba(255, 140, 40, 0.06);
             border-left: 2px solid #ff8c28;
             color: rgba(255, 180, 120, 0.95);
             box-shadow: none;
         }
-        
+
         .chip-icon {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s ease;
         }
-        
+
         .segment-chip.active .chip-icon {
             color: #ff8c42;
         }
+
         /* ─── Tech Stack Chips ─── */
-        
+
         .tech-chip-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 2px 10px;
         }
-        
+
         .tech-chip {
             display: inline-flex;
             align-items: center;
@@ -375,30 +384,30 @@
             text-transform: uppercase;
             letter-spacing: 0.06em;
         }
-        
+
         .tech-chip:hover {
             background: rgba(255, 140, 40, 0.05);
             color: rgba(255, 255, 255, 0.88);
         }
-        
+
         .tech-chip.active {
             background: rgba(255, 140, 40, 0.06);
             color: #ff8c28;
             box-shadow: none;
         }
-        
+
         .tech-chip-icon {
             font-size: 0.8rem;
             filter: grayscale(1) brightness(2);
             opacity: 0.5;
             transition: all 0.3s ease;
         }
-        
+
         .tech-chip.active .tech-chip-icon {
             filter: none;
             opacity: 1;
         }
-        
+
         .tech-chip-badge {
             background: transparent;
             color: rgba(255, 255, 255, 0.32);
@@ -409,13 +418,14 @@
             line-height: 1.2;
             margin-left: 4px;
         }
-        
+
         .tech-chip.active .tech-chip-badge,
         .tech-chip:hover .tech-chip-badge {
             color: rgba(255, 140, 40, 0.85);
         }
+
         /* Ripple Effect */
-        
+
         .tech-chip-ripple {
             position: absolute;
             border-radius: 50%;
@@ -424,19 +434,20 @@
             animation: ripple-burst 0.5s linear;
             pointer-events: none;
         }
-        
+
         @keyframes ripple-burst {
             to {
                 transform: scale(4);
                 opacity: 0;
             }
         }
+
         /* Feed & Search */
-        
+
         .search-section {
             margin-bottom: 32px;
         }
-        
+
         .search-box {
             height: 52px;
             background: rgba(10, 10, 12, 0.92);
@@ -450,24 +461,24 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
             position: relative;
         }
-        
+
         .search-box:focus-within {
             background: rgba(10, 10, 12, 0.98);
             border-color: rgba(255, 140, 40, 0.6);
             box-shadow: 0 0 18px rgba(255, 140, 40, 0.08);
         }
-        
+
         .search-box i {
             color: rgba(255, 255, 255, 0.32);
             font-size: 1rem;
             transition: color 0.3s ease;
             margin: 0;
         }
-        
+
         .search-box:focus-within i {
             color: rgba(255, 140, 40, 0.85);
         }
-        
+
         .search-box input {
             flex: 1;
             background: none;
@@ -477,16 +488,16 @@
             font-size: 0.92rem;
             outline: none;
         }
-        
+
         .search-box input::placeholder {
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s ease;
         }
-        
+
         .search-box:focus-within input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
-        
+
         .search-shortcut {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -500,19 +511,20 @@
             user-select: none;
             transition: all 0.3s ease;
         }
-        
+
         .search-box:focus-within .search-shortcut {
             opacity: 0;
             transform: translateX(10px);
         }
+
         /* Trending List */
-        
+
         .trending-list {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-        
+
         .trending-card {
             background: transparent;
             border: none;
@@ -525,16 +537,16 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .trending-card:not(:last-child) {
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-        
+
         .trending-card:hover {
             background: rgba(255, 140, 40, 0.04);
             padding-left: 8px;
         }
-        
+
         .trending-thumb {
             width: 48px;
             height: 48px;
@@ -548,17 +560,17 @@
             color: #ff8c42;
             transition: all 0.3s ease;
         }
-        
+
         .trending-card:hover .trending-thumb {
             border-color: #ff8c42;
             box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
         }
-        
+
         .trending-info {
             flex: 1;
             min-width: 0;
         }
-        
+
         .trending-info h4 {
             color: #fff;
             font-size: 0.88rem;
@@ -566,14 +578,14 @@
             margin-bottom: 4px;
             letter-spacing: 0.01em;
         }
-        
+
         .trending-info p {
             color: rgba(255, 255, 255, 0.35);
             font-size: 0.72rem;
             line-height: 1.4;
             margin-bottom: 10px;
         }
-        
+
         .trending-stats {
             display: flex;
             gap: 14px;
@@ -582,13 +594,13 @@
             font-size: 0.65rem;
             font-weight: 600;
         }
-        
+
         .trending-stats span {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        
+
         .trending-arrow {
             position: absolute;
             right: 16px;
@@ -600,19 +612,20 @@
             width: 16px;
             height: 16px;
         }
-        
+
         .trending-card:hover .trending-arrow {
             opacity: 1;
             transform: translateY(-50%) translateX(0);
         }
+
         /* Suggested Users */
-        
+
         .user-suggestions {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-        
+
         .user-card {
             background: transparent;
             border: none;
@@ -624,16 +637,16 @@
             transition: background 0.3s ease, padding-left 0.3s ease;
             position: relative;
         }
-        
+
         .user-card:not(:last-child) {
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-        
+
         .user-card:hover {
             background: rgba(255, 140, 40, 0.04);
             padding-left: 8px;
         }
-        
+
         .user-card-avatar {
             width: 42px;
             height: 42px;
@@ -644,12 +657,12 @@
             background: rgba(255, 255, 255, 0.02);
             transition: all 0.3s ease;
         }
-        
+
         .user-card:hover .user-card-avatar {
             border-color: #ff8c42;
             box-shadow: 0 0 10px rgba(255, 140, 66, 0.15);
         }
-        
+
         .user-card-info h4 {
             color: #fff;
             font-size: 0.85rem;
@@ -657,7 +670,7 @@
             margin-bottom: 2px;
             letter-spacing: 0.01em;
         }
-        
+
         .user-card-info p {
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.7rem;
@@ -666,7 +679,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .view-profile-text {
             color: #ff8c42;
             font-size: 0.7rem;
@@ -679,13 +692,13 @@
             height: 0;
             overflow: hidden;
         }
-        
+
         .user-card:hover .view-profile-text {
             opacity: 1;
             transform: translateY(0);
             height: 14px;
         }
-        
+
         .follow-btn {
             background: transparent;
             border: none;
@@ -700,28 +713,28 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
-        
+
         .follow-btn:hover {
             background: rgba(255, 140, 40, 0.08);
             color: #ffb070;
         }
-        
+
         .follow-btn.following {
             background: transparent;
             color: rgba(255, 255, 255, 0.38);
         }
-        
+
         .trending-info span {
             color: var(--text-tertiary);
             font-size: 0.75rem;
         }
-        
+
         .project-feed {
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
-        
+
         .project-card {
             background: linear-gradient(180deg, rgba(10, 10, 12, 0.94), rgba(14, 14, 16, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -731,31 +744,31 @@
             will-change: transform, border-color;
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
         }
-        
+
         .project-card:hover {
             transform: translateY(-3px);
             border-color: rgba(255, 140, 40, 0.18);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 14px rgba(255, 140, 40, 0.06);
         }
-        
+
         .project-card-body {
             padding: 20px 22px;
         }
-        
+
         .project-card-body h3 {
             color: #fff;
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 8px;
         }
-        
+
         .project-card-body p {
             color: rgba(255, 255, 255, 0.45);
             font-size: 0.85rem;
             line-height: 1.5;
             margin-bottom: 14px;
         }
-        
+
         .project-card-meta {
             display: flex;
             flex-wrap: wrap;
@@ -765,34 +778,37 @@
             font-size: 0.68rem;
             color: rgba(255, 255, 255, 0.35);
         }
-        
+
         .project-card-meta .project-tag {
             color: rgba(255, 140, 40, 0.75);
             border: none;
             padding: 0;
             background: transparent;
         }
-        
+
         #empty-state {
             text-align: center;
             padding: 48px 24px;
         }
+
         /* Responsive */
-        
+
         @media (max-width: 1100px) {
             .explore-layout {
                 grid-template-columns: 268px minmax(0, 1fr);
                 padding: 0 20px;
             }
+
             .sidebar-right {
                 display: none;
             }
         }
-        
+
         @media (max-width: 850px) {
             .explore-layout {
                 grid-template-columns: 1fr;
             }
+
             .sidebar-left {
                 display: none;
             }
@@ -832,7 +848,8 @@
                 <label class="uiverse-hamburger" id="hamburger-menu-label">
                     <input type="checkbox" id="hamburger-checkbox">
                     <svg viewBox="0 0 32 32">
-                        <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        <path class="line line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
                         </path>
                         <path class="line" d="M7 16 27 16"></path>
                     </svg>
@@ -840,19 +857,39 @@
                     <div class="premium-dropdown" id="hamburger-dropdown" role="menu" aria-label="Main navigation">
                         <div class="dropdown-inner">
                             <div class="dropdown-group primary-nav">
-                                <a href="../index.html" class="dropdown-item nav-item-anim"><i data-lucide="home" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Home</span></a>
-                                <a href="explore.html" class="dropdown-item nav-item-anim active-page"><i data-lucide="compass" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Explore</span></a>
-                                <a href="feed.html" class="dropdown-item nav-item-anim"><i data-lucide="rss" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Feed</span></a>
-                                <a href="challenges.html" class="dropdown-item nav-item-anim"><i data-lucide="trophy" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Challenges</span></a>
-                                <a href="beginner.html" class="dropdown-item nav-item-anim"><i data-lucide="graduation-cap" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Beginner Zone</span></a>
-                                <a href="teams.html" class="dropdown-item nav-item-anim"><i data-lucide="users" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Teams</span></a>
-                                <a href="upload.html" class="dropdown-item nav-item-anim"><i data-lucide="upload" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Upload Project</span></a>
+                                <a href="../index.html" class="dropdown-item nav-item-anim"><i data-lucide="home"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Home</span></a>
+                                <a href="explore.html" class="dropdown-item nav-item-anim active-page"><i
+                                        data-lucide="compass" class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Explore</span></a>
+                                <a href="feed.html" class="dropdown-item nav-item-anim"><i data-lucide="rss"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Feed</span></a>
+                                <a href="challenges.html" class="dropdown-item nav-item-anim"><i data-lucide="trophy"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Challenges</span></a>
+                                <a href="beginner.html" class="dropdown-item nav-item-anim"><i
+                                        data-lucide="graduation-cap" class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Beginner Zone</span></a>
+                                <a href="teams.html" class="dropdown-item nav-item-anim"><i data-lucide="users"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Teams</span></a>
+                                <a href="upload.html" class="dropdown-item nav-item-anim"><i data-lucide="upload"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Upload
+                                        Project</span></a>
                             </div>
                             <div class="dropdown-divider" role="separator"></div>
                             <div class="dropdown-group secondary-nav">
-                                <a href="profile.html" class="dropdown-item nav-item-anim"><i data-lucide="user" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Profile</span></a>
-                                <a href="#" class="dropdown-item nav-item-anim"><i data-lucide="settings" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Settings</span></a>
-                                <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn" role="menuitem"><i data-lucide="log-out" class="nav-menu-icon" aria-hidden="true"></i><span class="nav-menu-label">Logout</span></a>
+                                <a href="profile.html" class="dropdown-item nav-item-anim"><i data-lucide="user"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Profile</span></a>
+                                <a href="#" class="dropdown-item nav-item-anim"><i data-lucide="settings"
+                                        class="nav-menu-icon" aria-hidden="true"></i><span
+                                        class="nav-menu-label">Settings</span></a>
+                                <a href="#" class="dropdown-item nav-item-anim logout-btn" id="nav-logout-btn"
+                                    role="menuitem"><i data-lucide="log-out" class="nav-menu-icon"
+                                        aria-hidden="true"></i><span class="nav-menu-label">Logout</span></a>
                             </div>
                         </div>
                     </div>
@@ -1041,7 +1078,8 @@
                     <h3 class="sidebar-title"><i data-lucide="users"></i> Suggested Users</h3>
                     <div class="user-suggestions">
                         <div class="user-card">
-                            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff" alt="Alex Rivers" class="user-card-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Alex+Rivers&background=ff8c42&color=fff"
+                                alt="Alex Rivers" class="user-card-avatar">
                             <div class="user-card-info">
                                 <h4>Alex Rivers</h4>
                                 <p>Full-stack Developer</p>
@@ -1050,7 +1088,8 @@
                             <button class="follow-btn">Follow</button>
                         </div>
                         <div class="user-card">
-                            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff" alt="Sarah Chen" class="user-card-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d2ff&color=fff"
+                                alt="Sarah Chen" class="user-card-avatar">
                             <div class="user-card-info">
                                 <h4>Sarah Chen</h4>
                                 <p>UI/UX Designer</p>
@@ -1059,7 +1098,8 @@
                             <button class="follow-btn">Follow</button>
                         </div>
                         <div class="user-card">
-                            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff" alt="Marcus Vane" class="user-card-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Marcus+Vane&background=9d50bb&color=fff"
+                                alt="Marcus Vane" class="user-card-avatar">
                             <div class="user-card-info">
                                 <h4>Marcus Vane</h4>
                                 <p>AI Engineer</p>
@@ -1075,48 +1115,55 @@
 
     <script src="../scripts/card-tilt.js"></script>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCVetFMH6RBpDVDrX20OsrhxK8Z4m-PmIg",
-            authDomain: "devstage-872b1.firebaseapp.com",
-            projectId: "devstage-872b1",
-            storageBucket: "devstage-872b1.firebasestorage.app",
-            messagingSenderId: "993834630425",
-            appId: "1:993834630425:web:b063407a7d47a0830d5988"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
         const feed = document.getElementById('explore-feed');
 
-        const renderProject = (p, id) => {
+        const renderProject = (p) => {
             const card = document.createElement('article');
             card.className = 'project-card';
-            const tags = (p.tags && p.tags.length) ?
-                p.tags.slice(0, 3).map(t => `<span class="project-tag">${String(t)}</span>`).join('') :
+            const tags = (p.techStack && p.techStack.length) ?
+                p.techStack.slice(0, 3).map(t => `<span class="project-tag">${String(t)}</span>`).join('') :
                 '';
-            const likes = p.likes ? .length || p.likesCount || 0;
+            const likes = p.likes || 0;
+            const userName = p.owner && p.owner.displayName ? p.owner.displayName : (p.owner && p.owner.username ? p.owner.username : 'Anonymous');
+            
             card.innerHTML = `
                 <div class="project-card-body">
-                    <h3>${p.title || 'Untitled Project'}</h3>
-                    <p>${p.description || 'No description provided.'}</p>
+                    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        ${p.thumbnail ? `<img src="${p.thumbnail}" alt="${p.title}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">` : ''}
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #fff;">${p.title || 'Untitled Project'}</h3>
+                            <span style="font-size: 0.8rem; color: #888;">${p.category || p.status || 'Web App'}</span>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${p.description || 'No description provided.'}</p>
                     <div class="project-card-meta">
-                        <span>${p.userName || 'Anonymous'}</span>
+                        <span>${userName}</span>
                         <span><i data-lucide="heart"></i> ${likes}</span>
                         ${tags}
                     </div>
                 </div>`;
-            if (p.fileURL) {
+                
+            // Analytics: Fire impression
+            const projectId = p.id || p._id;
+            if (projectId) {
+                fetch(\`http://localhost:5000/api/analytics/impression/\${projectId}\`, { method: 'POST' }).catch(() => {});
+            }
+                
+            if (p.liveUrl || p.githubUrl) {
                 card.style.cursor = 'pointer';
-                card.addEventListener('click', () => window.open(p.fileURL, '_blank'));
+                card.addEventListener('click', () => {
+                    // Analytics: Fire click
+                    if (projectId) {
+                        fetch(\`http://localhost:5000/api/analytics/click/\${projectId}\`, { method: 'POST' }).catch(() => {});
+                    }
+                    window.open(p.liveUrl || p.githubUrl, '_blank');
+                });
             }
             return card;
         };
+
+
 
         const startEmptyTypewriter = () => {
             const el = document.getElementById('tw-text');
@@ -1150,24 +1197,37 @@
             tick();
         };
 
-        const fetchProjects = async(filter = 'latest') => {
+        const fetchProjects = async (filter = 'latest', tech = null) => {
             try {
-                let query = db.collection('projects');
-                if (filter === 'latest') query = query.orderBy('createdAt', 'desc');
-                const snapshot = await query.get();
+                let url = 'http://localhost:5000/api/projects/all';
+                if (tech) {
+                    url = `http://localhost:5000/api/search/projects?tech=${encodeURIComponent(tech)}`;
+                }
+                const response = await fetch(url);
+                const data = await response.json();
+                
                 feed.innerHTML = '';
 
-                if (snapshot.empty) {
+                let projects = data.projects || [];
+                
+                // Client-side filtering logic based on segmented controls
+                if (filter === 'featured') {
+                    projects = projects.filter(p => p.featured);
+                } else if (filter === 'trending') {
+                    projects = projects.sort((a, b) => (b.views || 0) - (a.views || 0));
+                }
+
+                if (!data.success || projects.length === 0) {
                     feed.innerHTML = `
                         <div id="empty-state">
-                            <span style="color: rgba(255,255,255,0.3); font-size: 15px;">Try searching </span>
+                            <span style="color: rgba(255,255,255,0.3); font-size: 15px;">Try uploading a project first! </span>
                             <span id="tw-text" style="color: rgba(255,255,255,0.5); font-size: 15px;"></span>
                         </div>`;
                     startEmptyTypewriter();
                     return;
                 }
 
-                snapshot.forEach(doc => feed.appendChild(renderProject(doc.data(), doc.id)));
+                projects.forEach(p => feed.appendChild(renderProject(p)));
                 lucide.createIcons();
             } catch (error) {
                 console.error('Explore fetch error:', error);
@@ -1180,11 +1240,32 @@
             }
         };
 
+        let searchTimeout;
         document.getElementById('feed-search').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            feed.querySelectorAll('.project-card').forEach(card => {
-                card.style.display = card.innerText.toLowerCase().includes(term) ? 'block' : 'none';
-            });
+            const term = e.target.value;
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                if (!term) {
+                    fetchProjects();
+                    return;
+                }
+                try {
+                    const response = await fetch(`http://localhost:5000/api/search/projects?q=${encodeURIComponent(term)}`);
+                    const data = await response.json();
+                    feed.innerHTML = '';
+                    if (!data.success || data.projects.length === 0) {
+                        feed.innerHTML = `
+                            <div id="empty-state">
+                                <span style="color: rgba(255,255,255,0.3); font-size: 15px;">No projects found for "${term}". </span>
+                            </div>`;
+                        return;
+                    }
+                    data.projects.forEach(p => feed.appendChild(renderProject(p)));
+                    lucide.createIcons();
+                } catch (error) {
+                    console.error('Search error:', error);
+                }
+            }, 300);
         });
 
         // Segmented Control Logic
@@ -1200,7 +1281,9 @@
         const techChips = document.querySelectorAll('.tech-chip');
         techChips.forEach(chip => {
             chip.addEventListener('click', (e) => {
-                chip.classList.toggle('active');
+                techChips.forEach(c => { if (c !== chip) c.classList.remove('active'); });
+                const isActive = chip.classList.toggle('active');
+                
                 const ripple = document.createElement('span');
                 ripple.className = 'tech-chip-ripple';
                 const size = Math.max(chip.offsetWidth, chip.offsetHeight);
@@ -1213,6 +1296,12 @@
         `;
                 chip.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 500);
+
+                if (isActive) {
+                    fetchProjects(null, chip.textContent.trim());
+                } else {
+                    fetchProjects();
+                }
             });
         });
 
@@ -1309,6 +1398,44 @@
                         chip.classList.remove('hidden');
                     } else {
                         chip.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Action logic
+            const executeSearch = (term, type = 'q') => {
+                closePalette();
+                if (type === 'q') {
+                    const mainSearch = document.getElementById('feed-search');
+                    if (mainSearch) {
+                        mainSearch.value = term;
+                        mainSearch.dispatchEvent(new Event('input'));
+                    }
+                } else if (type === 'tech') {
+                    fetchProjects(null, term);
+                } else if (type === 'filter') {
+                    fetchProjects(term);
+                }
+            };
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    executeSearch(e.target.value, 'q');
+                }
+            });
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const parentLabel = chip.closest('.palette-category').querySelector('label').innerText;
+                    if (parentLabel.includes('User')) {
+                        executeSearch(chip.innerText, 'q');
+                    } else if (parentLabel.includes('Stack')) {
+                        executeSearch(chip.innerText, 'tech');
+                    } else if (parentLabel.includes('Quick Actions')) {
+                        let filter = 'latest';
+                        if (chip.innerText.includes('Trending')) filter = 'trending';
+                        if (chip.innerText.includes('liked')) filter = 'trending';
+                        executeSearch(filter, 'filter');
                     }
                 });
             });

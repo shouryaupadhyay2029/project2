@@ -7,6 +7,7 @@ const projectSchema = new mongoose.Schema({
   githubUrl: { type: String, default: "" },
   liveUrl: { type: String, default: "" },
   thumbnail: { type: String, default: "" },
+  category: { type: String, default: "Web App" },
   status: {
     type: String,
     enum: ["Planning", "In Progress", "Completed"],
