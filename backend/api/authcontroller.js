@@ -8,6 +8,7 @@ function toAuthUser(user) {
         id: user._id,
         username: user.username,
         email: user.email,
+        displayName: user.displayName,
         bio: user.bio,
         location: user.location,
         timezone: user.timezone,

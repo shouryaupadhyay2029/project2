@@ -354,7 +354,10 @@ document.addEventListener("DOMContentLoaded", () => {
           });
           const data = await res.json();
           if (data.success && data.analytics) {
-              const { views, impressions, clicks, saves } = data.analytics;
+              const views = data.views || 0;
+              const impressions = data.summary?.totalImpressions || 0;
+              const clicks = data.summary?.totalClicks || 0;
+              const saves = data.summary?.totalSaves || 0;
               document.getElementById('analytics-content').innerHTML = \`
                   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                       <div style="background: var(--bg); padding: 15px; border-radius: 8px; text-align: center;">

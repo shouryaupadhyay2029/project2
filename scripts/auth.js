@@ -111,6 +111,7 @@ function cacheAuthSession(token, refreshToken, user, provider) {
         id: user.id || user._id || user.uid,
         username: user.username || "Unknown User",
         email: user.email,
+        displayName: user.displayName || "",
         profilePhoto: user.profilePhoto || user.photoURL || ""
     };
 

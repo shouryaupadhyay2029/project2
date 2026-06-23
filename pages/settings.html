@@ -2842,7 +2842,15 @@
             }
 
             function loadLocalFallback() {
-                const user = JSON.parse(localStorage.getItem('user')) || JSON.parse(localStorage.getItem('currentUser'));
+                let user = JSON.parse(localStorage.getItem('user')) || JSON.parse(localStorage.getItem('currentUser'));
+                if (!user) {
+                    try {
+                        const authData = JSON.parse(localStorage.getItem('devstage_auth'));
+                        if (authData && authData.user) {
+                            user = authData.user;
+                        }
+                    } catch (e) {}
+                }
                 if (user) {
                     populateUI({
                         displayName: user.fullName || user.displayName || '',

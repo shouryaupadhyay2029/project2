@@ -109,7 +109,7 @@ const searchProjects = async (req, res) => {
     if (!q && !techFilter && !categoryFilter)
       return res.status(200).json({ success: true, projects: [] });
 
-    const cacheKey = \`search:projects:\${q}:\${techFilter}:\${categoryFilter}:\${statusFilter}:\${featuredOnly}\`;
+    const cacheKey = `search:projects:${q}:${techFilter}:${categoryFilter}:${statusFilter}:${featuredOnly}`;
     const cached = getCache(cacheKey);
     if (cached)
       return res
